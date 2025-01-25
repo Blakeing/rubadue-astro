@@ -1,0 +1,96 @@
+---
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import Header from "@/components/astro/layout/Header.astro";
+import Footer from "@/components/astro/layout/Footer.astro";
+import ProductPage from "@/components/react/ProductPage";
+import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import { Image } from "astro:assets";
+
+interface Props {
+  title: string;
+  description: string;
+  heroImage?: ImageMetadata | string;
+  specifications?: {
+    conductor?: string;
+    insulation?: string;
+    temperature?: string;
+    voltage?: string;
+    tensileStrength?: string;
+  };
+  compliances?: string[];
+  systemApprovals?: string[];
+  category: string;
+  reviews?: {
+    average: number;
+    featured: Array<{
+      id: number;
+      rating: number;
+      content: string;
+      date: string;
+      datetime: string;
+      author: string;
+      avatarSrc: string;
+    }>;
+  };
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
+  license?: {
+    href: string;
+    summary: string;
+    content: string;
+  };
+}
+
+const props = Astro.props;
+
+// Build breadcrumb segments
+const segments = [
+  { name: "Products", href: "/products" },
+  {
+    name: props.category,
+    href: `/products?category=${props.category.toLowerCase().replace(" ", "-")}`,
+  },
+  { name: props.title, href: Astro.url.pathname },
+];
+
+// Default placeholder image
+import placeholderImage from "@/assets/rubadue-hero.webp";
+const heroImage = props.heroImage || placeholderImage;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={props.title} description={props.description} />
+  </head>
+  <body class="min-h-screen bg-background">
+    <Header />
+    <main class="container mx-auto px-4 py-6">
+      <div class="mb-6">
+        <Breadcrumbs segments={segments} />
+      </div>
+      <ProductPage
+        client:load
+        product={{
+          name: props.title,
+          description: props.description,
+          imageSrc: heroImage,
+          imageAlt: props.title,
+          specifications: props.specifications,
+          compliances: props.compliances,
+          systemApprovals: props.systemApprovals,
+          category: props.category,
+        }}
+        reviews={props.reviews}
+        faqs={props.faqs}
+        license={props.license}
+      />
+      <article class="prose prose-slate max-w-none dark:prose-invert">
+        <slot />
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>

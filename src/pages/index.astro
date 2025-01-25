@@ -1,74 +1,38 @@
 ---
-import BaseHead from '@/components/BaseHead.astro';
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '@/consts';
-import '@/styles/global.css';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import Header from "@/components/astro/layout/Header.astro";
+import Footer from "@/components/astro/layout/Footer.astro";
+import Hero from "@/components/astro/layout/Hero.astro";
+import CableSection from "@/components/react/CableSection";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import "@/styles/global.css";
+import { Button } from "@/components/react/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/react/ui/card";
+import { PaymentsTable } from "@/components/react/data-table/demo";
+import N1MaxCalculatorForm from "@/components/react/N1MaxCalculatorForm";
+
+const title = "Rubadue Wire - Advanced Wire Solutions";
+const description =
+  "Specializing in Litz wire manufacturing, we deliver innovative solutions for high-frequency applications, transformers, and power supplies with unmatched quality and precision.";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body class="min-h-screen bg-background font-sans antialiased">
-		<Header />
-		<main class="container mx-auto px-4 py-12">
-			<div class="flex flex-col items-center text-center space-y-8 pb-8">
-				<h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-					Welcome to {SITE_TITLE}
-				</h1>
-				<p class="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-					{SITE_DESCRIPTION}
-				</p>
-				<div class="flex gap-4">
-					<a href="/blog">
-						<Button variant="default">
-							Read the Blog
-						</Button>
-					</a>
-					<a href="/about">
-						<Button variant="outline">
-							About Me
-						</Button>
-					</a>
-				</div>
-			</div>
-
-			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				<Card>
-					<CardHeader>
-						<CardTitle>Feature 1</CardTitle>
-						<CardDescription>Description of feature 1</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<p>Detailed explanation of feature 1 and its benefits.</p>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle>Feature 2</CardTitle>
-						<CardDescription>Description of feature 2</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<p>Detailed explanation of feature 2 and its benefits.</p>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle>Feature 3</CardTitle>
-						<CardDescription>Description of feature 3</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<p>Detailed explanation of feature 3 and its benefits.</p>
-					</CardContent>
-				</Card>
-			</div>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <Header />
+    <main>
+      <Hero />
+      <CableSection client:load />
+    </main>
+    <Footer />
+  </body>
 </html>

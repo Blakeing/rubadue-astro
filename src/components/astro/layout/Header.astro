@@ -1,7 +1,7 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
-import ThemeToggle from './ThemeToggle.astro';
+import HeaderLink from '@/components/astro/common/HeaderLink.astro';
+import { SITE_TITLE } from '@/consts';
+import ThemeToggle from '@/components/shared/ThemeToggle/ThemeToggle.astro';
 ---
 
 <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -12,6 +12,7 @@ import ThemeToggle from './ThemeToggle.astro';
 			</a>
 			<div class="hidden md:flex gap-6">
 				<HeaderLink href="/">Home</HeaderLink>
+				<HeaderLink href="/products">Products</HeaderLink>
 				<HeaderLink href="/blog">Blog</HeaderLink>
 				<HeaderLink href="/about">About</HeaderLink>
 			</div>

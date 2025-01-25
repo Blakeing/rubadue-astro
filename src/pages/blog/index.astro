@@ -1,31 +1,31 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
-import { BlogSearch } from '@/components/BlogSearch';
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import Header from "@/components/astro/layout/Header.astro";
+import Footer from "@/components/astro/layout/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import { getCollection } from "astro:content";
+import BlogSearch from "@/components/react/search/BlogSearch";
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body class="min-h-screen bg-background font-sans antialiased">
-		<Header />
-		<main class="container mx-auto px-4 py-12">
-			<div class="flex flex-col items-center text-center space-y-4 pb-8">
-				<h1 class="text-4xl font-bold tracking-tighter">Blog</h1>
-				<p class="text-muted-foreground">Latest posts and updates</p>
-			</div>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <Header />
+    <main class="container mx-auto px-4 py-12">
+      <div class="flex flex-col items-center text-center space-y-4 pb-8">
+        <h1 class="text-4xl font-bold tracking-tighter">Blog</h1>
+        <p class="text-muted-foreground">Latest posts and updates</p>
+      </div>
 
-			<BlogSearch client:load posts={posts} />
-		</main>
-		<Footer />
-	</body>
+      <BlogSearch client:load posts={posts} />
+    </main>
+    <Footer />
+  </body>
 </html>

@@ -1,68 +1,75 @@
-# Astro Starter Kit: Blog
+# Rubadue Astro
 
-```sh
-npm create astro@latest -- --template blog
-```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+A modern web application built with Astro, React, and Tailwind CSS.
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
+/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── content/         # Content collections and blog posts
+│   ├── hooks/          # Custom React hooks
+│   ├── layouts/        # Page layouts and templates
+│   ├── lib/            # Utility functions and shared logic
+│   ├── pages/          # Page components and routes
+│   └── styles/         # Global styles and Tailwind configurations
+├── astro.config.mjs    # Astro configuration
+├── tailwind.config.mjs # Tailwind CSS configuration
+└── tsconfig.json      # TypeScript configuration
+```
 
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| :----------------------- | :----------------------------------------------- |
+| `pnpm install`           | Installs dependencies                            |
+| `pnpm run dev`           | Starts local dev server at `localhost:4321`      |
+| `pnpm run build`         | Build your production site to `./dist/`          |
+| `pnpm run preview`       | Preview your build locally, before deploying     |
+| `pnpm run astro ...`     | Run CLI commands like `astro add`, `astro check` |
 
-## 👀 Want to learn more?
+## 🎨 Development Guidelines
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Component Organization
+- Use TypeScript for all components and utilities
+- Place reusable components in `src/components/`
+- Keep components small and focused on a single responsibility
+- Use named exports for components
 
-## Credit
+### Styling
+- Use Tailwind CSS for styling
+- Follow utility-first CSS principles
+- Use component-specific styles when needed
+- Maintain consistent spacing and layout patterns
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+### Content Management
+- Store blog posts and content collections in `src/content/`
+- Use MDX for content that requires React components
+- Follow the content schema defined in `src/content.config.ts`
+
+### Performance
+- Optimize images using Astro's built-in image optimization
+- Minimize client-side JavaScript
+- Utilize Astro's partial hydration with `client:*` directives
+
+### TypeScript
+- Maintain strict type checking
+- Use interfaces for component props
+- Keep types and interfaces close to where they're used
+
+## 🔧 Configuration
+
+The project uses several key configuration files:
+
+- `astro.config.mjs`: Astro build and integration settings
+- `tailwind.config.mjs`: Tailwind CSS customization
+- `tsconfig.json`: TypeScript compiler options
+- `components.json`: Shadcn UI component configurations
+
+## 📝 License
+
+[MIT License](LICENSE)

@@ -1,6 +1,6 @@
 import { useState, useEffect, type ChangeEvent } from "react";
-import { Input } from "./ui/input";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Input } from "@/components/react/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/react/ui/card";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
 import {
@@ -11,7 +11,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "./ui/pagination";
+} from "@/components/react/ui/pagination";
 
 interface Post {
   id: string;
@@ -32,10 +32,10 @@ interface BlogSearchProps {
 const POSTS_PER_PAGE = 2;
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(new Date(date));
 }
 
@@ -92,7 +92,7 @@ const searchInputStyles = `
   }
 `;
 
-export function BlogSearch({ posts, className }: BlogSearchProps) {
+export default function BlogSearch({ posts, className }: BlogSearchProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -109,8 +109,10 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
     const matchesSearch =
       !debouncedSearch ||
       post.data.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      post.data.description?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      post.data.tags?.some(tag => 
+      post.data.description
+        ?.toLowerCase()
+        .includes(debouncedSearch.toLowerCase()) ||
+      post.data.tags?.some((tag) =>
         tag.toLowerCase().includes(debouncedSearch.toLowerCase())
       );
 
@@ -149,7 +151,7 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -170,7 +172,7 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
             </div>
           )}
         </div>
-        
+
         {allTags.length > 0 && (
           <div className="flex flex-wrap gap-2 justify-center">
             {allTags.map((tag) => (
@@ -195,7 +197,7 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
         {currentPosts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
-        
+
         {filteredPosts.length === 0 && (
           <div className="col-span-2 flex items-center justify-center text-center text-muted-foreground py-8">
             No posts found matching your search
@@ -208,13 +210,15 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious 
-                href="#" 
+              <PaginationPrevious
+                href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (currentPage > 1) handlePageChange(currentPage - 1);
                 }}
-                className={cn(currentPage === 1 && "pointer-events-none opacity-50")}
+                className={cn(
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
               />
             </PaginationItem>
 
@@ -242,10 +246,7 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
                 );
               }
               // Show ellipsis for skipped pages
-              if (
-                page === currentPage - 2 ||
-                page === currentPage + 2
-              ) {
+              if (page === currentPage - 2 || page === currentPage + 2) {
                 return (
                   <PaginationItem key={page}>
                     <PaginationEllipsis />
@@ -256,13 +257,16 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
             })}
 
             <PaginationItem>
-              <PaginationNext 
-                href="#" 
+              <PaginationNext
+                href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (currentPage < totalPages) handlePageChange(currentPage + 1);
+                  if (currentPage < totalPages)
+                    handlePageChange(currentPage + 1);
                 }}
-                className={cn(currentPage === totalPages && "pointer-events-none opacity-50")}
+                className={cn(
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
               />
             </PaginationItem>
           </PaginationContent>
@@ -270,4 +274,4 @@ export function BlogSearch({ posts, className }: BlogSearchProps) {
       )}
     </div>
   );
-} 
+}
