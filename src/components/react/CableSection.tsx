@@ -66,7 +66,7 @@ export default function CableSection() {
   const [activeFeature, setActiveFeature] = useState(0);
 
   return (
-    <div className="relative overflow-hidden bg-muted/30 py-24 sm:py-32">
+    <div className="relative overflow-hidden bg-muted/20 py-24 sm:py-32">
       <WaveBackground opacity={20} rotate={-10} />
       <div className="mx-auto container relative">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">

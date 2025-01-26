@@ -23,10 +23,10 @@ export const GeminiEffect = ({ className }: { className?: string }) => {
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{
-            duration: 2,
+            duration: 4,
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
+            repeatType: "reverse",
+            ease: "easeInOut",
           }}
         />
         <motion.path
@@ -37,10 +37,10 @@ export const GeminiEffect = ({ className }: { className?: string }) => {
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{
-            duration: 2,
+            duration: 4,
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
+            repeatType: "reverse",
+            ease: "easeInOut",
             delay: 0.2,
           }}
         />
@@ -52,10 +52,10 @@ export const GeminiEffect = ({ className }: { className?: string }) => {
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{
-            duration: 2,
+            duration: 4,
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
+            repeatType: "reverse",
+            ease: "easeInOut",
             delay: 0.4,
           }}
         />
@@ -67,10 +67,10 @@ export const GeminiEffect = ({ className }: { className?: string }) => {
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{
-            duration: 2,
+            duration: 4,
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
+            repeatType: "reverse",
+            ease: "easeInOut",
             delay: 0.6,
           }}
         />
@@ -82,10 +82,10 @@ export const GeminiEffect = ({ className }: { className?: string }) => {
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{
-            duration: 2,
+            duration: 4,
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
+            repeatType: "reverse",
+            ease: "easeInOut",
             delay: 0.8,
           }}
         />

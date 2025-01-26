@@ -1,6 +1,6 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import Header from "@/components/astro/layout/Header.astro";
+import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import { getCollection } from "astro:content";
@@ -17,7 +17,7 @@ const posts = (await getCollection("blog")).sort(
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
-    <Header />
+    <Header client:load />
     <main class="container mx-auto px-4 py-12">
       <div class="flex flex-col items-center text-center space-y-4 pb-8">
         <h1 class="text-4xl font-bold tracking-tighter">Blog</h1>
