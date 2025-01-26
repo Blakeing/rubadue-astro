@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import Header from "@/components/astro/layout/Header.astro";
+import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import FormattedDate from "@/components/astro/common/FormattedDate.astro";
 import { Card } from "@/components/react/ui/card";
@@ -18,7 +18,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   </head>
 
   <body class="min-h-screen bg-background">
-    <Header />
+    <Header client:load />
     <main class="container mx-auto px-4 py-6">
       <article>
         {

@@ -2,8 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import "@/styles/global.css";
-// Supports weights 100-900
-import "@fontsource-variable/montserrat";
+import "@fontsource-variable/exo-2";
 
 interface Props {
   title: string;
@@ -23,21 +22,15 @@ const { title, description, image = "/blog-placeholder-1.jpg" } = Astro.props;
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font styles -->
-<!-- <style is:global>
+<style is:global>
   @font-face {
-    font-family: "Geist";
-    src: url("/fonts/Geist-v1.4.01/webfonts/Geist[wght].woff2")
-      format("woff2-variations");
-    font-weight: 100 900;
+    font-family: "Good Times";
+    src: url("/fonts/good-times-regular.woff2") format("woff2");
+    font-weight: normal;
     font-style: normal;
     font-display: swap;
   }
-
-  :root {
-    --font-geist-sans: "Geist", system-ui, -apple-system, BlinkMacSystemFont,
-      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-</style> -->
+</style>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

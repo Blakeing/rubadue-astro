@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ImageMetadata } from "astro";
+import { WaveBackground } from "./WaveBackground";
 
 // Import images
 import litzWireImage from "@/assets/litz-wire-removebg-preview.png";
@@ -65,15 +66,16 @@ export default function CableSection() {
   const [activeFeature, setActiveFeature] = useState(0);
 
   return (
-    <div className="overflow-hidden bg-background py-24 sm:py-32">
-      <div className="mx-auto container px-6 lg:px-8">
+    <div className="relative overflow-hidden bg-muted/30 py-24 sm:py-32">
+      <WaveBackground opacity={20} rotate={-10} />
+      <div className="mx-auto container relative">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pr-8 lg:pt-4">
-            <div className="lg:max-w-lg">
-              <h2 className="text-base/7 font-semibold text-primary">
-                Wire Types
+            <div className="">
+              <h2 className="text-xl font-display  text-accent-foreground">
+                Wire <span className="text-primary">Types</span>
               </h2>
-              <p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              <p className="mt-2 text-pretty text-4xl  font-semibold  text-foreground sm:text-5xl">
                 Cables to Meet Your Needs.
               </p>
               <p className="mt-6 text-lg/8 text-muted-foreground">
@@ -119,7 +121,7 @@ export default function CableSection() {
                     alt={`${features[activeFeature].name} product image`}
                     width={2432}
                     height={1442}
-                    className="w-full h-full object-contain bg-background"
+                    className="w-full h-full object-contain "
                   />
                 </motion.div>
               </AnimatePresence>

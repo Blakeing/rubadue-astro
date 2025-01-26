@@ -1,0 +1,45 @@
+---
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import { Header } from "@/components/react/Header";
+import Footer from "@/components/astro/layout/Footer.astro";
+import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  category?: string;
+}
+
+const { title, description } = Astro.props;
+
+// Build breadcrumb segments based on current URL path
+const segments = Astro.url.pathname
+  .split("/")
+  .filter(Boolean)
+  .map((segment, index, array) => {
+    const href = "/" + array.slice(0, index + 1).join("/");
+    // Convert kebab case to title case for display
+    const name = segment
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    return { name, href };
+  });
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="min-h-screen bg-background">
+    <Header client:load />
+    <main class="container mx-auto px-4 py-6">
+      <div class="mb-6">
+        <Breadcrumbs segments={segments} />
+      </div>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

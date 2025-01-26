@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Montserrat Variable", ...defaultTheme.fontFamily.sans],
-        mono: [...defaultTheme.fontFamily.mono],
+        sans: ["'Exo 2 Variable'", ...defaultTheme.fontFamily.sans],
+        display: ["Good Times", ...defaultTheme.fontFamily.sans],
       },
       borderRadius: {
         lg: "var(--radius)",

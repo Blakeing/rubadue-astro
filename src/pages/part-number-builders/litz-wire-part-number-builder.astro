@@ -1,0 +1,33 @@
+---
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import { Header } from "@/components/react/Header";
+import Footer from "@/components/astro/layout/Footer.astro";
+import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import LitzWirePartNumberBuilderForm from "@/components/react/LitzWirePartNumberBuilderForm";
+
+const title = "Product Catalog";
+const description =
+  "Browse our complete catalog of high-quality wire and cable products.";
+
+// Build breadcrumb segments
+const segments = [{ name: "Products", href: "/products" }];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="min-h-screen bg-background">
+    <Header client:load />
+    <main>
+      <div class="container mx-auto py-6">
+        <div class="mb-6">
+          <Breadcrumbs segments={segments} />
+        </div>
+        <LitzWirePartNumberBuilderForm client:load />
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
