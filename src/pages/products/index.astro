@@ -1,6 +1,6 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import Header from "@/components/astro/layout/Header.astro";
+import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { getCollection } from "astro:content";
 import ProductListingPage from "@/components/react/ProductListingPage";
@@ -26,7 +26,7 @@ const segments = [{ name: "Products", href: "/products" }];
     <BaseHead title={title} description={description} />
   </head>
   <body class="min-h-screen bg-background">
-    <Header />
+    <Header client:load />
     <main>
       <div class="container mx-auto px-4 py-6">
         <div class="mb-6">

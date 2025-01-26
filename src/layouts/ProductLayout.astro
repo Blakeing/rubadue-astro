@@ -1,6 +1,6 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import Header from "@/components/astro/layout/Header.astro";
+import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import ProductPage from "@/components/react/ProductPage";
 import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
@@ -66,7 +66,7 @@ const heroImage = props.heroImage || placeholderImage;
     <BaseHead title={props.title} description={props.description} />
   </head>
   <body class="min-h-screen bg-background">
-    <Header />
+    <Header client:load />
     <main class="container mx-auto px-4 py-6">
       <div class="mb-6">
         <Breadcrumbs segments={segments} />
@@ -87,7 +87,7 @@ const heroImage = props.heroImage || placeholderImage;
         faqs={props.faqs}
         license={props.license}
       />
-      <article class="prose prose-slate max-w-none dark:prose-invert">
+      <article class="prose prose-stone max-w-none dark:prose-invert">
         <slot />
       </article>
     </main>

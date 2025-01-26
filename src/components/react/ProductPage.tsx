@@ -110,7 +110,7 @@ export default function ProductPage({
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{product.description}</p>
+            <p className="mt-6 text-muted-foreground">{product.description}</p>
 
             {/* Specifications */}
             <div className="mt-10">
@@ -209,8 +209,8 @@ export default function ProductPage({
                                 key={rating}
                                 className={classNames(
                                   review.rating > rating
-                                    ? "text-yellow-400"
-                                    : "text-gray-300",
+                                    ? "text-primary"
+                                    : "text-muted-foreground",
                                   "h-4 w-4"
                                 )}
                                 fill="currentColor"
