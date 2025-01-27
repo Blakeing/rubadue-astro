@@ -517,7 +517,7 @@ export default function N1MaxCalculatorForm() {
                           <Line
                             type="monotone"
                             dataKey="value"
-                            stroke="#2563eb"
+                            stroke="#C06536"
                             strokeWidth={2}
                             dot={{ strokeWidth: 4 }}
                           />

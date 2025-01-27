@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Book, Cable, FileText, Menu, Settings, Wrench } from "lucide-react";
-import logo from "@/assets/rubadue-logo.svg?url";
 import { ThemeToggle } from "./theme-toggle";
 import { TextLogo } from "./TextLogo";
 import {
@@ -65,6 +64,7 @@ const resources = [
   { name: "Notes", href: "#", icon: FileText },
   { name: "Glossary", href: "#", icon: Book },
   { name: "Part Number Index", href: "#", icon: Settings },
+  { name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
 ];
 
 export function Header() {

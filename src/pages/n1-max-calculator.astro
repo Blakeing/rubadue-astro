@@ -1,0 +1,12 @@
+---
+import N1MaxCalculatorForm from "@/components/react/N1MaxCalculatorForm";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="N1 Max Calculator | Rubadue Wire"
+  description="Calculate the maximum number of turns (N1 max) for a transformer using our N1 Max Calculator"
+  category="Tools"
+>
+  <N1MaxCalculatorForm client:load />
+</BaseLayout>
