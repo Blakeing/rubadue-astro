@@ -11,12 +11,6 @@ import tripleInsulatedImage from "@/assets/triple_insulated-removebg-preview.png
 
 const features = [
   {
-    name: "Bare Litz",
-    description:
-      "Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together.",
-    image: litzWireImage,
-  },
-  {
     name: "Single Insulated",
     description:
       "Rubadue wire manufactures several wire with a single layer of insulation.",
@@ -33,6 +27,12 @@ const features = [
     description:
       "Rubadue wire was the first company to design and manufacture triple insulated wires.",
     image: tripleInsulatedImage,
+  },
+  {
+    name: "Bare Litz",
+    description:
+      "Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together.",
+    image: litzWireImage,
   },
 ];
 
