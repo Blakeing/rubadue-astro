@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "@/components/react/ui/tooltip";
+import { Switch } from "@/components/react/ui/switch";
 
 // Add type for AWG keys
 type AWGKey = keyof typeof awgData;
@@ -35,10 +36,29 @@ type AWGKey = keyof typeof awgData;
 // Add type for material keys
 type MaterialKey = keyof typeof materialPresets;
 
+// Add type for AWG values
+type AWGValue = keyof typeof awgData;
+
+// Add temperature unit type
+type TemperatureUnit = "F" | "C";
+
+// Add length unit type
+type LengthUnit = "m" | "ft";
+
+// Add temperature conversion functions
+const fahrenheitToCelsius = (fahrenheit: number) => (fahrenheit - 32) * (5 / 9);
+const celsiusToFahrenheit = (celsius: number) => celsius * (9 / 5) + 32;
+
+// Add length conversion functions
+const feetToMeters = (feet: number) => feet * 0.3048;
+const metersToFeet = (meters: number) => meters * 3.28084;
+
 const formSchema = z.object({
   frequency: z.number().min(1, "Frequency must be greater than 0"),
   permeability: z.number().min(0, "Permeability cannot be negative"),
-  resistivity: z.number().min(0, "Resistivity cannot be negative"),
+  temperature: z
+    .number()
+    .min(-459.67, "Temperature cannot be below absolute zero"),
   awg: z.string().refine((val): val is AWGKey => val in awgData),
   wireLength: z.number().min(0, "Wire length must be non-negative"),
 });
@@ -62,38 +82,72 @@ const materialPresets = {
   copper: {
     name: "Copper",
     permeability: 1.256665e-6,
-    resistivity: 1.72e-8,
+    baseResistivity: 1.72e-8, // resistivity at room temperature (20°C)
+    tempCoeff: 0.00393, // temperature coefficient of resistance for copper
   },
   aluminum: {
     name: "Aluminum",
     permeability: 1.256665e-6,
-    resistivity: 2.82e-8,
+    baseResistivity: 2.82e-8,
+    tempCoeff: 0.00429,
   },
   silver: {
     name: "Silver",
     permeability: 1.256665e-6,
-    resistivity: 1.59e-8,
+    baseResistivity: 1.59e-8,
+    tempCoeff: 0.0038,
   },
   gold: {
     name: "Gold",
     permeability: 1.256665e-6,
-    resistivity: 2.44e-8,
+    baseResistivity: 2.44e-8,
+    tempCoeff: 0.0034,
   },
 };
 
-const calculateResults = (data: z.infer<typeof formSchema>) => {
-  const conductivity = 1 / data.resistivity;
+const calculateResistivity = (
+  baseResistivity: number,
+  tempCoeff: number,
+  temperature: number,
+  unit: TemperatureUnit
+) => {
+  // Convert to Celsius if needed
+  const temperatureC =
+    unit === "F" ? fahrenheitToCelsius(temperature) : temperature;
+  // Calculate resistivity at given temperature using the formula:
+  // ρ(T) = ρ₀[1 + α(T - T₀)]
+  // where T₀ is room temperature (20°C)
+  return baseResistivity * (1 + tempCoeff * (temperatureC - 20));
+};
+
+const calculateResults = (
+  data: {
+    frequency: number;
+    permeability: number;
+    temperature: number;
+    awg: AWGValue;
+    wireLength: number;
+  },
+  material: MaterialKey,
+  unit: TemperatureUnit
+) => {
+  const resistivity = calculateResistivity(
+    materialPresets[material].baseResistivity,
+    materialPresets[material].tempCoeff,
+    data.temperature,
+    unit
+  );
+  const conductivity = 1 / resistivity;
   const skinDepth =
     1 / Math.sqrt(Math.PI * data.frequency * data.permeability * conductivity);
-  // Type assertion since we validated AWG key in schema
-  const strandDiameter = awgData[data.awg as AWGKey] / 1000; // Convert mm to meters
+  const strandDiameter = awgData[data.awg] / 1000; // Convert mm to meters
   const n1Max = Math.floor((2 * skinDepth) / strandDiameter);
 
   // Cross-sectional area calculation
   const crossSectionalArea = Math.PI * Math.pow(strandDiameter / 2, 2);
 
   // Resistance per unit length calculation
-  const resistancePerMeter = data.resistivity / crossSectionalArea;
+  const resistancePerMeter = resistivity / crossSectionalArea;
 
   // Total resistance calculation
   const totalResistance = resistancePerMeter * data.wireLength;
@@ -105,6 +159,7 @@ const calculateResults = (data: z.infer<typeof formSchema>) => {
     crossSectionalArea,
     resistancePerMeter,
     totalResistance,
+    resistivity,
   };
 };
 
@@ -134,6 +189,9 @@ const calculatorDescription = {
 };
 
 export default function N1MaxCalculatorForm() {
+  const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>("F");
+  const [lengthUnit, setLengthUnit] = useState<LengthUnit>("ft");
+
   const {
     register,
     watch,
@@ -144,21 +202,20 @@ export default function N1MaxCalculatorForm() {
     defaultValues: {
       frequency: 1200,
       permeability: materialPresets.copper.permeability,
-      resistivity: materialPresets.copper.resistivity,
+      temperature: temperatureUnit === "F" ? 68 : 20,
       awg: "18",
-      wireLength: 1,
+      wireLength: lengthUnit === "ft" ? 3.28084 : 1, // Default to 1 meter (or ~3.28 feet)
     },
     mode: "onChange",
   });
 
-  const [selectedMaterial, setSelectedMaterial] = useState("copper");
+  const [selectedMaterial, setSelectedMaterial] =
+    useState<MaterialKey>("copper");
 
   // Handle material preset selection
   const handleMaterialChange = (value: MaterialKey) => {
     setSelectedMaterial(value);
-    const material = materialPresets[value];
-    setValue("permeability", material.permeability);
-    setValue("resistivity", material.resistivity);
+    setValue("permeability", materialPresets[value].permeability);
   };
 
   const [results, setResults] = useState({
@@ -168,30 +225,79 @@ export default function N1MaxCalculatorForm() {
     crossSectionalArea: 0,
     resistancePerMeter: 0,
     totalResistance: 0,
+    resistivity: 0,
   });
 
   // Watch all form values
   const formValues = watch();
 
+  // Handle temperature unit change
+  const handleTemperatureUnitChange = (checked: boolean) => {
+    const newUnit = checked ? "C" : "F";
+    const currentTemp = formValues.temperature;
+
+    // Convert the current temperature value
+    const newTemp =
+      newUnit === "C"
+        ? fahrenheitToCelsius(currentTemp)
+        : celsiusToFahrenheit(currentTemp);
+
+    setTemperatureUnit(newUnit);
+    setValue("temperature", Math.round(newTemp * 10) / 10); // Round to 1 decimal place
+  };
+
+  // Handle length unit change
+  const handleLengthUnitChange = (checked: boolean) => {
+    const newUnit = checked ? "m" : "ft";
+    const currentLength = formValues.wireLength;
+
+    // Convert the current length value
+    const newLength =
+      newUnit === "m"
+        ? feetToMeters(currentLength)
+        : metersToFeet(currentLength);
+
+    setLengthUnit(newUnit);
+    setValue("wireLength", Math.round(newLength * 100) / 100); // Round to 2 decimal places
+  };
+
   // Update results whenever form values change
   useEffect(() => {
     const calculateIfValid = () => {
       try {
+        const awgValue = formValues.awg as AWGValue;
+        const wireLengthInMeters =
+          lengthUnit === "ft"
+            ? feetToMeters(Number(formValues.wireLength))
+            : Number(formValues.wireLength);
+
         const data = {
           frequency: Number(formValues.frequency),
           permeability: Number(formValues.permeability),
-          resistivity: Number(formValues.resistivity),
-          awg: formValues.awg,
-          wireLength: Number(formValues.wireLength),
+          temperature: Number(formValues.temperature),
+          awg: awgValue,
+          wireLength: wireLengthInMeters, // Always use meters for calculations
         };
+
+        const minTemp = temperatureUnit === "C" ? -273.15 : -459.67;
 
         // Only calculate if all values are valid numbers
         if (
-          Object.entries(data).every(([key, value]) =>
-            key === "awg" ? true : !isNaN(value) && value >= 0
-          )
+          !isNaN(data.frequency) &&
+          data.frequency > 0 &&
+          !isNaN(data.permeability) &&
+          data.permeability >= 0 &&
+          !isNaN(data.temperature) &&
+          data.temperature >= minTemp &&
+          !isNaN(data.wireLength) &&
+          data.wireLength >= 0 &&
+          data.awg in awgData
         ) {
-          const newResults = calculateResults(data);
+          const newResults = calculateResults(
+            data,
+            selectedMaterial,
+            temperatureUnit
+          );
           setResults(newResults);
         }
       } catch (error) {
@@ -202,255 +308,350 @@ export default function N1MaxCalculatorForm() {
     // Debounce the calculation
     const timeoutId = setTimeout(calculateIfValid, 100);
     return () => clearTimeout(timeoutId);
-  }, [formValues]);
+  }, [formValues, selectedMaterial, temperatureUnit, lengthUnit]);
 
   return (
     <Card>
       <CardContent className="pt-6">
-        <div className="mb-6 space-y-2">
+        <div className="mb-6">
           <h2 className="text-2xl font-bold">{calculatorDescription.title}</h2>
           <p className="text-muted-foreground">
             {calculatorDescription.description}
           </p>
         </div>
-        <TooltipProvider>
-          <form className="space-y-6">
-            {/* Material Preset Selector */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Label htmlFor="material">Material</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>
-                      Select a common conductor material to auto-fill properties
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Left Column - Form */}
+          <TooltipProvider>
+            <form className="space-y-6">
+              {/* Material Preset Selector */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label htmlFor="material">Material</Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        Select a common conductor material to auto-fill
+                        properties
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Select
+                  value={selectedMaterial}
+                  onValueChange={handleMaterialChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select material" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(materialPresets).map(([key, material]) => (
+                      <SelectItem key={key} value={key}>
+                        {material.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <Select
-                value={selectedMaterial}
-                onValueChange={handleMaterialChange}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select material" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(materialPresets).map(([key, material]) => (
-                    <SelectItem key={key} value={key}>
-                      {material.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
-            {/* Frequency Input - enhanced tooltip */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Label htmlFor="frequency">Operating Frequency (f)</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p>{calculatorDescription.frequencyNote}</p>
-                  </TooltipContent>
-                </Tooltip>
+              {/* Frequency Input - enhanced tooltip */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label htmlFor="frequency">Operating Frequency (f)</Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p>{calculatorDescription.frequencyNote}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <div className="flex space-x-2">
+                  <Input
+                    id="frequency"
+                    type="number"
+                    className="flex-1"
+                    {...register("frequency", { valueAsNumber: true })}
+                  />
+                  <span className="flex items-center text-sm text-muted-foreground">
+                    Hz
+                  </span>
+                </div>
+                {errors.frequency && (
+                  <p className="text-sm text-red-500">
+                    {errors.frequency.message}
+                  </p>
+                )}
               </div>
-              <div className="flex space-x-2">
-                <Input
-                  id="frequency"
-                  type="number"
-                  className="flex-1"
-                  {...register("frequency", { valueAsNumber: true })}
-                />
-                <span className="flex items-center text-sm text-muted-foreground">
-                  Hz
-                </span>
-              </div>
-              {errors.frequency && (
-                <p className="text-sm text-red-500">
-                  {errors.frequency.message}
-                </p>
-              )}
-            </div>
 
-            {/* Permeability Input - enhanced tooltip */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Label htmlFor="permeability">Magnetic Permeability (μ)</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p>
-                      Magnetic permeability of the conductor material. For most
-                      non-magnetic conductors, this is approximately μ₀ (4π ×
-                      10⁻⁷ H/m).
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+              {/* Permeability Input - enhanced tooltip */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Label htmlFor="permeability">
+                    Magnetic Permeability (μ)
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p>
+                        Magnetic permeability of the conductor material. For
+                        most non-magnetic conductors, this is approximately μ₀
+                        (4π × 10⁻⁷ H/m).
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <div className="flex space-x-2">
+                  <Input
+                    id="permeability"
+                    type="number"
+                    step="0.000001"
+                    className="flex-1"
+                    {...register("permeability", { valueAsNumber: true })}
+                  />
+                  <span className="flex items-center text-sm text-muted-foreground">
+                    H/m
+                  </span>
+                </div>
+                {errors.permeability && (
+                  <p className="text-sm text-red-500">
+                    {errors.permeability.message}
+                  </p>
+                )}
               </div>
-              <div className="flex space-x-2">
-                <Input
-                  id="permeability"
-                  type="number"
-                  step="0.000001"
-                  className="flex-1"
-                  {...register("permeability", { valueAsNumber: true })}
-                />
-                <span className="flex items-center text-sm text-muted-foreground">
-                  H/m
-                </span>
+
+              {/* Temperature Input with Unit Toggle */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="temperature">Temperature</Label>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>
+                          Operating temperature affects the conductor's
+                          resistivity. Reference temperatures:
+                          {temperatureUnit === "F" ? (
+                            <>
+                              Room temperature: 68°F
+                              <br />
+                              Common operating temps: 140°F, 311°F, 356°F
+                            </>
+                          ) : (
+                            <>
+                              Room temperature: 20°C
+                              <br />
+                              Common operating temps: 60°C, 155°C, 180°C
+                            </>
+                          )}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="tempUnit">°F</Label>
+                    <Switch
+                      id="tempUnit"
+                      checked={temperatureUnit === "C"}
+                      onCheckedChange={handleTemperatureUnitChange}
+                    />
+                    <Label htmlFor="tempUnit">°C</Label>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <Input
+                    id="temperature"
+                    type="number"
+                    step="1"
+                    className="flex-1"
+                    {...register("temperature", { valueAsNumber: true })}
+                  />
+                  <span className="flex items-center text-sm text-muted-foreground">
+                    °{temperatureUnit}
+                  </span>
+                </div>
+                {errors.temperature && (
+                  <p className="text-sm text-red-500">
+                    {errors.temperature.message}
+                  </p>
+                )}
               </div>
-              {errors.permeability && (
-                <p className="text-sm text-red-500">
-                  {errors.permeability.message}
-                </p>
-              )}
-            </div>
 
-            {/* Resistivity Input - enhanced tooltip */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Label htmlFor="resistivity">Resistivity (ρ)</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p>
-                      Electrical resistivity of the conductor material.
-                      Temperature dependence: ρ = ρ₀[1 + α(T - T₀)]
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+              {/* AWG Strand Selection */}
+              <div className="space-y-2">
+                <Label htmlFor="awg">AWG Strand Selection</Label>
+                <Select
+                  defaultValue={watch("awg")}
+                  onValueChange={(value) => {
+                    register("awg").onChange({
+                      target: { name: "awg", value: value },
+                    });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select AWG" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {awgOptions.map((awg) => (
+                      <SelectItem key={awg} value={awg}>
+                        {awg} AWG
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.awg && (
+                  <p className="text-sm text-red-500">{errors.awg.message}</p>
+                )}
               </div>
-              <div className="flex space-x-2">
-                <Input
-                  id="resistivity"
-                  type="number"
-                  step="0.00000001"
-                  className="flex-1"
-                  {...register("resistivity", { valueAsNumber: true })}
-                />
-                <span className="flex items-center text-sm text-muted-foreground">
-                  Ω⋅m
-                </span>
+
+              {/* Wire Length Input with Unit Toggle */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="wireLength">Wire Length</Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="lengthUnit">ft</Label>
+                    <Switch
+                      id="lengthUnit"
+                      checked={lengthUnit === "m"}
+                      onCheckedChange={handleLengthUnitChange}
+                    />
+                    <Label htmlFor="lengthUnit">m</Label>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <Input
+                    id="wireLength"
+                    type="number"
+                    step="0.01"
+                    className="flex-1"
+                    {...register("wireLength", { valueAsNumber: true })}
+                  />
+                  <span className="flex items-center text-sm text-muted-foreground">
+                    {lengthUnit}
+                  </span>
+                </div>
+                {errors.wireLength && (
+                  <p className="text-sm text-red-500">
+                    {errors.wireLength.message}
+                  </p>
+                )}
               </div>
-              {errors.resistivity && (
-                <p className="text-sm text-red-500">
-                  {errors.resistivity.message}
-                </p>
-              )}
-            </div>
+            </form>
+          </TooltipProvider>
 
-            {/* AWG Strand Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="awg">AWG Strand Selection</Label>
-              <Select
-                defaultValue={watch("awg")}
-                onValueChange={(value) => {
-                  register("awg").onChange({
-                    target: { name: "awg", value: value },
-                  });
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select AWG" />
-                </SelectTrigger>
-                <SelectContent>
-                  {awgOptions.map((awg) => (
-                    <SelectItem key={awg} value={awg}>
-                      {awg} AWG
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.awg && (
-                <p className="text-sm text-red-500">{errors.awg.message}</p>
-              )}
-            </div>
-
-            {/* Wire Length Input */}
-            <div className="space-y-2">
-              <Label htmlFor="wireLength">Wire Length (meters)</Label>
-              <Input
-                id="wireLength"
-                type="number"
-                step="0.1"
-                {...register("wireLength", { valueAsNumber: true })}
-              />
-              {errors.wireLength && (
-                <p className="text-sm text-red-500">
-                  {errors.wireLength.message}
-                </p>
-              )}
-            </div>
-
+          {/* Right Column - Results */}
+          <div className="space-y-6">
             {results.skinDepth > 0 && (
-              <div className="space-y-4">
+              <>
+                {/* Results Card */}
                 <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                   <div className="p-6">
-                    <div className="space-y-4">
-                      <h4 className="text-lg font-medium">Results Analysis</h4>
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        <div className="space-y-1">
-                          <p className="font-semibold">
-                            Skin Depth (δ): {results.skinDepth.toExponential(6)}{" "}
-                            meters
-                          </p>
-                          <p className="text-xs">
-                            At this depth, current density drops to 37% of its
-                            surface value. For frequencies of{" "}
-                            {formValues.frequency} Hz, current mainly flows
-                            within {results.skinDepth.toExponential(3)} meters
-                            of the surface, making thicker solid conductors
-                            inefficient.
-                          </p>
-                        </div>
+                    <h3 className="mb-4 text-lg font-medium">
+                      Results Analysis
+                    </h3>
+                    <div className="space-y-4 text-sm text-muted-foreground">
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          Skin Depth (δ): {results.skinDepth.toExponential(6)}{" "}
+                          meters
+                        </p>
+                        <p className="text-xs">
+                          At this depth, current density drops to 37% of its
+                          surface value. For frequencies of{" "}
+                          {formValues.frequency} Hz, current mainly flows within{" "}
+                          {results.skinDepth.toExponential(3)} meters of the
+                          surface, making thicker solid conductors inefficient.
+                        </p>
+                      </div>
 
-                        <div className="space-y-1">
-                          <p className="font-semibold">
-                            Max Recommended Strands (N1 Max): {results.n1Max}
-                          </p>
-                          <p className="text-xs">
-                            {calculatorDescription.n1MaxNote}
-                          </p>
-                        </div>
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          Max Recommended Strands (N1 Max): {results.n1Max}
+                        </p>
+                        <p className="text-xs">
+                          {calculatorDescription.n1MaxNote}
+                        </p>
+                      </div>
 
-                        <div className="space-y-1">
-                          <p className="font-semibold">
-                            Cross-Sectional Area:{" "}
-                            {results.crossSectionalArea.toExponential(6)} m²
-                          </p>
-                          <p className="text-xs">
-                            Total conductor cross-section for current carrying
-                            capacity
-                          </p>
-                        </div>
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          Cross-Sectional Area:{" "}
+                          {results.crossSectionalArea.toExponential(6)} m²
+                        </p>
+                        <p className="text-xs">
+                          Total conductor cross-section for current carrying
+                          capacity
+                        </p>
+                      </div>
 
-                        <div className="space-y-1">
-                          <p className="font-semibold">
-                            DC Resistance:{" "}
-                            {results.totalResistance.toExponential(6)} Ω
-                          </p>
-                          <p className="text-xs">
-                            Base resistance without AC effects. AC resistance
-                            will be higher due to skin effect.
-                          </p>
-                        </div>
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          DC Resistance per{" "}
+                          {lengthUnit === "m" ? "meter" : "foot"}:{" "}
+                          {(lengthUnit === "m"
+                            ? results.resistancePerMeter
+                            : results.resistancePerMeter * 0.3048
+                          ).toExponential(6)}{" "}
+                          Ω/{lengthUnit}
+                        </p>
+                        <p className="text-xs">
+                          Base resistance without AC effects. AC resistance will
+                          be higher due to skin effect.
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          Total DC Resistance:{" "}
+                          {results.totalResistance.toExponential(6)} Ω (
+                          {formValues.wireLength} {lengthUnit})
+                        </p>
+                        <p className="text-xs">
+                          Total DC resistance for the specified wire length
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <p className="font-semibold">
+                          Resistivity at{" "}
+                          {temperatureUnit === "F" ? (
+                            <>
+                              {formValues.temperature}°F (
+                              {fahrenheitToCelsius(
+                                formValues.temperature
+                              ).toFixed(1)}
+                              °C)
+                            </>
+                          ) : (
+                            <>
+                              {formValues.temperature}°C (
+                              {celsiusToFahrenheit(
+                                formValues.temperature
+                              ).toFixed(1)}
+                              °F)
+                            </>
+                          )}
+                          : {results.resistivity.toExponential(6)} Ω⋅m
+                        </p>
+                        <p className="text-xs">
+                          Temperature-adjusted resistivity used in calculations
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
+                {/* Chart Card */}
                 <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
                   <div className="p-6">
+                    <h3 className="mb-4 text-lg font-medium">Visualization</h3>
                     <div className="h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart
@@ -533,10 +734,10 @@ export default function N1MaxCalculatorForm() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
-          </form>
-        </TooltipProvider>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

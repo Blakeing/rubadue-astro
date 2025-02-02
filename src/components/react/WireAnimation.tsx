@@ -12,7 +12,7 @@ export const WireAnimation = ({ className }: { className?: string }) => {
         xmlns="http://www.w3.org/2000/svg"
         className="absolute w-full h-full  left-1/3 animate-pulse"
         style={{
-          transform: " scaleX(1.25) rotate(90deg)",
+          transform: " scaleX(1.25) scaleY(.9) rotate(90deg)",
         }}
       >
         <defs>
