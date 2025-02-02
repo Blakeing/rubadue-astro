@@ -1,8 +1,8 @@
 ---
-title: 'Triple Insulated Litz Wire with FEP Insulation'
-description: 'Detailed specifications and applications of our Triple Insulated Litz Wire featuring FEP insulation, designed for high-frequency applications.'
-pubDate: '2025-01-25'
-heroImage: '/blog/triple-insulated-litz-wire.jpg'
+title: "Triple Insulated Litz Wire with FEP Insulation"
+description: "Detailed specifications and applications of our Triple Insulated Litz Wire featuring FEP insulation, designed for high-frequency applications."
+pubDate: "2025-01-25"
+heroImage: "/images/test-1.webp"
 ---
 
 # Triple Insulated Litz Wire with FEP Insulation
@@ -29,6 +29,7 @@ Our Triple Insulated Litz Wire meets the following standards:
 - VDE License Nr. 6715: Class F
 
 ### System Approvals
+
 - UL 1446
 - RXT-2 (Class F)
 - TCA (Class F)
@@ -49,3 +50,25 @@ This wire is specifically designed for high-frequency applications. The triple i
 Below you'll find detailed specifications for our range of Triple Insulated Litz Wire products. The table includes essential parameters such as AWG sizes, core dimensions, and recommended operating frequencies.
 
 Note: Due to manufacturing variations, conductor diameters may vary by supplier. Please request a specification sheet to ensure the diameter meets your application requirements.
+
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+- List item 1
+- List item 2
+- List item 3
+
+sdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfg
+
+sdfgsdfgsdfg
+
+sdfgsdfgsdfg
+
+|        | 12 AWG Single Build (Grade 1) Magnet Wire | 12 AWG 400/38 Single Build Litz PN: RL-400-38S80-01 |
+| ------ | ----------------------------------------- | --------------------------------------------------- |
+| Min OD | .0827” (2,101mm)                          | .0827” (2,101mm)                                    |
+| Nom OD | .0814” (2,068mm)                          | .0814” (2,068mm)                                    |
+| Max OD | .0840” (2,134mm)                          | .0840” (2,134mm)                                    |

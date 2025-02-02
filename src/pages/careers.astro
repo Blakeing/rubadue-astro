@@ -1,0 +1,219 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+interface Props {
+  text: string;
+  description?: string;
+}
+
+const { text, description } = Astro.props;
+---
+
+<BaseLayout
+  title="Careers | Rubadue Wire"
+  description="Join our team at Rubadue Wire and be part of a company that values innovation, growth, and employee well-being."
+  category="Careers"
+>
+  <div class="py-24">
+    <div class="container">
+      <div class="mx-auto max-w-2xl lg:mx-0">
+        <h2
+          class="text-pretty text-4xl font-bold tracking-tight text-foreground sm:text-5xl"
+        >
+          Join Our Team
+        </h2>
+        <p class="mt-6 text-lg/8 text-muted-foreground">
+          At Rubadue Wire, we believe in fostering a workplace that values
+          innovation, growth, and employee well-being. Join us and be part of a
+          team that's shaping the future of wire manufacturing.
+        </p>
+      </div>
+
+      <div class="mt-16 bg-background sm:mt-32">
+        <div
+          class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-4"
+        >
+          <!-- Compensation -->
+          <div>
+            <h3 class="text-base/7 font-semibold text-primary">Compensation</h3>
+            <dl
+              class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
+            >
+              {
+                [
+                  "Pay for Performance Wages",
+                  "Hourly Pay",
+                  "Salary Pay",
+                  "Weekly Pay Periods",
+                  "Bonus Program",
+                  "Quarterly Profit Sharing",
+                  "Shift Premiums",
+                ].map((item) => (
+                  <div class="relative pl-9">
+                    <dt class="font-semibold text-foreground">
+                      <svg
+                        class="absolute left-0 top-1 size-5 text-primary"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      {item}
+                    </dt>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <!-- Benefits -->
+          <div>
+            <h3 class="text-base/7 font-semibold text-primary">Benefits</h3>
+            <dl
+              class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
+            >
+              {
+                [
+                  { text: "ESOP" },
+                  { text: "401k" },
+                  {
+                    text: "Medical",
+                    description:
+                      "Company contributes the majority of the cost for you and your dependents",
+                  },
+                  { text: "Dental", description: "Employees covered at 100%" },
+                  { text: "Vision", description: "Employees covered at 100%" },
+                  { text: "Teledoc" },
+                  { text: "Company Paid Short-term Disability" },
+                  { text: "Company Paid Long-term Disability" },
+                  { text: "Company Paid Life Insurance" },
+                  { text: "Company Paid AD&D Insurance" },
+                  { text: "Additional Voluntary Life" },
+                  { text: "Spouse and Dependent Life Insurance" },
+                  { text: "FSA" },
+                  { text: "HSA" },
+                  { text: "Supplemental Insurance" },
+                ].map((item) => (
+                  <div class="relative pl-9">
+                    <dt class="font-semibold text-foreground">
+                      <svg
+                        class="absolute left-0 top-1 size-5 text-primary"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      {item.text}
+                    </dt>
+                    {item.description && (
+                      <dd class="mt-2">{item.description}</dd>
+                    )}
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <!-- Other Benefits -->
+          <div>
+            <h3 class="text-base/7 font-semibold text-primary">
+              Other Benefits
+            </h3>
+            <dl
+              class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
+            >
+              {
+                [
+                  "9 Paid Holidays",
+                  "Generous PTO",
+                  "Gym Reimbursement",
+                  "Work/Life Balance",
+                  "Community Volunteer Programs",
+                  "Paid Volunteer Time Off",
+                  "Employee Assistance Program",
+                  "Wellness Program",
+                  "Financial Planning Assistance",
+                  "Safety Shoe Assistance",
+                  "Prescription Safety Glasses Assistance",
+                ].map((item) => (
+                  <div class="relative pl-9">
+                    <dt class="font-semibold text-foreground">
+                      <svg
+                        class="absolute left-0 top-1 size-5 text-primary"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      {item}
+                    </dt>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <!-- Performance & Recognition -->
+          <div>
+            <h3 class="text-base/7 font-semibold text-primary">
+              Performance & Recognition
+            </h3>
+            <dl
+              class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
+            >
+              {
+                [
+                  "Service Awards",
+                  "Life Events Recognition",
+                  "Peer Recognition",
+                  "1:1 Meetings",
+                  "Goal-Specific Awards",
+                  "Employee Appreciation Events",
+                  "Spot Awards and Recognition",
+                  "Performance Reviews",
+                  "Development & Career",
+                  "Tuition Reimbursement",
+                  "Leadership Training",
+                  "On The Job Training",
+                ].map((item) => (
+                  <div class="relative pl-9">
+                    <dt class="font-semibold text-foreground">
+                      <svg
+                        class="absolute left-0 top-1 size-5 text-primary"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      {item}
+                    </dt>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

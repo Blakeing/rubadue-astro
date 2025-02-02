@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Book, Cable, FileText, Menu, Settings, Wrench } from "lucide-react";
-import { ThemeToggle } from "./theme-toggle";
 import { TextLogo } from "./TextLogo";
 import {
   NavigationMenu,
@@ -10,6 +9,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
   NavigationMenuViewport,
 } from "@/components/react/ui/navigation-menu";
 import {
@@ -65,6 +65,7 @@ const resources = [
   { name: "Glossary", href: "#", icon: Book },
   { name: "Part Number Index", href: "#", icon: Settings },
   { name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
+  { name: "Blog", href: "/blog", icon: Book },
 ];
 
 export function Header() {
@@ -79,6 +80,7 @@ export function Header() {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Wire Products</NavigationMenuTrigger>
+
                 <NavigationMenuContent>
                   <div className="w-[400px] p-6">
                     <h3 className="text-sm font-medium text-muted-foreground mb-4">
@@ -99,6 +101,7 @@ export function Header() {
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -118,28 +121,50 @@ export function Header() {
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  Specialty Products
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="w-[400px] p-6">
-                    <div className="flex items-center gap-x-2 mb-4">
-                      <Settings className="h-5 w-5 text-muted-foreground" />
-                      <h3 className="text-sm font-medium text-foreground">
-                        Specialty Products
-                      </h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Explore our range of specialized wire products and custom
-                      solutions.
-                    </p>
-                  </div>
-                </NavigationMenuContent>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <a href="/about">About</a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <a href="/markets">Markets</a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <a href="/careers">Careers</a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <a href="/contact">Contact Us</a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <a href="/request-a-quote">Request a Quote</a>
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          <ThemeToggle />
         </div>
         <div className="flex lg:hidden">
           <Sheet>

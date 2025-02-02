@@ -144,7 +144,7 @@ const calculateResults = (
   const n1Max = Math.floor((2 * skinDepth) / strandDiameter);
 
   // Cross-sectional area calculation
-  const crossSectionalArea = Math.PI * Math.pow(strandDiameter / 2, 2);
+  const crossSectionalArea = Math.PI * (strandDiameter / 2) ** 2;
 
   // Resistance per unit length calculation
   const resistancePerMeter = resistivity / crossSectionalArea;
@@ -283,13 +283,13 @@ export default function N1MaxCalculatorForm() {
 
         // Only calculate if all values are valid numbers
         if (
-          !isNaN(data.frequency) &&
+          !Number.isNaN(data.frequency) &&
           data.frequency > 0 &&
-          !isNaN(data.permeability) &&
+          !Number.isNaN(data.permeability) &&
           data.permeability >= 0 &&
-          !isNaN(data.temperature) &&
+          !Number.isNaN(data.temperature) &&
           data.temperature >= minTemp &&
-          !isNaN(data.wireLength) &&
+          !Number.isNaN(data.wireLength) &&
           data.wireLength >= 0 &&
           data.awg in awgData
         ) {
@@ -658,7 +658,10 @@ export default function N1MaxCalculatorForm() {
                           data={[
                             {
                               name: "Wire Diameter",
-                              value: awgData[formValues.awg] / 1000,
+                              value:
+                                awgData[
+                                  formValues.awg as keyof typeof awgData
+                                ] / 1000,
                               label: "Wire Diameter",
                             },
                             {

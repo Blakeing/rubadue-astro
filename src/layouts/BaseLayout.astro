@@ -3,6 +3,7 @@ import BaseHead from "@/components/astro/layout/BaseHead.astro";
 import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import { Toaster } from "@/components/react/ui/toaster";
 
 interface Props {
   title: string;
@@ -17,7 +18,7 @@ const segments = Astro.url.pathname
   .split("/")
   .filter(Boolean)
   .map((segment, index, array) => {
-    const href = "/" + array.slice(0, index + 1).join("/");
+    const href = `/${array.slice(0, index + 1).join("/")}`;
     // Convert kebab case to title case for display
     const name = segment
       .split("-")
@@ -41,5 +42,6 @@ const segments = Astro.url.pathname
       <slot />
     </main>
     <Footer />
+    <Toaster client:load />
   </body>
 </html>

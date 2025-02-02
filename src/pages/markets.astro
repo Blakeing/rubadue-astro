@@ -1,0 +1,227 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/react/ui/card";
+import { Badge } from "@/components/react/ui/badge";
+import { Button } from "@/components/react/ui/button";
+import { Separator } from "@/components/react/ui/separator";
+
+interface Market {
+  name: string;
+  tagline: string;
+  description: string;
+  applications: string[];
+  products: string[];
+  icon: string;
+}
+
+const markets: Market[] = [
+  {
+    name: "Automotive",
+    tagline: "Driving Innovation in Electric Vehicle Technology",
+    description:
+      "Rubadue Wire powers the future of mobility with cutting-edge solutions for electric vehicle systems. From onboard charging to fast-charging power supplies and controls, our products are engineered for efficiency, durability, and reliability.",
+    applications: [
+      "Onboard Charging",
+      "Fast Charging Power Supplies & Controls",
+    ],
+    products: [
+      "Extruded & Tape Wrap Litz",
+      "Single & Multi-Layer Winding Wire",
+    ],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+    </svg>`,
+  },
+  {
+    name: "Aerospace",
+    tagline: "Soaring Higher with Precision and Reliability",
+    description:
+      "Rubadue Wire supports the aerospace industry with solutions designed for the most demanding applications, including satellites and cutting-edge eVTOL technology. Our wires and cables meet the highest standards for performance and longevity in extreme environments.",
+    applications: ["Power Supplies & Custom Magnetics", "eVTOL", "Satellites"],
+    products: [
+      "Custom Litz Conductors",
+      "ETFE Insulated Winding Wires",
+      "Custom Cables",
+    ],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+    </svg>`,
+  },
+  {
+    name: "Medical",
+    tagline: "Empowering Life-Saving Innovations",
+    description:
+      "Rubadue Wire plays a vital role in powering advanced medical technologies, from IEC 60601 power supplies to specialty diagnostic and treatment devices. Our tight tolerance and high-performance wires meet the stringent standards required in healthcare.",
+    applications: [
+      "IEC 60601 Power Supplies",
+      "Specialty Diagnostic & Treatment Devices",
+    ],
+    products: [
+      "Extruded Litz",
+      "Triple Insulated Wires",
+      "Tight Tolerance Conductors",
+    ],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+    </svg>`,
+  },
+  {
+    name: "Industrial Controls",
+    tagline: "Strengthening Industry with High-Performance Solutions",
+    description:
+      "Rubadue Wire supports industrial controls and systems with reliable, high-performance wiring solutions. Our products ensure durability and efficiency in applications like welding, material handling equipment, and high-reliability power systems.",
+    applications: [
+      "Industrial Welding",
+      "High Reliability",
+      "Material Handling Equipment",
+    ],
+    products: [
+      "Custom Litz",
+      "Single & Multi-Layer PFA",
+      "TCA-series Winding Wires",
+      "Custom",
+    ],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+    </svg>`,
+  },
+];
+---
+
+<BaseLayout
+  title="Markets | Rubadue Wire"
+  description="Discover how Rubadue Wire serves diverse markets with innovative wire solutions for automotive, aerospace, medical, and industrial applications."
+  category="Markets"
+>
+  <div class="py-24 sm:py-32">
+    <div class="mx-auto container px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl lg:mx-0">
+        <h2
+          class="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+        >
+          Markets We Serve
+        </h2>
+        <p class="mt-6 text-lg/8 text-muted-foreground">
+          From automotive to aerospace, medical to industrial controls, Rubadue
+          Wire delivers innovative solutions that power the future of technology
+          across diverse markets.
+        </p>
+      </div>
+
+      <div
+        class="mx-auto mt-16 gap-16 grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2"
+      >
+        {
+          markets.map((market: Market) => (
+            <Card className="border-border">
+              <CardHeader>
+                <div class="flex items-center gap-x-4">
+                  <div class="flex size-16 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <Fragment set:html={market.icon} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg font-semibold leading-8 text-foreground">
+                      {market.name}
+                    </CardTitle>
+                    <CardDescription className="text-primary">
+                      {market.tagline}
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p class="text-base leading-7 text-muted-foreground">
+                  {market.description}
+                </p>
+                <div class="mt-6 space-y-6">
+                  <div>
+                    <h4 class="font-medium text-foreground">Applications</h4>
+                    <Separator className="my-2" />
+                    <div class="mt-2 flex flex-wrap gap-2">
+                      {market.applications.map((app: string) => (
+                        <Badge
+                          variant="secondary"
+                          className="bg-secondary text-secondary-foreground"
+                        >
+                          {app}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-foreground">Products</h4>
+                    <Separator className="my-2" />
+                    <div class="mt-2 flex flex-wrap gap-2">
+                      {market.products.map((product: string) => (
+                        <Badge
+                          variant="outline"
+                          className="border-border text-foreground"
+                        >
+                          {product}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        }
+      </div>
+
+      <div class="mx-auto mt-24 container sm:px-6 sm:mt-32 lg:px-8">
+        <div
+          class="relative isolate overflow-hidden bg-card px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16"
+        >
+          <h2
+            class="text-balance text-4xl font-semibold tracking-tight text-card-foreground sm:text-5xl"
+          >
+            Let's Build Something Together
+          </h2>
+          <p
+            class="mx-auto mt-6 max-w-xl text-pretty text-lg/8 text-muted-foreground"
+          >
+            Ready to explore how Rubadue Wire can power your next innovation?
+            Our team of experts is here to help you find the perfect solution
+            for your specific needs.
+          </p>
+          <div class="mt-10 flex items-center justify-center gap-x-6">
+            <Button asChild size="lg" variant="secondary">
+              <a href="/contact">Contact Our Team</a>
+            </Button>
+            <Button asChild variant="link" className="text-card-foreground">
+              <a href="/products">
+                Browse Products <span aria-hidden="true">→</span>
+              </a>
+            </Button>
+          </div>
+          <svg
+            viewBox="0 0 1024 1024"
+            aria-hidden="true"
+            class="absolute left-1/2 top-1/2 -z-10 size-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+          >
+            <circle
+              r={512}
+              cx={512}
+              cy={512}
+              fill="url(#gradient-contact)"
+              fill-opacity="0.25"></circle>
+            <defs>
+              <radialGradient id="gradient-contact">
+                <stop stop-color="hsl(var(--primary))"></stop>
+                <stop offset={1} stop-color="hsl(var(--secondary))"></stop>
+              </radialGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

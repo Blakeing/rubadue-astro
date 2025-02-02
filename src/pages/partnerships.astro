@@ -35,57 +35,6 @@ const people: Person[] = [
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
 ];
-
-const timelineEvents = [
-  {
-    year: "1977",
-    description:
-      "Founded with a core philosophy of providing customized solutions.",
-  },
-  {
-    year: "1977-1995",
-    description: "First to market extruded triple insulated wire",
-  },
-  {
-    year: "1995",
-    description: "Moved to Greeley, Colorado",
-  },
-  {
-    year: "2002",
-    description:
-      "Rubadue Wire won the Dupont Plunkett Award for new use of FEP",
-  },
-  {
-    year: "2013",
-    description: "Expanded Greeley facility",
-  },
-  {
-    year: "2014",
-    description: "Acquired by PHGI and converted to 100% Employee Owned",
-  },
-  {
-    year: "2015",
-    description: "Acquired Kerrigan-Lewis, specialty manufacturer of Litz Wire",
-  },
-  {
-    year: "2018",
-    description: "Moved to larger facility to support continued growth",
-  },
-  {
-    year: "2019",
-    description: "PHGI rebrands to Wire Experts Group",
-  },
-  {
-    year: "2022-2023",
-    description:
-      "Installed 5 new extrusion lines & increasing respool capacity",
-  },
-  {
-    year: "2024",
-    description:
-      "Active projects to expand Litz capabilities & add new production line for customer specific project",
-  },
-];
 ---
 
 <BaseLayout
@@ -165,51 +114,6 @@ const timelineEvents = [
           ))
         }
       </ul>
-    </div>
-    <div class="pt-24 mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl lg:mx-0">
-        <h2
-          class="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl"
-        >
-          Our History
-        </h2>
-        <p class="mt-6 text-lg/8 text-gray-600">
-          Meet the dedicated leaders who drive innovation and excellence at
-          Rubadue Wire. Our leadership team brings decades of experience and a
-          shared commitment to delivering exceptional wire solutions.
-        </p>
-      </div>
-      <div class="mt-20 relative">
-        {/* Vertical line */}
-        <div
-          class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-orange-500"
-        >
-        </div>
-
-        {
-          timelineEvents.map((event, index) => (
-            <div
-              class={`relative flex items-center mb-12 ${index % 2 === 0 ? "flex-row-reverse" : ""}`}
-            >
-              {/* Timeline dot */}
-              <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-orange-500 border-4 border-white" />
-
-              {/* Content */}
-              <div
-                class={`w-1/2 ${index % 2 === 0 ? "pr-12 text-right" : "pl-12"}`}
-              >
-                <h3 class="text-xl font-bold text-orange-600 mb-2">
-                  {event.year}
-                </h3>
-                <p class="text-gray-700">{event.description}</p>
-              </div>
-
-              {/* Empty space for the other side */}
-              <div class="w-1/2" />
-            </div>
-          ))
-        }
-      </div>
     </div>
   </div>
 </BaseLayout>
