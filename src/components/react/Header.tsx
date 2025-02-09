@@ -71,7 +71,7 @@ const resources = [
 export function Header() {
   return (
     <header className="bg-background shadow sticky top-0 z-50">
-      <nav className="mx-auto flex container items-center justify-between py-6 ">
+      <nav className="mx-auto flex  max-w-7xl px-2 sm:px-6 lg:px-8 items-center justify-between py-6 ">
         <a href="/" className="-m-1.5 p-1.5">
           <TextLogo />
         </a>

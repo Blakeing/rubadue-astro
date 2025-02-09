@@ -18,7 +18,7 @@ const posts = (await getCollection("blog")).sort(
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
     <Header client:load />
-    <main class="container mx-auto px-4 py-12">
+    <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col items-center text-center space-y-4 pb-8">
         <h1 class="text-4xl font-bold tracking-tighter">Blog</h1>
         <p class="text-muted-foreground">Latest posts and updates</p>

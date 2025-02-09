@@ -92,7 +92,7 @@ export default function LitzWirePartNumberBuilder() {
   }, [formValues]);
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-16">
       <h1 className="text-3xl font-bold mb-8">
         Rubadue Litz Part Number Builder
       </h1>
