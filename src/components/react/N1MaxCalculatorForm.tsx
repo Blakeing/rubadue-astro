@@ -60,7 +60,6 @@ const formSchema = z.object({
     .number()
     .min(-459.67, "Temperature cannot be below absolute zero"),
   awg: z.string().refine((val): val is AWGKey => val in awgData),
-  wireLength: z.number().min(0, "Wire length must be non-negative"),
 });
 
 const awgData = {
@@ -126,7 +125,6 @@ const calculateResults = (
     permeability: number;
     temperature: number;
     awg: AWGValue;
-    wireLength: number;
   },
   material: MaterialKey,
   unit: TemperatureUnit
@@ -141,24 +139,14 @@ const calculateResults = (
   const skinDepth =
     1 / Math.sqrt(Math.PI * data.frequency * data.permeability * conductivity);
   const strandDiameter = awgData[data.awg] / 1000; // Convert mm to meters
-  const n1Max = Math.floor((2 * skinDepth) / strandDiameter);
-
-  // Cross-sectional area calculation
-  const crossSectionalArea = Math.PI * (strandDiameter / 2) ** 2;
-
-  // Resistance per unit length calculation
-  const resistancePerMeter = resistivity / crossSectionalArea;
-
-  // Total resistance calculation
-  const totalResistance = resistancePerMeter * data.wireLength;
+  const n1Max = Math.floor(
+    (4 * (skinDepth * skinDepth)) / (strandDiameter * strandDiameter)
+  );
 
   return {
     skinDepth,
     doubleSkinDepth: 2 * skinDepth,
     n1Max,
-    crossSectionalArea,
-    resistancePerMeter,
-    totalResistance,
     resistivity,
   };
 };
@@ -190,7 +178,6 @@ const calculatorDescription = {
 
 export default function N1MaxCalculatorForm() {
   const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>("F");
-  const [lengthUnit, setLengthUnit] = useState<LengthUnit>("ft");
 
   const {
     register,
@@ -204,7 +191,6 @@ export default function N1MaxCalculatorForm() {
       permeability: materialPresets.copper.permeability,
       temperature: temperatureUnit === "F" ? 68 : 20,
       awg: "18",
-      wireLength: lengthUnit === "ft" ? 3.28084 : 1, // Default to 1 meter (or ~3.28 feet)
     },
     mode: "onChange",
   });
@@ -222,9 +208,6 @@ export default function N1MaxCalculatorForm() {
     skinDepth: 0,
     doubleSkinDepth: 0,
     n1Max: 0,
-    crossSectionalArea: 0,
-    resistancePerMeter: 0,
-    totalResistance: 0,
     resistivity: 0,
   });
 
@@ -246,55 +229,26 @@ export default function N1MaxCalculatorForm() {
     setValue("temperature", Math.round(newTemp * 10) / 10); // Round to 1 decimal place
   };
 
-  // Handle length unit change
-  const handleLengthUnitChange = (checked: boolean) => {
-    const newUnit = checked ? "m" : "ft";
-    const currentLength = formValues.wireLength;
-
-    // Convert the current length value
-    const newLength =
-      newUnit === "m"
-        ? feetToMeters(currentLength)
-        : metersToFeet(currentLength);
-
-    setLengthUnit(newUnit);
-    setValue("wireLength", Math.round(newLength * 100) / 100); // Round to 2 decimal places
-  };
-
   // Update results whenever form values change
   useEffect(() => {
     const calculateIfValid = () => {
       try {
-        const awgValue = formValues.awg as AWGValue;
-        const wireLengthInMeters =
-          lengthUnit === "ft"
-            ? feetToMeters(Number(formValues.wireLength))
-            : Number(formValues.wireLength);
-
-        const data = {
-          frequency: Number(formValues.frequency),
-          permeability: Number(formValues.permeability),
-          temperature: Number(formValues.temperature),
-          awg: awgValue,
-          wireLength: wireLengthInMeters, // Always use meters for calculations
-        };
-
-        const minTemp = temperatureUnit === "C" ? -273.15 : -459.67;
-
-        // Only calculate if all values are valid numbers
         if (
-          !Number.isNaN(data.frequency) &&
-          data.frequency > 0 &&
-          !Number.isNaN(data.permeability) &&
-          data.permeability >= 0 &&
-          !Number.isNaN(data.temperature) &&
-          data.temperature >= minTemp &&
-          !Number.isNaN(data.wireLength) &&
-          data.wireLength >= 0 &&
-          data.awg in awgData
+          !Number.isNaN(formValues.frequency) &&
+          formValues.frequency > 0 &&
+          !Number.isNaN(formValues.permeability) &&
+          formValues.permeability >= 0 &&
+          !Number.isNaN(formValues.temperature) &&
+          formValues.temperature >= -459.67 &&
+          formValues.awg in awgData
         ) {
           const newResults = calculateResults(
-            data,
+            {
+              frequency: Number(formValues.frequency),
+              permeability: Number(formValues.permeability),
+              temperature: Number(formValues.temperature),
+              awg: formValues.awg as AWGValue,
+            },
             selectedMaterial,
             temperatureUnit
           );
@@ -308,7 +262,7 @@ export default function N1MaxCalculatorForm() {
     // Debounce the calculation
     const timeoutId = setTimeout(calculateIfValid, 100);
     return () => clearTimeout(timeoutId);
-  }, [formValues, selectedMaterial, temperatureUnit, lengthUnit]);
+  }, [formValues, selectedMaterial, temperatureUnit]);
 
   return (
     <Card>
@@ -510,39 +464,6 @@ export default function N1MaxCalculatorForm() {
                   <p className="text-sm text-red-500">{errors.awg.message}</p>
                 )}
               </div>
-
-              {/* Wire Length Input with Unit Toggle */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="wireLength">Wire Length</Label>
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="lengthUnit">ft</Label>
-                    <Switch
-                      id="lengthUnit"
-                      checked={lengthUnit === "m"}
-                      onCheckedChange={handleLengthUnitChange}
-                    />
-                    <Label htmlFor="lengthUnit">m</Label>
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  <Input
-                    id="wireLength"
-                    type="number"
-                    step="0.01"
-                    className="flex-1"
-                    {...register("wireLength", { valueAsNumber: true })}
-                  />
-                  <span className="flex items-center text-sm text-muted-foreground">
-                    {lengthUnit}
-                  </span>
-                </div>
-                {errors.wireLength && (
-                  <p className="text-sm text-red-500">
-                    {errors.wireLength.message}
-                  </p>
-                )}
-              </div>
             </form>
           </TooltipProvider>
 
@@ -556,6 +477,50 @@ export default function N1MaxCalculatorForm() {
                     <h3 className="mb-4 text-lg font-medium">
                       Results Analysis
                     </h3>
+                    <div className="mb-6 rounded-lg bg-orange-50 p-4">
+                      <p className="text-2xl font-bold text-orange-600">
+                        N1 Max: {results.n1Max}
+                      </p>
+                      <p className="mt-2 text-sm text-orange-700">
+                        Maximum number of strands in the first-level bundle for
+                        optimal performance at {formValues.frequency} Hz
+                      </p>
+                    </div>
+
+                    {/* Add Construction Preview section */}
+                    <div className="mb-6 rounded-lg bg-gray-50 p-4">
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        Construction Preview
+                      </h4>
+                      <div className="space-y-2">
+                        <div>
+                          <p className="font-medium">Basic Bundle:</p>
+                          <p className="text-sm text-gray-600">
+                            {results.n1Max}/{formValues.awg} AWG (
+                            {results.n1Max} total strands)
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-medium">Common Configurations:</p>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <p>
+                              5x{results.n1Max}/{formValues.awg} AWG (
+                              {5 * results.n1Max} total strands)
+                            </p>
+                            <p>
+                              5x5x{results.n1Max}/{formValues.awg} AWG (
+                              {5 * 5 * results.n1Max} total strands)
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="mt-3 text-xs text-gray-500">
+                        These are common Litz wire configurations using the
+                        calculated N1 max. Format is: (bundles per level)x(N1
+                        max)/(AWG size)
+                      </p>
+                    </div>
+
                     <div className="space-y-4 text-sm text-muted-foreground">
                       <div className="space-y-1">
                         <p className="font-semibold">
@@ -567,54 +532,7 @@ export default function N1MaxCalculatorForm() {
                           surface value. For frequencies of{" "}
                           {formValues.frequency} Hz, current mainly flows within{" "}
                           {results.skinDepth.toExponential(3)} meters of the
-                          surface, making thicker solid conductors inefficient.
-                        </p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          Max Recommended Strands (N1 Max): {results.n1Max}
-                        </p>
-                        <p className="text-xs">
-                          {calculatorDescription.n1MaxNote}
-                        </p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          Cross-Sectional Area:{" "}
-                          {results.crossSectionalArea.toExponential(6)} m²
-                        </p>
-                        <p className="text-xs">
-                          Total conductor cross-section for current carrying
-                          capacity
-                        </p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          DC Resistance per{" "}
-                          {lengthUnit === "m" ? "meter" : "foot"}:{" "}
-                          {(lengthUnit === "m"
-                            ? results.resistancePerMeter
-                            : results.resistancePerMeter * 0.3048
-                          ).toExponential(6)}{" "}
-                          Ω/{lengthUnit}
-                        </p>
-                        <p className="text-xs">
-                          Base resistance without AC effects. AC resistance will
-                          be higher due to skin effect.
-                        </p>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="font-semibold">
-                          Total DC Resistance:{" "}
-                          {results.totalResistance.toExponential(6)} Ω (
-                          {formValues.wireLength} {lengthUnit})
-                        </p>
-                        <p className="text-xs">
-                          Total DC resistance for the specified wire length
+                          surface.
                         </p>
                       </div>
 
@@ -644,96 +562,6 @@ export default function N1MaxCalculatorForm() {
                           Temperature-adjusted resistivity used in calculations
                         </p>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Chart Card */}
-                <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-                  <div className="p-6">
-                    <h3 className="mb-4 text-lg font-medium">Visualization</h3>
-                    <div className="h-[200px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart
-                          data={[
-                            {
-                              name: "Wire Diameter",
-                              value:
-                                awgData[
-                                  formValues.awg as keyof typeof awgData
-                                ] / 1000,
-                              label: "Wire Diameter",
-                            },
-                            {
-                              name: "Skin Depth",
-                              value: results.skinDepth,
-                              label: "Skin Depth (δ)",
-                            },
-                            {
-                              name: "2× Skin Depth",
-                              value: results.doubleSkinDepth,
-                              label: "2× Skin Depth",
-                            },
-                          ]}
-                        >
-                          <XAxis
-                            dataKey="label"
-                            stroke="#888888"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={true}
-                          />
-                          <YAxis
-                            stroke="#888888"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={true}
-                            tickFormatter={(value) =>
-                              `${value.toExponential(1)}m`
-                            }
-                          />
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            className="stroke-muted"
-                          />
-                          <RechartsTooltip
-                            content={({ active, payload }) => {
-                              if (active && payload?.[0]) {
-                                const data = payload[0];
-                                return (
-                                  <div className="rounded-lg border bg-background p-2 shadow-sm">
-                                    <div className="flex flex-col gap-1">
-                                      <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                        {data.payload.label}
-                                      </span>
-                                      <span className="font-bold text-muted-foreground">
-                                        {typeof data.value === "number"
-                                          ? `${data.value.toExponential(6)}m`
-                                          : ""}
-                                      </span>
-                                    </div>
-                                  </div>
-                                );
-                              }
-                              return null;
-                            }}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="value"
-                            stroke="#C06536"
-                            strokeWidth={2}
-                            dot={{ strokeWidth: 4 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </div>
-                    <div className="mt-4 text-sm text-muted-foreground">
-                      <p>
-                        This chart compares the wire diameter with the skin
-                        depth. For effective Litz wire design, individual strand
-                        diameter should be less than 2× skin depth.
-                      </p>
                     </div>
                   </div>
                 </div>
