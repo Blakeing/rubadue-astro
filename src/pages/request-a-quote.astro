@@ -1,18 +1,35 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import QuoteRequestForm from "../components/react/QuoteRequestForm";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/components/react/ui/card";
 ---
 
 <BaseLayout
   title="Request a Quote - Rubadue Wire"
-  description="Request a quote for your wire and cable needs."
+  description="Get a customized quote for your wire and cable needs. Our expert team will help you find the perfect solution for your specific requirements, whether it's Litz wire, winding wire, or custom cable configurations."
+  category="Request a Quote"
+  eyebrow="Request a Quote"
+  headerTitle="Get Started"
 >
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-bold text-center mb-8">Request a Quote</h1>
-    <p class="text-center mb-8 max-w-2xl mx-auto">
-      Please fill out the form below and we'll get back to you as soon as
-      possible with a quote for your wire and cable needs.
-    </p>
-    <QuoteRequestForm client:load />
+  <div class="isloate relative -8">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-24">
+      <Card className="shadow-lg">
+        <CardHeader className="space-y-2 pb-6">
+          <CardDescription className="text-lg">
+            Please fill out the form below and we'll get back to you as soon as
+            possible with a quote for your wire and cable needs.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <QuoteRequestForm client:load />
+        </CardContent>
+      </Card>
+    </div>
   </div>
 </BaseLayout>

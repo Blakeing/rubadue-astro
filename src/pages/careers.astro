@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Card } from "@/components/react/ui/card";
 
 interface Props {
   text: string;
@@ -13,216 +14,217 @@ const { text, description } = Astro.props;
   title="Careers | Rubadue Wire"
   description="Join our team at Rubadue Wire and be part of a company that values innovation, growth, and employee well-being."
   category="Careers"
+  eyebrow="Careers"
+  headerTitle="Join Our Team"
 >
-  <div class="py-24">
-    <div class="container">
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+  <div class="pt-24 space-y-24">
+    <!-- Compensation Section -->
+    <div class="">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
-          <h2
-            class="text-pretty text-4xl font-bold tracking-tight text-foreground sm:text-5xl"
-          >
-            Join Our Team
+          <h2 class="text-base/7 font-semibold text-primary font-display">
+            Compensation
           </h2>
+          <p
+            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+          >
+            Competitive Pay & Performance Rewards
+          </p>
           <p class="mt-6 text-lg/8 text-muted-foreground">
-            At Rubadue Wire, we believe in fostering a workplace that values
-            innovation, growth, and employee well-being. Join us and be part of
-            a team that's shaping the future of wire manufacturing.
+            We offer competitive compensation packages designed to recognize and
+            reward your contributions to our success.
           </p>
         </div>
-
-        <div class="mt-16 bg-background sm:mt-32">
-          <div
-            class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-4"
+        <Card className="mt-16 p-8">
+          <dl
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
           >
-            <!-- Compensation -->
-            <div>
-              <h3 class="text-base/7 font-semibold text-primary">
-                Compensation
-              </h3>
-              <dl
-                class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
-              >
-                {
-                  [
-                    "Pay for Performance Wages",
-                    "Hourly Pay",
-                    "Salary Pay",
-                    "Weekly Pay Periods",
-                    "Bonus Program",
-                    "Quarterly Profit Sharing",
-                    "Shift Premiums",
-                  ].map((item) => (
-                    <div class="relative pl-9">
-                      <dt class="font-semibold text-foreground">
-                        <svg
-                          class="absolute left-0 top-1 size-5 text-primary"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {item}
-                      </dt>
-                    </div>
-                  ))
-                }
-              </dl>
-            </div>
+            {
+              [
+                "Pay for Performance Wages",
+                "Hourly Pay",
+                "Salary Pay",
+                "Weekly Pay Periods",
+                "Bonus Program",
+                "Quarterly Profit Sharing",
+                "Shift Premiums",
+              ].map((item) => (
+                <div class="relative pl-9">
+                  <dt class="inline font-semibold text-foreground">
+                    <svg
+                      class="absolute left-1 top-1 size-5 text-primary"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    {item}
+                  </dt>
+                </div>
+              ))
+            }
+          </dl>
+        </Card>
+      </div>
+    </div>
 
-            <!-- Benefits -->
-            <div>
-              <h3 class="text-base/7 font-semibold text-primary">Benefits</h3>
-              <dl
-                class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
-              >
+    <!-- Benefits Section -->
+    <div class="bg-accent py-24 border-y border">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:mx-0">
+          <h2 class="text-base/7 font-semibold text-primary font-display">
+            Benefits
+          </h2>
+          <p
+            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+          >
+            Comprehensive Healthcare & Financial Benefits
+          </p>
+          <p class="mt-6 text-lg/8 text-muted-foreground">
+            We provide a comprehensive benefits package to support your health,
+            well-being, and financial future.
+          </p>
+        </div>
+        <Card className="mt-16 p-8 bg-background">
+          <dl
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
+          >
+            {
+              [
+                { text: "ESOP", desc: "Employee Stock Ownership Plan" },
+                { text: "401k", desc: "Retirement savings with company match" },
                 {
-                  [
-                    { text: "ESOP" },
-                    { text: "401k" },
-                    {
-                      text: "Medical",
-                      description:
-                        "Company contributes the majority of the cost for you and your dependents",
-                    },
-                    {
-                      text: "Dental",
-                      description: "Employees covered at 100%",
-                    },
-                    {
-                      text: "Vision",
-                      description: "Employees covered at 100%",
-                    },
-                    { text: "Teledoc" },
-                    { text: "Company Paid Short-term Disability" },
-                    { text: "Company Paid Long-term Disability" },
-                    { text: "Company Paid Life Insurance" },
-                    { text: "Company Paid AD&D Insurance" },
-                    { text: "Additional Voluntary Life" },
-                    { text: "Spouse and Dependent Life Insurance" },
-                    { text: "FSA" },
-                    { text: "HSA" },
-                    { text: "Supplemental Insurance" },
-                  ].map((item) => (
-                    <div class="relative pl-9">
-                      <dt class="font-semibold text-foreground">
-                        <svg
-                          class="absolute left-0 top-1 size-5 text-primary"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {item.text}
-                      </dt>
-                      {item.description && (
-                        <dd class="mt-2">{item.description}</dd>
-                      )}
-                    </div>
-                  ))
-                }
-              </dl>
-            </div>
+                  text: "Medical",
+                  desc: "Company contributes the majority of the cost",
+                },
+                { text: "Dental", desc: "Employees covered at 100%" },
+                { text: "Vision", desc: "Employees covered at 100%" },
+                { text: "Life Insurance", desc: "Company paid coverage" },
+              ].map((item) => (
+                <div class="relative pl-9">
+                  <dt class="inline font-semibold text-foreground">
+                    <svg
+                      class="absolute left-1 top-1 size-5 text-primary"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    {item.text}
+                  </dt>
+                  {item.desc && <dd class="inline"> - {item.desc}</dd>}
+                </div>
+              ))
+            }
+          </dl>
+        </Card>
+      </div>
+    </div>
 
-            <!-- Other Benefits -->
-            <div>
-              <h3 class="text-base/7 font-semibold text-primary">
-                Other Benefits
-              </h3>
-              <dl
-                class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
-              >
+    <!-- Work Life & Development Section -->
+    <div class="">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:mx-0">
+          <h2 class="text-base/7 font-semibold text-primary font-display">
+            Work Life & Development
+          </h2>
+          <p
+            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+          >
+            Balance & Growth Opportunities
+          </p>
+          <p class="mt-6 text-lg/8 text-muted-foreground">
+            We believe in supporting both your professional growth and personal
+            well-being.
+          </p>
+        </div>
+        <Card className="mt-16 p-8">
+          <dl
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
+          >
+            {
+              [
+                { text: "Generous PTO", desc: "Flexible time off policy" },
                 {
-                  [
-                    "9 Paid Holidays",
-                    "Generous PTO",
-                    "Gym Reimbursement",
-                    "Work/Life Balance",
-                    "Community Volunteer Programs",
-                    "Paid Volunteer Time Off",
-                    "Employee Assistance Program",
-                    "Wellness Program",
-                    "Financial Planning Assistance",
-                    "Safety Shoe Assistance",
-                    "Prescription Safety Glasses Assistance",
-                  ].map((item) => (
-                    <div class="relative pl-9">
-                      <dt class="font-semibold text-foreground">
-                        <svg
-                          class="absolute left-0 top-1 size-5 text-primary"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {item}
-                      </dt>
-                    </div>
-                  ))
-                }
-              </dl>
-            </div>
+                  text: "Work/Life Balance",
+                  desc: "We value your personal time",
+                },
+                {
+                  text: "Wellness Program",
+                  desc: "Including gym reimbursement",
+                },
+                {
+                  text: "Development",
+                  desc: "Tuition reimbursement and training",
+                },
+                {
+                  text: "Recognition",
+                  desc: "Service awards and peer recognition",
+                },
+                { text: "Community", desc: "Paid volunteer time off" },
+              ].map((item) => (
+                <div class="relative pl-9">
+                  <dt class="inline font-semibold text-foreground">
+                    <svg
+                      class="absolute left-1 top-1 size-5 text-primary"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    {item.text}
+                  </dt>
+                  {item.desc && <dd class="inline"> - {item.desc}</dd>}
+                </div>
+              ))
+            }
+          </dl>
+        </Card>
+      </div>
+    </div>
 
-            <!-- Performance & Recognition -->
-            <div>
-              <h3 class="text-base/7 font-semibold text-primary">
-                Performance & Recognition
-              </h3>
-              <dl
-                class="mt-6 grid grid-cols-1 gap-y-4 text-base/7 text-muted-foreground"
+    <!-- Call to Action -->
+    <div class="bg-accent border-t border py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <Card className="p-12">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-base/7 font-semibold text-primary font-display">
+              Ready to Join?
+            </h2>
+            <p
+              class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+            >
+              Start Your Journey With Us
+            </p>
+            <p class="mt-6 text-lg/8 text-muted-foreground">
+              We're always looking for talented individuals to join our team.
+              Get in touch to learn more about our current opportunities.
+            </p>
+            <div class="mt-10">
+              <a
+                href="/contact"
+                class="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
-                {
-                  [
-                    "Service Awards",
-                    "Life Events Recognition",
-                    "Peer Recognition",
-                    "1:1 Meetings",
-                    "Goal-Specific Awards",
-                    "Employee Appreciation Events",
-                    "Spot Awards and Recognition",
-                    "Performance Reviews",
-                    "Development & Career",
-                    "Tuition Reimbursement",
-                    "Leadership Training",
-                    "On The Job Training",
-                  ].map((item) => (
-                    <div class="relative pl-9">
-                      <dt class="font-semibold text-foreground">
-                        <svg
-                          class="absolute left-0 top-1 size-5 text-primary"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {item}
-                      </dt>
-                    </div>
-                  ))
-                }
-              </dl>
+                Contact Us About Opportunities
+              </a>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   </div>

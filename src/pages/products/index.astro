@@ -27,11 +27,11 @@ const segments = [{ name: "Products", href: "/products" }];
   </head>
   <body class="min-h-screen bg-background">
     <Header client:load />
+    <div class="mb-6">
+      <Breadcrumbs segments={segments} />
+    </div>
     <main>
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
-        <div class="mb-6">
-          <Breadcrumbs segments={segments} />
-        </div>
         <ProductListingPage
           client:load
           products={sortedProducts}

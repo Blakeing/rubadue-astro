@@ -99,24 +99,13 @@ const markets: Market[] = [
   title="Markets | Rubadue Wire"
   description="Discover how Rubadue Wire serves diverse markets with innovative wire solutions for automotive, aerospace, medical, and industrial applications."
   category="Markets"
+  eyebrow="Core"
+  headerTitle="Markets"
 >
-  <div class="py-24 sm:py-32">
+  <div class="py-24">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl lg:mx-0">
-        <h2
-          class="text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
-        >
-          Markets We Serve
-        </h2>
-        <p class="mt-6 text-lg/8 text-muted-foreground">
-          From automotive to aerospace, medical to industrial controls, Rubadue
-          Wire delivers innovative solutions that power the future of technology
-          across diverse markets.
-        </p>
-      </div>
-
       <div
-        class="mx-auto mt-16 gap-16 grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2"
+        class="mx-auto gap-16 grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2"
       >
         {
           markets.map((market: Market) => (
@@ -176,7 +165,7 @@ const markets: Market[] = [
         }
       </div>
 
-      <div class="mx-auto mt-24 max-w-7xl px-2 sm:px-6 lg:px-8 sm:mt-32">
+      <!-- <div class="mx-auto mt-24 max-w-7xl px-2 sm:px-6 lg:px-8 sm:mt-32">
         <div
           class="relative isolate overflow-hidden bg-card px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16"
         >
@@ -221,7 +210,7 @@ const markets: Market[] = [
             </defs>
           </svg>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </BaseLayout>

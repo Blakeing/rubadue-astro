@@ -57,6 +57,7 @@ const segments = [
 
 // Default placeholder image
 import placeholderImage from "@/assets/rubadue-hero.webp";
+import { Card, CardContent } from "@/components/react/ui/card";
 const heroImage = props.heroImage || placeholderImage;
 ---
 
@@ -67,10 +68,10 @@ const heroImage = props.heroImage || placeholderImage;
   </head>
   <body class="min-h-screen bg-background">
     <Header client:load />
+    <div class="mb-6">
+      <Breadcrumbs segments={segments} />
+    </div>
     <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
-      <div class="mb-6">
-        <Breadcrumbs segments={segments} />
-      </div>
       <ProductPage
         client:load
         product={{
@@ -87,9 +88,13 @@ const heroImage = props.heroImage || placeholderImage;
         faqs={props.faqs}
         license={props.license}
       />
-      <article class="prose prose-stone max-w-none">
-        <slot />
-      </article>
+      <Card className="mt-10">
+        <CardContent className="p-6">
+          <article class="prose prose-stone max-w-none">
+            <slot />
+          </article>
+        </CardContent>
+      </Card>
     </main>
     <Footer />
   </body>

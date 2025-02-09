@@ -1,5 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/react/ui/card";
 
 interface Person {
   name: string;
@@ -141,7 +147,7 @@ const stats = [
   headerTitle="Rubadue Wire"
 >
   <div class="py-12">
-    <div class="mx-auto">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
       {/* Description Section */}
       <div class="mx-auto lg:mx-0 mb-24">
         <p class="text-lg/8 text-muted-foreground">
@@ -153,20 +159,28 @@ const stats = [
 
       {/* Mission & Vision Section */}
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-24">
-        <div class="bg-card rounded-lg p-8">
-          <h3 class="text-2xl font-bold text-primary mb-4">OUR MISSION</h3>
-          <p class="text-lg text-card-foreground">
-            We solve wire and cable challenges when high performance and
-            reliability are critical.
-          </p>
-        </div>
-        <div class="bg-card rounded-lg p-8">
-          <h3 class="text-2xl font-bold text-primary mb-4">OUR VISION</h3>
-          <p class="text-lg text-card-foreground">
-            Create the premier brand in developing and manufacturing specialty
-            wire and cable to support tomorrow's innovation.
-          </p>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className=" text-primary">Our Mission</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p class="text-lg text-card-foreground">
+              We solve wire and cable challenges when high performance and
+              reliability are critical.
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className=" text-primary">Our Vision</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p class="text-lg text-card-foreground">
+              Create the premier brand in developing and manufacturing specialty
+              wire and cable to support tomorrow's innovation.
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Leadership Section */}
@@ -241,30 +255,6 @@ const stats = [
             ))
           }
         </ul>
-      </div>
-
-      {/* Join Our Team Section */}
-      <div class="bg-primary/10 rounded-2xl p-12 mb-24">
-        <div class="mx-auto max-w-2xl text-center">
-          <h2
-            class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
-          >
-            Join Our Team!
-          </h2>
-          <p class="mt-6 text-lg leading-8 text-muted-foreground">
-            If you strive for Precision, care about Performance, and take pride
-            in Partnership, you are who we are looking for. Survey the available
-            positions and apply today! Don't let this opportunity pass you by!
-          </p>
-          <div class="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="https://rubadue.com/about-us/careers-rubadue-wire/"
-              class="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              Apply Today
-            </a>
-          </div>
-        </div>
       </div>
 
       {/* History Timeline Section */}

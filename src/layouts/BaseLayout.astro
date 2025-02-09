@@ -50,10 +50,8 @@ const segments = Astro.url.pathname
         <BaseHeader eyebrow={eyebrow} title={headerTitle} />
       )
     }
-    <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
-      <div class="mb-6">
-        <Breadcrumbs segments={segments} />
-      </div>
+    <main class="">
+      <Breadcrumbs segments={segments} />
       <slot />
     </main>
     <Footer />
