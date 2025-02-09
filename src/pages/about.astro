@@ -13,24 +13,28 @@ const people: Person[] = [
   {
     name: "Sue Rubadue",
     role: "President",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    xUrl: "#",
-    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
-  },
-  {
-    name: "Kathy Rubadue",
-    role: "Vice President",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    imageUrl: "https://placehold.co/600x400",
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
   {
     name: "Steve Rubadue",
     role: "Vice President",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    imageUrl: "https://placehold.co/600x400",
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+  {
+    name: "Kathy Rubadue",
+    role: "Vice President",
+    imageUrl: "https://placehold.co/600x400",
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+  {
+    name: "Jared Rubadue",
+    role: "Vice President",
+    imageUrl: "https://placehold.co/600x400",
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
@@ -40,73 +44,75 @@ const timelineEvents = [
   {
     year: "1977",
     description:
-      "Founded with a core philosophy of providing customized solutions.",
+      "Rubadue Wire Company was founded by Bill Rubadue in Loveland, Colorado.",
   },
   {
     year: "1977-1995",
-    description: "First to market extruded triple insulated wire",
+    description: "First to market extruded triple insulated wire.",
   },
   {
     year: "1995",
-    description: "Moved to Greeley, Colorado",
+    description: "Moved to Greeley, Colorado to accommodate growth.",
   },
   {
     year: "2002",
     description:
-      "Rubadue Wire won the Dupont Plunkett Award for new use of FEP",
+      "Rubadue Wire won the Dupont Plunkett Award for new use of FEP.",
   },
   {
     year: "2013",
-    description: "Expanded Greeley facility",
+    description: "Expanded Greeley facility to meet growing demand.",
   },
   {
     year: "2014",
-    description: "Acquired by PHGI and converted to 100% Employee Owned",
+    description: "Acquired by PHGI and converted to 100% Employee Owned.",
   },
   {
     year: "2015",
-    description: "Acquired Kerrigan-Lewis, specialty manufacturer of Litz Wire",
+    description:
+      "Acquired Kerrigan-Lewis Wire Products, a specialty manufacturer of Litz Wire.",
   },
   {
     year: "2018",
-    description: "Moved to larger facility to support continued growth",
+    description:
+      "Moved to larger facility in Loveland, Colorado to support continued growth.",
   },
   {
     year: "2019",
-    description: "PHGI rebrands to Wire Experts Group",
+    description: "PHGI rebrands to Wire Experts Group.",
   },
   {
     year: "2022-2023",
     description:
-      "Installed 5 new extrusion lines & increasing respool capacity",
+      "Installed 5 new extrusion lines & increased respool capacity.",
   },
   {
     year: "2024",
     description:
-      "Active projects to expand Litz capabilities & add new production line for customer specific project",
+      "Active projects to expand Litz capabilities & add new production line for customer specific project.",
   },
 ];
 
 const values = [
   {
+    title: "Precision",
+    description:
+      "Maintaining the highest standards in manufacturing and delivering precise solutions.",
+  },
+  {
+    title: "Performance",
+    description:
+      "Delivering high-performance wire and cable solutions that meet critical requirements.",
+  },
+  {
+    title: "Partnership",
+    description:
+      "Building strong relationships with our customers through collaboration and trust.",
+  },
+  {
     title: "Innovation",
     description:
       "Pioneering wire solutions with cutting-edge technology and continuous improvement.",
-  },
-  {
-    title: "Quality",
-    description:
-      "Maintaining the highest standards in manufacturing and customer service.",
-  },
-  {
-    title: "Customer Focus",
-    description:
-      "Delivering customized solutions that meet our clients' specific needs.",
-  },
-  {
-    title: "Integrity",
-    description:
-      "Operating with honesty, transparency, and ethical business practices.",
   },
   {
     title: "Employee Ownership",
@@ -114,9 +120,9 @@ const values = [
       "Fostering a culture of shared responsibility and commitment to excellence.",
   },
   {
-    title: "Sustainability",
+    title: "Quality",
     description:
-      "Implementing environmentally conscious practices in our operations.",
+      "Maintaining the highest standards in manufacturing and customer service.",
   },
 ];
 
@@ -128,15 +134,23 @@ const stats = [
 ---
 
 <BaseLayout
-  title="About Us | Rubadue Wire"
-  description="Learn about Rubadue Wire's mission, vision, and commitment to solving wire and cable challenges when high performance and reliability are critical."
+  title="About Rubadue Wire | Wire & Cable Solutions"
+  description="Since 1977, Rubadue Wire has been pioneering wire solutions with cutting-edge technology, specializing in triple-insulated wire and Litz wire. As a 100% employee-owned company, we solve wire and cable challenges when high performance and reliability are critical."
   category="About"
-  eyebrow="About Rubadue Wire"
-  headerTitle="Excellence Through Innovation"
-  headerDescription="We solve wire and cable challenges when high performance and reliability are critical, creating the premier brand in developing and manufacturing specialty wire and cable to support tomorrow's innovation."
+  eyebrow="About"
+  headerTitle="Rubadue Wire"
 >
   <div class="py-12">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto">
+      {/* Description Section */}
+      <div class="mx-auto lg:mx-0 mb-24">
+        <p class="text-lg/8 text-muted-foreground">
+          We solve wire and cable challenges when high performance and
+          reliability are critical. As a 100% employee-owned company, we are
+          committed to innovation, quality, and exceptional customer service.
+        </p>
+      </div>
+
       {/* Mission & Vision Section */}
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-24">
         <div class="bg-card rounded-lg p-8">
@@ -239,11 +253,12 @@ const stats = [
           </h2>
           <p class="mt-6 text-lg leading-8 text-muted-foreground">
             If you strive for Precision, care about Performance, and take pride
-            in Partnership, you are who we are looking for.
+            in Partnership, you are who we are looking for. Survey the available
+            positions and apply today! Don't let this opportunity pass you by!
           </p>
           <div class="mt-10 flex items-center justify-center gap-x-6">
             <a
-              href="/careers"
+              href="https://rubadue.com/about-us/careers-rubadue-wire/"
               class="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Apply Today
@@ -292,5 +307,5 @@ const stats = [
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </BaseLayout>

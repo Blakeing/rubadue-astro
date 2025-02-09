@@ -46,12 +46,8 @@ const segments = Astro.url.pathname
   <body class="min-h-screen bg-background">
     <Header client:load />
     {
-      eyebrow && headerTitle && headerDescription && (
-        <BaseHeader
-          eyebrow={eyebrow}
-          title={headerTitle}
-          description={headerDescription}
-        />
+      eyebrow && headerTitle && (
+        <BaseHeader eyebrow={eyebrow} title={headerTitle} />
       )
     }
     <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
