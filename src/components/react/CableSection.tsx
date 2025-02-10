@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { ImageMetadata } from "astro";
 import { WaveBackground } from "./WaveBackground";
 
 // Import images
@@ -118,6 +117,7 @@ export default function CableSection() {
 								>
 									<img
 										src={features[activeFeature].image.src}
+										// biome-ignore lint/a11y/noRedundantAlt: <explanation>
 										alt={`${features[activeFeature].name} product image`}
 										width={2432}
 										height={1442}
