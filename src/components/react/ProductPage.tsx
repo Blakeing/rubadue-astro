@@ -3,17 +3,11 @@ import { Star } from "lucide-react";
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from "@/components/react/ui/tabs";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/components/react/ui/card";
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/react/ui/accordion";
 
 function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
@@ -79,13 +73,13 @@ export default function ProductPage({
 							<img
 								src={product.imageSrc}
 								alt={product.imageAlt}
-								className="aspect-[4/3] w-full rounded-lg bg-muted object-cover"
+								className="aspect-[4/3] w-full rounded-lg bg-muted object-contain"
 							/>
 						) : (
 							<Image
 								src={product.imageSrc}
 								alt={product.imageAlt}
-								class="aspect-[4/3] w-full rounded-lg bg-muted object-cover"
+								class="aspect-[4/3] w-full rounded-lg bg-muted object-contain"
 								width={1600}
 								height={900}
 								format="webp"
@@ -95,64 +89,96 @@ export default function ProductPage({
 					</div>
 
 					{/* Product details */}
-					<div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
-						<Card>
-							<CardHeader>
-								<CardTitle className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-									{product.name}
-								</CardTitle>
-								{product.version && (
-									<p className="text-sm text-muted-foreground">
-										Version {product.version.name} (Updated{" "}
-										<time dateTime={product.version.datetime}>
-											{product.version.date}
-										</time>
-										)
-									</p>
-								)}
-							</CardHeader>
-							<CardContent>
-								<p className="text-muted-foreground">{product.description}</p>
-							</CardContent>
-						</Card>
+					<div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none w-full">
+						{/* <div className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mb-6">
+								{product.name}
+							</div>
+							<p className="text-muted-foreground mb-8">{product.description}</p> */}
 
-						{/* Specifications */}
-						<div className="mt-10 space-y-6">
-							<Card>
-								<CardHeader>
-									<CardTitle>Specifications</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<div className="space-y-6">
-										{product.specifications &&
-											Object.entries(product.specifications).map(
-												([key, value]) => (
-													<div key={key} className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground capitalize">
-															{key}:
+						<Accordion
+							type="single"
+							defaultValue="construction"
+							className="w-full"
+						>
+							{/* Product Construction */}
+							<AccordionItem value="construction">
+								<AccordionTrigger className="text-lg font-semibold">
+									Product Construction
+								</AccordionTrigger>
+								<AccordionContent>
+									<div className="space-y-4">
+										{product.specifications && (
+											<>
+												{product.specifications.conductor && (
+													<div className="flex items-center">
+														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+															Conductor:
 														</dt>
-														<dd className="text-sm text-foreground">{value}</dd>
+														<dd className="text-sm text-foreground">
+															{product.specifications.conductor}
+														</dd>
 													</div>
-												),
-											)}
+												)}
+												{product.specifications.insulation && (
+													<div className="flex items-center">
+														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+															Insulation:
+														</dt>
+														<dd className="text-sm text-foreground">
+															{product.specifications.insulation}
+														</dd>
+													</div>
+												)}
+												{product.specifications.temperature && (
+													<div className="flex items-center">
+														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+															Temperature:
+														</dt>
+														<dd className="text-sm text-foreground">
+															{product.specifications.temperature}
+														</dd>
+													</div>
+												)}
+												{product.specifications.voltage && (
+													<div className="flex items-center">
+														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+															Voltage:
+														</dt>
+														<dd className="text-sm text-foreground">
+															{product.specifications.voltage}
+														</dd>
+													</div>
+												)}
+												{product.specifications.tensileStrength && (
+													<div className="flex items-center">
+														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+															Tensile Strength:
+														</dt>
+														<dd className="text-sm text-foreground">
+															{product.specifications.tensileStrength}
+														</dd>
+													</div>
+												)}
+											</>
+										)}
 									</div>
-								</CardContent>
-							</Card>
+								</AccordionContent>
+							</AccordionItem>
 
-							{/* Compliances and Approvals */}
+							{/* Compliances & Approvals */}
 							{(product.compliances || product.systemApprovals) && (
-								<Card>
-									<CardHeader>
-										<CardTitle>Compliances & Approvals</CardTitle>
-									</CardHeader>
-									<CardContent>
+								<AccordionItem value="compliances">
+									<AccordionTrigger className="text-lg font-semibold">
+										Compliances & Approvals
+									</AccordionTrigger>
+									<AccordionContent>
 										<div className="space-y-6">
 											{product.compliances && (
 												<div>
-													<dt className="text-sm text-muted-foreground">
+													<dt className="text-sm text-muted-foreground mb-2">
 														Compliances:
 													</dt>
-													<dd className="mt-2">
+													<dd>
 														<ul className="list-disc space-y-2 pl-5 text-sm">
 															{product.compliances.map((compliance) => (
 																<li key={compliance}>{compliance}</li>
@@ -162,11 +188,11 @@ export default function ProductPage({
 												</div>
 											)}
 											{product.systemApprovals && (
-												<div>
-													<dt className="text-sm text-muted-foreground">
+												<div className="mt-4">
+													<dt className="text-sm text-muted-foreground mb-2">
 														System Approvals:
 													</dt>
-													<dd className="mt-2">
+													<dd>
 														<ul className="list-disc space-y-2 pl-5 text-sm">
 															{product.systemApprovals.map((approval) => (
 																<li key={approval}>{approval}</li>
@@ -176,134 +202,134 @@ export default function ProductPage({
 												</div>
 											)}
 										</div>
-									</CardContent>
-								</Card>
+									</AccordionContent>
+								</AccordionItem>
 							)}
-						</div>
+						</Accordion>
 					</div>
 				</div>
 
 				{/* Tabs section */}
-				<div className="mx-auto mt-16 w-full max-w-2xl lg:max-w-none">
-					<Card>
-						<CardContent className="pt-6">
-							<Tabs
-								defaultValue={reviews ? "reviews" : faqs ? "faq" : "license"}
-								className="space-y-16"
-							>
-								<TabsList className="w-full justify-start">
+				{/* <div className="mx-auto mt-16 w-full max-w-2xl lg:max-w-none">
+						<Card>
+							<CardContent className="pt-6">
+								<Tabs
+									defaultValue={reviews ? "reviews" : faqs ? "faq" : "license"}
+									className="space-y-16"
+								>
+									<TabsList className="w-full justify-start">
+										{reviews && (
+											<TabsTrigger value="reviews">Reviews</TabsTrigger>
+										)}
+										{faqs && <TabsTrigger value="faq">FAQ</TabsTrigger>}
+										{license && (
+											<TabsTrigger value="license">License</TabsTrigger>
+										)}
+									</TabsList>
+
 									{reviews && (
-										<TabsTrigger value="reviews">Reviews</TabsTrigger>
-									)}
-									{faqs && <TabsTrigger value="faq">FAQ</TabsTrigger>}
-									{license && (
-										<TabsTrigger value="license">License</TabsTrigger>
-									)}
-								</TabsList>
-
-								{reviews && (
-									<TabsContent value="reviews" className="space-y-8">
-										<div>
-											<h2 className="text-lg font-medium text-foreground">
-												Customer Reviews ({reviews.average}/5)
-											</h2>
-											<div className="mt-6 space-y-10">
-												{reviews.featured.map((review) => (
-													<div key={review.id} className="flex space-x-4">
-														<div className="flex-none">
-															<img
-																src={review.avatarSrc}
-																alt={review.author}
-																className="h-10 w-10 rounded-full bg-muted"
-															/>
-														</div>
-														<div className="flex-1">
-															<h3 className="font-medium text-foreground">
-																{review.author}
-															</h3>
-															<div className="mt-1 flex items-center">
-																{[0, 1, 2, 3, 4].map((rating) => (
-																	<Star
-																		key={rating}
-																		className={classNames(
-																			review.rating > rating
-																				? "text-primary"
-																				: "text-muted-foreground",
-																			"h-4 w-4",
-																		)}
-																		fill="currentColor"
-																	/>
-																))}
+										<TabsContent value="reviews" className="space-y-8">
+											<div>
+												<h2 className="text-lg font-medium text-foreground">
+													Customer Reviews ({reviews.average}/5)
+												</h2>
+												<div className="mt-6 space-y-10">
+													{reviews.featured.map((review) => (
+														<div key={review.id} className="flex space-x-4">
+															<div className="flex-none">
+																<img
+																	src={review.avatarSrc}
+																	alt={review.author}
+																	className="h-10 w-10 rounded-full bg-muted"
+																/>
 															</div>
-															<p className="mt-2 text-sm text-muted-foreground">
-																{review.content}
-															</p>
-															<p className="mt-2 text-sm text-muted-foreground">
-																<time dateTime={review.datetime}>
-																	{review.date}
-																</time>
-															</p>
+															<div className="flex-1">
+																<h3 className="font-medium text-foreground">
+																	{review.author}
+																</h3>
+																<div className="mt-1 flex items-center">
+																	{[0, 1, 2, 3, 4].map((rating) => (
+																		<Star
+																			key={rating}
+																			className={classNames(
+																				review.rating > rating
+																					? "text-primary"
+																					: "text-muted-foreground",
+																				"h-4 w-4",
+																			)}
+																			fill="currentColor"
+																		/>
+																	))}
+																</div>
+																<p className="mt-2 text-sm text-muted-foreground">
+																	{review.content}
+																</p>
+																<p className="mt-2 text-sm text-muted-foreground">
+																	<time dateTime={review.datetime}>
+																		{review.date}
+																	</time>
+																</p>
+															</div>
 														</div>
-													</div>
-												))}
+													))}
+												</div>
 											</div>
-										</div>
-									</TabsContent>
-								)}
+										</TabsContent>
+									)}
 
-								{faqs && (
-									<TabsContent value="faq" className="space-y-8">
-										<div>
-											<h2 className="text-lg font-medium text-foreground">
-												Frequently Asked Questions
-											</h2>
-											<div className="mt-6 space-y-8">
-												{faqs.map((faq) => (
-													<Card key={faq.question}>
-														<CardHeader>
-															<CardTitle className="text-base">
-																{faq.question}
-															</CardTitle>
-														</CardHeader>
-														<CardContent>
-															<p className="text-sm text-muted-foreground">
-																{faq.answer}
-															</p>
-														</CardContent>
-													</Card>
-												))}
+									{faqs && (
+										<TabsContent value="faq" className="space-y-8">
+											<div>
+												<h2 className="text-lg font-medium text-foreground">
+													Frequently Asked Questions
+												</h2>
+												<div className="mt-6 space-y-8">
+													{faqs.map((faq) => (
+														<Card key={faq.question}>
+															<CardHeader>
+																<CardTitle className="text-base">
+																	{faq.question}
+																</CardTitle>
+															</CardHeader>
+															<CardContent>
+																<p className="text-sm text-muted-foreground">
+																	{faq.answer}
+																</p>
+															</CardContent>
+														</Card>
+													))}
+												</div>
 											</div>
-										</div>
-									</TabsContent>
-								)}
+										</TabsContent>
+									)}
 
-								{license && (
-									<TabsContent value="license" className="space-y-8">
-										<div>
-											<h2 className="text-lg font-medium text-foreground">
-												License Information
-											</h2>
-											<div className="mt-6">
-												<p className="font-medium text-foreground">
-													{license.summary}
-												</p>
-												<p className="mt-4 text-sm text-muted-foreground">
-													{license.content}
-												</p>
-												<a
-													href={license.href}
-													className="mt-4 inline-block text-sm text-primary hover:text-primary/80"
-												>
-													View full terms →
-												</a>
+									{license && (
+										<TabsContent value="license" className="space-y-8">
+											<div>
+												<h2 className="text-lg font-medium text-foreground">
+													License Information
+												</h2>
+												<div className="mt-6">
+													<p className="font-medium text-foreground">
+														{license.summary}
+													</p>
+													<p className="mt-4 text-sm text-muted-foreground">
+														{license.content}
+													</p>
+													<a
+														href={license.href}
+														className="mt-4 inline-block text-sm text-primary hover:text-primary/80"
+													>
+														View full terms →
+													</a>
+												</div>
 											</div>
-										</div>
-									</TabsContent>
-								)}
-							</Tabs>
-						</CardContent>
-					</Card>
-				</div>
+										</TabsContent>
+									)}
+								</Tabs>
+							</CardContent>
+						</Card>
+					</div> */}
 			</div>
 		</div>
 	);

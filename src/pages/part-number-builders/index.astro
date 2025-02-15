@@ -1,12 +1,85 @@
 ---
-import PartNumberBuildersContent from "../../components/react/PartNumberBuildersContent";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Button } from "@/components/react/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/react/ui/card";
 ---
 
 <BaseLayout
   title="Part Number Builders | Rubadue Wire"
   description="Build custom part numbers for Rubadue wire products with our interactive part number builders"
   category="Tools"
+  eyebrow="Resources"
+  headerTitle="Part Number Builders"
 >
-  <PartNumberBuildersContent client:load />
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-24">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
+      <Card className="flex flex-col">
+        <CardHeader>
+          <CardTitle>Insulated Winding Wire</CardTitle>
+          <CardDescription>
+            Build part numbers for insulated winding wire products with various
+            insulation types, conductor materials, and specifications.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-grow">
+          <div class="space-y-4">
+            <p class="text-sm text-muted-foreground">Features:</p>
+            <ul
+              class="list-disc list-inside text-sm text-muted-foreground space-y-1"
+            >
+              <li>Multiple insulation layer options</li>
+              <li>Various conductor materials</li>
+              <li>AWG size selection (4-40)</li>
+              <li>Color coding options</li>
+              <li>Insulation thickness specifications</li>
+            </ul>
+            <div class="pt-4">
+              <a href="/part-number-builders/insulated-winding-wire">
+                <Button className="w-full">
+                  Build Insulated Wire Part Number
+                </Button>
+              </a>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="flex flex-col">
+        <CardHeader>
+          <CardTitle>Rubadue Litz Wire</CardTitle>
+          <CardDescription>
+            Create part numbers for Rubadue Litz wire products with specific
+            strand configurations and build options.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-grow">
+          <div class="space-y-4">
+            <p class="text-sm text-muted-foreground">Features:</p>
+            <ul
+              class="list-disc list-inside text-sm text-muted-foreground space-y-1"
+            >
+              <li>Multiple strand count options</li>
+              <li>AWG size selection (12-50)</li>
+              <li>Enamel build specifications</li>
+              <li>Magnet wire grade selection</li>
+              <li>Optional serve layer configurations</li>
+            </ul>
+            <div class="pt-4">
+              <a href="/part-number-builders/litz-wire">
+                <Button className="w-full">
+                  Build Litz Wire Part Number
+                </Button>
+              </a>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
 </BaseLayout>
