@@ -8,10 +8,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/react/ui/accordion";
-
-function classNames(...classes: string[]) {
-	return classes.filter(Boolean).join(" ");
-}
+import { ScrollArea } from "@/components/react/ui/scroll-area";
 
 interface ProductPageProps {
 	product: {
@@ -32,6 +29,8 @@ interface ProductPageProps {
 		compliances?: string[];
 		systemApprovals?: string[];
 		category: string;
+		overview?: string;
+		applications?: string[];
 	};
 	reviews?: {
 		average: number;
@@ -63,7 +62,7 @@ export default function ProductPage({
 	license,
 }: ProductPageProps) {
 	return (
-		<div className="bg-background">
+		<div className="">
 			<div className="">
 				{/* Product */}
 				<div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
@@ -73,13 +72,13 @@ export default function ProductPage({
 							<img
 								src={product.imageSrc}
 								alt={product.imageAlt}
-								className="aspect-[4/3] w-full rounded-lg bg-muted object-contain"
+								className="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
 							/>
 						) : (
 							<Image
 								src={product.imageSrc}
 								alt={product.imageAlt}
-								class="aspect-[4/3] w-full rounded-lg bg-muted object-contain"
+								class="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
 								width={1600}
 								height={900}
 								format="webp"
@@ -90,122 +89,147 @@ export default function ProductPage({
 
 					{/* Product details */}
 					<div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none w-full">
-						{/* <div className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mb-6">
-								{product.name}
-							</div>
-							<p className="text-muted-foreground mb-8">{product.description}</p> */}
+						<h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mb-6">
+							Product Information
+						</h2>
+						<ScrollArea className="h-[75vh]  lg:h-[440px] px-6 py-2 border rounded-lg">
+							<Accordion
+								type="multiple"
+								defaultValue={["overview"]}
+								className="w-full [&>*:last-child]:data-[state=open]:border-b-0"
+							>
+								{/* Product Overview */}
+								{product.overview && (
+									<AccordionItem value="overview">
+										<AccordionTrigger>Overview</AccordionTrigger>
+										<AccordionContent>
+											<p className="text-sm text-foreground">
+												{product.overview}
+											</p>
+										</AccordionContent>
+									</AccordionItem>
+								)}
 
-						<Accordion
-							type="single"
-							defaultValue="construction"
-							className="w-full"
-						>
-							{/* Product Construction */}
-							<AccordionItem value="construction">
-								<AccordionTrigger className="text-lg font-semibold">
-									Product Construction
-								</AccordionTrigger>
-								<AccordionContent>
-									<div className="space-y-4">
-										{product.specifications && (
-											<>
-												{product.specifications.conductor && (
-													<div className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-															Conductor:
-														</dt>
-														<dd className="text-sm text-foreground">
-															{product.specifications.conductor}
-														</dd>
-													</div>
-												)}
-												{product.specifications.insulation && (
-													<div className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-															Insulation:
-														</dt>
-														<dd className="text-sm text-foreground">
-															{product.specifications.insulation}
-														</dd>
-													</div>
-												)}
-												{product.specifications.temperature && (
-													<div className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-															Temperature:
-														</dt>
-														<dd className="text-sm text-foreground">
-															{product.specifications.temperature}
-														</dd>
-													</div>
-												)}
-												{product.specifications.voltage && (
-													<div className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-															Voltage:
-														</dt>
-														<dd className="text-sm text-foreground">
-															{product.specifications.voltage}
-														</dd>
-													</div>
-												)}
-												{product.specifications.tensileStrength && (
-													<div className="flex items-center">
-														<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-															Tensile Strength:
-														</dt>
-														<dd className="text-sm text-foreground">
-															{product.specifications.tensileStrength}
-														</dd>
-													</div>
-												)}
-											</>
-										)}
-									</div>
-								</AccordionContent>
-							</AccordionItem>
+								{/* Common Applications */}
+								{product.applications && (
+									<AccordionItem value="applications">
+										<AccordionTrigger>Common Applications</AccordionTrigger>
+										<AccordionContent>
+											<ul className="list-disc space-y-2 pl-5 text-sm">
+												{product.applications.map((application) => (
+													<li key={application}>{application}</li>
+												))}
+											</ul>
+										</AccordionContent>
+									</AccordionItem>
+								)}
 
-							{/* Compliances & Approvals */}
-							{(product.compliances || product.systemApprovals) && (
-								<AccordionItem value="compliances">
-									<AccordionTrigger className="text-lg font-semibold">
-										Compliances & Approvals
-									</AccordionTrigger>
+								{/* Product Construction */}
+								<AccordionItem value="construction">
+									<AccordionTrigger>Product Construction</AccordionTrigger>
 									<AccordionContent>
-										<div className="space-y-6">
-											{product.compliances && (
-												<div>
-													<dt className="text-sm text-muted-foreground mb-2">
-														Compliances:
-													</dt>
-													<dd>
-														<ul className="list-disc space-y-2 pl-5 text-sm">
-															{product.compliances.map((compliance) => (
-																<li key={compliance}>{compliance}</li>
-															))}
-														</ul>
-													</dd>
-												</div>
-											)}
-											{product.systemApprovals && (
-												<div className="mt-4">
-													<dt className="text-sm text-muted-foreground mb-2">
-														System Approvals:
-													</dt>
-													<dd>
-														<ul className="list-disc space-y-2 pl-5 text-sm">
-															{product.systemApprovals.map((approval) => (
-																<li key={approval}>{approval}</li>
-															))}
-														</ul>
-													</dd>
-												</div>
+										<div className="space-y-4">
+											{product.specifications && (
+												<>
+													{product.specifications.conductor && (
+														<div className="flex items-center">
+															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+																Conductor:
+															</dt>
+															<dd className="text-sm text-foreground">
+																{product.specifications.conductor}
+															</dd>
+														</div>
+													)}
+													{product.specifications.insulation && (
+														<div className="flex items-center">
+															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+																Insulation:
+															</dt>
+															<dd className="text-sm text-foreground">
+																{product.specifications.insulation}
+															</dd>
+														</div>
+													)}
+													{product.specifications.temperature && (
+														<div className="flex items-center">
+															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+																Temperature:
+															</dt>
+															<dd className="text-sm text-foreground">
+																{product.specifications.temperature}
+															</dd>
+														</div>
+													)}
+													{product.specifications.voltage && (
+														<div className="flex items-center">
+															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+																Voltage:
+															</dt>
+															<dd className="text-sm text-foreground">
+																{product.specifications.voltage}
+															</dd>
+														</div>
+													)}
+													{product.specifications.tensileStrength && (
+														<div className="flex items-center">
+															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
+																Tensile Strength:
+															</dt>
+															<dd className="text-sm text-foreground">
+																{product.specifications.tensileStrength}
+															</dd>
+														</div>
+													)}
+												</>
 											)}
 										</div>
 									</AccordionContent>
 								</AccordionItem>
-							)}
-						</Accordion>
+
+								{/* Compliances & Approvals */}
+								{(product.compliances || product.systemApprovals) && (
+									<AccordionItem
+										value="compliances"
+										className="data-[state=open]:border-b-0"
+									>
+										<AccordionTrigger>Compliances & Approvals</AccordionTrigger>
+										<AccordionContent>
+											<div className="space-y-6">
+												{product.compliances && (
+													<div>
+														<dt className="text-sm text-muted-foreground mb-2">
+															Compliances:
+														</dt>
+														<dd>
+															<ul className="list-disc space-y-2 pl-5 text-sm">
+																{product.compliances.map((compliance) => (
+																	<li key={compliance}>{compliance}</li>
+																))}
+															</ul>
+														</dd>
+													</div>
+												)}
+												{product.systemApprovals && (
+													<div className="mt-4">
+														<dt className="text-sm text-muted-foreground mb-2">
+															System Approvals:
+														</dt>
+														<dd>
+															<ul className="list-disc space-y-2 pl-5 text-sm">
+																{product.systemApprovals.map((approval) => (
+																	<li key={approval}>{approval}</li>
+																))}
+															</ul>
+														</dd>
+													</div>
+												)}
+											</div>
+										</AccordionContent>
+									</AccordionItem>
+								)}
+							</Accordion>
+						</ScrollArea>
 					</div>
 				</div>
 

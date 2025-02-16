@@ -1,6 +1,30 @@
-export { default as Button } from './button';
-export { default as Card } from './card';
-export { default as Input } from './input';
-export { default as Pagination } from './pagination';
-export { default as Separator } from './separator';
-export { default as Table } from './table';
+export { default as Button, type ButtonProps, buttonVariants } from "./button";
+export {
+	Card,
+	CardHeader,
+	CardFooter,
+	CardTitle,
+	CardDescription,
+	CardContent,
+} from "./card";
+export { Input } from "./input";
+export {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "./pagination";
+export { Separator } from "./separator";
+export {
+	Table,
+	TableHeader,
+	TableBody,
+	TableFooter,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableCaption,
+} from "./table";

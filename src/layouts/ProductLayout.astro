@@ -10,6 +10,8 @@ interface Props {
   title: string;
   description: string;
   heroImage?: ImageMetadata | string;
+  overview?: string;
+  applications?: string[];
   specifications?: {
     conductor?: string;
     insulation?: string;
@@ -67,13 +69,13 @@ const heroImage = props.heroImage || placeholderImage;
   <head>
     <BaseHead title={props.title} description={props.description} />
   </head>
-  <body class="min-h-screen bg-background">
+  <body class="min-h-screen">
     <Header client:load />
     <BaseHeader eyebrow={props.category} title={props.title} client:load />
     <div class="mb-6">
       <Breadcrumbs segments={segments} />
     </div>
-    <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-8">
+    <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 pt-12 pb-24">
       <ProductPage
         client:load
         product={{
@@ -85,13 +87,15 @@ const heroImage = props.heroImage || placeholderImage;
           compliances: props.compliances,
           systemApprovals: props.systemApprovals,
           category: props.category,
+          overview: props.overview,
+          applications: props.applications,
         }}
         reviews={props.reviews}
         faqs={props.faqs}
         license={props.license}
       />
 
-      <article class="prose prose-stone max-w-none">
+      <article class="max-w-none">
         <slot />
       </article>
     </main>
