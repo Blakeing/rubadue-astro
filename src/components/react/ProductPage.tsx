@@ -9,7 +9,7 @@ import {
 	AccordionTrigger,
 } from "@/components/react/ui/accordion";
 import { ScrollArea } from "@/components/react/ui/scroll-area";
-
+import { cn } from "@/lib/utils";
 interface ProductPageProps {
 	product: {
 		name: string;
@@ -19,35 +19,23 @@ interface ProductPageProps {
 		highlights?: string[];
 		imageSrc: string | ImageMetadata;
 		imageAlt: string;
-		specifications?: {
+		construction?: {
+			sizeRange?: string;
 			conductor?: string;
 			insulation?: string;
 			temperature?: string;
-			voltage?: string;
-			tensileStrength?: string;
+			voltage?: string | string[];
+			numberWires?: string;
+			coatings?: string[];
 		};
 		compliances?: string[];
 		systemApprovals?: string[];
 		category: string;
 		overview?: string;
 		applications?: string[];
+		tensileStrength?: string;
 	};
-	reviews?: {
-		average: number;
-		featured: Array<{
-			id: number;
-			rating: number;
-			content: string;
-			date: string;
-			datetime: string;
-			author: string;
-			avatarSrc: string;
-		}>;
-	};
-	faqs?: Array<{
-		question: string;
-		answer: string;
-	}>;
+
 	license?: {
 		href: string;
 		summary: string;
@@ -55,12 +43,198 @@ interface ProductPageProps {
 	};
 }
 
-export default function ProductPage({
-	product,
-	reviews,
-	faqs,
-	license,
-}: ProductPageProps) {
+export default function ProductPage({ product, license }: ProductPageProps) {
+	const sections = [
+		{
+			id: "overview",
+			title: "Overview",
+			show: !!product.overview,
+			content: <p className="text-sm text-foreground">{product.overview}</p>,
+		},
+		{
+			id: "applications",
+			title: "Applications",
+			show: !!product.applications?.length,
+			content: (
+				<ul className="list-disc space-y-2 pl-5 text-sm">
+					{product.applications?.map((application) => (
+						<li key={application}>{application}</li>
+					))}
+				</ul>
+			),
+		},
+		{
+			id: "construction",
+			title: "Product Construction",
+			show: !!product.construction,
+			content: (
+				<div className="space-y-4">
+					{product.construction && (
+						<>
+							{product.construction.sizeRange && (
+								<div className="flex items-center">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Size Range:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{product.construction.sizeRange}
+									</dd>
+								</div>
+							)}
+
+							{product.construction.numberWires && (
+								<div className="flex items-center">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Number of Wires:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{product.construction.numberWires}
+									</dd>
+								</div>
+							)}
+
+							{product.construction.conductor && (
+								<div className="flex items-center">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Conductor:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{product.construction.conductor}
+									</dd>
+								</div>
+							)}
+							{product.construction.insulation && (
+								<div className="flex items-center">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Insulation:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{product.construction.insulation}
+									</dd>
+								</div>
+							)}
+							{product.construction.temperature && (
+								<div className="flex items-center">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Temperature:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{product.construction.temperature}
+									</dd>
+								</div>
+							)}
+							{product.construction.coatings && (
+								<div
+									className={cn(
+										"flex items-center",
+										product.construction.coatings.length > 1 &&
+											"flex-col items-start",
+									)}
+								>
+									<dt
+										className={cn(
+											"pr-2 flex-none text-sm text-muted-foreground",
+											product.construction.coatings.length > 1 && "mb-2 pr-0",
+										)}
+									>
+										Coatings:
+									</dt>
+									<dd>
+										{product.construction.coatings.length > 1 ? (
+											<ul className="list-disc space-y-2 pl-5 text-sm">
+												{product.construction.coatings.map((coating) => (
+													<li key={coating}>{coating}</li>
+												))}
+											</ul>
+										) : (
+											<p className="text-sm text-foreground">
+												{product.construction.coatings[0]}
+											</p>
+										)}
+									</dd>
+								</div>
+							)}
+							{product.construction.voltage && (
+								<div className="flex items-start">
+									<dt className="pr-2 flex-none text-sm text-muted-foreground">
+										Voltage:
+									</dt>
+									<dd className="text-sm text-foreground">
+										{Array.isArray(product.construction.voltage) ? (
+											product.construction.voltage.length > 1 ? (
+												<ul className="list-disc pl-5">
+													{product.construction.voltage.map((v) => (
+														<li key={v}>{v}</li>
+													))}
+												</ul>
+											) : (
+												product.construction.voltage[0]
+											)
+										) : (
+											product.construction.voltage
+										)}
+									</dd>
+								</div>
+							)}
+						</>
+					)}
+				</div>
+			),
+		},
+		{
+			id: "compliances",
+			title: "Compliances",
+			show: !!(
+				product.compliances ||
+				product.systemApprovals ||
+				product.tensileStrength
+			),
+			content: (
+				<div className="space-y-4">
+					{product.compliances && (
+						<div>
+							<dt className="sr-only">Compliances:</dt>
+							<dd>
+								<ul className="list-disc space-y-2 pl-5 text-sm">
+									{product.compliances.map((compliance) => (
+										<li key={compliance}>{compliance}</li>
+									))}
+								</ul>
+							</dd>
+						</div>
+					)}
+					{product.systemApprovals && (
+						<div className="mt-4">
+							<dt className="text-sm text-muted-foreground mb-2">
+								System Approvals:
+							</dt>
+							<dd>
+								<ul className="list-disc space-y-2 pl-5 text-sm">
+									{product.systemApprovals.map((approval) => (
+										<li key={approval}>{approval}</li>
+									))}
+								</ul>
+							</dd>
+						</div>
+					)}
+					{product.tensileStrength && (
+						<div className="flex items-center">
+							<dt className="flex-none text-sm text-muted-foreground pr-2">
+								Tensile Strength:
+							</dt>
+							<dd className="text-sm text-foreground">
+								{product.tensileStrength}
+							</dd>
+						</div>
+					)}
+				</div>
+			),
+		},
+	];
+
+	const visibleSections = sections.filter((section) => section.show);
+	const defaultSection = visibleSections[0]?.id;
+
 	return (
 		<div className="">
 			<div className="">
@@ -95,265 +269,26 @@ export default function ProductPage({
 						<ScrollArea className="h-[75vh]  lg:h-[440px] px-6 py-2 border rounded-lg">
 							<Accordion
 								type="multiple"
-								defaultValue={["overview"]}
-								className="w-full [&>*:last-child]:data-[state=open]:border-b-0"
+								defaultValue={defaultSection ? [defaultSection] : []}
+								className="w-full"
 							>
-								{/* Product Overview */}
-								{product.overview && (
-									<AccordionItem value="overview">
-										<AccordionTrigger>Overview</AccordionTrigger>
-										<AccordionContent>
-											<p className="text-sm text-foreground">
-												{product.overview}
-											</p>
-										</AccordionContent>
-									</AccordionItem>
-								)}
-
-								{/* Common Applications */}
-								{product.applications && (
-									<AccordionItem value="applications">
-										<AccordionTrigger>Common Applications</AccordionTrigger>
-										<AccordionContent>
-											<ul className="list-disc space-y-2 pl-5 text-sm">
-												{product.applications.map((application) => (
-													<li key={application}>{application}</li>
-												))}
-											</ul>
-										</AccordionContent>
-									</AccordionItem>
-								)}
-
-								{/* Product Construction */}
-								<AccordionItem value="construction">
-									<AccordionTrigger>Product Construction</AccordionTrigger>
-									<AccordionContent>
-										<div className="space-y-4">
-											{product.specifications && (
-												<>
-													{product.specifications.conductor && (
-														<div className="flex items-center">
-															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-																Conductor:
-															</dt>
-															<dd className="text-sm text-foreground">
-																{product.specifications.conductor}
-															</dd>
-														</div>
-													)}
-													{product.specifications.insulation && (
-														<div className="flex items-center">
-															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-																Insulation:
-															</dt>
-															<dd className="text-sm text-foreground">
-																{product.specifications.insulation}
-															</dd>
-														</div>
-													)}
-													{product.specifications.temperature && (
-														<div className="flex items-center">
-															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-																Temperature:
-															</dt>
-															<dd className="text-sm text-foreground">
-																{product.specifications.temperature}
-															</dd>
-														</div>
-													)}
-													{product.specifications.voltage && (
-														<div className="flex items-center">
-															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-																Voltage:
-															</dt>
-															<dd className="text-sm text-foreground">
-																{product.specifications.voltage}
-															</dd>
-														</div>
-													)}
-													{product.specifications.tensileStrength && (
-														<div className="flex items-center">
-															<dt className="w-1/3 flex-none text-sm text-muted-foreground">
-																Tensile Strength:
-															</dt>
-															<dd className="text-sm text-foreground">
-																{product.specifications.tensileStrength}
-															</dd>
-														</div>
-													)}
-												</>
-											)}
-										</div>
-									</AccordionContent>
-								</AccordionItem>
-
-								{/* Compliances & Approvals */}
-								{(product.compliances || product.systemApprovals) && (
+								{visibleSections.map((section, index) => (
 									<AccordionItem
-										value="compliances"
-										className="data-[state=open]:border-b-0"
+										key={section.id}
+										value={section.id}
+										className={cn(
+											index === visibleSections.length - 1 &&
+												"data-[state=open]:border-b-0",
+										)}
 									>
-										<AccordionTrigger>Compliances & Approvals</AccordionTrigger>
-										<AccordionContent>
-											<div className="space-y-6">
-												{product.compliances && (
-													<div>
-														<dt className="text-sm text-muted-foreground mb-2">
-															Compliances:
-														</dt>
-														<dd>
-															<ul className="list-disc space-y-2 pl-5 text-sm">
-																{product.compliances.map((compliance) => (
-																	<li key={compliance}>{compliance}</li>
-																))}
-															</ul>
-														</dd>
-													</div>
-												)}
-												{product.systemApprovals && (
-													<div className="mt-4">
-														<dt className="text-sm text-muted-foreground mb-2">
-															System Approvals:
-														</dt>
-														<dd>
-															<ul className="list-disc space-y-2 pl-5 text-sm">
-																{product.systemApprovals.map((approval) => (
-																	<li key={approval}>{approval}</li>
-																))}
-															</ul>
-														</dd>
-													</div>
-												)}
-											</div>
-										</AccordionContent>
+										<AccordionTrigger>{section.title}</AccordionTrigger>
+										<AccordionContent>{section.content}</AccordionContent>
 									</AccordionItem>
-								)}
+								))}
 							</Accordion>
 						</ScrollArea>
 					</div>
 				</div>
-
-				{/* Tabs section */}
-				{/* <div className="mx-auto mt-16 w-full max-w-2xl lg:max-w-none">
-						<Card>
-							<CardContent className="pt-6">
-								<Tabs
-									defaultValue={reviews ? "reviews" : faqs ? "faq" : "license"}
-									className="space-y-16"
-								>
-									<TabsList className="w-full justify-start">
-										{reviews && (
-											<TabsTrigger value="reviews">Reviews</TabsTrigger>
-										)}
-										{faqs && <TabsTrigger value="faq">FAQ</TabsTrigger>}
-										{license && (
-											<TabsTrigger value="license">License</TabsTrigger>
-										)}
-									</TabsList>
-
-									{reviews && (
-										<TabsContent value="reviews" className="space-y-8">
-											<div>
-												<h2 className="text-lg font-medium text-foreground">
-													Customer Reviews ({reviews.average}/5)
-												</h2>
-												<div className="mt-6 space-y-10">
-													{reviews.featured.map((review) => (
-														<div key={review.id} className="flex space-x-4">
-															<div className="flex-none">
-																<img
-																	src={review.avatarSrc}
-																	alt={review.author}
-																	className="h-10 w-10 rounded-full bg-muted"
-																/>
-															</div>
-															<div className="flex-1">
-																<h3 className="font-medium text-foreground">
-																	{review.author}
-																</h3>
-																<div className="mt-1 flex items-center">
-																	{[0, 1, 2, 3, 4].map((rating) => (
-																		<Star
-																			key={rating}
-																			className={classNames(
-																				review.rating > rating
-																					? "text-primary"
-																					: "text-muted-foreground",
-																				"h-4 w-4",
-																			)}
-																			fill="currentColor"
-																		/>
-																	))}
-																</div>
-																<p className="mt-2 text-sm text-muted-foreground">
-																	{review.content}
-																</p>
-																<p className="mt-2 text-sm text-muted-foreground">
-																	<time dateTime={review.datetime}>
-																		{review.date}
-																	</time>
-																</p>
-															</div>
-														</div>
-													))}
-												</div>
-											</div>
-										</TabsContent>
-									)}
-
-									{faqs && (
-										<TabsContent value="faq" className="space-y-8">
-											<div>
-												<h2 className="text-lg font-medium text-foreground">
-													Frequently Asked Questions
-												</h2>
-												<div className="mt-6 space-y-8">
-													{faqs.map((faq) => (
-														<Card key={faq.question}>
-															<CardHeader>
-																<CardTitle className="text-base">
-																	{faq.question}
-																</CardTitle>
-															</CardHeader>
-															<CardContent>
-																<p className="text-sm text-muted-foreground">
-																	{faq.answer}
-																</p>
-															</CardContent>
-														</Card>
-													))}
-												</div>
-											</div>
-										</TabsContent>
-									)}
-
-									{license && (
-										<TabsContent value="license" className="space-y-8">
-											<div>
-												<h2 className="text-lg font-medium text-foreground">
-													License Information
-												</h2>
-												<div className="mt-6">
-													<p className="font-medium text-foreground">
-														{license.summary}
-													</p>
-													<p className="mt-4 text-sm text-muted-foreground">
-														{license.content}
-													</p>
-													<a
-														href={license.href}
-														className="mt-4 inline-block text-sm text-primary hover:text-primary/80"
-													>
-														View full terms →
-													</a>
-												</div>
-											</div>
-										</TabsContent>
-									)}
-								</Tabs>
-							</CardContent>
-						</Card>
-					</div> */}
 			</div>
 		</div>
 	);

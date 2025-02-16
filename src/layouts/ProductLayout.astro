@@ -12,32 +12,20 @@ interface Props {
   heroImage?: ImageMetadata | string;
   overview?: string;
   applications?: string[];
-  specifications?: {
+  construction?: {
+    numberWires?: string;
+    coatings?: string[];
+    sizeRange?: string;
     conductor?: string;
     insulation?: string;
     temperature?: string;
     voltage?: string;
-    tensileStrength?: string;
   };
   compliances?: string[];
   systemApprovals?: string[];
+  tensileStrength?: string;
+
   category: string;
-  reviews?: {
-    average: number;
-    featured: Array<{
-      id: number;
-      rating: number;
-      content: string;
-      date: string;
-      datetime: string;
-      author: string;
-      avatarSrc: string;
-    }>;
-  };
-  faqs?: Array<{
-    question: string;
-    answer: string;
-  }>;
   license?: {
     href: string;
     summary: string;
@@ -83,15 +71,14 @@ const heroImage = props.heroImage || placeholderImage;
           description: props.description,
           imageSrc: heroImage,
           imageAlt: props.title,
-          specifications: props.specifications,
           compliances: props.compliances,
+          construction: props.construction,
           systemApprovals: props.systemApprovals,
+          tensileStrength: props.tensileStrength,
           category: props.category,
           overview: props.overview,
           applications: props.applications,
         }}
-        reviews={props.reviews}
-        faqs={props.faqs}
         license={props.license}
       />
 

@@ -5,22 +5,26 @@ pubDate: "2025-01-22"
 category: "Litz Wire"
 tableType: "litzWire"
 heroImage: "/images/test.png"
-specifications:
-  conductor: "NEMA MW 79-C | NEMA MW 80-C"
-  insulation: "FEP"
-  temperature: "155°C"
-  voltage: "1000 Vpk"
-  tensileStrength: "3000 psi"
+construction:
+  sizeRange: "50 AWG to 12 AWG  (0.127mm to 2.05mm)"
+  numberWires: "From 2 wires to 10,000 wires"
+  conductor: "Overall twisted diameter up to .350 (8.9mm)"
+  temperature: "From 155°C to 240°C"
+  coatings:
+    - "Nylon Serve in Single or Double Layer"
+    - "Polyimide Serve in Single or Double Layer"
+  voltage:
+    - "1000 Vpk"
+    - "1500 Vpk"
 compliances:
   - "UL OBJT2 File No. E206198"
   - "UL/IEC 60950-1 (Ed. 2), Annex U"
   - "IEC 61010-1 (Ed. 3)"
   - "VDE License Nr. 6715: Class F"
 systemApprovals:
-  - "UL 1446"
-  - "RXT-2 (Class F)"
-  - "TCA (Class F)"
+  - "UL recognized component per OBMMW2 File #: E190291"
   - "RoHS Compliant"
+tensileStrength: "3000 psi"
 overview: "Litz wire is used wherever a reduction in AC losses is required and can be found in many major industry segments. Its greater flexibility makes it superior to other wires in the same cross section. Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together."
 applications:
   - "Electric Vehicles and Charging Stations"
@@ -37,11 +41,10 @@ license:
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
 ---
 
-import { WireSpecsTable } from "@/components/react/data-table/bare-litz-wire/table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/react/ui/tabs";
+import { BareLitzWireTable } from "@/components/react/data-table/bare-litz-wire/table";
 
 
-<WireSpecsTable client:load />
+<BareLitzWireTable client:load />
 
 **Please Note:** Litz conductor diameters can vary by supplier. Please request a specification sheet to ensure the diameter will meet your application requirement(s). Contact the Sales Department for additional constructions.
 

@@ -9,45 +9,44 @@ const products = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.string().optional(),
-			overview: z.string().optional(),
-			applications: z.array(z.string()).optional(),
-			specifications: z
-				.object({
-					conductor: z.string().optional(),
-					insulation: z.string().optional(),
-					temperature: z.string().optional(),
-					voltage: z.string().optional(),
-					tensileStrength: z.string().optional(),
-				})
-				.optional(),
-			compliances: z.array(z.string()).optional(),
-			systemApprovals: z.array(z.string()).optional(),
 			category: z.string(),
 			tableType: z.enum(["litzWire", "magnet", "custom"]).optional(),
-			reviews: z
+
+			// Product Construction
+			construction: z
 				.object({
-					average: z.number(),
-					featured: z.array(
-						z.object({
-							id: z.number(),
-							rating: z.number(),
-							content: z.string(),
-							date: z.string(),
-							datetime: z.string(),
-							author: z.string(),
-							avatarSrc: z.string(),
-						}),
-					),
+					numberWires: z.string().optional(),
+					coatings: z.array(z.string()).optional(),
+					sizeRange: z.string().optional(),
+					conductor: z.string().optional(),
+					insulation: z.string().optional(),
+					rating: z
+						.object({
+							temperature: z.string().optional(),
+							voltage: z.array(z.string()).optional(),
+						})
+						.optional(),
 				})
 				.optional(),
-			faqs: z
-				.array(
-					z.object({
-						question: z.string(),
-						answer: z.string(),
-					}),
-				)
+
+			// Technical Specifications
+			specifications: z
+				.object({
+					temperature: z.string().optional(),
+					voltage: z.string().optional(),
+				})
 				.optional(),
+
+			// Applications and Overview
+			overview: z.string().optional(),
+			applications: z.array(z.string()).optional(),
+
+			// Compliance and Certifications
+			compliances: z.array(z.string()).optional(),
+			systemApprovals: z.array(z.string()).optional(),
+			tensileStrength: z.string().optional(),
+
+			// Optional Documentation
 			license: z
 				.object({
 					href: z.string(),

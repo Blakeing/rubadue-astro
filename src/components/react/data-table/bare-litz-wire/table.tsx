@@ -2,7 +2,7 @@ import { columns } from "./columns";
 import { SelectDataTable } from "../SelectDataTable";
 import { tabs } from "./data";
 
-export function WireSpecsTable() {
+export function BareLitzWireTable() {
 	return (
 		<SelectDataTable
 			tabs={tabs}
