@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
 		onGlobalFilterChange: setGlobalFilter,
 		initialState: {
 			pagination: {
-				pageSize: 5,
+				pageSize: 10,
 			},
 		},
 	});
