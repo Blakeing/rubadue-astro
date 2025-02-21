@@ -1,47 +1,50 @@
 ---
-title: Triple TCA3 Insulation
-description: "High-performance triple-insulated Litz wire with TCA3 insulation, engineered for high-frequency applications requiring superior insulation properties."
+title: Double FEP Insulation
+description: "High-performance double-insulated Litz wire with FEP insulation, engineered for high-frequency applications requiring superior insulation properties."
 pubDate: "2024-03-14"
-category: "Litz Wire"
+categories: ["Wire", "Double Insulated", "FEP", "Litz Wire"]
+category: "Litz Wire"  # Legacy support
 tableType: "litzWire"
 heroImage: "/images/test.png"
+
+# Organized Tags
+tags:
+  type: ["Double Insulated", "Litz Wire"]
+  material: ["FEP"]
+
 construction:
   sizeRange: "Sizes listed are a small sample of the litz products offered. Contact the Sales Department."
-  conductor: "NEMA MW 79-C"
-  insulation: "Modified ETFE"
+  conductor: "NEMA MW 79-C | NEMA MW 80-C"
+  insulation: "FEP"
   rating:
     temperature: "155°C"
-    voltage: 
-      - "UL: 1500 Vpk for electronic equipment"
-      - "UL: 707 Vrms for medical equipment"
-      - "VDE: 1000 Vpk"
+    voltage: ["600 Vpk"]
 applications:
   - "High frequency applications"
-  - "Medical Equipment"
-  - "Electronic Equipment"
   - "Switch Mode Power Supplies"
   - "Transformers"
+  - "Medical Equipment"
+  - "Industrial Controls"
   - "Safety-critical Applications"
 compliances:
   - "UL OBJT2 File No. E206198"
   - "UL/IEC 60950-1 (Ed. 2), Annex U"
-  - "UL 60601-1 (Ed. 3) (40 AWG - 18 AWG)"
-  - "IEC 61558-1, 60601-1 (Ed.3), 61010-1 (Ed. 3)"
-  - "VDE License Nr. 40000223: Class F"
+  - "VDE License Nr. 6715: Class F"
 systemApprovals:
+  - "UL 1446"
   - "RXT-2 (Class F)"
   - "TCA (Class F)"
   - "Other systems available upon request"
-tensileStrength: "6500 psi"
-overview: "Triple insulated TCA3 Litz wire combines the benefits of traditional Litz wire construction with enhanced modified ETFE insulation properties, making it ideal for high-frequency applications requiring reinforced insulation. The TCA3 construction provides excellent chemical resistance, high temperature performance, and superior electrical properties."
+tensileStrength: "3000 psi"
+overview: "Double insulated Litz wire combines the benefits of traditional Litz wire construction with enhanced FEP insulation properties, making it ideal for high-frequency applications requiring reinforced insulation. FEP insulation provides excellent chemical resistance, high temperature performance, and superior electrical properties."
 license:
   href: "/terms/wire-products"
   summary: "Standard commercial license with 1-year warranty"
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
 ---
 
-import { TripleInsulatedLitzTable } from "@/components/react/data-table/insulated-litz/triple/tca3/table";
+import { DoubleInsulatedLitzTable } from "@/components/react/data-table/insulated-litz/double/fep/table";
 
-<TripleInsulatedLitzTable client:load />
+<DoubleInsulatedLitzTable client:load />
 
 **Please Note:** For detailed specifications including breakdown voltage and other technical parameters, please request a specification sheet. Contact our Sales Department for additional constructions and custom requirements. 

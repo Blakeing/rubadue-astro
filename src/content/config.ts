@@ -5,11 +5,24 @@ const products = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
+			seoTitle: z.string().optional(),
 			description: z.string(),
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.string().optional(),
-			category: z.string(),
+
+			// Categories and Tags
+			categories: z.array(z.string()).optional(),
+			category: z.string(), // Legacy
+			tags: z
+				.object({
+					type: z.array(z.string()).optional(), // e.g., ["Litz Wire", "Triple Insulated"]
+					material: z.array(z.string()).optional(), // e.g., ["ETFE", "Copper"]
+					specs: z.array(z.string()).optional(), // e.g., ["155°C", "1000V"]
+					applications: z.array(z.string()).optional(), // e.g., ["Transformers", "Medical"]
+					certifications: z.array(z.string()).optional(), // e.g., ["UL", "VDE"]
+				})
+				.optional(),
 			tableType: z.enum(["litzWire", "magnet", "custom"]).optional(),
 
 			// Product Construction

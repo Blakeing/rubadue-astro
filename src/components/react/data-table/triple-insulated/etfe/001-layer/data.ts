@@ -1,18 +1,6 @@
-export type EtfeWireSpec = {
-	partNumber: string;
-	awg: string;
-	conductor: {
-		inches: string;
-		mm: string;
-	};
-	nominalOD: {
-		inches: string;
-		mm: string;
-	};
-	weightLbFt: string;
-};
+import type { WireData } from "./columns";
 
-export const etfeWireData: EtfeWireSpec[] = [
+export const wireData: WireData[] = [
 	{
 		partNumber: "T20A01TXXX-1",
 		awg: "20",
@@ -24,7 +12,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0380",
 			mm: "0.965",
 		},
-		weightLbFt: "3.33",
+		weightLbKft: "3.33",
 	},
 	{
 		partNumber: "T21A01TXXX-1",
@@ -37,7 +25,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0345",
 			mm: "0.876",
 		},
-		weightLbFt: "2.68",
+		weightLbKft: "2.68",
 	},
 	{
 		partNumber: "T22A01TXXX-1",
@@ -50,7 +38,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0313",
 			mm: "0.795",
 		},
-		weightLbFt: "2.14",
+		weightLbKft: "2.14",
 	},
 	{
 		partNumber: "T23A01TXXX-1",
@@ -63,7 +51,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0286",
 			mm: "0.726",
 		},
-		weightLbFt: "1.73",
+		weightLbKft: "1.73",
 	},
 	{
 		partNumber: "T24A01TXXX-1",
@@ -76,7 +64,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0261",
 			mm: "0.663",
 		},
-		weightLbFt: "1.38",
+		weightLbKft: "1.38",
 	},
 	{
 		partNumber: "T25A01TXXX-1",
@@ -89,7 +77,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0239",
 			mm: "0.607",
 		},
-		weightLbFt: "1.12",
+		weightLbKft: "1.12",
 	},
 	{
 		partNumber: "T26A01TXXX-1",
@@ -102,7 +90,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0219",
 			mm: "0.556",
 		},
-		weightLbFt: "0.90",
+		weightLbKft: "0.90",
 	},
 	{
 		partNumber: "T27A01TXXX-1",
@@ -115,7 +103,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0202",
 			mm: "0.513",
 		},
-		weightLbFt: "0.73",
+		weightLbKft: "0.73",
 	},
 	{
 		partNumber: "T28A01TXXX-1",
@@ -128,7 +116,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0186",
 			mm: "0.472",
 		},
-		weightLbFt: "0.59",
+		weightLbKft: "0.59",
 	},
 	{
 		partNumber: "T29A01TXXX-1",
@@ -141,7 +129,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0173",
 			mm: "0.439",
 		},
-		weightLbFt: "0.49",
+		weightLbKft: "0.49",
 	},
 	{
 		partNumber: "T30A01TXXX-1",
@@ -154,7 +142,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0160",
 			mm: "0.406",
 		},
-		weightLbFt: "0.39",
+		weightLbKft: "0.39",
 	},
 	{
 		partNumber: "T31A01TXXX-1",
@@ -167,7 +155,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0149",
 			mm: "0.378",
 		},
-		weightLbFt: "0.32",
+		weightLbKft: "0.32",
 	},
 	{
 		partNumber: "T32A01TXXX-1",
@@ -180,7 +168,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0140",
 			mm: "0.356",
 		},
-		weightLbFt: "0.27",
+		weightLbKft: "0.27",
 	},
 	{
 		partNumber: "T33A01TXXX-1",
@@ -193,7 +181,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0131",
 			mm: "0.333",
 		},
-		weightLbFt: "0.22",
+		weightLbKft: "0.22",
 	},
 	{
 		partNumber: "T34A01TXXX-1",
@@ -206,7 +194,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0123",
 			mm: "0.312",
 		},
-		weightLbFt: "0.18",
+		weightLbKft: "0.18",
 	},
 	{
 		partNumber: "T35A01TXXX-1",
@@ -219,7 +207,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0116",
 			mm: "0.295",
 		},
-		weightLbFt: "0.15",
+		weightLbKft: "0.15",
 	},
 	{
 		partNumber: "T36A01TXXX-1",
@@ -232,7 +220,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0110",
 			mm: "0.279",
 		},
-		weightLbFt: "0.13",
+		weightLbKft: "0.13",
 	},
 	{
 		partNumber: "T37A01TXXX-1",
@@ -245,7 +233,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0105",
 			mm: "0.267",
 		},
-		weightLbFt: "0.11",
+		weightLbKft: "0.11",
 	},
 	{
 		partNumber: "T38A01TXXX-1",
@@ -258,7 +246,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0100",
 			mm: "0.254",
 		},
-		weightLbFt: "0.10",
+		weightLbKft: "0.10",
 	},
 	{
 		partNumber: "T39A01TXXX-1",
@@ -271,7 +259,7 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0095",
 			mm: "0.241",
 		},
-		weightLbFt: "0.08",
+		weightLbKft: "0.08",
 	},
 	{
 		partNumber: "T40A01TXXX-1",
@@ -284,6 +272,6 @@ export const etfeWireData: EtfeWireSpec[] = [
 			inches: "0.0091",
 			mm: "0.231",
 		},
-		weightLbFt: "0.07",
+		weightLbKft: "0.07",
 	},
 ];

@@ -7,7 +7,8 @@ import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
 import { Image } from "astro:assets";
 
 interface Props {
-  title: string;
+  title: string; // Display title for the BaseHeader
+  seoTitle?: string; // Optional SEO title, falls back to title if not provided
   description: string;
   heroImage?: ImageMetadata | string;
   overview?: string;
@@ -35,15 +36,30 @@ interface Props {
 
 const props = Astro.props;
 
-// Build breadcrumb segments
-const segments = [
-  { name: "Products", href: "/products" },
-  {
-    name: props.category,
-    href: `/products?category=${props.category.toLowerCase().replace(" ", "-")}`,
-  },
-  { name: props.title, href: Astro.url.pathname },
-];
+// Build breadcrumb segments starting with just Products
+const segments = [{ name: "Products", href: "/products" }];
+
+// Handle all subcategories including the main category
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+if (pathParts.length > 2) {
+  // Skip 'products' and get all parts including the final slug
+  const pathSegments = pathParts.slice(1);
+
+  let currentPath = "/products";
+  for (const segment of pathSegments) {
+    currentPath += `/${segment}`;
+    // Format the segment name from the URL slug
+    const formattedName = segment
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    segments.push({
+      name: formattedName,
+      href: "/products",
+    });
+  }
+}
 
 // Default placeholder image
 import placeholderImage from "@/assets/rubadue-hero.webp";
@@ -55,11 +71,14 @@ const heroImage = props.heroImage || placeholderImage;
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={props.title} description={props.description} />
+    <BaseHead
+      title={props.seoTitle || props.title}
+      description={props.description}
+    />
   </head>
   <body class="min-h-screen">
     <Header client:load />
-    <BaseHeader eyebrow={props.category} title={props.title} client:load />
+    <BaseHeader eyebrow={props.category} title={props.title} />
     <div class="mb-6">
       <Breadcrumbs segments={segments} />
     </div>

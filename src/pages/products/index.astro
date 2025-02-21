@@ -5,12 +5,36 @@ import Footer from "@/components/astro/layout/Footer.astro";
 import { getCollection } from "astro:content";
 import ProductListingPage from "@/components/react/ProductListingPage";
 import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
 
-const products = await getCollection("products");
-const sortedProducts = products.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+// Get all products from both directory structures
+const products = await getCollection("products", (product) => {
+  // Debug log to see what's being found
+  console.log("Found product:", product.id, product.slug);
+  return true;
+});
+
+// Map collection data to match Product interface
+const mappedProducts = products.map((product) => ({
+  id: product.id,
+  slug: product.slug,
+  collection: product.collection,
+  data: {
+    ...product.data,
+    pubDate: product.data.pubDate.toString(),
+  },
+}));
+
+// Sort products by date
+const sortedProducts = mappedProducts.sort(
+  (a, b) =>
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
-const categories = [...new Set(products.map((post) => post.data.category))];
+
+// Get unique categories
+const categories = [
+  ...new Set(mappedProducts.map((post) => post.data.category)),
+];
 
 const title = "Product Catalog";
 const description =
@@ -27,9 +51,7 @@ const segments = [{ name: "Products", href: "/products" }];
   </head>
   <body class="min-h-screen bg-background">
     <Header client:load />
-    <div class="mb-6">
-      <Breadcrumbs segments={segments} />
-    </div>
+    <BaseHeader eyebrow="Products" title="Catalog" />
     <main>
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-6">
         <ProductListingPage
