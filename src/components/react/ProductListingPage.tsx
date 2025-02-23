@@ -103,6 +103,7 @@ const filters: Filters = {
 		{ label: "ETFE", value: "ETFE" },
 		{ label: "FEP", value: "FEP" },
 		{ label: "PFA", value: "PFA" },
+		{ label: "TCA", value: "TCA" },
 	],
 	// specs: [
 	// 	{ label: "155°C", value: "155°C" },
