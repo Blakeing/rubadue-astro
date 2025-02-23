@@ -1,0 +1,314 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/astro/layout/Breadcrumbs.astro";
+
+const segments = [
+  {
+    name: "Resources",
+    href: "/resources",
+  },
+  {
+    name: "Health & Safety",
+    href: "/health-safety",
+  },
+];
+---
+
+<BaseLayout
+  title="Health & Safety | Rubadue Wire"
+  description="Learn about Rubadue Wire's health and safety policies and procedures."
+  category="Resources"
+  eyebrow="Resources"
+  headerTitle="Health & Safety"
+>
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="space-y-12">
+      <section class="space-y-6">
+        <p class="text-muted-foreground leading-7">
+          Rubadue Wire is committed to protecting our employees, customers, and
+          our environment. Safety is our first priority. The foundation of our
+          safety program is a systemic dedication to focus on safety in all
+          aspects of the business. We analyze and investigate all functions and
+          tasks to determine the safest possible process. Through extensive
+          training, communication and procedures we ensure that safety is part
+          of our culture.
+        </p>
+        <div class="rounded-lg border bg-card p-6">
+          <h3 class="font-medium mb-4">Certifications</h3>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <span class="h-1 w-1 rounded-full bg-foreground mr-2"></span>
+              Rubadue Wire Co., Inc. UL AWM File&nbsp;<a
+                href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=AVLV2.E78621&ccnshorttitle=Appliance+Wiring+Material+-+Component&objid=1073746000&cfgid=1073741824&version=versionless&parent_id=1073744548&sequence=1"
+                target="_blank"
+                rel="noreferrer noopener"
+                class="font-medium text-primary hover:underline">E78621</a
+              >
+            </li>
+            <li class="flex items-center">
+              <span class="h-1 w-1 rounded-full bg-foreground mr-2"></span>
+              Rubadue Wire Co., Inc. Single – Multi-layer Insulated Winding Wire
+              File&nbsp;<a
+                href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=OBJT2.E206198&ccnshorttitle=Single-+and+Multi-layer+Insulated+Winding+Wire+-+Component&objid=1074594062&cfgid=1073741824&version=versionless&parent_id=1074436127&sequence=1"
+                target="_blank"
+                rel="noreferrer noopener"
+                class="font-medium text-primary hover:underline">E206198</a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="h-px bg-border"></div>
+
+      <section class="space-y-6">
+        <h2 class="text-2xl font-semibold tracking-tight">
+          Rubadue Wire VDE Certificates
+        </h2>
+        <ul class="grid sm:grid-cols-4 gap-4">
+          <li>
+            <a
+              target="_blank"
+              href="/src/assets/vde-certificates/vde-certificate-fep.pdf"
+              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <span class="text-sm font-medium">FEP Series</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path><path
+                  d="M17 17V7H7"></path></svg
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              href="/src/assets/vde-certificates/vde-certificate-etfe.pdf"
+              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <span class="text-sm font-medium">ETFE Series</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path><path
+                  d="M17 17V7H7"></path></svg
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              href="/src/assets/vde-certificates/vde-certficate-pfa.pdf"
+              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <span class="text-sm font-medium">PFA Series</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path><path
+                  d="M17 17V7H7"></path></svg
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              target="_blank"
+              href="/src/assets/vde-certificates/vde-certificate-tca.pdf"
+              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <span class="text-sm font-medium">TCA Series</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all"
+                ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path><path
+                  d="M17 17V7H7"></path></svg
+              >
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <div class="h-px bg-border"></div>
+
+      <section class="space-y-6">
+        <h2 class="text-2xl font-semibold tracking-tight">
+          Environmental Compliance
+        </h2>
+        <div class="space-y-8">
+          <p class="text-muted-foreground leading-7">
+            Rubadue Wire Co., Inc. and its employees are committed to the use of
+            environmentally friendly products and processes. As a result of this
+            commitment to help protect our global environment, virtually all
+            Rubadue Wire products manufactured and shipped since 2005 have met
+            and continue to meet the requirements of the Restriction on
+            Hazardous Substances (RoHS) Directive and the existing Reach SVHC.
+            Rubadue Wire is also proud to claim our continuing compliance and
+            certification to ISO 14001 environmental standards.
+          </p>
+
+          <div class="rounded-lg border bg-card/50 p-8 space-y-4">
+            <h3 class="text-xl font-semibold tracking-tight">
+              RoHS - <span class="text-lg text-muted-foreground font-normal">
+                Restriction of Certain Hazardous Substances Directive</span
+              >
+            </h3>
+            <p class="text-sm text-muted-foreground italic">
+              European Directive 2015/863/EU, 2011/65/EC
+            </p>
+            <div class="space-y-4">
+              <p class="text-muted-foreground leading-7">
+                RoHS Compliance - The amendment to the RoHS 2 directive
+                (2015/863) added four new substances to the list of restricted
+                materials. Those materials are Bis(2-Ethylhexyl) phthalate
+                (DEHP), Benzyl butyl phthalate (BBP), Dibutyl phthalate (DBP),
+                and Diisobutyl phthalate (DIBP). Rubadue Wire does not use these
+                four substances in the manufacturing of its parts or components.
+                To the best of our knowledge, none of our raw material suppliers
+                use these substances in the manufacturing of their products.
+                Rubadue Wire does not use Polybrominated Biphenyl (PBB) and
+                Polybrominated Diphenyl Ether (PBDE) flame retardants as
+                intentional ingredients in the manufacturing of any parts or
+                components. To the best of our knowledge, none of our raw
+                material suppliers use these substances in the manufacturing of
+                their products.
+              </p>
+              <p class="text-muted-foreground leading-7">
+                European Directive 2011/65/EC also prohibits the use of certain
+                amounts of lead, cadmium, mercury and hexavalent chromium.
+                Rubadue Wire products do not exceed the maximum allowable
+                contents of these "heavy metals" in the manufacturing process.
+                To the best of our knowledge, none of our raw material suppliers
+                use unacceptable amounts of these substances in the
+                manufacturing of their products.
+              </p>
+              <p class="text-muted-foreground leading-7">
+                We conduct random analysis testing of our products to ensure
+                RoHS compliance, but we do not routinely analyze our products
+                for substances not purposely added.
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-lg border bg-card/50 p-8 space-y-4">
+            <h3 class="text-xl font-semibold tracking-tight">
+              REACH - <span class="text-lg text-muted-foreground font-normal"
+                >Registration, Evaluation, and Authorization of Chemicals</span
+              >
+            </h3>
+
+            <div class="space-y-6">
+              <div class="space-y-4">
+                <p class="text-muted-foreground leading-7">
+                  Registration, Evaluation, and Authorization of Chemicals
+                  (Reach) entered into force in June 2007 for the intent of
+                  protection to human health and the protection of the
+                  environment. The Reach SVHC list now includes 219 substances
+                  and is updated with new substances every six months.
+                </p>
+                <p class="text-muted-foreground leading-7">
+                  REACH also addresses the continued use of 151 substances
+                  defined as "Substances with Very High Concern" (SVHC). Rubadue
+                  Wire Co., Inc. does not intentionally use or add any of the
+                  151 (SVHC) above 0.1% weight and we have also confirmed with
+                  our raw material suppliers that these substances are not
+                  intentionally used or added above 0.1% weight.
+                </p>
+              </div>
+
+              <div class="rounded-lg bg-muted/50 p-6 space-y-4">
+                <p class="text-muted-foreground leading-7">
+                  Rubadue Wire Co., Inc. is a producer of "articles" and
+                  therefore must rely on suppliers for pre-registration. When a
+                  new list of SVHC is released, Rubadue Wire Co., Inc. takes due
+                  diligence with its supply chain to determine compliance.
+                </p>
+                <div class="flex items-center gap-4">
+                  <a
+                    target="_blank"
+                    href="/src/assets/reach-statement.pdf"
+                    class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                      ></path><polyline points="7 10 12 15 17 10"
+                      ></polyline><line x1="12" y1="15" x2="12" y2="3"
+                      ></line></svg
+                    >
+                    Download Latest REACH SVHC Statement
+                  </a>
+                  <a
+                    href="/contact"
+                    class="inline-flex items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Contact Us About REACH SVHC
+                  </a>
+                </div>
+              </div>
+
+              <div
+                class="flex items-center gap-2 text-sm text-muted-foreground"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                  ></path><path d="M21 3v5h-5"></path></svg
+                >
+                Last Updated: December 13, 2024
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

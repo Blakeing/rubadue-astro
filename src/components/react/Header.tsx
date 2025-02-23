@@ -1,6 +1,14 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Book, Cable, FileText, Menu, Settings, Wrench } from "lucide-react";
+import {
+	Book,
+	Cable,
+	FileText,
+	Menu,
+	Settings,
+	Shield,
+	Wrench,
+} from "lucide-react";
 import { TextLogo } from "./TextLogo";
 import {
 	NavigationMenu,
@@ -62,6 +70,7 @@ const resources = [
 	{ name: "Glossary", href: "/glossary", icon: Book },
 	{ name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
 	{ name: "Blog", href: "/blog", icon: Book },
+	{ name: "Health & Safety", href: "/health-safety", icon: Shield },
 ];
 
 export function Header() {
@@ -72,7 +81,7 @@ export function Header() {
 					<TextLogo />
 				</a>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-					<NavigationMenu className="mr-4">
+					<NavigationMenu className="mr-4" data-hover="false">
 						<NavigationMenuList>
 							<NavigationMenuItem>
 								<NavigationMenuLink
@@ -128,7 +137,7 @@ export function Header() {
 							<NavigationMenuItem>
 								<NavigationMenuTrigger>Resources</NavigationMenuTrigger>
 								<NavigationMenuContent>
-									<div className="w-[400px] p-6">
+									<div className="min-w-60 p-6">
 										<div className="space-y-2">
 											{resources.map((item) => (
 												<a
