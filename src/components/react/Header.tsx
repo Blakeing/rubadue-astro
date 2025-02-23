@@ -22,38 +22,38 @@ import {
 
 const navigation = [
 	{ name: "Part Number Builders", href: "#" },
-	{ name: "Bare Litz Wires", href: "/products/bare-litz-wire" },
-	{ name: "Insulated Litz Wires", href: "#" },
-	{ name: "Triple Insulated Wires", href: "#" },
-	{ name: "Double Insulated Wires", href: "#" },
-	{ name: "Single Insulated Wires", href: "#" },
-	{ name: "Specialty Products", href: "#" },
+	{ name: "Bare Litz Wires", href: "/products" },
+	{ name: "Insulated Litz Wires", href: "/products" },
+	{ name: "Triple Insulated Wires", href: "/products" },
+	{ name: "Double Insulated Wires", href: "/products" },
+	{ name: "Single Insulated Wires", href: "/products" },
+	{ name: "Specialty Products", href: "/products" },
 	{ name: "Technical Info", href: "#" },
 	{ name: "Notes", href: "#" },
-	{ name: "Glossary", href: "#" },
+	{ name: "Glossary", href: "/glossary" },
 	{ name: "Part Number Index", href: "#" },
 ];
 
 const wireTypes = [
-	{ name: "Bare Litz Wires", href: "/products/bare-litz-wire", icon: Cable },
+	{ name: "Bare Litz Wires", href: "/products", icon: Cable },
 	{
 		name: "Insulated Litz Wires",
-		href: "/products/insulated-litz-wire",
+		href: "/products",
 		icon: Cable,
 	},
 	{
 		name: "Triple Insulated Wires",
-		href: "/products/triple-insulated-wire",
+		href: "/products",
 		icon: Cable,
 	},
 	{
 		name: "Double Insulated Wires",
-		href: "/products/double-insulated-wire",
+		href: "/products",
 		icon: Cable,
 	},
 	{
 		name: "Single Insulated Wires",
-		href: "/products/single-insulated-wire",
+		href: "/products",
 		icon: Cable,
 	},
 ];
@@ -62,7 +62,7 @@ const resources = [
 	{ name: "Part Number Builders", href: "/part-number-builders", icon: Wrench },
 	{ name: "Technical Info", href: "#", icon: FileText },
 	{ name: "Notes", href: "#", icon: FileText },
-	{ name: "Glossary", href: "#", icon: Book },
+	{ name: "Glossary", href: "/glossary", icon: Book },
 	{ name: "Part Number Index", href: "#", icon: Settings },
 	{ name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
 	{ name: "Blog", href: "/blog", icon: Book },

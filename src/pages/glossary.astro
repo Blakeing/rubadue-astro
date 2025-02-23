@@ -1,0 +1,817 @@
+---
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
+import { Header } from "@/components/react/Header";
+import Footer from "@/components/astro/layout/Footer.astro";
+import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
+import { Input } from "@/components/react/ui/input";
+import { Button } from "@/components/react/ui/button";
+import { Search } from "lucide-react";
+import { GlossaryComponent } from "@/components/react/Glossary";
+
+const title = "Wire & Cable Glossary";
+const description =
+  "Comprehensive glossary of wire and cable industry terms and definitions.";
+
+// Build breadcrumb segments
+const segments = [{ name: "Glossary", href: "/glossary" }];
+
+// Organize terms alphabetically
+const glossaryTerms = {
+  A: [
+    {
+      term: "ABRASION",
+      definition:
+        "Damage caused by scraping or rubbing against a rough, hard surface.",
+    },
+    {
+      term: "ABRASION RESISTANCE",
+      definition:
+        "A measure of the ability of a wire, covering or material to resist surface wear or damage by friction.",
+    },
+    {
+      term: "A.C. OR A-C",
+      definition: "Abbreviation for alternating current.",
+    },
+    {
+      term: "ACCELERATED LIFE TEST",
+      definition:
+        "A test wherein some conditions (voltage, temperature, etc.) to which a wire, cable or material is subjected are increased in magnitude above normal operating values to obtain observable deterioration in a reasonable period of time, thereby providing a relative measure of performance at normal values of operating voltage, temperature, etc.",
+    },
+    {
+      term: "ACTIVE WIRE",
+      definition:
+        "The wire in an armature winding which produces useful voltage. That portion of the winding in which induction takes place.",
+    },
+    {
+      term: "ADMITTANCE",
+      definition:
+        "The measure of ease with which alternating current can flow through a circuit; the reciprocal of impedance.",
+    },
+    {
+      term: "AGING",
+      definition:
+        "The change in properties of a material with time under specific conditions.",
+    },
+    {
+      term: "ALLOY",
+      definition: "A metal formed by combining two or more other metals.",
+    },
+    {
+      term: "ALTERNATING CURRENT",
+      definition:
+        "Electric current that periodically and regularly reverses its direction. The frequency of the change in flow is expressed in cycles per second (Hertz or Hz).",
+    },
+    {
+      term: "AMBIENT TEMPERATURE",
+      definition:
+        "The temperature of a medium, such as gas or liquid, surrounding an object.",
+    },
+    {
+      term: "AMERICAN WIRE GAUGE (AWG)",
+      definition: "The standard system used for measuring wire diameter.",
+    },
+    {
+      term: "AMPERE (AMP)",
+      definition:
+        "The unit measure of the rate of flow of an electrical current. One ampere is the current flowing through an ohm of resistance at one volt potential.",
+    },
+  ],
+  B: [
+    {
+      term: "BARE CONDUCTOR",
+      definition: "A conductor not covered with insulating material.",
+    },
+    {
+      term: "BASIC ISOLATION",
+      definition: "One layer of insulation over a conductor.",
+    },
+    {
+      term: "BC",
+      definition: "Bare Copper.",
+    },
+  ],
+  C: [
+    {
+      term: "CABLE ASSEMBLY",
+      definition: "A cable with plugs or connectors on each end.",
+    },
+    {
+      term: "CABLE CORE",
+      definition:
+        "The portion of an insulated wire or cable lying under the protective or insulating covering or coverings.",
+    },
+    {
+      term: "CFN",
+      definition: "Customer furnished material.",
+    },
+    {
+      term: "CIRCUIT",
+      definition:
+        "A complete path over which electrons can flow from the negative terminals of a voltage source through a conductor to the positive terminals of the same voltage source.",
+    },
+    {
+      term: "CLADDING",
+      definition:
+        "Method of applying a layer of metal over another metal material in such a way that the metals is continuously welded.",
+    },
+    {
+      term: "CLASS B",
+      definition: "Thermal Class B rated for 130°C temperature.",
+    },
+    {
+      term: "CLASS F",
+      definition: "Thermal Class F rated for 155°C temperature.",
+    },
+    {
+      term: "CLASS H",
+      definition: "Thermal Class H rated for 180°C temperature.",
+    },
+    {
+      term: "COLOR CODE",
+      definition:
+        "A color system for wire or circuit identification by use of colors. (See color code chart.)",
+    },
+    {
+      term: "COMPOSITE CORE WIRE",
+      definition:
+        "A wire having a core in which is fused an outer shell of one or more different metals.",
+    },
+    {
+      term: "COMPOUND",
+      definition:
+        "An insulating jacketing material made by mixing two or more ingredients, thereby resulting in a new material.",
+    },
+    {
+      term: "CONCENTRIC",
+      definition:
+        "A central core surrounded by one or more helically wound strands at a fixed radius geometric arrangement.",
+    },
+    {
+      term: "COULOMB",
+      definition:
+        "Unit quantity of electricity. The amount transferred by one ampere in one second.",
+    },
+    {
+      term: "CROSS-SECTIONAL AREA OF A CONDUCTOR",
+      definition:
+        "The area of an imaginary plane cutting straight through a conductor perpendicular to its axis.",
+    },
+    {
+      term: "CSA",
+      definition:
+        "Canadian Standards Association - A global provider of product testing and certification services.",
+    },
+    {
+      term: "CURRENT",
+      definition:
+        "The rate of transfer of electricity. From high to low potential which represents the transfer of one coulomb per second.",
+    },
+    {
+      term: "CURRENT CARRYING CAPACITY",
+      definition:
+        "The maximum current a conductor can carry without heating beyond a safe limit.",
+    },
+  ],
+  D: [
+    {
+      term: "D.C. OR D-C",
+      definition: "Abbreviation for direct current.",
+    },
+    {
+      term: "DE-RATING FACTOR",
+      definition:
+        "A factor used to reduce current carrying capacity of a wire or cable in other than free air for which the value was established.",
+    },
+    {
+      term: "DIELECTRIC",
+      definition: "Insulator.",
+    },
+    {
+      term: "DIELECTRIC ABSORPTION",
+      definition:
+        "The property of an imperfect dielectric which causes the dielectric to retain an electric charge after being discharged.",
+    },
+    {
+      term: "DIELECTRIC CONSTANT",
+      definition:
+        "(Permittivity or Specific Inductive Capacity). The property of a dielectric which determines the electrostatic energy stored per unit volume for a given potential gradient.",
+    },
+    {
+      term: "DIELECTRIC STRENGTH",
+      definition:
+        "The voltage which an insulation can withstand before a breakdown occurs.",
+    },
+    {
+      term: "DIELECTRIC TEST",
+      definition:
+        "Tests which evaluate the capability of insulation to withstand a specified test voltage for a specified time period under specified test conditions.",
+    },
+    {
+      term: "DIRECT CURRENT",
+      definition: "An electric current which flows in only one direction.",
+    },
+    {
+      term: "DISTURBED CONDUCTOR",
+      definition:
+        "A conductor that has received energy generated by the field of another conductor or an external source such as a transformer.",
+    },
+    {
+      term: "DRAWING",
+      definition:
+        "In the manufacture of wire, pulling the metal through a die or series of dies for reduction of diameter to a specified size.",
+    },
+    {
+      term: "DWF",
+      definition: "Double layer insulated wire.",
+    },
+  ],
+  E: [
+    {
+      term: "ECCENTRICITY",
+      definition:
+        "A measure of the concentricity of conductor with respect to the insulation. Expressed as a percentage of center displacement.",
+    },
+    {
+      term: "EIA",
+      definition:
+        "Abbreviation for Electronic Industries Association. The force which causes current to flow in a circuit.",
+    },
+    {
+      term: "ELECTRONIC HOOK-UP WIRE",
+      definition:
+        "Wires used to make internal connections between various electrical parts of electronic assemblies.",
+    },
+    {
+      term: "ELECTRONIC INTERFACE WIRE",
+      definition:
+        "Wires or cables used to make connections between units of electronic equipment.",
+    },
+    {
+      term: "ELECTRO-TINNED",
+      definition: "Electronic process of tinning wire into pure tin.",
+    },
+    {
+      term: "ELONGATION",
+      definition:
+        "A fractional increase in the length of a material when a given amount of stress is applied.",
+    },
+    {
+      term: "EMF",
+      definition:
+        "Abbreviation, Electromotive Force or voltage. End Check, Test to conduct on a completed wire and/or cable run to assure electrical continuity.",
+    },
+    {
+      term: "ETFE",
+      definition: "Ethylene tetrafluoroethylene; type of insulation.",
+    },
+    {
+      term: "EXTRUSION",
+      definition:
+        "A method of forcing plastic, rubber or elastomer materials through an orifice in a continuous fashion to apply insulation to a conductor or cable.",
+    },
+  ],
+  F: [
+    {
+      term: "FARAD",
+      definition: "Unit of capacitation.",
+    },
+    {
+      term: "FEP",
+      definition: "Fluorinated Ethylene Propylene; type of insulation.",
+    },
+    {
+      term: "FILM",
+      definition:
+        "Shielding having a nominal thickness not greater than 0.010 inch.",
+    },
+    {
+      term: "FLAT CONDUCTOR",
+      definition:
+        "A conductor with a width-to-thickness ratio arbitrarily 5 to 1 or greater.",
+    },
+    {
+      term: "FLEX LIFE",
+      definition:
+        "The time of heat aging that a material can withstand before failing when bent around a specific radius. (Used to evaluate thermal endurance.) Also, ability of conductor, wire, cable to withstand repeated bending.",
+    },
+    {
+      term: "FREQUENCY",
+      definition:
+        "The number of times an alternating current repeats its cycle in one second.",
+    },
+  ],
+  G: [
+    {
+      term: "GAGE OR GAUGE",
+      definition: "A term used to denote the physical size of a wire.",
+    },
+    {
+      term: "GROUND INSULATION",
+      definition: "The major insulation used to achieve ground potential.",
+    },
+    {
+      term: "GROUND WIRE",
+      definition:
+        "A conductor leading from equipment to an electrical connection with the ground.",
+    },
+  ],
+  H: [
+    {
+      term: "HARD DRAWN COPPER WIRE",
+      definition: "Copper wire that has not been annealed after drawing.",
+    },
+    {
+      term: "HEAT ENDURANCE",
+      definition:
+        "The time a material can withstand before failing a specified physical test.",
+    },
+    {
+      term: "HEAT SHOCK",
+      definition:
+        "Test to determine stability of material by sudden exposure to a high temperature for a short period of time.",
+    },
+    {
+      term: "HELICAL",
+      definition: "Spiral.",
+    },
+    {
+      term: "HELIX",
+      definition: "Spiral winding.",
+    },
+    {
+      term: "HENRY",
+      definition:
+        "Unit of inductance when the induced electromotive force in one volt is produced by the inducing current changing at the rate of one ampere per second.",
+    },
+    {
+      term: "HERTZ",
+      definition:
+        "A term replacing cycles-per-second as an indication of frequency.",
+    },
+    {
+      term: "HI-POT",
+      definition:
+        "A test designed to determine the highest potential that can be applied to a conductor without breaking through the insulation.",
+    },
+    {
+      term: "HIGH VOLTAGE",
+      definition:
+        "Typically refers to a wire or cable with an operating voltage over 600 volts.",
+    },
+    {
+      term: "HOOK-UP WIRE",
+      definition:
+        "Insulated wire used for low current, low voltage (under 1000 volt) applications internally within enclosed electronic equipment.",
+    },
+    {
+      term: "HOT TIN DIP",
+      definition:
+        "A process of passing wire through a bath of molten tin to provide a coating.",
+    },
+  ],
+  I: [
+    {
+      term: "IEC",
+      definition:
+        "International Electrotechnical Commission. International standards organization dealing with electrical, electronic, and related technologies.",
+    },
+    {
+      term: "IMPEDANCE",
+      definition:
+        "The total opposition that a circuit offers to the flow of alternating current or any other varying current at a particular frequency.",
+    },
+    {
+      term: "INDUCTANCE",
+      definition:
+        "The property of a circuit or circuit element that opposes a change in current flow, thus causing current changes to lag behind voltage changes. Inductance is measured in henrys.",
+    },
+    {
+      term: "INSULATED WIRE",
+      definition:
+        "A conductor of electricity covered with a non-conducting material.",
+    },
+    {
+      term: "INSULATION",
+      definition:
+        "Material having a high resistance to the flow of electric current, to prevent leakage of current from a conductor.",
+    },
+    {
+      term: "INSULATION SYSTEM",
+      definition:
+        "All of the insulating materials used to insulate a particular electrical or electronic product.",
+    },
+    {
+      term: "INSULATION THICKNESS",
+      definition:
+        "Size of insulation applied to conductor, typically measured in mils or thousandths of an inch.",
+    },
+    {
+      term: "INSULATOR",
+      definition:
+        "A material of such low conductivity that the flow of current through it is usually negligible.",
+    },
+    {
+      term: "INTERCONNECTING WIRE",
+      definition:
+        "The physical wiring between components or between units of a system. The conductors between units or between larger portions of a system or systems.",
+    },
+  ],
+  J: [
+    {
+      term: "JACKET",
+      definition:
+        "A synthetic or rubber covering over the insulation, core or sheath of a cable.",
+    },
+  ],
+  K: [
+    {
+      term: "KILOWATT",
+      definition: "A unit of power equal to one thousand watts.",
+    },
+    {
+      term: "KILOVOLT AMPERE",
+      definition: "1000 volts X amperes.",
+    },
+    {
+      term: "KILOVOLTS",
+      definition: "1000 volts.",
+    },
+  ],
+  L: [
+    {
+      term: "LAY",
+      definition:
+        "The twist in a stranded conductor or twisted wires; distance between each complete twist.",
+    },
+    {
+      term: "LITZ WIRE",
+      definition:
+        "(Litzendraht Wire) Consisting of a number of fine, separately insulated strands braided together for reduced skin effect and hence lower resistance to high frequency currents for lower RF losses.",
+    },
+  ],
+  M: [
+    {
+      term: "MAGNET WIRE",
+      definition:
+        "Enameled wire intended for use in windings on motors, transformers and other devices for electromagnetic devices.",
+    },
+    {
+      term: "MELT RANGE",
+      definition:
+        "The difference in degrees of °C between the melting point of material and its flow point.",
+    },
+    {
+      term: "MELTING POINT",
+      definition:
+        "The temperature at which a material changes state from solid to liquid.",
+    },
+    {
+      term: "MHD",
+      definition: "Medium Hard Drawn copper wire.",
+    },
+    {
+      term: "MIL",
+      definition:
+        '0.001" (1/1000) inch. One thousandth of an inch. A unit used in measuring the diameter of wire or thickness of insulation over a conductor.',
+    },
+    {
+      term: "MILLI",
+      definition: "Prefix denoting one thousandth.",
+    },
+  ],
+  N: [
+    {
+      term: "NEC",
+      definition:
+        "National Electrical Code covers the use of wire and cable in many applications.",
+    },
+    {
+      term: "NEMA",
+      definition: "National Electrical Manufacturers Association.",
+    },
+    {
+      term: "NICKEL",
+      definition:
+        "Nickel offers a combination of corrosion resistance, formability, and tough physical properties. Nickel is used for alloying purposes and in nickel-clad copper wire.",
+    },
+    {
+      term: "NON-CONDUCTOR",
+      definition: "An insulating material.",
+    },
+    {
+      term: "NPC",
+      definition: "Nickel Plated Copper.",
+    },
+    {
+      term: "NYLON",
+      definition: "The generic name for synthetic fiber-forming polyamides.",
+    },
+  ],
+  O: [
+    {
+      term: "OD",
+      definition: "Outside Diameter.",
+    },
+    {
+      term: "OHM",
+      definition:
+        "Unit of electrical resistance. Resistance of a circuit in which a potential difference of one volt produces a current of one ampere.",
+    },
+    {
+      term: "OHM'S LAW",
+      definition:
+        "Current in terms of electromotive force E and resistance R, given by equation I = E/R.",
+    },
+    {
+      term: "OVER POTENTIAL / OVERVOLTAGE",
+      definition:
+        "A voltage above the normal operating voltage of a device or circuit.",
+    },
+  ],
+  P: [
+    {
+      term: "PERCENT CONDUCTIVITY",
+      definition:
+        "Conductivity of a material expressed as a percentage of that of copper.",
+    },
+    {
+      term: "PFA",
+      definition: "Perfluoroalkoxy; type of insulation.",
+    },
+    {
+      term: "PLAIN CONDUCTOR",
+      definition: "A conductor consisting of one metal only.",
+    },
+    {
+      term: "PLASTIC",
+      definition:
+        "High polymer substances, including both natural and synthetic products (excluding rubbers), that are capable of flowing under heat and pressure.",
+    },
+    {
+      term: "PLATING",
+      definition: "One method of applying a coating of one metal over another.",
+    },
+    {
+      term: "POLARITY",
+      definition:
+        "a) An electrical condition determining the direction in which current tends to flow. b) The quality of having two opposite charges.",
+    },
+    {
+      term: "POLYETHYLENE (PE)",
+      definition: "Thermoplastic polymer insulation.",
+    },
+    {
+      term: "POLYPROPYLENE",
+      definition:
+        "Thermoplastic insulation similar to polyethylene but offering a higher temperature capability.",
+    },
+    {
+      term: "POLYURETHANE",
+      definition: "Broad class of polymer insulation.",
+    },
+    {
+      term: "POTTING",
+      definition:
+        "Sealing of a wire or cable termination or other parts with a liquid composition that hardens into an elastomer or solid plastic material.",
+    },
+    {
+      term: "PRIMARY INSULATION",
+      definition:
+        "A wire insulating material, the first layer over a conductor. The prime function being an electrical barrier for the applied potential.",
+    },
+    {
+      term: "PVC",
+      definition:
+        "Polyvinyl chloride; general purpose thermoplastic insulation.",
+    },
+  ],
+  R: [
+    {
+      term: "REINFORCED ISOLATION",
+      definition:
+        "(Reinforced Insulation) - Three layers of insulation over a conductor.",
+    },
+    {
+      term: "RESISTANCE",
+      definition:
+        "Property of a conductor that determines the current produced by a given difference of potential. The ohm is the practical unit of resistance.",
+    },
+    {
+      term: "RESISTIVE CONDUCTOR",
+      definition:
+        "A conductor used primarily because it possesses the property of high electric resistance.",
+    },
+    {
+      term: "RE-SPOOL",
+      definition:
+        "To rerun material from one package size to another for varying reasons. Such as: testing, inspection for defects, cut to lengths, etc.",
+    },
+    {
+      term: "RMS",
+      definition:
+        "Root Mean Square - Theoretically current value that corresponds to the direct current value that will produce the same heating effect.",
+    },
+  ],
+  S: [
+    {
+      term: "SILVER",
+      definition:
+        "Silver is similar to gold in corrosion resistance. Costs less, provides very good conductivity. Widely used as a plating or coating over copper.",
+    },
+    {
+      term: "SIW",
+      definition: "Single (layer) insulated wire.",
+    },
+    {
+      term: "SOLDER",
+      definition: "A metallic alloy for joining metals.",
+    },
+    {
+      term: "SOLID CONDUCTOR",
+      definition: "A conductor consisting of a single wire.",
+    },
+    {
+      term: "SPC",
+      definition: "Silver Plated Copper.",
+    },
+    {
+      term: "SPARK TEST",
+      definition:
+        "A test performed on wire and cable to determine the amount of defective insulation (pin holes) on the conductor.",
+    },
+    {
+      term: "STRAND",
+      definition:
+        "One of the wires, groups of wires, of any stranded conductor.",
+    },
+    {
+      term: "STRANDED CONDUCTOR",
+      definition:
+        "A conductor composed of a group of wires (Wires in a Stranded Conductor are usually twisted).",
+    },
+    {
+      term: "STRIP",
+      definition: "To remove insulation from a wire or cable.",
+    },
+    {
+      term: "SUPPLEMENTARY INSULATION",
+      definition:
+        "(Supplementary Insulation) - Two layers of insulation over a conductor.",
+    },
+  ],
+  T: [
+    {
+      term: "TANK TEST",
+      definition:
+        "A term used to describe a voltage dielectric test where the specimen to be tested is submerged in a liquid (usually water) and a voltage potential applied between the conductor and the liquid as ground.",
+    },
+    {
+      term: "TPC",
+      definition: "Tin Plated Copper.",
+    },
+    {
+      term: "TEFLON",
+      definition: "Chemours™ trade name (Teflon® FEP & Teflon® PFA).",
+    },
+    {
+      term: "TEFZEL",
+      definition: "Chemours™ trade name for Tefzel ETFE.",
+    },
+    {
+      term: "TENSILE STRENGTH",
+      definition: "The pulling stress required to break a given wire.",
+    },
+    {
+      term: "TEMPERATURE RATING",
+      definition:
+        "The maximum temperature at which the insulation material may be used in continuous operation without loss of its basic properties.",
+    },
+    {
+      term: "TEE",
+      definition:
+        "Polytetrafluoroethylene, Thermal Conductivity - Ability of material to conduct heat.",
+    },
+    {
+      term: "THERMAL ENDURANCE",
+      definition:
+        "The time limit at a selected temperature for an insulation material to deteriorate to some predetermined level of electrical, mechanical, or chemical performance under specified conditions.",
+    },
+    {
+      term: "TIN PLATED COPPER",
+      definition:
+        "Copper wire that has been coated with a layer of tin. One benefit is to simplify soldering.",
+    },
+    {
+      term: "TIW",
+      definition: "Three (layer) insulated wire.",
+    },
+    {
+      term: "TOLERANCE",
+      definition:
+        "A specified allowance for error from a standard or given dimension, weight, or property.",
+    },
+  ],
+  U: [
+    {
+      term: "UL",
+      definition:
+        "Underwriters Laboratories Inc.; independent product safety testing and certification organization.",
+    },
+    {
+      term: "UNIDIRECTIONAL STRANDING",
+      definition:
+        "A term denoting that in a stranded conductor all layers have the same direction of lay.",
+    },
+    {
+      term: "UNILAY STRAND",
+      definition:
+        "A conductor constructed with a central core surrounded by more than one layer of helically laid wires, with all layers having a common length and direction of lay.",
+    },
+  ],
+  V: [
+    {
+      term: "VDE",
+      definition:
+        "Verband der Elektrotechnik; German Association for electrical, electronic, and information technologies certification organization.",
+    },
+    {
+      term: "VOLT",
+      definition: "Basic unit of electrical potential.",
+    },
+    {
+      term: "VOLTAGE",
+      definition: "Electrical potential or force expressed in volts.",
+    },
+    {
+      term: "VOLTAGE DROP",
+      definition:
+        "Amount of voltage loss from original input in a conductor of given size and length.",
+    },
+    {
+      term: "VOLTAGE RATING",
+      definition:
+        "The maximum voltage that may be continuously applied to a wire in conformance with standards or specifications.",
+    },
+  ],
+  W: [
+    {
+      term: "WALL THICKNESS",
+      definition:
+        "A term used that expresses the thickness of an insulation or jacket.",
+    },
+    {
+      term: "WATT",
+      definition:
+        "Unit of power or work done at the rate of one joule per second or when one ampere of current flows under a pressure of one volt (voltampere).",
+    },
+    {
+      term: "WINDING WIRES",
+      definition: "Basic, Supplementary or Reinforced isolation / insulation.",
+    },
+    {
+      term: "WIRE",
+      definition: "A conductor of round, square, or rectangular section.",
+    },
+    {
+      term: "WIRE GAGE",
+      definition:
+        "A system of numerical designations of wire sizes. See American Wire Gauge (AWG).",
+    },
+    {
+      term: "WITHSTAND VOLTAGE",
+      definition:
+        "Voltage that the conductor will safely handle in a given application without failure.",
+    },
+  ],
+};
+
+// Calculate total terms for pagination
+const ITEMS_PER_PAGE = 20;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      .glossary-section {
+        margin-top: 3rem;
+      }
+      .first-visible-section {
+        margin-top: 0 !important;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background">
+    <Header client:load />
+    <BaseHeader eyebrow="Reference" title="Glossary" />
+    <main>
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 min-h-[calc(100vh-452px)]"
+      >
+        <GlossaryComponent client:load glossaryTerms={glossaryTerms} />
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
