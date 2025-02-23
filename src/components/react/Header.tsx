@@ -29,9 +29,7 @@ const navigation = [
 	{ name: "Single Insulated Wires", href: "/products" },
 	{ name: "Specialty Products", href: "/products" },
 	{ name: "Technical Info", href: "#" },
-	{ name: "Notes", href: "#" },
 	{ name: "Glossary", href: "/glossary" },
-	{ name: "Part Number Index", href: "#" },
 ];
 
 const wireTypes = [
@@ -61,9 +59,7 @@ const wireTypes = [
 const resources = [
 	{ name: "Part Number Builders", href: "/part-number-builders", icon: Wrench },
 	{ name: "Technical Info", href: "#", icon: FileText },
-	{ name: "Notes", href: "#", icon: FileText },
 	{ name: "Glossary", href: "/glossary", icon: Book },
-	{ name: "Part Number Index", href: "#", icon: Settings },
 	{ name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
 	{ name: "Blog", href: "/blog", icon: Book },
 ];
@@ -79,47 +75,12 @@ export function Header() {
 					<NavigationMenu className="mr-4">
 						<NavigationMenuList>
 							<NavigationMenuItem>
-								<NavigationMenuTrigger>Wire Products</NavigationMenuTrigger>
-
-								<NavigationMenuContent>
-									<div className="w-[400px] p-6">
-										<h3 className="text-sm font-medium text-muted-foreground mb-4">
-											Litz Wire Types
-										</h3>
-										<div className="space-y-2">
-											{wireTypes.map((item) => (
-												<a
-													key={item.name}
-													href={item.href}
-													className="flex items-center gap-x-2 text-sm font-semibold text-foreground hover:text-accent-foreground"
-												>
-													<item.icon className="h-5 w-5 flex-none text-muted-foreground" />
-													<span>{item.name}</span>
-												</a>
-											))}
-										</div>
-									</div>
-								</NavigationMenuContent>
-							</NavigationMenuItem>
-
-							<NavigationMenuItem>
-								<NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-								<NavigationMenuContent>
-									<div className="w-[400px] p-6">
-										<div className="space-y-2">
-											{resources.map((item) => (
-												<a
-													key={item.name}
-													href={item.href}
-													className="flex items-center gap-x-2 text-sm font-semibold text-foreground hover:text-accent-foreground"
-												>
-													<item.icon className="h-5 w-5 flex-none text-muted-foreground" />
-													<span>{item.name}</span>
-												</a>
-											))}
-										</div>
-									</div>
-								</NavigationMenuContent>
+								<NavigationMenuLink
+									asChild
+									className={navigationMenuTriggerStyle()}
+								>
+									<a href="/products">Products</a>
+								</NavigationMenuLink>
 							</NavigationMenuItem>
 
 							<NavigationMenuItem>
@@ -162,6 +123,26 @@ export function Header() {
 								>
 									<a href="/request-a-quote">Request a Quote</a>
 								</NavigationMenuLink>
+							</NavigationMenuItem>
+
+							<NavigationMenuItem>
+								<NavigationMenuTrigger>Resources</NavigationMenuTrigger>
+								<NavigationMenuContent>
+									<div className="w-[400px] p-6">
+										<div className="space-y-2">
+											{resources.map((item) => (
+												<a
+													key={item.name}
+													href={item.href}
+													className="flex items-center gap-x-2 text-sm font-semibold text-foreground hover:text-accent-foreground"
+												>
+													<item.icon className="h-5 w-5 flex-none text-muted-foreground" />
+													<span>{item.name}</span>
+												</a>
+											))}
+										</div>
+									</div>
+								</NavigationMenuContent>
 							</NavigationMenuItem>
 						</NavigationMenuList>
 					</NavigationMenu>
