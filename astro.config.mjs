@@ -23,18 +23,4 @@ export default defineConfig({
 			entrypoint: "astro/assets/services/sharp",
 		},
 	},
-	vite: {
-		resolve: {
-			alias: {
-				"@": "/src",
-			},
-		},
-		build: {
-			rollupOptions: {
-				output: {
-					manualChunks: undefined,
-				},
-			},
-		},
-	},
 });

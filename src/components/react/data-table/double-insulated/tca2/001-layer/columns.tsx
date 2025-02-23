@@ -1,18 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-
-export type WireData = {
-	partNumber: string;
-	awg: string;
-	conductor: {
-		inches: string;
-		mm: string;
-	};
-	nominalOD: {
-		inches: string;
-		mm: string;
-	};
-	weightLbKft: string;
-};
+import type { WireData } from "./types";
 
 const columnHelper = createColumnHelper<WireData>();
 
@@ -28,9 +15,11 @@ export const columns = [
 		columns: [
 			columnHelper.accessor("conductor.inches", {
 				header: "INCHES",
+				cell: ({ row }) => row.original.conductor.inches.toFixed(4),
 			}),
 			columnHelper.accessor("conductor.mm", {
 				header: "MM",
+				cell: ({ row }) => row.original.conductor.mm.toFixed(3),
 			}),
 		],
 	}),
@@ -39,13 +28,16 @@ export const columns = [
 		columns: [
 			columnHelper.accessor("nominalOD.inches", {
 				header: "INCHES",
+				cell: ({ row }) => row.original.nominalOD.inches.toFixed(4),
 			}),
 			columnHelper.accessor("nominalOD.mm", {
 				header: "MM",
+				cell: ({ row }) => row.original.nominalOD.mm.toFixed(3),
 			}),
 		],
 	}),
-	columnHelper.accessor("weightLbKft", {
-		header: ({ header }) => (header.depth === 0 ? "" : "WEIGHT LB/KFT"),
+	columnHelper.accessor("weightLbFt", {
+		header: ({ header }) => (header.depth === 0 ? "" : "WEIGHT LB/FT"),
+		cell: ({ row }) => row.original.weightLbFt.toFixed(2),
 	}),
 ];

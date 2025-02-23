@@ -1,18 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-
-export type WireData = {
-	partNumber: string;
-	awg: string;
-	conductor: {
-		inches: string;
-		mm: string;
-	};
-	nominalOD: {
-		inches: string;
-		mm: string;
-	};
-	weightLbKft: string;
-};
+import type { WireData } from "./data";
 
 const columnHelper = createColumnHelper<WireData>();
 
@@ -45,7 +32,7 @@ export const columns = [
 			}),
 		],
 	}),
-	columnHelper.accessor("weightLbKft", {
+	columnHelper.accessor("weightLbFt", {
 		header: ({ header }) => (header.depth === 0 ? "" : "WEIGHT LB/KFT"),
 	}),
 ];

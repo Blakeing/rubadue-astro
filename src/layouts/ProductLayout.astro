@@ -19,13 +19,20 @@ interface Props {
     sizeRange?: string;
     conductor?: string;
     insulation?: string;
-    temperature?: string;
-    voltage?: string;
+    rating?: {
+      temperature?: string;
+      voltage?: string[];
+    };
   };
   compliances?: string[];
   systemApprovals?: string[];
   tensileStrength?: string;
-
+  breakdown?: string;
+  tableType?: "litzWire" | "magnet" | "doubleInsulated" | "custom";
+  tags?: {
+    type?: string[];
+    material?: string[];
+  };
   category: string;
   license?: {
     href: string;

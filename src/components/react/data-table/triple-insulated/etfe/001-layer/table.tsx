@@ -1,7 +1,7 @@
-import { DataTable } from "@/components/react/data-table/data-table";
+import { SimpleDataTable } from "@/components/react/data-table/simple-data-table";
 import { columns } from "./columns";
 import { wireData } from "./data";
 
 export function EtfeWireTable() {
-	return <DataTable columns={columns} data={wireData} />;
+	return <SimpleDataTable columns={columns} data={wireData} />;
 }

@@ -23,7 +23,9 @@ const products = defineCollection({
 					certifications: z.array(z.string()).optional(), // e.g., ["UL", "VDE"]
 				})
 				.optional(),
-			tableType: z.enum(["litzWire", "magnet", "custom"]).optional(),
+			tableType: z
+				.enum(["litzWire", "magnet", "doubleInsulated", "custom"])
+				.optional(),
 
 			// Product Construction
 			construction: z

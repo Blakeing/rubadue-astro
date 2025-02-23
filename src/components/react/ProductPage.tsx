@@ -23,8 +23,10 @@ interface ProductPageProps {
 			sizeRange?: string;
 			conductor?: string;
 			insulation?: string;
-			temperature?: string;
-			voltage?: string | string[];
+			rating?: {
+				temperature?: string;
+				voltage?: string[];
+			};
 			numberWires?: string;
 			coatings?: string[];
 		};
@@ -34,6 +36,11 @@ interface ProductPageProps {
 		overview?: string;
 		applications?: string[];
 		tensileStrength?: string;
+		breakdown?: string;
+		tags?: {
+			type?: string[];
+			material?: string[];
+		};
 	};
 
 	license?: {
@@ -113,14 +120,28 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 									</dd>
 								</div>
 							)}
-							{product.construction.temperature && (
-								<div className="flex items-center">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Temperature:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{product.construction.temperature}
-									</dd>
+							{product.construction.rating && (
+								<div className="flex flex-col space-y-2">
+									{product.construction.rating.temperature && (
+										<div className="flex items-center">
+											<dt className="pr-2 flex-none text-sm text-muted-foreground">
+												Temperature:
+											</dt>
+											<dd className="text-sm text-foreground">
+												{product.construction.rating.temperature}
+											</dd>
+										</div>
+									)}
+									{product.construction.rating.voltage && (
+										<div className="flex items-center">
+											<dt className="pr-2 flex-none text-sm text-muted-foreground">
+												Voltage:
+											</dt>
+											<dd className="text-sm text-foreground">
+												{product.construction.rating.voltage.join(", ")}
+											</dd>
+										</div>
+									)}
 								</div>
 							)}
 							{product.construction.coatings && (
@@ -150,28 +171,6 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 											<p className="text-sm text-foreground">
 												{product.construction.coatings[0]}
 											</p>
-										)}
-									</dd>
-								</div>
-							)}
-							{product.construction.voltage && (
-								<div className="flex items-start">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Voltage:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{Array.isArray(product.construction.voltage) ? (
-											product.construction.voltage.length > 1 ? (
-												<ul className="list-disc pl-5">
-													{product.construction.voltage.map((v) => (
-														<li key={v}>{v}</li>
-													))}
-												</ul>
-											) : (
-												product.construction.voltage[0]
-											)
-										) : (
-											product.construction.voltage
 										)}
 									</dd>
 								</div>

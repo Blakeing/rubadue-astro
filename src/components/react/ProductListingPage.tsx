@@ -49,7 +49,7 @@ interface ProductData {
 	heroImage?: string;
 	category: string;
 	pubDate: string;
-	tableType?: "litzWire" | "magnet" | "custom";
+	tableType?: "litzWire" | "magnet" | "doubleInsulated" | "custom";
 	construction?: {
 		sizeRange?: string;
 		conductor?: string;
@@ -95,6 +95,7 @@ type Filters = {
 const filters: Filters = {
 	type: [
 		{ label: "Litz Wire", value: "Litz Wire" },
+		{ label: "Double Insulated", value: "Double Insulated" },
 		{ label: "Triple Insulated", value: "Triple Insulated" },
 		{ label: "Single Insulated", value: "Single Insulated" },
 	],
@@ -342,19 +343,17 @@ export default function ProductListingPage({
 											const inputId = `filter-${category}-${option.value}`;
 											return (
 												<div key={option.value} className="flex items-center">
-													<input
+													<Checkbox
 														id={inputId}
-														type="checkbox"
 														checked={activeFilters[
 															category as FilterCategory
 														].includes(option.value)}
-														onChange={() =>
+														onCheckedChange={() =>
 															toggleFilter(
 																category as FilterCategory,
 																option.value,
 															)
 														}
-														className="h-4 w-4 rounded border-muted text-primary focus:ring-primary"
 													/>
 													<label
 														htmlFor={inputId}
@@ -384,7 +383,7 @@ export default function ProductListingPage({
 								{paginatedProducts.map((product) => (
 									<a
 										key={product.slug}
-										href={`/products/${product.id.replace(/\.mdx$/, "")}`}
+										href={`/products/${product.slug}`}
 										className="group relative"
 									>
 										<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-muted">
