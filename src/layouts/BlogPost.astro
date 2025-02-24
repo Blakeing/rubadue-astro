@@ -7,7 +7,7 @@ import FormattedDate from "@/components/astro/common/FormattedDate.astro";
 import { Card } from "@/components/react/ui/card";
 import { Separator } from "@/components/react/ui/separator";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import { Button } from "@/components/react/ui/button";
+import { Button, buttonVariants } from "@/components/react/ui/button";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -94,8 +94,11 @@ const formattedDate = pubDate.toLocaleDateString("en-us", {
                   Have questions about our products or services? Our team is
                   here to help!
                 </p>
-                <Button asChild className=" w-full">
-                  <a href="/contact">Contact Us</a>
+                <Button asChild>
+                  <a
+                    class={buttonVariants({ variant: "default" })}
+                    href="/contact">Contact Us</a
+                  >
                 </Button>
               </div>
             </Card>
