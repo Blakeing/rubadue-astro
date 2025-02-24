@@ -51,6 +51,8 @@ export function SimpleDataTable<TData>({
 				pageSize: 10,
 			},
 		},
+		enableSorting: true,
+		enableMultiSort: true,
 	});
 
 	return (
@@ -73,35 +75,40 @@ export function SimpleDataTable<TData>({
 										key={header.id}
 										colSpan={header.colSpan}
 										className={`text-left p-4 ${
+											header.column.getCanSort()
+												? "cursor-pointer select-none"
+												: ""
+										} ${
 											headerGroup.depth === 0
 												? header.colSpan > 1
 													? "border-b-0"
 													: "opacity-0"
 												: "border-t"
 										}`}
-										onClick={
-											headerGroup.depth === 1
-												? header.column.getToggleSortingHandler()
+										onClick={(e) =>
+											header.column.getCanSort()
+												? header.column.getToggleSortingHandler()?.(e)
 												: undefined
 										}
+										onKeyDown={(e) => {
+											if (
+												header.column.getCanSort() &&
+												(e.key === "Enter" || e.key === " ")
+											) {
+												e.preventDefault();
+												header.column.getToggleSortingHandler()?.(e);
+											}
+										}}
+										tabIndex={header.column.getCanSort() ? 0 : undefined}
+										role={header.column.getCanSort() ? "button" : undefined}
 									>
-										<div
-											className={`flex items-center space-x-2 ${
-												headerGroup.depth === 1 && header.column.getCanSort()
-													? "cursor-pointer select-none"
-													: ""
-											}`}
-										>
-											<span>
-												{header.isPlaceholder
-													? null
-													: flexRender(
-															header.column.columnDef.header,
-															header.getContext(),
-														)}
-											</span>
-											{headerGroup.depth === 1 &&
-												header.column.getCanSort() && (
+										{header.isPlaceholder ? null : (
+											<div className="flex items-center space-x-2">
+												{flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+												)}
+												{header.column.getCanSort() && (
 													<span className="ml-2 h-4 w-4">
 														{header.column.getIsSorted() === "desc" ? (
 															<ArrowDown className="h-4 w-4" />
@@ -112,7 +119,8 @@ export function SimpleDataTable<TData>({
 														)}
 													</span>
 												)}
-										</div>
+											</div>
+										)}
 									</TableHead>
 								))}
 							</TableRow>
