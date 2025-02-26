@@ -61,27 +61,37 @@ const variants = {
 	},
 };
 
+// function CircleDecorations() {
+// 	return (
+// 		<>
+// 			{/* Large outer circle with light orange border */}
+// 			<div className="absolute size-[665px] -top-[80%] -left-[30%] rounded-full border-[13px] border-primary/10 pointer-events-none z-0 rotate-[-15deg]" />
+// 			{/* Inner circle with solid orange border */}
+// 			<div className="absolute size-[665px] -top-[85%] -left-[25%] rounded-full border-2 border-primary pointer-events-none z-0 rotate-[-15deg]" />
+// 		</>
+// 	);
+// }
+
 export default function CableSection() {
 	const [activeFeature, setActiveFeature] = useState(0);
 
 	return (
-		<div className="relative overflow-hidden bg-white py-24 sm:py-32">
-			<WaveBackground opacity={20} rotate={-10} />
-			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative">
-				<div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-					<div className="lg:pr-8 lg:pt-4">
-						<div className="">
-							<h2 className="text-xl font-display  text-accent-foreground">
+		<div className="overflow-hidden py-24 sm:py-32">
+			<div className="mx-auto max-w-7xl md:px-6 lg:px-8">
+				<div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
+					<div className="px-6 lg:px-0 ">
+						<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
+							<h2 className="text-xl font-display text-accent-foreground">
 								Wire <span className="text-primary">Types</span>
 							</h2>
-							<p className="mt-2 text-pretty text-4xl  font-semibold  text-foreground sm:text-5xl">
-								Cables to Meet Your Needs.
+							<p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+								Cables to Meet Your Needs
 							</p>
-							<p className="mt-6 text-lg/8 text-muted-foreground">
+							<p className="mt-6 text-lg text-muted-foreground">
 								Browse a wide variety of specialty cables. All cable components
 								can be adapted to meet your requirements.
 							</p>
-							<dl className="mt-10 max-w-xl space-y-8 text-base/7 text-muted-foreground lg:max-w-none">
+							<dl className="mt-10 max-w-xl space-y-8 text-base text-muted-foreground lg:max-w-none">
 								{features.map((feature, index) => (
 									<motion.div
 										key={feature.name}
@@ -104,27 +114,38 @@ export default function CableSection() {
 							</dl>
 						</div>
 					</div>
-					<div className="relative w-[48rem] aspect-[16/10] sm:w-[57rem] overflow-hidden">
-						<div className="absolute inset-0">
-							<AnimatePresence mode="popLayout">
-								<motion.div
-									key={activeFeature}
-									variants={variants}
-									initial="enter"
-									animate="center"
-									exit="exit"
-									className="absolute inset-0"
-								>
-									<img
-										src={features[activeFeature].image.src}
-										// biome-ignore lint/a11y/noRedundantAlt: <explanation>
-										alt={`${features[activeFeature].name} product image`}
-										width={2432}
-										height={1442}
-										className="w-full h-full object-contain "
-									/>
-								</motion.div>
-							</AnimatePresence>
+					<div className="sm:px-6 lg:px-0">
+						<div className="relative isolate overflow-hidden bg-primary/5 px-6  sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0  lg:mx-0 lg:max-w-none">
+							<div
+								className="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-49deg] bg-primary opacity-20 ring-1 ring-inset ring-white"
+								aria-hidden="true"
+							/>
+							<div className="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
+								<div className="relative w-[48rem] aspect-square sm:w-[33rem]">
+									<AnimatePresence mode="popLayout">
+										<motion.div
+											key={activeFeature}
+											variants={variants}
+											initial="enter"
+											animate="center"
+											exit="exit"
+											className="absolute inset-0"
+										>
+											<img
+												src={features[activeFeature].image.src}
+												alt={`${features[activeFeature].name} illustration`}
+												width={2432}
+												height={1442}
+												className="w-full h-full object-contain rounded-tl-xl"
+											/>
+										</motion.div>
+									</AnimatePresence>
+								</div>
+							</div>
+							<div
+								className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 sm:rounded-3xl"
+								aria-hidden="true"
+							/>
 						</div>
 					</div>
 				</div>
