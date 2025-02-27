@@ -1,9 +1,7 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Button } from "./ui/button";
+import { useToast } from "@/hooks/use-toast";
 import {
 	Form,
 	FormControl,
@@ -11,29 +9,24 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+} from "@/components/react/ui/form";
+import { Input } from "@/components/react/ui/input";
+import { Button } from "@/components/react/ui/button";
+import { Textarea } from "@/components/react/ui/textarea";
+import { useState } from "react";
 
 const formSchema = z.object({
-	firstName: z.string().min(2, {
-		message: "First name must be at least 2 characters.",
-	}),
-	lastName: z.string().min(2, {
-		message: "Last name must be at least 2 characters.",
-	}),
-	email: z.string().email({
-		message: "Please enter a valid email address.",
-	}),
-	phone: z.string().min(10, {
-		message: "Please enter a valid phone number.",
-	}),
-	message: z.string().min(10, {
-		message: "Message must be at least 10 characters.",
-	}),
+	firstName: z.string().min(1, "First name is required"),
+	lastName: z.string().min(1, "Last name is required"),
+	email: z.string().email("Invalid email address"),
+	phone: z.string().min(1, "Phone number is required"),
+	message: z.string().min(1, "Message is required"),
 });
 
-export function ContactForm() {
+export default function ContactForm() {
+	const { toast } = useToast();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -45,23 +38,61 @@ export function ContactForm() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Handle form submission
-		console.log(values);
-	}
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		setIsSubmitting(true);
+
+		try {
+			const response = await fetch("/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
+
+			const responseData = await response.json();
+
+			if (!response.ok) {
+				throw new Error(responseData.error || "Failed to send message");
+			}
+
+			// Show success message
+			toast({
+				title: "Message Sent",
+				description: "Thank you for your message. We'll be in touch soon.",
+			});
+
+			// Reset form
+			form.reset();
+		} catch (error) {
+			toast({
+				variant: "destructive",
+				title: "Error",
+				description:
+					error instanceof Error
+						? error.message
+						: "There was a problem sending your message. Please try again.",
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-				<div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="mx-auto space-y-6"
+			>
+				<div className="grid grid-cols-2 gap-4">
 					<FormField
 						control={form.control}
 						name="firstName"
 						render={({ field }) => (
-							<FormItem className="col-span-2">
-								<FormLabel>First name</FormLabel>
+							<FormItem>
+								<FormLabel>First Name</FormLabel>
 								<FormControl>
-									<Input placeholder="Enter your first name" {...field} />
+									<Input placeholder="John" {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -71,25 +102,28 @@ export function ContactForm() {
 						control={form.control}
 						name="lastName"
 						render={({ field }) => (
-							<FormItem className="col-span-2">
-								<FormLabel>Last name</FormLabel>
+							<FormItem>
+								<FormLabel>Last Name</FormLabel>
 								<FormControl>
-									<Input placeholder="Enter your last name" {...field} />
+									<Input placeholder="Doe" {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
+				</div>
+
+				<div className="grid grid-cols-2 gap-4">
 					<FormField
 						control={form.control}
 						name="email"
 						render={({ field }) => (
-							<FormItem className="col-span-2">
+							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Enter your email"
 										type="email"
+										placeholder="john.doe@company.com"
 										{...field}
 									/>
 								</FormControl>
@@ -101,30 +135,12 @@ export function ContactForm() {
 						control={form.control}
 						name="phone"
 						render={({ field }) => (
-							<FormItem className="col-span-2">
-								<FormLabel>Phone number</FormLabel>
+							<FormItem>
+								<FormLabel>Phone</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="Enter your phone number"
 										type="tel"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="message"
-						render={({ field }) => (
-							<FormItem className="sm:col-span-2">
-								<FormLabel>Message</FormLabel>
-								<FormControl>
-									<Textarea
-										placeholder="Enter your message"
-										className="resize-none"
-										rows={4}
+										placeholder="+1 (555) 000-0000"
 										{...field}
 									/>
 								</FormControl>
@@ -133,8 +149,33 @@ export function ContactForm() {
 						)}
 					/>
 				</div>
-				<div className="mt-8 flex justify-end">
-					<Button type="submit">Send message</Button>
+
+				<FormField
+					control={form.control}
+					name="message"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Message</FormLabel>
+							<FormControl>
+								<Textarea
+									rows={6}
+									placeholder="How can we help you?"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<div className="flex items-center justify-end pt-4">
+					<Button
+						type="submit"
+						className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 px-8"
+						disabled={isSubmitting}
+					>
+						{isSubmitting ? "Sending..." : "Send Message"}
+					</Button>
 				</div>
 			</form>
 		</Form>

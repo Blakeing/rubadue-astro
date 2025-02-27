@@ -22,6 +22,7 @@ import {
 } from "@/components/react/ui/select";
 import { Checkbox } from "@/components/react/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const formSchema = z.object({
 	firstName: z.string().min(1, "First name is required"),
@@ -53,6 +54,8 @@ const formSchema = z.object({
 
 export default function QuoteRequestForm() {
 	const { toast } = useToast();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -77,22 +80,42 @@ export default function QuoteRequestForm() {
 	});
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		setIsSubmitting(true);
+
 		try {
-			console.log(data);
-			// Add your form submission logic here
+			const response = await fetch("/api/quote-request", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
+
+			const responseData = await response.json();
+
+			if (!response.ok) {
+				throw new Error(responseData.error || "Failed to submit quote request");
+			}
+
+			// Show success message
 			toast({
 				title: "Quote Request Submitted",
 				description: "Thank you for your request. We'll be in touch soon.",
 			});
+
+			// Reset form
 			form.reset();
 		} catch (error) {
-			console.error("Form submission error:", error);
 			toast({
 				variant: "destructive",
 				title: "Error",
 				description:
-					"There was a problem submitting your request. Please try again.",
+					error instanceof Error
+						? error.message
+						: "There was a problem submitting your request. Please try again.",
 			});
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -381,8 +404,9 @@ export default function QuoteRequestForm() {
 					<Button
 						type="submit"
 						className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 px-8"
+						disabled={isSubmitting}
 					>
-						Submit Request
+						{isSubmitting ? "Submitting..." : "Submit Request"}
 					</Button>
 				</div>
 			</form>
