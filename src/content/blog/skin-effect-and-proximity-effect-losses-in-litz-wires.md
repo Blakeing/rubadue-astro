@@ -25,7 +25,7 @@ Strand level skin effect losses can be minimized by selecting an individual stra
 
 The skin depth (δ) can be calculated using:
 
-\[δ = \sqrt{\frac{ρ}{πfμ_0}}\]
+$$δ = \sqrt{\frac{ρ}{πfμ_0}}$$
 
 Where:
 - δ = Skin Depth (m)
@@ -38,7 +38,7 @@ Bundle-level skin-effect losses become significant when the diameter of the over
 
 To determine if it is necessary to break a Litz conductor up into smaller bundles, calculate the maximum number of strands that should be bunched in a single operation (n₁,max):
 
-\[n_{1,max} = \frac{8δ^2}{d_s^2}\]
+$$n_{1,max} = \frac{8δ^2}{d_s^2}$$
 
 Where:
 - ds = Diameter of an individual strand (m)

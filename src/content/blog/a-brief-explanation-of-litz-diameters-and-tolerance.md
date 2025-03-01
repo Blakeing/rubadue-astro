@@ -36,13 +36,18 @@ Tolerances on the overall diameter are also wider for Litz wires than they are f
 
 ## Bunch Stranded Conductor Overall Diameter Approximation
 
-\[D = P \cdot d \cdot \sqrt{n}\]
+$$D = P \cdot d \cdot \sqrt{n}$$
 
 Where:
 - P = Packing factor (1.155 for bunch-stranded conductors)
 - D = Overall diameter
 - d = Diameter of individual strands
 - n = Total number of strands
+
+Lift($$L$$) can be determined by Lift Coefficient ($$C_L$$) like the following
+equation.
+
+$$L = \frac{1}{2} \rho v^2 S C_L$$
 
 With bunch-stranded Litz wires, minimum and maximum magnet wire diameters can be plugged into the equation above in order to calculate minimum and maximum overall wire diameters. Let's take a look at that in the case of a simple 20 AWG 65/38 Litz conductor.
 

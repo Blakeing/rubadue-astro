@@ -21,16 +21,31 @@ const {
 } = Astro.props;
 
 // Format the date for the eyebrow text
-const formattedDate = pubDate.toLocaleDateString("en-us", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const formattedDate = pubDate
+  ? pubDate instanceof Date
+    ? pubDate.toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : new Date(pubDate).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+  : "No date available";
 ---
 
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
+    <!-- KaTeX CSS for math rendering -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+      integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+      crossorigin="anonymous"
+    />
   </head>
 
   <body class="min-h-screen bg-background">
