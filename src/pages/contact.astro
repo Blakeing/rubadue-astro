@@ -84,15 +84,19 @@ const generalInquiries = {
                       <h3 class="text-2xl font-semibold text-foreground">
                         {region.name}
                       </h3>
-                      <p class="text-lg text-gray-600">{region.location}</p>
+                      <p class="text-lg text-muted-foreground">
+                        {region.location}
+                      </p>
                     </div>
                     {region.manager && (
                       <div class="space-y-4">
                         <div>
-                          <p class="font-medium text-primary">
+                          <p class="font-semibold text-foreground">
                             {region.manager.title}
                           </p>
-                          <p class="text-foreground">{region.manager.name}</p>
+                          <p class="text-accent-foreground">
+                            {region.manager.name}
+                          </p>
                         </div>
                         <div class="space-y-2">
                           <a

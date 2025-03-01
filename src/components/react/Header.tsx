@@ -30,36 +30,36 @@ import {
 
 const navigation = [
 	{ name: "Part Number Builders", href: "#" },
-	{ name: "Bare Litz Wires", href: "/products" },
-	{ name: "Insulated Litz Wires", href: "/products" },
-	{ name: "Triple Insulated Wires", href: "/products" },
-	{ name: "Double Insulated Wires", href: "/products" },
-	{ name: "Single Insulated Wires", href: "/products" },
-	{ name: "Specialty Products", href: "/products" },
+	{ name: "Bare Litz Wires", href: "/catalog" },
+	{ name: "Insulated Litz Wires", href: "/catalog" },
+	{ name: "Triple Insulated Wires", href: "/catalog" },
+	{ name: "Double Insulated Wires", href: "/catalog" },
+	{ name: "Single Insulated Wires", href: "/catalog" },
+	{ name: "Specialty Products", href: "/catalog" },
 	{ name: "Glossary", href: "/glossary" },
 	{ name: "Knowledge Base", href: "/knowledge-base" },
 ];
 
 const wireTypes = [
-	{ name: "Bare Litz Wires", href: "/products", icon: Cable },
+	{ name: "Bare Litz Wires", href: "/catalog", icon: Cable },
 	{
 		name: "Insulated Litz Wires",
-		href: "/products",
+		href: "/catalog",
 		icon: Cable,
 	},
 	{
 		name: "Triple Insulated Wires",
-		href: "/products",
+		href: "/catalog",
 		icon: Cable,
 	},
 	{
 		name: "Double Insulated Wires",
-		href: "/products",
+		href: "/catalog",
 		icon: Cable,
 	},
 	{
 		name: "Single Insulated Wires",
-		href: "/products",
+		href: "/catalog",
 		icon: Cable,
 	},
 ];
@@ -87,7 +87,7 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/products">Products</a>
+									<a href="/catalog">Catalog</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 

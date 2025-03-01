@@ -43,16 +43,16 @@ interface Props {
 
 const props = Astro.props;
 
-// Build breadcrumb segments starting with just Products
-const segments = [{ name: "Products", href: "/products" }];
+// Build breadcrumb segments starting with just Catalog
+const segments = [{ name: "Catalog", href: "/catalog" }];
 
 // Handle all subcategories including the main category
 const pathParts = Astro.url.pathname.split("/").filter(Boolean);
 if (pathParts.length > 2) {
-  // Skip 'products' and get all parts including the final slug
+  // Skip 'catalog' and get all parts including the final slug
   const pathSegments = pathParts.slice(1);
 
-  let currentPath = "/products";
+  let currentPath = "/catalog";
   for (const segment of pathSegments) {
     currentPath += `/${segment}`;
     // Format the segment name from the URL slug
@@ -63,7 +63,7 @@ if (pathParts.length > 2) {
 
     segments.push({
       name: formattedName,
-      href: "/products",
+      href: currentPath,
     });
   }
 }

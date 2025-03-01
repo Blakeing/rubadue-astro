@@ -384,14 +384,14 @@ export default function ProductListingPage({
 								{paginatedProducts.map((product) => (
 									<a
 										key={product.slug}
-										href={`/products/${product.slug}`}
+										href={`/catalog/${product.slug}`}
 										className="group relative"
 									>
-										<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-muted">
+										<div className="aspect-square w-full overflow-hidden rounded-lg bg-muted">
 											<img
 												src={product.data.heroImage || "/rubadue-hero.webp"}
 												alt={product.data.title}
-												className="h-full w-full object-cover object-center group-hover:opacity-75"
+												className="h-full w-full object-contain object-center group-hover:opacity-75"
 											/>
 										</div>
 										<div className="mt-4 flex justify-between">
