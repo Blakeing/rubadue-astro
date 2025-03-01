@@ -2,7 +2,7 @@
 title: "A Brief Explanation of Litz Diameters and Tolerances"
 description: "Understanding the differences in diameters and tolerances between solid conductor winding wires and Litz wires for transformer industry engineers."
 pubDate: "2022-04-21"
-heroImage: "/images/blog-hero-placeholder.webp"
+heroImage: "/images/knowledge-base-hero-placeholder.webp"
 tags: ["Technical", "Litz Wire", "Design Guide", "Manufacturing"]
 ---
 

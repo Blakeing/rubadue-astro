@@ -32,7 +32,7 @@ interface Post {
 	};
 }
 
-interface BlogSearchProps {
+interface KnowledgeBaseSearchProps {
 	posts: Post[];
 	className?: string;
 }
@@ -105,7 +105,10 @@ const searchInputStyles = `
   }
 `;
 
-export default function BlogSearch({ posts, className }: BlogSearchProps) {
+export default function KnowledgeBaseSearch({
+	posts,
+	className,
+}: KnowledgeBaseSearchProps) {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedTag, setSelectedTag] = useState<string | null>(null);
 	const [isSearching, setIsSearching] = useState(false);

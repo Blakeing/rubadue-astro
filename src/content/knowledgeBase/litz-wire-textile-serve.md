@@ -2,7 +2,7 @@
 title: "Litz Wire 101: When is a textile serve appropriate for your application?"
 description: "Learn about textile serves in Litz wires, their benefits for mechanical protection, and key considerations for choosing the right serve for your application."
 pubDate: "2023-12-21"
-heroImage: "/images/blog-hero-placeholder.webp"
+heroImage: "/images/knowledge-base-hero-placeholder.webp"
 tags: ["Technical Guide", "Litz Wire", "Textile Serve", "Wire Protection"]
 ---
 

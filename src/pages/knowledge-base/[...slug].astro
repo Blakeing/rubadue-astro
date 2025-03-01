@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import BlogPost from "@/layouts/BlogPost.astro";
+import KnowledgeBasePost from "@/layouts/KnowledgeBasePost.astro";
 import { render } from "astro:content";
 import Prose from "@/components/astro/common/Prose.astro";
 
@@ -8,20 +8,20 @@ import Prose from "@/components/astro/common/Prose.astro";
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await getCollection("knowledgeBase");
   return posts.map((post) => ({
     params: { slug: post.id.replace(/\.md$/, "") },
     props: post,
   }));
 }
-type Props = CollectionEntry<"blog">;
+type Props = CollectionEntry<"knowledgeBase">;
 
 const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<KnowledgeBasePost {...post.data}>
   <Prose>
     <Content />
   </Prose>
-</BlogPost>
+</KnowledgeBasePost>

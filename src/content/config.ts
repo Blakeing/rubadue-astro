@@ -72,7 +72,7 @@ const products = defineCollection({
 		}),
 });
 
-const blog = defineCollection({
+const knowledgeBase = defineCollection({
 	type: "content",
 	schema: z.object({
 		title: z.string(),
@@ -85,8 +85,8 @@ const blog = defineCollection({
 });
 
 // Export a single `collections` object to register your collections
-export { products, blog };
+export { products, knowledgeBase };
 export const collections = {
 	products,
-	blog,
+	knowledgeBase,
 };

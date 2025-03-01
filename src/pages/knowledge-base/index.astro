@@ -4,11 +4,11 @@ import { Header } from "@/components/react/Header";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import { getCollection } from "astro:content";
-import BlogSearch from "@/components/react/search/BlogSearch";
+import { KnowledgeBaseSearch } from "@/components/react/search";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
 
 // Get posts and ensure dates are serialized properly
-const posts = (await getCollection("blog"))
+const posts = (await getCollection("knowledgeBase"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .map((post) => ({
     ...post,
@@ -29,7 +29,7 @@ const posts = (await getCollection("blog"))
     <Header client:load />
     <BaseHeader eyebrow="Knowledge Base" title="Latest News" />
     <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-12">
-      <BlogSearch client:load posts={posts} />
+      <KnowledgeBaseSearch client:load posts={posts} />
     </main>
     <Footer />
   </body>

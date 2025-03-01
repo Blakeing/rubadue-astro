@@ -37,6 +37,7 @@ const navigation = [
 	{ name: "Single Insulated Wires", href: "/products" },
 	{ name: "Specialty Products", href: "/products" },
 	{ name: "Glossary", href: "/glossary" },
+	{ name: "Knowledge Base", href: "/knowledge-base" },
 ];
 
 const wireTypes = [
@@ -67,7 +68,7 @@ const resources = [
 	{ name: "Part Number Builders", href: "/part-number-builders", icon: Wrench },
 	{ name: "Glossary", href: "/glossary", icon: Book },
 	{ name: "N1 Max Calculator", href: "/n1-max-calculator", icon: Settings },
-	{ name: "Blog", href: "/blog", icon: Book },
+	{ name: "Knowledge Base", href: "/knowledge-base", icon: Book },
 	{ name: "Health & Safety", href: "/health-safety", icon: Shield },
 ];
 

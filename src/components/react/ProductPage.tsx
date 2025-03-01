@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useCallback } from "react";
 import { Star } from "lucide-react";
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
@@ -51,6 +51,95 @@ interface ProductPageProps {
 }
 
 export default function ProductPage({ product, license }: ProductPageProps) {
+	const productImageRef = useRef<HTMLDivElement>(null);
+	const productDetailsRef = useRef<HTMLDivElement>(null);
+
+	// Function to update the details height based on image height
+	const updateDetailsHeight = useCallback(() => {
+		if (productImageRef.current && productDetailsRef.current) {
+			const imageHeight = productImageRef.current.offsetHeight;
+			// Find the ScrollArea viewport element
+			const scrollAreaViewport = productDetailsRef.current.querySelector(
+				"[data-radix-scroll-area-viewport]",
+			);
+			if (scrollAreaViewport) {
+				// Only apply fixed height on larger screens (lg and up)
+				if (window.innerWidth >= 1024) {
+					// 1024px is the lg breakpoint in Tailwind
+					// Subtract space for the heading (approximately 80px)
+					(scrollAreaViewport as HTMLElement).style.height =
+						`${imageHeight - 80}px`;
+				} else {
+					// Remove fixed height on mobile
+					(scrollAreaViewport as HTMLElement).style.height = "auto";
+				}
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		// Check if we're on mobile initially
+		const isMobile = window.innerWidth < 1024;
+
+		// Initial setup based on screen size
+		if (productDetailsRef.current) {
+			const scrollAreaViewport = productDetailsRef.current.querySelector(
+				"[data-radix-scroll-area-viewport]",
+			);
+
+			if (scrollAreaViewport) {
+				if (isMobile) {
+					// On mobile, set height to auto
+					(scrollAreaViewport as HTMLElement).style.height = "auto";
+				} else {
+					// On desktop, calculate based on image height
+					updateDetailsHeight();
+				}
+			}
+		}
+
+		// Handle window resize for responsive behavior
+		const handleResize = () => {
+			// Find the ScrollArea viewport element
+			if (productDetailsRef.current) {
+				const scrollAreaViewport = productDetailsRef.current.querySelector(
+					"[data-radix-scroll-area-viewport]",
+				);
+
+				if (scrollAreaViewport) {
+					// On mobile, ensure height is auto
+					if (window.innerWidth < 1024) {
+						(scrollAreaViewport as HTMLElement).style.height = "auto";
+					} else {
+						// On desktop, recalculate based on image height
+						updateDetailsHeight();
+					}
+				}
+			}
+		};
+
+		// Update on window resize
+		window.addEventListener("resize", handleResize);
+
+		// Add multiple checks to ensure images are loaded (only needed for desktop)
+		const imageLoadTimers = !isMobile
+			? [
+					setTimeout(updateDetailsHeight, 100),
+					setTimeout(updateDetailsHeight, 300),
+					setTimeout(updateDetailsHeight, 800),
+					setTimeout(updateDetailsHeight, 1500),
+				]
+			: [];
+
+		// Cleanup
+		return () => {
+			window.removeEventListener("resize", handleResize);
+			for (const timer of imageLoadTimers) {
+				clearTimeout(timer);
+			}
+		};
+	}, [updateDetailsHeight]);
+
 	const sections = [
 		{
 			id: "overview",
@@ -235,37 +324,46 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 	const defaultSection = visibleSections[0]?.id;
 
 	return (
-		<div className="">
-			<div className="">
-				{/* Product */}
-				<div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
-					{/* Product image */}
-					<div className="lg:col-span-4 lg:row-end-1">
-						{typeof product.imageSrc === "string" ? (
-							<img
-								src={product.imageSrc}
-								alt={product.imageAlt}
-								className="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
-							/>
-						) : (
-							<Image
-								src={product.imageSrc}
-								alt={product.imageAlt}
-								class="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
-								width={1600}
-								height={900}
-								format="webp"
-								quality={80}
-							/>
-						)}
-					</div>
+		<div className="relative">
+			{/* Product */}
+			<div className="lg:grid lg:grid-cols-9 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
+				{/* Product image */}
+				<div
+					ref={productImageRef}
+					id="product-image"
+					className="lg:col-span-4 lg:row-end-1"
+				>
+					{typeof product.imageSrc === "string" ? (
+						<img
+							src={product.imageSrc}
+							alt={product.imageAlt}
+							className="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
+							onLoad={updateDetailsHeight}
+						/>
+					) : (
+						<Image
+							src={product.imageSrc}
+							alt={product.imageAlt}
+							class="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
+							width={1600}
+							height={900}
+							format="webp"
+							quality={80}
+						/>
+					)}
+				</div>
 
-					{/* Product details */}
-					<div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none w-full">
-						<h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mb-6">
-							Product Information
-						</h2>
-						<ScrollArea className="h-[75vh]  lg:h-[440px] px-6 py-2 border rounded-lg">
+				{/* Product details */}
+				<div
+					ref={productDetailsRef}
+					id="product-details"
+					className="mx-auto mt-8 sm:mt-10 lg:mt-0 max-w-2xl lg:col-span-5 lg:row-span-2 lg:row-end-2 lg:max-w-none w-full"
+				>
+					<h2 className="text-xl  font-bold tracking-tight text-foreground sm:text-3xl mb-4 lg:mb-6">
+						Product Information
+					</h2>
+					<ScrollArea className="px-4 lg:px-6 py-2 border-0 lg:border rounded-lg">
+						<div className="pb-4">
 							<Accordion
 								type="multiple"
 								defaultValue={defaultSection ? [defaultSection] : []}
@@ -285,8 +383,8 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 									</AccordionItem>
 								))}
 							</Accordion>
-						</ScrollArea>
-					</div>
+						</div>
+					</ScrollArea>
 				</div>
 			</div>
 		</div>
