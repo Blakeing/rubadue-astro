@@ -2,7 +2,7 @@
 title: "Tips on How to Avoid Damaging Insulated Winding Wires in your Process"
 description: "Insulation walls on insulated winding wires are much thinner today than they were in decades past. Learn how to avoid damaging these sensitive components in your manufacturing process."
 pubDate: "2023-12-21"
-heroImage: "src/assets/blog-hero-placeholder.webp"
+heroImage: "/images/blog-hero-placeholder.webp"
 tags: ["Manufacturing", "Wire Protection", "Best Practices", "Quality Control"]
 ---
 

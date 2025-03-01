@@ -2,7 +2,7 @@
 title: "The Different Test Methods Used for Electric Strength and Breakdown Voltage Testing on Winding Wires"
 description: "Learn about the three different test methods used for Electric Strength and Breakdown Voltage testing on winding wires, including when to use each method based on wire size."
 pubDate: "2022-06-22"
-heroImage: "src/assets/blog-hero-placeholder.webp"
+heroImage: "/images/blog-hero-placeholder.webp"
 tags: ["Technical", "Quality Control", "Testing Methods", "Standards"]
 ---
 

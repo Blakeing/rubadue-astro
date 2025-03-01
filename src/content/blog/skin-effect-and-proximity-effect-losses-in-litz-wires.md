@@ -2,7 +2,7 @@
 title: "Skin Effect and Proximity Effect Losses in Litz Wires"
 description: "Understanding and minimizing skin effect and proximity effect losses in Litz wire design. Learn about strand-level and bundle-level losses and how to optimize your Litz wire performance."
 pubDate: "2022-07-21"
-heroImage: "src/assets/blog-hero-placeholder.webp"
+heroImage: "/images/blog-hero-placeholder.webp"
 tags: ["Technical", "Litz Wire", "Design Guide", "Electrical Engineering"]
 ---
 
