@@ -66,7 +66,7 @@ ${message}
 `;
 
 		const { data, error } = await resend.emails.send({
-			from: "Quote Request <onboarding@resend.dev>", // Update with your verified domain
+			from: "Rubadue Quote Request <onboarding@resend.dev>", // Using Resend test domain
 			to: ["blakeingenthron@gmail.com"], // Update with your email
 			subject: `New Quote Request from ${firstName} ${lastName}`,
 			html: html,

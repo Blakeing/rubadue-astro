@@ -28,7 +28,7 @@ ${message}
 `;
 
 		const { data, error } = await resend.emails.send({
-			from: "Contact Form <onboarding@resend.dev>", // Update with your verified domain
+			from: "Rubadue Contact <onboarding@resend.dev>", // Using Resend test domain
 			to: ["blakeingenthron@gmail.com"], // Update with your email
 			subject: `New Contact Form Message from ${firstName} ${lastName}`,
 			html: html,
