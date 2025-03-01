@@ -49,10 +49,9 @@ export function SelectDataTable<TData, TValue>({
 
 	return (
 		<div className="not-prose">
-			<h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl mb-6 ">
-				Recommended Operating Frequency
-			</h2>
-			<Separator className="my-6" />
+			<h3 className="text-xl  font-bold tracking-tight text-foreground sm:text-2xl mb-4">
+				Wire Specifications
+			</h3>
 			<div className="space-y-2">
 				<Select value={selectedValue} onValueChange={handleValueChange}>
 					<SelectTrigger className="w-[300px] ">

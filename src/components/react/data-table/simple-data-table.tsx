@@ -57,6 +57,9 @@ export function SimpleDataTable<TData>({
 
 	return (
 		<div>
+			<h3 className="text-xl  font-bold tracking-tight text-foreground sm:text-2xl">
+				Wire Specifications
+			</h3>
 			<div className="flex items-center py-4">
 				<Input
 					placeholder="Search all columns..."

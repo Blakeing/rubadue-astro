@@ -6,7 +6,7 @@ import { SimpleDataTable } from "../../../simple-data-table";
 
 export function DoubleInsulatedTable() {
 	return (
-		<div className="container mx-auto py-10">
+		<div className="">
 			<SimpleDataTable
 				columns={columns as ColumnDef<WireData, unknown>[]}
 				data={wireData}

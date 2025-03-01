@@ -6,7 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 export function DoubleInsulatedTable() {
 	return (
-		<div className="container mx-auto py-10">
+		<div className="">
 			<SimpleDataTable
 				columns={columns as ColumnDef<WireData>[]}
 				data={wireData}

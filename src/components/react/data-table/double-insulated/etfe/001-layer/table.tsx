@@ -4,7 +4,7 @@ import { wireData } from "./data";
 
 export function DoubleInsulatedTable() {
 	return (
-		<div className="container mx-auto py-10">
+		<div className="">
 			<SimpleDataTable columns={columns} data={wireData} />
 		</div>
 	);
