@@ -6,9 +6,18 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import { getCollection } from "astro:content";
 import BlogSearch from "@/components/react/search/BlogSearch";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+
+// Get posts and ensure dates are serialized properly
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((post) => ({
+    ...post,
+    data: {
+      ...post.data,
+      // Convert Date objects to ISO strings for consistent serialization
+      pubDate: post.data.pubDate.toISOString(),
+    },
+  }));
 ---
 
 <!doctype html>

@@ -67,6 +67,11 @@ function SearchAndNavigation({
 
 	// Add keyboard shortcut for search
 	useEffect(() => {
+		// Only run this code on the client side
+		if (typeof window === "undefined" || typeof document === "undefined") {
+			return;
+		}
+
 		const handleKeyPress = (e: KeyboardEvent) => {
 			if (e.key === "/" && !e.ctrlKey && !e.metaKey) {
 				e.preventDefault();
@@ -278,6 +283,11 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 	};
 
 	const scrollToSection = (letter: string) => {
+		// Only run this code on the client side
+		if (typeof window === "undefined") {
+			return;
+		}
+
 		const element = sectionRefs.current[letter];
 		if (element) {
 			// Calculate offset for header (88px) and search bar (approximately 140px)

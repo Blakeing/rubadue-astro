@@ -25,7 +25,7 @@ interface Post {
 	id: string;
 	data: {
 		title: string;
-		pubDate: Date;
+		pubDate: string | Date;
 		heroImage?: string;
 		description?: string;
 		tags?: string[];
@@ -39,11 +39,13 @@ interface BlogSearchProps {
 
 const POSTS_PER_PAGE = 4;
 
-function formatDate(date: Date) {
+function formatDate(date: string | Date) {
+	// Use a fixed locale and options to ensure consistent formatting between server and client
 	return new Intl.DateTimeFormat("en-US", {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
+		timeZone: "UTC", // Use UTC to ensure consistent timezone handling
 	}).format(new Date(date));
 }
 
@@ -118,19 +120,27 @@ export default function BlogSearch({ posts, className }: BlogSearchProps) {
 
 	// Handle client-side initialization
 	useEffect(() => {
-		hasMounted.current = true;
+		// Only run this code on the client side
+		if (typeof window !== "undefined") {
+			hasMounted.current = true;
 
-		// Check URL parameters
-		const params = new URLSearchParams(window.location.search);
-		const tagParam = params.get("tag");
-		if (tagParam && allTags.includes(tagParam)) {
-			setSelectedTag(tagParam);
+			// Check URL parameters
+			const params = new URLSearchParams(window.location.search);
+			const tagParam = params.get("tag");
+			if (tagParam && allTags.includes(tagParam)) {
+				setSelectedTag(tagParam);
+			}
 		}
 	}, [allTags]);
 
 	// Update URL when tag changes
 	useEffect(() => {
-		if (!hasMounted.current || !isInitialized.current) {
+		// Only run this code on the client side
+		if (
+			typeof window === "undefined" ||
+			!hasMounted.current ||
+			!isInitialized.current
+		) {
 			isInitialized.current = true;
 			return;
 		}
@@ -199,7 +209,9 @@ export default function BlogSearch({ posts, className }: BlogSearchProps) {
 
 	const handlePageChange = (page: number) => {
 		setCurrentPage(page);
-		window.scrollTo({ top: 0, behavior: "smooth" });
+		if (typeof window !== "undefined") {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
 	};
 
 	return (
