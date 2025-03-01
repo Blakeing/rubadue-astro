@@ -110,7 +110,7 @@ export default function KnowledgeBaseSearch({
 	className,
 }: KnowledgeBaseSearchProps) {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedTag, setSelectedTag] = useState<string | null>(null);
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [isSearching, setIsSearching] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const debouncedSearch = useDebounce(searchQuery, 300);
@@ -132,14 +132,19 @@ export default function KnowledgeBaseSearch({
 
 			// Check URL parameters
 			const params = new URLSearchParams(window.location.search);
-			const tagParam = params.get("tag");
-			if (tagParam && allTags.includes(tagParam)) {
-				setSelectedTag(tagParam);
+			const tagParams = params.getAll("tag");
+
+			if (tagParams.length > 0) {
+				// Filter out any invalid tags
+				const validTags = tagParams.filter((tag) => allTags.includes(tag));
+				if (validTags.length > 0) {
+					setSelectedTags(validTags);
+				}
 			}
 		}
 	}, [allTags]);
 
-	// Update URL when tag changes
+	// Update URL when tags change
 	useEffect(() => {
 		// Only run this code on the client side
 		if (
@@ -152,15 +157,22 @@ export default function KnowledgeBaseSearch({
 		}
 
 		const url = new URL(window.location.href);
-		if (selectedTag && allTags.includes(selectedTag)) {
-			url.searchParams.set("tag", selectedTag);
-		} else {
-			url.searchParams.delete("tag");
-		}
-		window.history.replaceState({}, "", url.toString());
-	}, [selectedTag, allTags]);
+		// Clear existing tag parameters
+		url.searchParams.delete("tag");
 
-	// Filter posts based on search query and selected tag
+		// Add each selected tag as a parameter
+		if (selectedTags.length > 0) {
+			for (const tag of selectedTags) {
+				if (allTags.includes(tag)) {
+					url.searchParams.append("tag", tag);
+				}
+			}
+		}
+
+		window.history.replaceState({}, "", url.toString());
+	}, [selectedTags, allTags]);
+
+	// Filter posts based on search query and selected tags
 	const filteredPosts = useMemo(
 		() =>
 			posts.filter((post) => {
@@ -176,12 +188,14 @@ export default function KnowledgeBaseSearch({
 						tag.toLowerCase().includes(debouncedSearch.toLowerCase()),
 					);
 
-				const matchesTag =
-					!selectedTag || post.data.tags?.includes(selectedTag);
+				const matchesTags =
+					selectedTags.length === 0 ||
+					(post.data.tags &&
+						selectedTags.some((tag) => post.data.tags?.includes(tag)));
 
-				return matchesSearch && matchesTag;
+				return matchesSearch && matchesTags;
 			}),
-		[posts, debouncedSearch, selectedTag],
+		[posts, debouncedSearch, selectedTags],
 	);
 
 	// Calculate pagination
@@ -194,7 +208,7 @@ export default function KnowledgeBaseSearch({
 	useEffect(() => {
 		setCurrentPage(1);
 		// We want this effect to run when filters change
-	}, [searchQuery, selectedTag]);
+	}, [searchQuery, selectedTags]);
 
 	// Handle search state
 	useEffect(() => {
@@ -210,7 +224,14 @@ export default function KnowledgeBaseSearch({
 	};
 
 	const handleTagClick = (tag: string) => {
-		setSelectedTag(selectedTag === tag ? null : tag);
+		setSelectedTags((prevTags) => {
+			// If tag is already selected, remove it
+			if (prevTags.includes(tag)) {
+				return prevTags.filter((t) => t !== tag);
+			}
+			// Otherwise add it
+			return [...prevTags, tag];
+		});
 	};
 
 	const handlePageChange = (page: number) => {
@@ -218,6 +239,10 @@ export default function KnowledgeBaseSearch({
 		if (typeof window !== "undefined") {
 			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
+	};
+
+	const handleClearTags = () => {
+		setSelectedTags([]);
 	};
 
 	return (
@@ -244,22 +269,36 @@ export default function KnowledgeBaseSearch({
 				</div>
 
 				{allTags.length > 0 && (
-					<div className="flex flex-wrap gap-2">
-						{allTags.map((tag) => (
-							<button
-								type="button"
-								key={tag}
-								onClick={() => handleTagClick(tag)}
-								className={cn(
-									"px-3 py-1 rounded-full text-sm transition-colors",
-									selectedTag === tag
-										? "bg-primary text-primary-foreground"
-										: "bg-muted hover:bg-muted/80",
-								)}
-							>
-								{tag}
-							</button>
-						))}
+					<div className="space-y-2">
+						<div className="flex items-center justify-between">
+							<h3 className="text-sm font-medium">Filter by tags</h3>
+							{selectedTags.length > 0 && (
+								<button
+									type="button"
+									onClick={handleClearTags}
+									className="text-xs text-muted-foreground hover:text-primary transition-colors"
+								>
+									Clear all
+								</button>
+							)}
+						</div>
+						<div className="flex flex-wrap gap-2">
+							{allTags.map((tag) => (
+								<button
+									type="button"
+									key={tag}
+									onClick={() => handleTagClick(tag)}
+									className={cn(
+										"px-3 py-1 rounded-full text-sm transition-colors",
+										selectedTags.includes(tag)
+											? "bg-primary text-primary-foreground"
+											: "bg-muted hover:bg-muted/80",
+									)}
+								>
+									{tag}
+								</button>
+							))}
+						</div>
 					</div>
 				)}
 			</div>
@@ -272,7 +311,18 @@ export default function KnowledgeBaseSearch({
 				{filteredPosts.length === 0 && (
 					<div className="col-span-2 flex items-center justify-center text-center text-muted-foreground py-8">
 						No posts found matching your search
-						{selectedTag && ` and tag "${selectedTag}"`}.
+						{selectedTags.length > 0 && (
+							<>
+								{" "}
+								and tags{" "}
+								{selectedTags.map((tag, index) => (
+									<span key={tag}>
+										"{tag}"{index < selectedTags.length - 1 ? ", " : ""}
+									</span>
+								))}
+							</>
+						)}
+						.
 					</div>
 				)}
 			</div>
