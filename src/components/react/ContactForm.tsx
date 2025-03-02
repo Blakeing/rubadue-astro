@@ -169,11 +169,7 @@ export default function ContactForm() {
 				/>
 
 				<div className="flex items-center justify-end pt-4">
-					<Button
-						type="submit"
-						className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 px-8"
-						disabled={isSubmitting}
-					>
+					<Button type="submit" disabled={isSubmitting}>
 						{isSubmitting ? "Sending..." : "Send Message"}
 					</Button>
 				</div>

@@ -12,25 +12,25 @@ const features = [
 	{
 		name: "Single Insulated",
 		description:
-			"Rubadue wire manufactures several wire with a single layer of insulation.",
+			"Rubadue Wire manufactures wires with a single layer of insulation for applications requiring basic insulation.",
 		image: singleInsulatedImage,
 	},
 	{
 		name: "Double Insulated",
 		description:
-			"Rubadue wire manufactures several double insulated wires to be used in supplementary isolation applications",
+			"Rubadue Wire manufactures double insulated wires for use in supplementary insulation applications.",
 		image: doubleInsulatedImage,
 	},
 	{
 		name: "Triple Insulated",
 		description:
-			"Rubadue wire was the first company to design and manufacture triple insulated wires.",
+			"Rubadue Wire manufactures triple insulated wires with extruded insulation.",
 		image: tripleInsulatedImage,
 	},
 	{
 		name: "Bare Litz",
 		description:
-			"Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together.",
+			"Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together to reduce skin and proximity effect losses at higher frequencies.",
 		image: litzWireImage,
 	},
 ];
@@ -88,8 +88,14 @@ export default function CableSection() {
 								Cables to Meet Your Needs
 							</p>
 							<p className="mt-6 text-lg text-muted-foreground">
-								Browse a wide variety of specialty cables. All cable components
-								can be adapted to meet your requirements.
+								All cable components can be adapted to meet your requirements.
+								<a
+									href="/contact"
+									className="text-primary hover:text-primary/80 ml-1"
+								>
+									Contact&nbsp;
+								</a>
+								our engineering department to explore your options.
 							</p>
 							<dl className="mt-10 max-w-xl space-y-8 text-base text-muted-foreground lg:max-w-none">
 								{features.map((feature, index) => (

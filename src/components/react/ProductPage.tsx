@@ -331,20 +331,20 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 				<div
 					ref={productImageRef}
 					id="product-image"
-					className="lg:col-span-4 lg:row-end-1"
+					className="lg:col-span-4 lg:row-end-1 "
 				>
 					{typeof product.imageSrc === "string" ? (
 						<img
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							className="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
+							className="aspect-[4/3] w-full rounded-lg  bg-accent object-contain shadow-2xl"
 							onLoad={updateDetailsHeight}
 						/>
 					) : (
 						<Image
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							class="aspect-[4/3] w-full rounded-lg bg-accent-foreground object-contain shadow-2xl"
+							class="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-2xl"
 							width={1600}
 							height={900}
 							format="webp"
