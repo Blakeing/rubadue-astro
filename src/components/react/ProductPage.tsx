@@ -10,6 +10,7 @@ import {
 } from "@/components/react/ui/accordion";
 import { ScrollArea } from "@/components/react/ui/scroll-area";
 import { cn } from "@/lib/utils";
+
 interface ProductPageProps {
 	product: {
 		name: string;
