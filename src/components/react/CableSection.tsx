@@ -121,9 +121,9 @@ export default function CableSection() {
 						</div>
 					</div>
 					<div className="sm:px-6 lg:px-0">
-						<div className="relative isolate overflow-hidden bg-primary/5 px-6  sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0  lg:mx-0 lg:max-w-none">
+						<div className="relative isolate overflow-hidden bg-muted/05 px-6  sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0  lg:mx-0 lg:max-w-none">
 							<div
-								className="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-49deg] bg-primary opacity-20 ring-1 ring-inset ring-white"
+								className="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-49deg] bg-muted opacity-20 ring-1 ring-inset ring-ring"
 								aria-hidden="true"
 							/>
 							<div className="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
@@ -149,7 +149,7 @@ export default function CableSection() {
 								</div>
 							</div>
 							<div
-								className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 sm:rounded-3xl"
+								className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-ring/10 sm:rounded-3xl"
 								aria-hidden="true"
 							/>
 						</div>
