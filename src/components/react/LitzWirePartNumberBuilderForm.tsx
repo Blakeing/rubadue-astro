@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { toast } from "sonner";
 import {
 	Form,
 	FormControl,
@@ -23,288 +24,316 @@ import {
 	CardContent,
 	CardHeader,
 	CardTitle,
+	CardDescription,
 } from "@/components/react/ui/card";
+import { Button } from "@/components/react/ui/button";
+import { Copy } from "lucide-react";
+import {
+	SelectField,
+	InputField,
+	SelectWithCustomInput,
+} from "@/components/react/shared/FormFields";
 
+// Define constants for form options
+const ENAMEL_BUILD_OPTIONS = [
+	{ value: "S", label: "Single" },
+	{ value: "H", label: "Heavy" },
+];
+
+const MAGNET_WIRE_GRADE_OPTIONS = [
+	{ value: "MW79", label: "MW79-C" },
+	{ value: "MW80", label: "MW80-C" },
+	{ value: "MW16", label: "MW16-C" },
+	{ value: "MW35", label: "MW35-C" },
+	{ value: "MW77", label: "MW77-C" },
+	{ value: "MW82", label: "MW82-C" },
+	{ value: "MW83", label: "MW83-C" },
+];
+
+const SERVE_LAYER_OPTIONS = [
+	{ value: "N", label: "None" },
+	{ value: "F", label: "FEP" },
+	{ value: "P", label: "PFA" },
+	{ value: "T", label: "ETFE" },
+];
+
+const NUMBER_OF_STRANDS_OPTIONS = [
+	{ value: "10", label: "10" },
+	{ value: "20", label: "20" },
+	{ value: "40", label: "40" },
+	{ value: "60", label: "60" },
+	{ value: "80", label: "80" },
+	{ value: "100", label: "100" },
+	{ value: "120", label: "120" },
+	{ value: "150", label: "150" },
+	{ value: "200", label: "200" },
+	{ value: "250", label: "250" },
+	{ value: "300", label: "300" },
+	{ value: "350", label: "350" },
+	{ value: "400", label: "400" },
+	{ value: "450", label: "450" },
+	{ value: "500", label: "500" },
+	{ value: "custom", label: "Custom (Enter number)" },
+];
+
+// Create the form schema with validation
 const formSchema = z.object({
-	rubadueLitz: z.literal("RL-"),
-	numberOfStrands: z.string().min(1, "Required"),
-	strandSize: z.string().min(1, "Required"),
+	rubadueLitz: z.literal("RL").default("RL"),
+	numberOfStrands: z
+		.string()
+		.min(1, "Required")
+		.refine(
+			(val) => {
+				const num = Number(val);
+				return !Number.isNaN(num) && num > 0 && Number.isInteger(num);
+			},
+			{
+				message: "Must be a positive whole number",
+			},
+		),
+	strandSize: z
+		.string()
+		.min(1, "Required")
+		.refine(
+			(val) => {
+				const num = Number(val);
+				return (
+					!Number.isNaN(num) && Number.isInteger(num) && num >= 36 && num <= 50
+				);
+			},
+			{
+				message: "Must be a whole number between 36-50",
+			},
+		),
 	enamelBuild: z.string().min(1, "Required"),
 	magnetWireGrade: z.string().min(1, "Required"),
 	serveLayer: z.string().min(1, "Required"),
-	uniqueIdentifier: z.string().min(1, "Required"),
 });
 
-const numberOfStrandsOptions = [
-	{ value: "5-", label: "5 Strands" },
-	{ value: "7-", label: "7 Strands" },
-	{ value: "19-", label: "19 Strands" },
-	{ value: "41-", label: "41 Strands" },
-	{ value: "625-", label: "625 Strands" },
-	{ value: "10000-", label: "10,000 Strands" },
-];
+type FormData = z.infer<typeof formSchema>;
 
-const enamelBuildOptions = [
-	{ value: "S", label: "Single" },
-	{ value: "H", label: "Heavy" },
-	{ value: "T", label: "Triple" },
-	{ value: "Q", label: "Quad" },
-];
-
-const magnetWireGradeOptions = [
-	{ value: "79", label: "MW 79-C" },
-	{ value: "80", label: "MW 80-C" },
-	{ value: "77", label: "MW 77-C" },
-	{ value: "35", label: "MW 35-C" },
-	{ value: "16", label: "MW 16-C" },
-	{ value: "82", label: "MW 82-C" },
-	{ value: "83", label: "MW 83-C" },
-];
-
-const serveLayerOptions = [
-	{ value: "-SN", label: "Single Nylon Serve" },
-	{ value: "-DN", label: "Double Nylon Serve" },
-	{ value: "NONE", label: "No Serve" },
-];
-
-const uniqueIdentifierOptions = [
-	{ value: "-01", label: "Construction 1" },
-	{ value: "-02", label: "Construction 2" },
-];
+// Interface for example part numbers
+interface ExamplePartNumber {
+	id: string;
+	number: string;
+	description: string;
+}
 
 export default function LitzWirePartNumberBuilder() {
 	const [partNumber, setPartNumber] = useState("");
+	const [showCustomStrands, setShowCustomStrands] = useState(false);
+	const uniqueIdentifier = "XX";
 
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			rubadueLitz: "RL-",
+			rubadueLitz: "RL",
 			numberOfStrands: "",
 			strandSize: "",
 			enamelBuild: "",
 			magnetWireGrade: "",
-			serveLayer: "NONE",
-			uniqueIdentifier: "",
+			serveLayer: "",
 		},
+		mode: "onTouched",
 	});
 
 	const formValues = form.watch();
 
+	// Memoize the part number generation logic to improve performance
+	const generatePartNumber = useCallback((values: FormData) => {
+		const {
+			rubadueLitz,
+			numberOfStrands,
+			strandSize,
+			enamelBuild,
+			magnetWireGrade,
+			serveLayer,
+		} = values;
+
+		// Only generate if we have all required values
+		if (
+			!numberOfStrands ||
+			!strandSize ||
+			!enamelBuild ||
+			!magnetWireGrade ||
+			!serveLayer
+		) {
+			return "";
+		}
+
+		// Format the part number with the XX unique identifier
+		return `${rubadueLitz}-${numberOfStrands}/${strandSize}${enamelBuild}-${magnetWireGrade}-${serveLayer}-${uniqueIdentifier}`;
+	}, []);
+
+	// Update part number when form values change
 	useEffect(() => {
-		const serveLayerValue =
-			formValues.serveLayer === "NONE" ? "" : formValues.serveLayer;
-		const newPartNumber = `${formValues.rubadueLitz}${formValues.numberOfStrands}${formValues.strandSize}${formValues.enamelBuild}${formValues.magnetWireGrade}${serveLayerValue}${formValues.uniqueIdentifier}`;
+		const newPartNumber = generatePartNumber(formValues);
 		setPartNumber(newPartNumber);
-	}, [formValues]);
+	}, [formValues, generatePartNumber]);
+
+	// Memoize example part numbers
+	const examplePartNumbers = useMemo<ExamplePartNumber[]>(
+		() => [
+			{
+				id: "example-1",
+				number: "RL-100/44S-MW79-C-F-XX",
+				description:
+					"Rubadue Litz, 100 strands of 44 AWG, Single build enamel, MW79-C grade, FEP serve, XX unique identifier",
+			},
+			{
+				id: "example-2",
+				number: "RL-250/40H-MW80-C-N-XX",
+				description:
+					"Rubadue Litz, 250 strands of 40 AWG, Heavy build enamel, MW80-C grade, No serve, XX unique identifier",
+			},
+		],
+		[],
+	);
 
 	return (
-		<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-24">
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-				<Card>
-					<CardHeader>
-						<CardTitle>Build Your Part Number</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<Form {...form}>
-							<form className="space-y-6">
-								<FormField
-									control={form.control}
-									name="numberOfStrands"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Number of Strands</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select number of strands" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{numberOfStrandsOptions.map((option) => (
-														<SelectItem key={option.value} value={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
+		<>
+			<div className="relative mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-24 ">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+					<Card>
+						<CardHeader>
+							<CardTitle>Build Your Litz Wire Part Number</CardTitle>
+							<CardDescription>
+								Fill out the form to generate your custom Litz wire part number
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<Form {...form}>
+								<form className="space-y-6">
+									{/* Number of Strands */}
+									<SelectWithCustomInput
+										control={form.control}
+										name="numberOfStrands"
+										label="Number of Strands"
+										placeholder="Select number of strands"
+										options={NUMBER_OF_STRANDS_OPTIONS}
+										customOptionValue="custom"
+										showCustomInput={showCustomStrands}
+										setShowCustomInput={(show) => {
+											setShowCustomStrands(show);
+										}}
+										customInputProps={{
+											type: "number",
+											min: 1,
+											step: 1,
+											placeholder: "Enter number of strands",
+										}}
+										onCustomInputChange={(e) => {
+											const value = e.target.value;
+											// Ensure it's a valid number
+											const num = Number.parseInt(value, 10);
+											if (!Number.isNaN(num) && num > 0) {
+												form.setValue("numberOfStrands", `${num}`);
+											} else {
+												form.setValue("numberOfStrands", value);
+											}
+										}}
+									/>
 
-								<FormField
-									control={form.control}
-									name="strandSize"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Strand Size (AWG)</FormLabel>
-											<FormControl>
-												<Input placeholder="Enter AWG (12-50)" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
+									{/* Strand Size */}
+									<InputField
+										control={form.control}
+										name="strandSize"
+										label="Strand Size (AWG 36-50)"
+										placeholder="Enter AWG size (36-50)"
+										type="number"
+										min="36"
+										max="50"
+										step="1"
+									/>
 
-								<FormField
-									control={form.control}
-									name="enamelBuild"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Enamel Build</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select enamel build" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{enamelBuildOptions.map((option) => (
-														<SelectItem key={option.value} value={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
+									{/* Enamel Build */}
+									<SelectField
+										control={form.control}
+										name="enamelBuild"
+										label="Enamel Build"
+										placeholder="Select enamel build"
+										options={ENAMEL_BUILD_OPTIONS}
+									/>
 
-								<FormField
-									control={form.control}
-									name="magnetWireGrade"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Magnet Wire Grade</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select magnet wire grade" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{magnetWireGradeOptions.map((option) => (
-														<SelectItem key={option.value} value={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
+									{/* Magnet Wire Grade */}
+									<SelectField
+										control={form.control}
+										name="magnetWireGrade"
+										label="Magnet Wire Grade"
+										placeholder="Select grade"
+										options={MAGNET_WIRE_GRADE_OPTIONS}
+									/>
 
-								<FormField
-									control={form.control}
-									name="serveLayer"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Serve Layer(s)</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select serve layer" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{serveLayerOptions.map((option) => (
-														<SelectItem key={option.value} value={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
+									{/* Serve Layer */}
+									<SelectField
+										control={form.control}
+										name="serveLayer"
+										label="Serve Layer"
+										placeholder="Select serve layer"
+										options={SERVE_LAYER_OPTIONS}
+									/>
+								</form>
+							</Form>
+						</CardContent>
+					</Card>
 
-								<FormField
-									control={form.control}
-									name="uniqueIdentifier"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Unique Identifier</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select identifier" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{uniqueIdentifierOptions.map((option) => (
-														<SelectItem key={option.value} value={option.value}>
-															{option.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</form>
-						</Form>
-					</CardContent>
-				</Card>
-
-				<Card className="bg-background">
-					<CardHeader>
-						<CardTitle>Generated Part Number</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="text-2xl font-mono bg-white p-4 rounded border">
-							{partNumber || "RL-_ _ _ _ _ _ _"}
-						</div>
-
-						<div className="mt-8">
-							<h3 className="text-lg font-semibold mb-4">
-								Example Part Numbers:
-							</h3>
-							<div className="space-y-4">
-								<div>
-									<p className="font-mono">RL-2500-44S77-02</p>
-									<p className="text-sm text-gray-600">
-										Rubadue Litz, 2500 Strands, 44 AWG, Single Build, MW 77-C,
-										No Serve, Construction 2
-									</p>
+					<div className="space-y-6">
+						<Card>
+							<CardHeader>
+								<CardTitle>Generated Part Number</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-4">
+									<div className="flex items-center gap-4">
+										<Input
+											value={partNumber}
+											disabled
+											className="font-mono text-xl w-full"
+											placeholder="Part number"
+										/>
+										<Button
+											variant="outline"
+											size="sm"
+											className="gap-2 whitespace-nowrap"
+											onClick={() => {
+												if (partNumber) {
+													navigator.clipboard.writeText(partNumber);
+													toast.success("Part number copied!", {
+														description:
+															"The part number has been copied to your clipboard",
+													});
+												}
+											}}
+											disabled={!partNumber}
+										>
+											<Copy className="h-4 w-4" />
+											Copy
+										</Button>
+									</div>
 								</div>
-								<div>
-									<p className="font-mono">RL-400-38H79-SN-03</p>
-									<p className="text-sm text-gray-600">
-										Rubadue Litz, 400 Strands, 38 AWG, Heavy Build, MW 79-C,
-										Single Nylon Serve, Construction 3
-									</p>
-								</div>
-								<div>
-									<p className="font-mono">RL-5-30Q80-DN-01</p>
-									<p className="text-sm text-gray-600">
-										Rubadue Litz, 5 Strands, 30 AWG, Quad Build, MW 80-C, Double
-										Nylon Serve, Construction 1
-									</p>
-								</div>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardTitle>Example Part Numbers</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-8">
+								{examplePartNumbers.map((example) => (
+									<div key={example.id}>
+										<div className="font-medium font-mono tracking-wider mb-2">
+											{example.number}
+										</div>
+										<p className="text-sm text-muted-foreground">
+											{example.description}
+										</p>
+									</div>
+								))}
+							</CardContent>
+						</Card>
+					</div>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }

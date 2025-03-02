@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -28,15 +28,20 @@ import {
 import { Button } from "@/components/react/ui/button";
 import { Copy } from "lucide-react";
 import { toast, Toaster } from "sonner";
+import {
+	SelectField,
+	InputField,
+	SelectWithCustomInput,
+} from "@/components/react/shared/FormFields";
 
-// Define options arrays before the schema
-const layersOptions = [
+// Define options arrays as constants outside the component
+const LAYERS_OPTIONS = [
 	{ value: "S", label: "Single" },
 	{ value: "D", label: "Double" },
 	{ value: "T", label: "Triple" },
 ];
 
-const conductorMaterials = [
+const CONDUCTOR_MATERIALS = [
 	{ value: "A", label: "TPC (Tin Plated Copper)" },
 	{ value: "B", label: "SPC (Silver Plated Copper)" },
 	{ value: "C", label: "BS (Bare Copper)" },
@@ -51,7 +56,7 @@ const conductorMaterials = [
 	{ value: "other", label: "Others Available" },
 ];
 
-const strandsOptions = [
+const STRANDS_OPTIONS = [
 	{ value: "01", label: "Solid" },
 	{ value: "07", label: "7 Strands" },
 	{ value: "19", label: "19 Strands" },
@@ -60,13 +65,13 @@ const strandsOptions = [
 	{ value: "custom", label: "Custom (Enter number)" },
 ];
 
-const insulationTypes = [
+const INSULATION_TYPES = [
 	{ value: "F", label: "FEP" },
 	{ value: "P", label: "PFA" },
 	{ value: "T", label: "ETFE" },
 ];
 
-const colorCodes = [
+const COLOR_CODES = [
 	{ value: "0", label: "Black" },
 	{ value: "1", label: "Brown" },
 	{ value: "2", label: "Red" },
@@ -80,7 +85,7 @@ const colorCodes = [
 	{ value: "C", label: "Clear" },
 ];
 
-const thicknessOptions = [
+const THICKNESS_OPTIONS = [
 	{ value: "-1", label: '.001"/layer' },
 	{ value: "-1.5", label: '.0015"/layer' },
 	{ value: "-2", label: '.002"/layer' },
@@ -89,7 +94,7 @@ const thicknessOptions = [
 	{ value: "other", label: "Other" },
 ];
 
-const magnetWireGrades = [
+const MAGNET_WIRE_GRADES = [
 	{ value: "MW79", label: "MW79" },
 	{ value: "MW80", label: "MW80" },
 	{ value: "MW77", label: "MW77" },
@@ -99,12 +104,19 @@ const magnetWireGrades = [
 	{ value: "MW16", label: "MW16" },
 ];
 
-// Now define the schema with access to the options arrays
+// Create the form schema with validation
 const formSchema = z
 	.object({
 		layers: z.string().min(1, "Required"),
 		conductor: z.string().min(1, "Required"),
-		awgSize: z.string().optional(),
+		awgSize: z
+			.string()
+			.min(1, "Required")
+			.regex(/^\d+$/, "Must be a whole number")
+			.refine((val) => {
+				const num = Number.parseInt(val);
+				return num >= 4 && num <= 40;
+			}, "Must be between 4 and 40"),
 		strands: z.string().min(1, "Required"),
 		magnetWireSize: z
 			.string()
@@ -129,21 +141,24 @@ const formSchema = z
 		color: z.string().min(1, "Required"),
 		thickness: z.string().refine(
 			(val) => {
-				// Skip validation for predefined thickness options
-				const predefinedValues = thicknessOptions
-					.filter((option) => option.value !== "other")
-					.map((option) => option.value);
+				// Skip validation if the field is empty
+				if (!val) return true;
 
-				if (!val || predefinedValues.includes(val)) {
+				// Skip validation for predefined thickness options
+				const predefinedValues = THICKNESS_OPTIONS.filter(
+					(option) => option.value !== "other",
+				).map((option) => option.value);
+
+				if (predefinedValues.includes(val)) {
 					return true;
 				}
 
-				// Only validate custom thickness values
+				// Validate custom thickness values
 				if (val.startsWith("-")) {
 					const num = Number(val.substring(1));
 					return !Number.isNaN(num) && num >= 0.001 && num <= 0.25;
 				}
-				return true;
+				return false;
 			},
 			{
 				message: "Thickness must be between 0.001 and 0.250",
@@ -174,8 +189,6 @@ const formSchema = z
 					return false;
 				}
 
-				// Field-level validation will handle the range check
-
 				// Validate magnet wire grade for Litz wire
 				if (!data.magnetWireGrade || data.magnetWireGrade.trim() === "") {
 					return false;
@@ -191,6 +204,13 @@ const formSchema = z
 	);
 
 type FormData = z.infer<typeof formSchema>;
+
+// Interface for example part numbers
+interface ExamplePartNumber {
+	id: string;
+	number: string;
+	description: string;
+}
 
 export default function InsulatedWindingWirePartNumberBuilder() {
 	const [partNumber, setPartNumber] = useState("");
@@ -216,15 +236,13 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 
 	const formValues = form.watch();
 
-	useEffect(() => {
+	// Memoize the part number generation logic to improve performance
+	const generatePartNumber = useCallback((values: FormData) => {
 		// Check if Litz wire is selected
-		setIsLitzWire(formValues.conductor === "L");
-
-		// Format part number based on conductor type
-		let newPartNumber = "";
+		const isLitz = values.conductor === "L";
 
 		// Format AWG size to be 2 digits
-		let formattedAwgSize = formValues.awgSize || "";
+		let formattedAwgSize = values.awgSize || "";
 		if (
 			formattedAwgSize &&
 			formattedAwgSize !== "XX" &&
@@ -234,49 +252,63 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 		}
 
 		// Add X's after color based on layers
-		let colorWithX = formValues.color || "";
-		if (formValues.layers === "D" && colorWithX) {
+		let colorWithX = values.color || "";
+		if (values.layers === "D" && colorWithX) {
 			colorWithX = `${colorWithX}X`;
-		} else if (formValues.layers === "T" && colorWithX) {
+		} else if (values.layers === "T" && colorWithX) {
 			colorWithX = `${colorWithX}XX`;
 		}
 
-		if (formValues.conductor === "L") {
+		if (isLitz) {
 			// Litz wire format
-			const layers = formValues.layers || "";
-			const strands = formValues.strands || "";
-			const magnetWireSize = formValues.magnetWireSize || "";
+			const layers = values.layers || "";
+			const strands = values.strands || "";
+			const magnetWireSize = values.magnetWireSize || "";
 			const strandInfo =
 				strands && magnetWireSize ? `${strands}/${magnetWireSize}` : "";
-			const insulation = formValues.insulation || "";
-			const thickness = formValues.thickness || "";
-			const magnetWireGrade = formValues.magnetWireGrade
-				? `(${formValues.magnetWireGrade})`
+			const insulation = values.insulation || "";
+			const thickness = values.thickness || "";
+			const magnetWireGrade = values.magnetWireGrade
+				? `(${values.magnetWireGrade})`
 				: "";
 
-			newPartNumber = `${layers}XXL${strandInfo}${insulation}${colorWithX}${thickness}${magnetWireGrade}`;
-		} else {
-			// Standard wire format
-			const layers = formValues.layers || "";
-			const conductor = formValues.conductor || "";
-			const strands = formValues.strands || "";
-			const insulation = formValues.insulation || "";
-			const thickness = formValues.thickness || "";
-
-			newPartNumber = `${layers}${formattedAwgSize}${conductor}${strands}${insulation}${colorWithX}${thickness}`;
+			return `${layers}XXL${strandInfo}${insulation}${colorWithX}${thickness}${magnetWireGrade}`;
 		}
 
+		// Standard wire format
+		const layers = values.layers || "";
+		const conductor = values.conductor || "";
+		const strands = values.strands || "";
+		const insulation = values.insulation || "";
+		const thickness = values.thickness || "";
+
+		return `${layers}${formattedAwgSize}${conductor}${strands}${insulation}${colorWithX}${thickness}`;
+	}, []);
+
+	// Update part number when form values change
+	useEffect(() => {
+		const newPartNumber = generatePartNumber(formValues);
 		setPartNumber(newPartNumber);
-	}, [formValues]);
+	}, [formValues, generatePartNumber]);
 
-	const copyToClipboard = () => {
-		if (partNumber) {
-			navigator.clipboard.writeText(partNumber);
-			toast.success("Part number copied!", {
-				description: "The part number has been copied to your clipboard",
-			});
-		}
-	};
+	// Memoize example part numbers
+	const examplePartNumbers = useMemo<ExamplePartNumber[]>(
+		() => [
+			{
+				id: "example-1",
+				number: "S14A19F1-5",
+				description:
+					'Single Insulated (1), 14 AWG, Tin Plated Copper, 19 Strands, FEP, Brown, .0015"/layer',
+			},
+			{
+				id: "example-2",
+				number: "DXXL360/44T3X-1.5(MW79)",
+				description:
+					'Double Insulated (2), Litz Wire, 360 Strands of 44 AWG, ETFE, Orange with X suffix, .0015"/layer, MW79 grade',
+			},
+		],
+		[],
+	);
 
 	return (
 		<>
@@ -293,395 +325,165 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 							<Form {...form}>
 								<form className="space-y-6">
 									{/* Layers of Insulation */}
-									<FormField
+									<SelectField
 										control={form.control}
 										name="layers"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Layers of Insulation</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select layers" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{layersOptions.map((option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Layers of Insulation"
+										placeholder="Select layers"
+										options={LAYERS_OPTIONS}
 									/>
 
 									{/* Conductor Material */}
-									<FormField
+									<SelectField
 										control={form.control}
 										name="conductor"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Conductor Material</FormLabel>
-												<Select
-													onValueChange={(value) => {
-														field.onChange(value);
-														setIsLitzWire(value === "L");
-														// Reset related fields when changing conductor type
-														if (value === "L") {
-															form.setValue("awgSize", "", {
-																shouldValidate: false,
-															});
-														} else {
-															form.setValue("magnetWireSize", "", {
-																shouldValidate: false,
-															});
-															form.setValue("magnetWireGrade", "", {
-																shouldValidate: false,
-															});
-														}
-														// Only validate the conductor field
-														form.trigger("conductor");
-													}}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select conductor" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{conductorMaterials.map((option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Conductor Material"
+										placeholder="Select conductor"
+										options={CONDUCTOR_MATERIALS}
+										onChange={(value) => {
+											setIsLitzWire(value === "L");
+
+											// Reset related fields when changing conductor type
+											if (value === "L") {
+												form.setValue("awgSize", "", { shouldValidate: false });
+											} else {
+												form.setValue("magnetWireSize", "", {
+													shouldValidate: false,
+												});
+												form.setValue("magnetWireGrade", "", {
+													shouldValidate: false,
+												});
+											}
+										}}
 									/>
 
 									{/* AWG Size - Only show if not Litz wire */}
 									{!isLitzWire && (
-										<FormField
+										<InputField
 											control={form.control}
 											name="awgSize"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>AWG Size (4-40)</FormLabel>
-													<FormControl>
-														<Input
-															placeholder="Enter AWG size (4-40)"
-															{...field}
-															onChange={(e) => {
-																const value = e.target.value.toUpperCase();
-																field.onChange(value);
-																form.trigger("awgSize");
-															}}
-															onBlur={(e) => {
-																field.onBlur();
-																form.trigger("awgSize");
-															}}
-														/>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
+											label="AWG Size (4-40)"
+											placeholder="Enter AWG size (4-40)"
+											onChange={(e) => {
+												const value = e.target.value.toUpperCase();
+												form.setValue("awgSize", value);
+											}}
 										/>
 									)}
 
 									{/* Strands in Conductor */}
-									<FormField
+									<SelectWithCustomInput
 										control={form.control}
 										name="strands"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Strands in Conductor</FormLabel>
-												<div className="space-y-2">
-													<Select
-														onValueChange={(value) => {
-															if (value === "custom") {
-																setShowCustomStrands(true);
-																field.onChange("");
-															} else {
-																setShowCustomStrands(false);
-																field.onChange(value);
-															}
-														}}
-														defaultValue={field.value}
-													>
-														<FormControl>
-															<SelectTrigger>
-																<SelectValue placeholder="Select strands" />
-															</SelectTrigger>
-														</FormControl>
-														<SelectContent>
-															{strandsOptions.map((option) => (
-																<SelectItem
-																	key={option.value}
-																	value={option.value}
-																>
-																	{option.label}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-
-													{showCustomStrands && (
-														<FormControl>
-															<Input
-																type="number"
-																min="1"
-																step="1"
-																placeholder="Enter number of strands"
-																onChange={(e) => {
-																	const value = e.target.value;
-																	// Ensure it's a valid number
-																	const num = Number.parseInt(value, 10);
-																	if (!Number.isNaN(num) && num > 0) {
-																		// Format as string with leading zeros for single digits
-																		field.onChange(
-																			num < 10 ? `0${num}` : `${num}`,
-																		);
-																	} else {
-																		field.onChange(value);
-																	}
-																	form.trigger("strands");
-																}}
-															/>
-														</FormControl>
-													)}
-												</div>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Strands in Conductor"
+										placeholder="Select strands"
+										options={STRANDS_OPTIONS}
+										customOptionValue="custom"
+										showCustomInput={showCustomStrands}
+										setShowCustomInput={(show) => {
+											setShowCustomStrands(show);
+										}}
+										customInputProps={{
+											type: "number",
+											min: 1,
+											step: 1,
+											placeholder: "Enter number of strands",
+										}}
+										onCustomInputChange={(e) => {
+											const value = e.target.value;
+											// Ensure it's a valid number
+											const num = Number.parseInt(value, 10);
+											if (!Number.isNaN(num) && num > 0) {
+												form.setValue(
+													"strands",
+													num < 10 ? `0${num}` : `${num}`,
+												);
+											} else {
+												form.setValue("strands", value);
+											}
+										}}
 									/>
 
 									{/* Magnet Wire Size - Only show if Litz wire */}
 									{isLitzWire && (
-										<FormField
+										<InputField
 											control={form.control}
 											name="magnetWireSize"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Magnet Wire Size (AWG 12-50)</FormLabel>
-													<FormControl>
-														<Input
-															type="number"
-															min="12"
-															max="50"
-															step="1"
-															placeholder="Enter AWG size (12-50)"
-															{...field}
-															onChange={(e) => {
-																const value = e.target.value;
-																const num = Number.parseInt(value, 10);
-
-																// Validate the input is a number between 12-50
-																if (
-																	!value ||
-																	(Number.isInteger(num) &&
-																		num >= 12 &&
-																		num <= 50)
-																) {
-																	field.onChange(value);
-																} else {
-																	// If invalid, still update the field to show validation error
-																	field.onChange(value);
-																}
-
-																// Trigger validation for this field
-																form.trigger("magnetWireSize");
-															}}
-															onBlur={(e) => {
-																field.onBlur();
-																form.trigger("magnetWireSize");
-															}}
-														/>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
+											label="Magnet Wire Size (AWG 12-50)"
+											placeholder="Enter AWG size (12-50)"
+											type="number"
+											min="12"
+											max="50"
+											step="1"
+											onChange={(e) => {
+												// Always update the field value, validation will handle the constraints
+												form.setValue("magnetWireSize", e.target.value);
+											}}
 										/>
 									)}
 
 									{/* Insulation Type */}
-									<FormField
+									<SelectField
 										control={form.control}
 										name="insulation"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Insulation Type</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select insulation" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{insulationTypes.map((option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Insulation Type"
+										placeholder="Select insulation"
+										options={INSULATION_TYPES}
 									/>
 
 									{/* Color Code */}
-									<FormField
+									<SelectField
 										control={form.control}
 										name="color"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Color Code</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select color" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{colorCodes.map((option) => (
-															<SelectItem
-																key={option.value}
-																value={option.value}
-															>
-																{option.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Color Code"
+										placeholder="Select color"
+										options={COLOR_CODES}
 									/>
 
 									{/* Insulation Thickness */}
-									<FormField
+									<SelectWithCustomInput
 										control={form.control}
 										name="thickness"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Insulation Thickness per Layer</FormLabel>
-												<div className="space-y-2">
-													<Select
-														onValueChange={(value) => {
-															if (value === "other") {
-																setShowCustomThickness(true);
-																field.onChange("");
-															} else {
-																setShowCustomThickness(false);
-																field.onChange(value);
-															}
-														}}
-														defaultValue={field.value}
-													>
-														<FormControl>
-															<SelectTrigger>
-																<SelectValue placeholder="Select thickness" />
-															</SelectTrigger>
-														</FormControl>
-														<SelectContent>
-															{thicknessOptions.map((option) => (
-																<SelectItem
-																	key={option.value}
-																	value={option.value}
-																>
-																	{option.label}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-
-													{showCustomThickness && (
-														<FormControl>
-															<Input
-																type="number"
-																step="0.001"
-																min="0.001"
-																max="0.250"
-																placeholder="Enter thickness (0.001-0.250)"
-																onChange={(e) => {
-																	const value = Number.parseFloat(
-																		e.target.value,
-																	);
-																	if (!e.target.value) {
-																		field.onChange("");
-																	} else if (value >= 0.001 && value <= 0.25) {
-																		field.onChange(`-${value}`);
-																	} else {
-																		// Set an invalid value to trigger validation
-																		field.onChange("-invalid");
-																	}
-																	// Trigger validation after value change
-																	form.trigger("thickness");
-																}}
-															/>
-														</FormControl>
-													)}
-												</div>
-												<FormMessage />
-											</FormItem>
-										)}
+										label="Insulation Thickness per Layer"
+										placeholder="Select thickness"
+										options={THICKNESS_OPTIONS}
+										customOptionValue="other"
+										showCustomInput={showCustomThickness}
+										setShowCustomInput={(show) => {
+											setShowCustomThickness(show);
+										}}
+										customInputProps={{
+											type: "number",
+											step: "0.001",
+											min: "0.001",
+											max: "0.250",
+											placeholder: "Enter thickness (0.001-0.250)",
+										}}
+										onCustomInputChange={(e) => {
+											const value = Number.parseFloat(e.target.value);
+											if (!e.target.value) {
+												form.setValue("thickness", "");
+											} else if (value >= 0.001 && value <= 0.25) {
+												form.setValue("thickness", `-${value}`);
+												// Trigger validation
+												form.trigger("thickness");
+											} else {
+												// Set an invalid value to trigger validation
+												form.setValue("thickness", "-invalid");
+												// Trigger validation
+												form.trigger("thickness");
+											}
+										}}
 									/>
 
 									{/* Magnet Wire Grade - Only show if Litz wire */}
 									{isLitzWire && (
-										<FormField
+										<SelectField
 											control={form.control}
 											name="magnetWireGrade"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Magnet Wire Grade</FormLabel>
-													<Select
-														onValueChange={field.onChange}
-														defaultValue={field.value}
-													>
-														<FormControl>
-															<SelectTrigger>
-																<SelectValue placeholder="Select grade" />
-															</SelectTrigger>
-														</FormControl>
-														<SelectContent>
-															{magnetWireGrades.map((option) => (
-																<SelectItem
-																	key={option.value}
-																	value={option.value}
-																>
-																	{option.label}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-													<FormMessage />
-												</FormItem>
-											)}
+											label="Magnet Wire Grade"
+											placeholder="Select grade"
+											options={MAGNET_WIRE_GRADES}
 										/>
 									)}
 								</form>
@@ -693,10 +495,6 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 						<Card>
 							<CardHeader>
 								<CardTitle>Generated Part Number</CardTitle>
-								<CardDescription>
-									Your custom part number will appear here as you fill out the
-									form
-								</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-4">
@@ -711,7 +509,15 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 											variant="outline"
 											size="sm"
 											className="gap-2 whitespace-nowrap"
-											onClick={copyToClipboard}
+											onClick={() => {
+												if (partNumber) {
+													navigator.clipboard.writeText(partNumber);
+													toast.success("Part number copied!", {
+														description:
+															"The part number has been copied to your clipboard",
+													});
+												}
+											}}
 											disabled={!partNumber}
 										>
 											<Copy className="h-4 w-4" />
@@ -727,24 +533,16 @@ export default function InsulatedWindingWirePartNumberBuilder() {
 								<CardTitle>Example Part Numbers</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-8">
-								<div>
-									<div className="text-2xl font-mono tracking-wider mb-2">
-										S14A19F1-5
+								{examplePartNumbers.map((example) => (
+									<div key={example.id}>
+										<div className="font-medium font-mono tracking-wider mb-2">
+											{example.number}
+										</div>
+										<p className="text-sm text-muted-foreground">
+											{example.description}
+										</p>
 									</div>
-									<p className="text-sm text-muted-foreground">
-										Single Insulated (1), 14 AWG, Tin Plated Copper, 19 Strands,
-										FEP, Brown, .0015"/layer
-									</p>
-								</div>
-								<div>
-									<div className="text-2xl font-mono tracking-wider mb-2">
-										DXXL360/44T3X-1.5(MW79)
-									</div>
-									<p className="text-sm text-muted-foreground">
-										Double Insulated (2), Litz Wire, 360 Strands of 44 AWG,
-										ETFE, Orange with X suffix, .0015"/layer, MW79 grade
-									</p>
-								</div>
+								))}
 							</CardContent>
 						</Card>
 					</div>
