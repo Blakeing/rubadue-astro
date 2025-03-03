@@ -26,16 +26,17 @@ import {
 	SheetTrigger,
 	SheetTitle,
 	SheetDescription,
+	SheetClose,
 } from "@/components/react/ui/sheet";
 
 const navigation = [
-	{ name: "Part Number Builders", href: "#" },
-	{ name: "Bare Litz Wires", href: "/catalog" },
-	{ name: "Insulated Litz Wires", href: "/catalog" },
-	{ name: "Triple Insulated Wires", href: "/catalog" },
-	{ name: "Double Insulated Wires", href: "/catalog" },
-	{ name: "Single Insulated Wires", href: "/catalog" },
-	{ name: "Specialty Products", href: "/catalog" },
+	{ name: "Catalog", href: "/catalog" },
+	{ name: "About", href: "/about" },
+	{ name: "Markets", href: "/markets" },
+	{ name: "Careers", href: "/careers" },
+	{ name: "Contact Us", href: "/contact" },
+	{ name: "Request a Quote", href: "/request-a-quote" },
+	{ name: "Part Number Builders", href: "/part-number-builders" },
 	{ name: "Glossary", href: "/glossary" },
 	{ name: "Knowledge Base", href: "/knowledge-base" },
 ];
@@ -75,9 +76,9 @@ const resources = [
 export function Header() {
 	return (
 		<header className="bg-background shadow sticky top-0 z-50">
-			<nav className="mx-auto flex  max-w-7xl px-2 sm:px-6 lg:px-8 items-center justify-between py-6 ">
+			<nav className="mx-auto flex max-w-7xl px-4 sm:px-6 lg:px-8 items-center justify-between py-3 sm:py-4 md:py-6">
 				<a href="/" className="-m-1.5 p-1.5">
-					<TextLogo />
+					<TextLogo className="h-4 lg:h-5" />
 				</a>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
 					<NavigationMenu className="mr-4" data-hover="false">
@@ -161,28 +162,40 @@ export function Header() {
 							<button
 								type="button"
 								className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-muted-foreground"
+								aria-label="Open main menu"
 							>
 								<span className="sr-only">Open main menu</span>
 								<Menu className="h-6 w-6" />
 							</button>
 						</SheetTrigger>
-						<SheetContent side="right">
-							<SheetTitle>Navigation Menu</SheetTitle>
-							<SheetDescription>
+						<SheetContent side="right" className="w-full max-w-xs sm:max-w-sm">
+							<SheetTitle className="text-lg">Navigation Menu</SheetTitle>
+							<SheetDescription className="text-sm">
 								Browse our wire products and resources.
 							</SheetDescription>
 							<div className="mt-6 flow-root">
 								<div className="-my-6 divide-y divide-border">
-									<div className="space-y-2 py-6">
+									<div className="space-y-1 py-6">
 										{navigation.map((item) => (
-											<a
-												key={item.name}
-												href={item.href}
-												className="flex items-center justify-between -mx-3 rounded-lg px-3 py-2 text-base font-semibold text-foreground hover:bg-accent hover:text-accent-foreground"
-											>
-												<span>{item.name}</span>
-											</a>
+											<SheetClose asChild key={item.name}>
+												<a
+													href={item.href}
+													className="flex items-center justify-between -mx-3 rounded-lg px-3 py-2 text-base font-semibold text-foreground hover:bg-accent hover:text-accent-foreground"
+												>
+													<span>{item.name}</span>
+												</a>
+											</SheetClose>
 										))}
+									</div>
+									<div className="py-6">
+										<SheetClose asChild>
+											<a
+												href="/request-a-quote"
+												className="flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90"
+											>
+												Request a Quote
+											</a>
+										</SheetClose>
 									</div>
 								</div>
 							</div>

@@ -51,8 +51,10 @@ const formattedDate = pubDate
   <body class="min-h-screen bg-background">
     <Header client:load />
     <BaseHeader eyebrow={formattedDate} title={title} />
-    <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main
+      class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-24"
+    >
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-8">
           <article>
@@ -70,7 +72,9 @@ const formattedDate = pubDate
               )
             } -->
             <Card>
-              <div class="prose prose-neutral dark:prose-invert max-w-none p-6">
+              <div
+                class="prose prose-neutral dark:prose-invert max-w-none p-4 sm:p-6 lg:p-8"
+              >
                 <slot />
               </div>
             </Card>
@@ -78,19 +82,21 @@ const formattedDate = pubDate
         </div>
 
         <!-- Sticky Aside -->
-        <aside class="lg:col-span-4">
-          <div class="sticky top-32 space-y-6">
+        <aside class="lg:col-span-4 mt-6 lg:mt-0">
+          <div class="lg:sticky lg:top-32 space-y-4 sm:space-y-6">
             <!-- Categories/Tags Section -->
             {
               tags.length > 0 && (
                 <Card>
-                  <div class="p-6">
-                    <h2 class="text-lg font-semibold mb-4">Categories</h2>
+                  <div class="p-4 sm:p-6">
+                    <h2 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+                      Categories
+                    </h2>
                     <div class="flex flex-wrap gap-2">
                       {tags.map((tag: string) => (
                         <a
                           href={`/knowledge-base?tag=${tag}`}
-                          class="inline-flex items-center rounded-full bg-muted px-3 py-1 text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                          class="inline-flex items-center rounded-full bg-muted px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
                         >
                           {tag}
                         </a>
@@ -103,13 +109,17 @@ const formattedDate = pubDate
 
             <!-- Contact CTA -->
             <Card>
-              <div class="p-6 space-y-4">
-                <h2 class="text-lg font-semibold">Need Help?</h2>
-                <p class="text-sm text-muted-foreground">
+              <div class="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <h2 class="text-base sm:text-lg font-semibold">Need Help?</h2>
+                <p class="text-xs sm:text-sm text-muted-foreground">
                   Have questions about our products or services? Our team is
                   here to help!
                 </p>
-                <Button asChild>
+                <Button
+                  asChild
+                  size="sm"
+                  className="w-full sm:w-auto text-xs sm:text-sm"
+                >
                   <a
                     class={buttonVariants({ variant: "default" })}
                     href="/contact">Contact Us</a

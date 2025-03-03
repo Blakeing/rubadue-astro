@@ -264,6 +264,31 @@ export default function ProductListingPage({
 			<div>
 				{/* Mobile filter dialog */}
 				<Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+					<SheetTrigger asChild>
+						<Button
+							variant="outline"
+							size="sm"
+							className="mr-2 flex items-center gap-1 lg:hidden"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								className="h-4 w-4"
+								aria-hidden="true"
+							>
+								<title>Filter icon</title>
+								<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+							</svg>
+							Filters
+						</Button>
+					</SheetTrigger>
 					<SheetContent side="left" className="flex h-full flex-col">
 						<SheetHeader>
 							<SheetTitle>Filters</SheetTitle>
@@ -277,34 +302,66 @@ export default function ProductListingPage({
 											{filterName}
 										</h3>
 										<div className="space-y-4">
-											{options.map((option) => (
-												<div
-													key={option.value}
-													className="flex items-center gap-2"
-												>
-													<Checkbox id={option.value} />
-													<label
-														htmlFor={option.value}
-														className="text-sm text-muted-foreground"
+											{options.map((option) => {
+												const inputId = `mobile-filter-${filterName}-${option.value}`;
+												return (
+													<div
+														key={option.value}
+														className="flex items-center gap-2"
 													>
-														{option.label}
-													</label>
-												</div>
-											))}
+														<Checkbox
+															id={inputId}
+															checked={activeFilters[
+																filterName as FilterCategory
+															].includes(option.value)}
+															onCheckedChange={() =>
+																toggleFilter(
+																	filterName as FilterCategory,
+																	option.value,
+																)
+															}
+														/>
+														<label
+															htmlFor={inputId}
+															className="text-sm text-muted-foreground"
+														>
+															{option.label}
+														</label>
+													</div>
+												);
+											})}
 										</div>
 									</div>
 								))}
 							</form>
+							<div className="mt-6 flex justify-between">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => {
+										clearFilters();
+										setMobileFiltersOpen(false);
+									}}
+								>
+									Clear all
+								</Button>
+								<Button size="sm" onClick={() => setMobileFiltersOpen(false)}>
+									Apply filters
+								</Button>
+							</div>
 						</ScrollArea>
 					</SheetContent>
 				</Sheet>
 
-				<section aria-labelledby="products-heading" className="pb-24 pt-16">
+				<section
+					aria-labelledby="products-heading"
+					className="pb-12 sm:pb-16 md:pb-24 pt-6 sm:pt-10 md:pt-16"
+				>
 					<h2 id="products-heading" className="sr-only">
 						Products
 					</h2>
 
-					<div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+					<div className="grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
 						{/* Filters */}
 						<div className="hidden lg:block">
 							<div className="border-b border-muted pb-6">
@@ -372,6 +429,22 @@ export default function ProductListingPage({
 
 						{/* Product grid */}
 						<div className="lg:col-span-3">
+							{/* Mobile search and filter controls */}
+							<div className="mb-4 flex items-center justify-between lg:hidden">
+								<div className="relative flex-1 mr-2">
+									<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+									<Input
+										placeholder="Search products..."
+										value={searchQuery}
+										onChange={(e) => {
+											setSearchQuery(e.target.value);
+											setCurrentPage(1);
+										}}
+										className="pl-8 text-sm"
+									/>
+								</div>
+							</div>
+
 							{/* Results count */}
 							<div className="mb-4 flex items-center justify-end h-9">
 								<p className="text-sm text-muted-foreground">
@@ -380,7 +453,7 @@ export default function ProductListingPage({
 								</p>
 							</div>
 
-							<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+							<div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-6">
 								{paginatedProducts.map((product) => (
 									<a
 										key={product.slug}
@@ -394,16 +467,16 @@ export default function ProductListingPage({
 												className="h-full w-full object-contain object-center group-hover:opacity-75"
 											/>
 										</div>
-										<div className="mt-4 flex justify-between">
+										<div className="mt-3 flex justify-between">
 											<div>
-												<h3 className="text-sm font-medium">
+												<h3 className="text-sm sm:text-base font-medium">
 													<span
 														aria-hidden="true"
 														className="absolute inset-0"
 													/>
 													{product.data.title}
 												</h3>
-												<p className="mt-1 text-sm text-muted-foreground">
+												<p className="mt-1 text-xs sm:text-sm text-muted-foreground">
 													{product.data.category}
 												</p>
 											</div>
@@ -414,7 +487,7 @@ export default function ProductListingPage({
 
 							{/* Updated Pagination */}
 							{totalPages > 1 && (
-								<Pagination className="mt-8">
+								<Pagination className="mt-6 sm:mt-8">
 									<PaginationContent>
 										<PaginationItem>
 											<PaginationPrevious

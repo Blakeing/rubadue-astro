@@ -18,19 +18,21 @@ import {
   headerTitle="Part Number Builders"
 >
   <div
-    class="min-h-[calc(100vh-30.5rem)] mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-24"
+    class="min-h-[calc(100vh-30.5rem)] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16"
   >
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mx-auto">
       <Card className="flex flex-col">
-        <CardHeader>
-          <CardTitle>Insulated Winding Wire</CardTitle>
+        <CardHeader className="pb-3 sm:pb-6">
+          <CardTitle className="text-lg sm:text-xl"
+            >Insulated Winding Wire</CardTitle
+          >
           <CardDescription>
             For building insulated solid conductor and stranded winding wire
             parts.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow">
-          <div class="space-y-4">
+        <CardContent className="flex-grow pt-0">
+          <div class="space-y-3 sm:space-y-4">
             <p class="text-sm text-muted-foreground">Features:</p>
             <ul
               class="list-disc list-inside text-sm text-muted-foreground space-y-1"
@@ -43,7 +45,7 @@ import {
             </ul>
             <div class="pt-4">
               <a href="/part-number-builders/insulated-winding-wire">
-                <Button className="w-full">
+                <Button className="w-full text-sm sm:text-base py-2">
                   Build Insulated Wire Part Number
                 </Button>
               </a>
@@ -53,14 +55,15 @@ import {
       </Card>
 
       <Card className="flex flex-col">
-        <CardHeader>
-          <CardTitle>Rubadue Litz Wire</CardTitle>
+        <CardHeader className="pb-3 sm:pb-6">
+          <CardTitle className="text-lg sm:text-xl">Rubadue Litz Wire</CardTitle
+          >
           <CardDescription>
             For building bare and served Litz wire parts.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow">
-          <div class="space-y-4">
+        <CardContent className="flex-grow pt-0">
+          <div class="space-y-3 sm:space-y-4">
             <p class="text-sm text-muted-foreground">Features:</p>
             <ul
               class="list-disc list-inside text-sm text-muted-foreground space-y-1"
@@ -73,7 +76,7 @@ import {
             </ul>
             <div class="pt-4">
               <a href="/part-number-builders/litz-wire">
-                <Button className="w-full">
+                <Button className="w-full text-sm sm:text-base py-2">
                   Build Litz Wire Part Number
                 </Button>
               </a>

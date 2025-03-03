@@ -266,26 +266,28 @@ export default function N1MaxCalculatorForm() {
 
 	return (
 		<Card>
-			<CardContent className="pt-6">
-				<div className="mb-6">
-					<p className="text-muted-foreground">
+			<CardContent className="pt-4 sm:pt-6">
+				<div className="mb-4 sm:mb-6">
+					<p className="text-sm sm:text-base text-muted-foreground">
 						{calculatorDescription.description}
 					</p>
 				</div>
-				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+				<div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
 					{/* Left Column - Form */}
 					<TooltipProvider>
-						<form className="space-y-6">
+						<form className="space-y-4 sm:space-y-6">
 							{/* Material Preset Selector */}
-							<div className="space-y-2">
+							<div className="space-y-1 sm:space-y-2">
 								<div className="flex items-center space-x-2">
-									<Label htmlFor="material">Material</Label>
+									<Label htmlFor="material" className="text-sm sm:text-base">
+										Material
+									</Label>
 									<Tooltip>
 										<TooltipTrigger>
-											<InfoIcon className="h-4 w-4 text-muted-foreground" />
+											<InfoIcon className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 										</TooltipTrigger>
 										<TooltipContent>
-											<p>
+											<p className="text-xs sm:text-sm">
 												Select a common conductor material to auto-fill
 												properties
 											</p>
@@ -296,12 +298,16 @@ export default function N1MaxCalculatorForm() {
 									value={selectedMaterial}
 									onValueChange={handleMaterialChange}
 								>
-									<SelectTrigger>
+									<SelectTrigger className="text-sm sm:text-base">
 										<SelectValue placeholder="Select material" />
 									</SelectTrigger>
 									<SelectContent>
 										{Object.entries(materialPresets).map(([key, material]) => (
-											<SelectItem key={key} value={key}>
+											<SelectItem
+												key={key}
+												value={key}
+												className="text-sm sm:text-base"
+											>
 												{material.name}
 											</SelectItem>
 										))}
@@ -310,15 +316,19 @@ export default function N1MaxCalculatorForm() {
 							</div>
 
 							{/* Frequency Input - enhanced tooltip */}
-							<div className="space-y-2">
+							<div className="space-y-1 sm:space-y-2">
 								<div className="flex items-center space-x-2">
-									<Label htmlFor="frequency">Operating Frequency (f)</Label>
+									<Label htmlFor="frequency" className="text-sm sm:text-base">
+										Operating Frequency (f)
+									</Label>
 									<Tooltip>
 										<TooltipTrigger>
-											<InfoIcon className="h-4 w-4 text-muted-foreground" />
+											<InfoIcon className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 										</TooltipTrigger>
 										<TooltipContent className="max-w-xs">
-											<p>{calculatorDescription.frequencyNote}</p>
+											<p className="text-xs sm:text-sm">
+												{calculatorDescription.frequencyNote}
+											</p>
 										</TooltipContent>
 									</Tooltip>
 								</div>
@@ -326,32 +336,35 @@ export default function N1MaxCalculatorForm() {
 									<Input
 										id="frequency"
 										type="number"
-										className="flex-1"
+										className="flex-1 text-sm sm:text-base"
 										{...register("frequency", { valueAsNumber: true })}
 									/>
-									<span className="flex items-center text-sm text-muted-foreground">
+									<span className="flex items-center text-xs sm:text-sm text-muted-foreground">
 										Hz
 									</span>
 								</div>
 								{errors.frequency && (
-									<p className="text-sm text-red-500">
+									<p className="text-xs sm:text-sm text-red-500">
 										{errors.frequency.message}
 									</p>
 								)}
 							</div>
 
 							{/* Permeability Input - enhanced tooltip */}
-							<div className="space-y-2">
+							<div className="space-y-1 sm:space-y-2">
 								<div className="flex items-center space-x-2">
-									<Label htmlFor="permeability">
+									<Label
+										htmlFor="permeability"
+										className="text-sm sm:text-base"
+									>
 										Magnetic Permeability (μ)
 									</Label>
 									<Tooltip>
 										<TooltipTrigger>
-											<InfoIcon className="h-4 w-4 text-muted-foreground" />
+											<InfoIcon className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 										</TooltipTrigger>
 										<TooltipContent className="max-w-xs">
-											<p>
+											<p className="text-xs sm:text-sm">
 												Magnetic permeability of the conductor material. For
 												most non-magnetic conductors, this is approximately μ₀
 												(4π × 10⁻⁷ H/m).
@@ -364,31 +377,36 @@ export default function N1MaxCalculatorForm() {
 										id="permeability"
 										type="number"
 										step="0.000001"
-										className="flex-1"
+										className="flex-1 text-sm sm:text-base"
 										{...register("permeability", { valueAsNumber: true })}
 									/>
-									<span className="flex items-center text-sm text-muted-foreground">
+									<span className="flex items-center text-xs sm:text-sm text-muted-foreground">
 										H/m
 									</span>
 								</div>
 								{errors.permeability && (
-									<p className="text-sm text-red-500">
+									<p className="text-xs sm:text-sm text-red-500">
 										{errors.permeability.message}
 									</p>
 								)}
 							</div>
 
 							{/* Temperature Input with Unit Toggle */}
-							<div className="space-y-2">
+							<div className="space-y-1 sm:space-y-2">
 								<div className="flex items-center justify-between">
 									<div className="flex items-center space-x-2">
-										<Label htmlFor="temperature">Temperature</Label>
+										<Label
+											htmlFor="temperature"
+											className="text-sm sm:text-base"
+										>
+											Temperature
+										</Label>
 										<Tooltip>
 											<TooltipTrigger>
-												<InfoIcon className="h-4 w-4 text-muted-foreground" />
+												<InfoIcon className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
 											</TooltipTrigger>
 											<TooltipContent className="max-w-xs">
-												<p>
+												<p className="text-xs sm:text-sm">
 													Operating temperature affects the conductor's
 													resistivity. Reference temperatures:
 													{temperatureUnit === "F" ? (
@@ -408,14 +426,19 @@ export default function N1MaxCalculatorForm() {
 											</TooltipContent>
 										</Tooltip>
 									</div>
-									<div className="flex items-center space-x-2">
-										<Label htmlFor="tempUnit">°F</Label>
+									<div className="flex items-center space-x-1 sm:space-x-2">
+										<Label htmlFor="tempUnit" className="text-xs sm:text-sm">
+											°F
+										</Label>
 										<Switch
 											id="tempUnit"
 											checked={temperatureUnit === "C"}
 											onCheckedChange={handleTemperatureUnitChange}
+											className="scale-75 sm:scale-100"
 										/>
-										<Label htmlFor="tempUnit">°C</Label>
+										<Label htmlFor="tempUnit" className="text-xs sm:text-sm">
+											°C
+										</Label>
 									</div>
 								</div>
 								<div className="flex space-x-2">
@@ -423,23 +446,25 @@ export default function N1MaxCalculatorForm() {
 										id="temperature"
 										type="number"
 										step="1"
-										className="flex-1"
+										className="flex-1 text-sm sm:text-base"
 										{...register("temperature", { valueAsNumber: true })}
 									/>
-									<span className="flex items-center text-sm text-muted-foreground">
+									<span className="flex items-center text-xs sm:text-sm text-muted-foreground">
 										°{temperatureUnit}
 									</span>
 								</div>
 								{errors.temperature && (
-									<p className="text-sm text-red-500">
+									<p className="text-xs sm:text-sm text-red-500">
 										{errors.temperature.message}
 									</p>
 								)}
 							</div>
 
 							{/* AWG Strand Selection */}
-							<div className="space-y-2">
-								<Label htmlFor="awg">AWG Strand Selection</Label>
+							<div className="space-y-1 sm:space-y-2">
+								<Label htmlFor="awg" className="text-sm sm:text-base">
+									AWG Strand Selection
+								</Label>
 								<Select
 									defaultValue={watch("awg")}
 									onValueChange={(value) => {
@@ -448,60 +473,70 @@ export default function N1MaxCalculatorForm() {
 										});
 									}}
 								>
-									<SelectTrigger>
+									<SelectTrigger className="text-sm sm:text-base">
 										<SelectValue placeholder="Select AWG" />
 									</SelectTrigger>
 									<SelectContent>
 										{awgOptions.map((awg) => (
-											<SelectItem key={awg} value={awg}>
+											<SelectItem
+												key={awg}
+												value={awg}
+												className="text-sm sm:text-base"
+											>
 												{awg} AWG
 											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
 								{errors.awg && (
-									<p className="text-sm text-red-500">{errors.awg.message}</p>
+									<p className="text-xs sm:text-sm text-red-500">
+										{errors.awg.message}
+									</p>
 								)}
 							</div>
 						</form>
 					</TooltipProvider>
 
 					{/* Right Column - Results */}
-					<div className="space-y-6">
+					<div className="space-y-4 sm:space-y-6">
 						{results.skinDepth > 0 && (
 							<>
 								{/* Results Card */}
 								<div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-									<div className="p-6">
-										<h3 className="mb-4 text-lg font-medium">
+									<div className="p-4 sm:p-6">
+										<h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-medium">
 											Results Analysis
 										</h3>
-										<div className="mb-6 rounded-lg bg-orange-50 p-4">
-											<p className="text-2xl font-bold text-orange-600">
+										<div className="mb-4 sm:mb-6 rounded-lg bg-orange-50 p-3 sm:p-4">
+											<p className="text-xl sm:text-2xl font-bold text-orange-600">
 												N1 Max: {results.n1Max}
 											</p>
-											<p className="mt-2 text-sm text-orange-700">
+											<p className="mt-1 sm:mt-2 text-xs sm:text-sm text-orange-700">
 												Maximum number of strands in the first-level bundle for
 												optimal performance at {formValues.frequency} Hz
 											</p>
 										</div>
 
 										{/* Add Construction Preview section */}
-										<div className="mb-6 rounded-lg bg-gray-50 p-4">
-											<h4 className="font-semibold text-gray-900 mb-2">
+										<div className="mb-4 sm:mb-6 rounded-lg bg-gray-50 p-3 sm:p-4">
+											<h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
 												Construction Preview
 											</h4>
 											<div className="space-y-2">
 												<div>
-													<p className="font-medium">Basic Bundle:</p>
-													<p className="text-sm text-gray-600">
+													<p className="font-medium text-xs sm:text-sm">
+														Basic Bundle:
+													</p>
+													<p className="text-xs sm:text-sm text-gray-600">
 														{results.n1Max}/{formValues.awg} AWG (
 														{results.n1Max} total strands)
 													</p>
 												</div>
 												<div>
-													<p className="font-medium">Common Configurations:</p>
-													<div className="text-sm text-gray-600 space-y-1">
+													<p className="font-medium text-xs sm:text-sm">
+														Common Configurations:
+													</p>
+													<div className="text-xs sm:text-sm text-gray-600 space-y-1">
 														<p>
 															5x{results.n1Max}/{formValues.awg} AWG (
 															{5 * results.n1Max} total strands)
@@ -513,14 +548,14 @@ export default function N1MaxCalculatorForm() {
 													</div>
 												</div>
 											</div>
-											<p className="mt-3 text-xs text-gray-500">
+											<p className="mt-2 sm:mt-3 text-xs text-gray-500">
 												These are common Litz wire configurations using the
 												calculated N1 max. Format is: (bundles per level)x(N1
 												max)/(AWG size)
 											</p>
 										</div>
 
-										<div className="space-y-4 text-sm text-muted-foreground">
+										<div className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-muted-foreground">
 											<div className="space-y-1">
 												<p className="font-semibold">
 													Skin Depth (δ): {results.skinDepth.toExponential(6)}{" "}

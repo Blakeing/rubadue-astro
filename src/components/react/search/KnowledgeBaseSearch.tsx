@@ -69,25 +69,25 @@ function PostCard({ post }: { post: Post }) {
 						</div>
 					)}
 				</CardHeader>
-				<CardContent className="p-6">
-					<h2 className="text-2xl font-bold leading-tight tracking-tighter mb-2 group-hover:text-primary transition-colors line-clamp-2">
+				<CardContent className="p-4 sm:p-6">
+					<h2 className="text-xl sm:text-2xl font-bold leading-tight tracking-tighter mb-2 group-hover:text-primary transition-colors line-clamp-2">
 						{post.data.title}
 					</h2>
-					<div className="flex flex-wrap gap-2 mb-2">
+					<div className="flex flex-wrap gap-1 sm:gap-2 mb-2">
 						{post.data.tags?.map((tag) => (
 							<span
 								key={tag}
-								className="text-xs px-2 py-1 rounded-full bg-muted"
+								className="text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-muted"
 							>
 								{tag}
 							</span>
 						))}
 					</div>
-					<p className="text-sm text-muted-foreground">
+					<p className="text-xs sm:text-sm text-muted-foreground">
 						{formatDate(post.data.pubDate)}
 					</p>
 					{post.data.description && (
-						<p className="text-muted-foreground mt-2 line-clamp-2">
+						<p className="text-sm text-muted-foreground mt-2 line-clamp-2">
 							{post.data.description}
 						</p>
 					)}
@@ -247,49 +247,48 @@ export default function KnowledgeBaseSearch({
 
 	return (
 		<div
-			className={cn("w-full space-y-6 min-h-[calc(100vh-452px)]", className)}
+			className={cn(
+				"w-full space-y-4 sm:space-y-6 min-h-[calc(100vh-452px)]",
+				className,
+			)}
 		>
 			<style>{searchInputStyles}</style>
-			<div className="space-y-4">
-				<div className="relative w-full max-w-2xl">
-					<div className="relative">
-						<Input
-							type="search"
-							placeholder="Search posts by title, description, or tags..."
-							value={searchQuery}
-							onChange={handleSearch}
-							className="pr-8"
-						/>
-						{isSearching && (
-							<div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-								<div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-							</div>
-						)}
-					</div>
+
+			{/* Search and filters */}
+			<div className="space-y-3 sm:space-y-4">
+				<div className="relative">
+					<Input
+						type="search"
+						placeholder="Search articles..."
+						value={searchQuery}
+						onChange={handleSearch}
+						className="w-full"
+					/>
 				</div>
 
+				{/* Tags */}
 				{allTags.length > 0 && (
-					<div className="space-y-2">
+					<div className="space-y-2 sm:space-y-3">
 						<div className="flex items-center justify-between">
-							<h3 className="text-sm font-medium">Filter by tags</h3>
+							<h3 className="text-sm font-medium">Filter by tag</h3>
 							{selectedTags.length > 0 && (
 								<button
 									type="button"
 									onClick={handleClearTags}
-									className="text-xs text-muted-foreground hover:text-primary transition-colors"
+									className="text-xs sm:text-sm text-primary hover:underline"
 								>
 									Clear all
 								</button>
 							)}
 						</div>
-						<div className="flex flex-wrap gap-2">
+						<div className="flex flex-wrap gap-1.5 sm:gap-2">
 							{allTags.map((tag) => (
 								<button
 									type="button"
 									key={tag}
 									onClick={() => handleTagClick(tag)}
 									className={cn(
-										"px-3 py-1 rounded-full text-sm transition-colors",
+										"text-xs px-2 py-0.5 sm:py-1 rounded-full transition-colors",
 										selectedTags.includes(tag)
 											? "bg-primary text-primary-foreground"
 											: "bg-muted hover:bg-muted/80",
@@ -302,89 +301,114 @@ export default function KnowledgeBaseSearch({
 					</div>
 				)}
 			</div>
-			<Separator />
-			<div className="grid gap-6 sm:grid-cols-2 min-h-[200px]">
-				{currentPosts.map((post) => (
-					<PostCard key={post.id} post={post} />
-				))}
 
-				{filteredPosts.length === 0 && (
-					<div className="col-span-2 flex items-center justify-center text-center text-muted-foreground py-8">
-						No posts found matching your search
-						{selectedTags.length > 0 && (
-							<>
-								{" "}
-								and tags{" "}
-								{selectedTags.map((tag, index) => (
-									<span key={tag}>
-										"{tag}"{index < selectedTags.length - 1 ? ", " : ""}
-									</span>
-								))}
-							</>
-						)}
-						.
-					</div>
-				)}
+			{/* Results count */}
+			<div className="flex items-center justify-between">
+				<p className="text-xs sm:text-sm text-muted-foreground">
+					{filteredPosts.length === 0
+						? "No articles found"
+						: filteredPosts.length === 1
+							? "1 article found"
+							: `${filteredPosts.length} articles found`}
+				</p>
 			</div>
 
+			{/* Results */}
+			{currentPosts.length > 0 ? (
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+					{currentPosts.map((post) => (
+						<PostCard key={post.id} post={post} />
+					))}
+				</div>
+			) : (
+				<div className="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
+					<h3 className="text-lg sm:text-xl font-semibold mb-2">
+						No articles found
+					</h3>
+					<p className="text-sm text-muted-foreground max-w-md">
+						Try adjusting your search or filter criteria to find what you're
+						looking for.
+					</p>
+				</div>
+			)}
+
+			{/* Pagination */}
 			{totalPages > 1 && (
-				<Pagination>
+				<Pagination className="mt-6 sm:mt-8">
 					<PaginationContent>
 						<PaginationItem>
 							<PaginationPrevious
-								href="#"
-								onClick={(e) => {
-									e.preventDefault();
-									if (currentPage > 1) handlePageChange(currentPage - 1);
-								}}
+								onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
 								className={cn(
 									currentPage === 1 && "pointer-events-none opacity-50",
 								)}
 							/>
 						</PaginationItem>
 
-						{[...Array(totalPages)].map((_, i) => {
-							const page = i + 1;
-							// Show first page, last page, current page, and pages around current page
-							if (
-								page === 1 ||
-								page === totalPages ||
-								(page >= currentPage - 1 && page <= currentPage + 1)
-							) {
-								return (
-									<PaginationItem key={page}>
-										<PaginationLink
-											href="#"
-											onClick={(e) => {
-												e.preventDefault();
-												handlePageChange(page);
-											}}
-											isActive={currentPage === page}
-										>
-											{page}
-										</PaginationLink>
-									</PaginationItem>
-								);
-							}
-							// Show ellipsis for skipped pages
-							if (page === currentPage - 2 || page === currentPage + 2) {
-								return (
-									<PaginationItem key={page}>
-										<PaginationEllipsis />
-									</PaginationItem>
-								);
-							}
-							return null;
-						})}
+						{/* First page */}
+						{currentPage > 3 && (
+							<PaginationItem>
+								<PaginationLink onClick={() => handlePageChange(1)}>
+									1
+								</PaginationLink>
+							</PaginationItem>
+						)}
+
+						{/* Ellipsis if needed */}
+						{currentPage > 4 && (
+							<PaginationItem>
+								<PaginationEllipsis />
+							</PaginationItem>
+						)}
+
+						{/* Page before current */}
+						{currentPage > 1 && (
+							<PaginationItem>
+								<PaginationLink
+									onClick={() => handlePageChange(currentPage - 1)}
+								>
+									{currentPage - 1}
+								</PaginationLink>
+							</PaginationItem>
+						)}
+
+						{/* Current page */}
+						<PaginationItem>
+							<PaginationLink isActive>{currentPage}</PaginationLink>
+						</PaginationItem>
+
+						{/* Page after current */}
+						{currentPage < totalPages && (
+							<PaginationItem>
+								<PaginationLink
+									onClick={() => handlePageChange(currentPage + 1)}
+								>
+									{currentPage + 1}
+								</PaginationLink>
+							</PaginationItem>
+						)}
+
+						{/* Ellipsis if needed */}
+						{currentPage < totalPages - 3 && (
+							<PaginationItem>
+								<PaginationEllipsis />
+							</PaginationItem>
+						)}
+
+						{/* Last page */}
+						{currentPage < totalPages - 2 && (
+							<PaginationItem>
+								<PaginationLink onClick={() => handlePageChange(totalPages)}>
+									{totalPages}
+								</PaginationLink>
+							</PaginationItem>
+						)}
 
 						<PaginationItem>
 							<PaginationNext
-								href="#"
-								onClick={(e) => {
-									e.preventDefault();
-									if (currentPage < totalPages)
-										handlePageChange(currentPage + 1);
-								}}
+								onClick={() =>
+									handlePageChange(Math.min(totalPages, currentPage + 1))
+								}
 								className={cn(
 									currentPage === totalPages &&
 										"pointer-events-none opacity-50",

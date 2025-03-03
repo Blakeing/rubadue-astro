@@ -76,33 +76,27 @@ export default function CableSection() {
 	const [activeFeature, setActiveFeature] = useState(0);
 
 	return (
-		<div className="overflow-hidden py-24 sm:py-32">
-			<div className="mx-auto max-w-7xl md:px-6 lg:px-8">
-				<div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
-					<div className="px-6 lg:px-0 ">
+		<div className="overflow-hidden py-8 sm:py-12 md:py-16 lg:py-24">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2 lg:items-start">
+					<div className="px-4 sm:px-6 lg:px-8">
 						<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-							<h2 className="text-xl font-display text-accent-foreground">
+							<h2 className="text-base sm:text-lg font-display text-accent-foreground">
 								Wire <span className="text-primary">Types</span>
 							</h2>
-							<p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+							<p className="mt-4 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
 								Cables to Meet Your Needs
 							</p>
-							<p className="mt-6 text-lg text-muted-foreground">
+							<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
 								All cable components can be adapted to meet your requirements.
-								<a
-									href="/contact"
-									className="text-primary hover:text-primary/80 ml-1"
-								>
-									Contact&nbsp;
-								</a>
-								our engineering department to explore your options.
 							</p>
-							<dl className="mt-10 max-w-xl space-y-8 text-base text-muted-foreground lg:max-w-none">
+							<dl className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-sm sm:text-base text-muted-foreground lg:max-w-none">
 								{features.map((feature, index) => (
 									<motion.div
 										key={feature.name}
 										className="relative cursor-pointer select-none"
 										onHoverStart={() => setActiveFeature(index)}
+										onClick={() => setActiveFeature(index)}
 										animate={{
 											color:
 												activeFeature === index
@@ -120,14 +114,14 @@ export default function CableSection() {
 							</dl>
 						</div>
 					</div>
-					<div className="sm:px-6 lg:px-0">
-						<div className="relative isolate overflow-hidden bg-muted/05 px-6  sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0  lg:mx-0 lg:max-w-none">
+					<div className="mt-4 sm:mt-6 lg:mt-0">
+						<div className="relative isolate overflow-hidden bg-muted/05 px-4 sm:px-6 lg:px-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl lg:mx-0 lg:max-w-none">
 							<div
 								className="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-49deg] bg-muted opacity-20 ring-1 ring-inset ring-ring"
 								aria-hidden="true"
 							/>
 							<div className="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
-								<div className="relative w-[48rem] aspect-square sm:w-[33rem]">
+								<div className="relative w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[450px] sm:w-[33rem]">
 									<AnimatePresence mode="popLayout">
 										<motion.div
 											key={activeFeature}

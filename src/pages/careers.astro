@@ -17,27 +17,27 @@ const { text, description } = Astro.props;
   eyebrow="Careers"
   headerTitle="Join our Team"
 >
-  <div class="pt-24 space-y-24">
+  <div class="pt-12 sm:pt-24 space-y-16 sm:space-y-24">
     <!-- Compensation Section -->
     <div class="">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
           <h2 class="text-base/7 font-semibold text-primary font-display">
             Compensation
           </h2>
           <p
-            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+            class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
           >
             Competitive Pay & Performance Rewards
           </p>
-          <p class="mt-6 text-lg/8 text-muted-foreground">
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
             We offer competitive compensation packages designed to recognize and
             reward your contributions to our success.
           </p>
         </div>
-        <Card className="mt-16 p-8">
+        <Card className="mt-8 sm:mt-16 p-4 sm:p-8">
           <dl
-            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
           >
             {
               [
@@ -74,25 +74,25 @@ const { text, description } = Astro.props;
     </div>
 
     <!-- Benefits Section -->
-    <div class="bg-accent py-24 border-y border">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="bg-accent py-16 sm:py-24 border-y border">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
           <h2 class="text-base/7 font-semibold text-primary font-display">
             Benefits
           </h2>
           <p
-            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+            class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
           >
             Comprehensive Healthcare & Financial Benefits
           </p>
-          <p class="mt-6 text-lg/8 text-muted-foreground">
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
             We provide a comprehensive benefits package to support your health,
             well-being, and financial future.
           </p>
         </div>
-        <Card className="mt-16 p-8 bg-background">
+        <Card className="mt-8 sm:mt-16 p-4 sm:p-8 bg-background">
           <dl
-            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
           >
             {
               [
@@ -133,24 +133,24 @@ const { text, description } = Astro.props;
 
     <!-- Work Life & Development Section -->
     <div class="">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
           <h2 class="text-base/7 font-semibold text-primary font-display">
             Work Life & Development
           </h2>
           <p
-            class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+            class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
           >
             Balance & Growth Opportunities
           </p>
-          <p class="mt-6 text-lg/8 text-muted-foreground">
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
             We believe in supporting both your professional growth and personal
             well-being.
           </p>
         </div>
-        <Card className="mt-16 p-8">
+        <Card className="mt-8 sm:mt-16 p-4 sm:p-8">
           <dl
-            class="mx-auto grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
+            class="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 text-base/7 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16"
           >
             {
               [
@@ -199,26 +199,28 @@ const { text, description } = Astro.props;
     </div>
 
     <!-- Call to Action -->
-    <div class="bg-accent border-t border py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <Card className="p-12">
+    <div class="bg-accent border-t border py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Card className="p-6 sm:p-12">
           <div class="mx-auto max-w-2xl text-center">
             <h2 class="text-base/7 font-semibold text-primary font-display">
               Ready to Join?
             </h2>
             <p
-              class="mt-2 text-pretty text-3xl font-semibold tracking-tight text-foreground"
+              class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
             >
               Start Your Journey With Us
             </p>
-            <p class="mt-6 text-lg/8 text-muted-foreground">
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+            >
               We're always looking for talented individuals to join our team.
               Get in touch to learn more about our current opportunities.
             </p>
-            <div class="mt-10">
+            <div class="mt-8 sm:mt-10">
               <a
                 href="/contact"
-                class="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                class="inline-flex items-center justify-center rounded-md bg-primary px-4 sm:px-6 py-2 sm:py-3 text-base font-medium text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 Contact Us About Opportunities
               </a>

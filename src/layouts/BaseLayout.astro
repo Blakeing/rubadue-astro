@@ -39,18 +39,19 @@ const segments = Astro.url.pathname
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <BaseHead title={title} description={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
-  <body class="min-h-screen bg-background">
+  <body class="min-h-screen bg-background font-sans antialiased">
     <Header client:load />
     {
       eyebrow && headerTitle && (
         <BaseHeader eyebrow={eyebrow} title={headerTitle} />
       )
     }
-    <main class="">
+    <main>
       <Breadcrumbs segments={segments} />
       <slot />
     </main>

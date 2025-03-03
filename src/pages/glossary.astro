@@ -1,21 +1,12 @@
 ---
-import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import { Header } from "@/components/react/Header";
-import Footer from "@/components/astro/layout/Footer.astro";
-import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import { Input } from "@/components/react/ui/input";
-import { Button } from "@/components/react/ui/button";
-import { Search } from "lucide-react";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import { GlossaryComponent } from "@/components/react/Glossary";
 
-const title = "Glossary";
+const title = "Wire Glossary | Rubadue Wire";
 const description =
-  "Comprehensive glossary of wire and cable industry terms and definitions.";
+  "Explore our comprehensive wire glossary to understand technical terms and concepts in the wire and cable industry.";
 
-// Build breadcrumb segments
-const segments = [{ name: "Glossary", href: "/glossary" }];
-
-// Organize terms alphabetically
+// Organize terms alphabetically in the format expected by GlossaryComponent
 const glossaryTerms = {
   A: [
     {
@@ -784,34 +775,27 @@ const glossaryTerms = {
     },
   ],
 };
-
-// Calculate total terms for pagination
-const ITEMS_PER_PAGE = 20;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-    <style>
-      .glossary-section {
-        margin-top: 3rem;
-      }
-      .first-visible-section {
-        margin-top: 0 !important;
-      }
-    </style>
-  </head>
-  <body class="min-h-screen bg-background">
-    <Header client:load />
-    <BaseHeader eyebrow="Resources" title="Glossary" />
-    <main>
-      <div
-        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 min-h-[calc(100vh-452px)]"
-      >
-        <GlossaryComponent client:load glossaryTerms={glossaryTerms} />
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>
+<BaseLayout
+  title={title}
+  description={description}
+  category="Resources"
+  eyebrow="Resources"
+  headerTitle="Wire Glossary"
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+    <div class="mb-6 sm:mb-8 md:mb-12">
+      <p class="text-sm sm:text-base text-muted-foreground">
+        Welcome to our comprehensive wire glossary. This resource is designed to
+        help you understand the technical terminology used in the wire and cable
+        industry. Whether you're a seasoned professional or new to the field,
+        our glossary provides clear definitions for common terms.
+      </p>
+    </div>
+
+    <div class="space-y-6 sm:space-y-8">
+      <GlossaryComponent client:load glossaryTerms={glossaryTerms} />
+    </div>
+  </main>
+</BaseLayout>

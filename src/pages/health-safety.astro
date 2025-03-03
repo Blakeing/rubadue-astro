@@ -21,9 +21,9 @@ const segments = [
   eyebrow="Resources"
   headerTitle="Health & Safety"
 >
-  <main class="max-w-7xl mx-auto px-6 py-12">
-    <div class="space-y-12">
-      <section class="space-y-6">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div class="space-y-8 sm:space-y-12">
+      <section class="space-y-4 sm:space-y-6">
         <p class="text-muted-foreground leading-7">
           Rubadue Wire is committed to protecting our employees, customers, and
           our environment. Safety is our first priority. The foundation of our
@@ -33,26 +33,32 @@ const segments = [
           training, communication and procedures we ensure that safety is part
           of our culture.
         </p>
-        <div class="rounded-lg border bg-card p-6">
-          <h3 class="font-medium mb-4">Certifications</h3>
+        <div class="rounded-lg border bg-card p-4 sm:p-6">
+          <h3 class="font-medium mb-3 sm:mb-4">Certifications</h3>
           <ul class="space-y-2 text-sm">
-            <li class="flex items-center">
-              <span class="h-1 w-1 rounded-full bg-foreground mr-2"></span>
-              Rubadue Wire Co., Inc. UL AWM File&nbsp;<a
-                href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=AVLV2.E78621&ccnshorttitle=Appliance+Wiring+Material+-+Component&objid=1073746000&cfgid=1073741824&version=versionless&parent_id=1073744548&sequence=1"
-                target="_blank"
-                rel="noreferrer noopener"
-                class="font-medium text-primary hover:underline">E78621</a
+            <li class="flex items-start sm:items-center">
+              <span class="h-1 w-1 rounded-full bg-foreground mr-2 mt-2 sm:mt-0"
+              ></span>
+              <span
+                >Rubadue Wire Co., Inc. UL AWM File&nbsp;<a
+                  href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=AVLV2.E78621&ccnshorttitle=Appliance+Wiring+Material+-+Component&objid=1073746000&cfgid=1073741824&version=versionless&parent_id=1073744548&sequence=1"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  class="font-medium text-primary hover:underline">E78621</a
+                ></span
               >
             </li>
-            <li class="flex items-center">
-              <span class="h-1 w-1 rounded-full bg-foreground mr-2"></span>
-              Rubadue Wire Co., Inc. Single – Multi-layer Insulated Winding Wire
-              File&nbsp;<a
-                href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=OBJT2.E206198&ccnshorttitle=Single-+and+Multi-layer+Insulated+Winding+Wire+-+Component&objid=1074594062&cfgid=1073741824&version=versionless&parent_id=1074436127&sequence=1"
-                target="_blank"
-                rel="noreferrer noopener"
-                class="font-medium text-primary hover:underline">E206198</a
+            <li class="flex items-start sm:items-center">
+              <span class="h-1 w-1 rounded-full bg-foreground mr-2 mt-2 sm:mt-0"
+              ></span>
+              <span
+                >Rubadue Wire Co., Inc. Single – Multi-layer Insulated Winding
+                Wire File&nbsp;<a
+                  href="http://database.ul.com/cgi-bin/XYV/template/LISEXT/1FRAME/showpage.html?name=OBJT2.E206198&ccnshorttitle=Single-+and+Multi-layer+Insulated+Winding+Wire+-+Component&objid=1074594062&cfgid=1073741824&version=versionless&parent_id=1074436127&sequence=1"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  class="font-medium text-primary hover:underline">E206198</a
+                ></span
               >
             </li>
           </ul>
@@ -61,16 +67,16 @@ const segments = [
 
       <div class="h-px bg-border"></div>
 
-      <section class="space-y-6">
-        <h2 class="text-2xl font-semibold tracking-tight">
+      <section class="space-y-4 sm:space-y-6">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight">
           Rubadue Wire VDE Certificates
         </h2>
-        <ul class="grid sm:grid-cols-4 gap-4">
+        <ul class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <li>
             <a
               target="_blank"
               href="/src/assets/vde-certificates/vde-certificate-fep.pdf"
-              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+              class="group flex items-center justify-between p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <span class="text-sm font-medium">FEP Series</span>
               <svg
@@ -93,7 +99,7 @@ const segments = [
             <a
               target="_blank"
               href="/src/assets/vde-certificates/vde-certificate-etfe.pdf"
-              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+              class="group flex items-center justify-between p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <span class="text-sm font-medium">ETFE Series</span>
               <svg
@@ -116,7 +122,7 @@ const segments = [
             <a
               target="_blank"
               href="/src/assets/vde-certificates/vde-certficate-pfa.pdf"
-              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+              class="group flex items-center justify-between p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <span class="text-sm font-medium">PFA Series</span>
               <svg
@@ -139,7 +145,7 @@ const segments = [
             <a
               target="_blank"
               href="/src/assets/vde-certificates/vde-certificate-tca.pdf"
-              class="group flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
+              class="group flex items-center justify-between p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <span class="text-sm font-medium">TCA Series</span>
               <svg
@@ -163,11 +169,11 @@ const segments = [
 
       <div class="h-px bg-border"></div>
 
-      <section class="space-y-6">
-        <h2 class="text-2xl font-semibold tracking-tight">
+      <section class="space-y-4 sm:space-y-6">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight">
           Environmental Compliance
         </h2>
-        <div class="space-y-8">
+        <div class="space-y-6 sm:space-y-8">
           <p class="text-muted-foreground leading-7">
             Rubadue Wire Co., Inc. and its employees are committed to the use of
             environmentally friendly products and processes. As a result of this
@@ -179,9 +185,11 @@ const segments = [
             certification to ISO 14001 environmental standards.
           </p>
 
-          <div class="rounded-lg border bg-card/50 p-8 space-y-4">
-            <h3 class="text-xl font-semibold tracking-tight">
-              RoHS - <span class="text-lg text-muted-foreground font-normal">
+          <div class="rounded-lg border bg-card/50 p-4 sm:p-8 space-y-4">
+            <h3 class="text-lg sm:text-xl font-semibold tracking-tight">
+              RoHS - <span
+                class="text-base sm:text-lg text-muted-foreground font-normal"
+              >
                 Restriction of Certain Hazardous Substances Directive</span
               >
             </h3>
@@ -222,14 +230,15 @@ const segments = [
             </div>
           </div>
 
-          <div class="rounded-lg border bg-card/50 p-8 space-y-4">
-            <h3 class="text-xl font-semibold tracking-tight">
-              REACH - <span class="text-lg text-muted-foreground font-normal"
+          <div class="rounded-lg border bg-card/50 p-4 sm:p-8 space-y-4">
+            <h3 class="text-lg sm:text-xl font-semibold tracking-tight">
+              REACH - <span
+                class="text-base sm:text-lg text-muted-foreground font-normal"
                 >Registration, Evaluation, and Authorization of Chemicals</span
               >
             </h3>
 
-            <div class="space-y-6">
+            <div class="space-y-4 sm:space-y-6">
               <div class="space-y-4">
                 <p class="text-muted-foreground leading-7">
                   Registration, Evaluation, and Authorization of Chemicals
@@ -248,18 +257,20 @@ const segments = [
                 </p>
               </div>
 
-              <div class="rounded-lg bg-muted/50 p-6 space-y-4">
+              <div class="rounded-lg bg-muted/50 p-4 sm:p-6 space-y-4">
                 <p class="text-muted-foreground leading-7">
                   Rubadue Wire Co., Inc. is a producer of "articles" and
                   therefore must rely on suppliers for pre-registration. When a
                   new list of SVHC is released, Rubadue Wire Co., Inc. takes due
                   diligence with its supply chain to determine compliance.
                 </p>
-                <div class="flex items-center gap-4">
+                <div
+                  class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4"
+                >
                   <a
                     target="_blank"
                     href="/src/assets/reach-statement.pdf"
-                    class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -280,7 +291,7 @@ const segments = [
                   </a>
                   <a
                     href="/contact"
-                    class="inline-flex items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
                     Contact Us About REACH SVHC
                   </a>

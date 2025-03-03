@@ -11,7 +11,7 @@ import {
 // Icons for each expertise area
 const PartnershipIcon = () => (
 	<svg
-		className="w-16 h-16 text-primary/30"
+		className="w-12 h-12 sm:w-16 sm:h-16 text-primary/30"
 		viewBox="0 0 24 24"
 		fill="currentColor"
 		aria-hidden="true"
@@ -24,7 +24,7 @@ const PartnershipIcon = () => (
 
 const EngineeringIcon = () => (
 	<svg
-		className="w-16 h-16 text-primary/30"
+		className="w-12 h-12 sm:w-16 sm:h-16 text-primary/30"
 		viewBox="0 0 24 24"
 		fill="currentColor"
 		aria-hidden="true"
@@ -41,7 +41,7 @@ const EngineeringIcon = () => (
 
 const QualityIcon = () => (
 	<svg
-		className="w-16 h-16 text-primary/30"
+		className="w-12 h-12 sm:w-16 sm:h-16 text-primary/30"
 		viewBox="0 0 24 24"
 		fill="currentColor"
 		aria-hidden="true"
@@ -83,37 +83,36 @@ const qualityItems = [
 
 export default function CoreExpertise() {
 	return (
-		<section className="py-16 sm:py-24 bg-foreground/95">
+		<section className="py-12 sm:py-16 md:py-24 bg-foreground/95">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl lg:mx-0">
 					<h2 className="text-xl font-display text-muted">
 						Core <span className="text-primary">Expertise</span>
 					</h2>
-					<p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-background sm:text-5xl">
+					<p className="mt-2 text-pretty text-3xl font-semibold tracking-tight text-background sm:text-4xl lg:text-5xl">
 						Customer Success
 					</p>
-					{/* <p className="mt-6 text-lg/8 text-gray-300">
-						We create value by focusing on our key pillars:
-					</p> */}
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mt-12">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12 mt-8 sm:mt-12">
 					{/* Service through Partnership */}
-					<Card className="">
+					<Card className="h-full">
 						<CardHeader className="flex flex-row items-center gap-4">
-							<CardTitle className="text-xl">
+							<CardTitle className="text-lg sm:text-xl">
 								<span className="text-primary">Partnership</span>
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<ul className="space-y-3">
+							<ul className="space-y-2 sm:space-y-3">
 								{partnershipItems.map((item) => (
 									<li
 										key={`partnership-${item.substring(0, 20)}`}
 										className="flex items-start"
 									>
 										<span className="text-primary mr-2">•</span>
-										<span className="text-muted-foreground">{item}</span>
+										<span className="text-muted-foreground text-sm sm:text-base">
+											{item}
+										</span>
 									</li>
 								))}
 							</ul>
@@ -121,21 +120,23 @@ export default function CoreExpertise() {
 					</Card>
 
 					{/* Provide Proven Engineering Support */}
-					<Card className="">
+					<Card className="h-full">
 						<CardHeader className="flex flex-row items-center gap-4">
-							<CardTitle className="text-xl">
+							<CardTitle className="text-lg sm:text-xl">
 								<span className="text-primary">Engineering Support</span>
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<ul className="space-y-3">
+							<ul className="space-y-2 sm:space-y-3">
 								{engineeringItems.map((item) => (
 									<li
 										key={`engineering-${item.substring(0, 20)}`}
 										className="flex items-start"
 									>
 										<span className="text-primary mr-2">•</span>
-										<span className="text-muted-foreground">{item}</span>
+										<span className="text-muted-foreground text-sm sm:text-base">
+											{item}
+										</span>
 									</li>
 								))}
 							</ul>
@@ -143,21 +144,23 @@ export default function CoreExpertise() {
 					</Card>
 
 					{/* Continuing to Produce the Highest Quality Product */}
-					<Card className="">
+					<Card className="h-full sm:col-span-2 lg:col-span-1">
 						<CardHeader className="flex flex-row items-center gap-4">
-							<CardTitle className="text-xl">
+							<CardTitle className="text-lg sm:text-xl">
 								<span className="text-primary">Highest Quality Product</span>
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<ul className="space-y-3">
+							<ul className="space-y-2 sm:space-y-3">
 								{qualityItems.map((item) => (
 									<li
 										key={`quality-${item.substring(0, 20)}`}
 										className="flex items-start"
 									>
 										<span className="text-primary mr-2">•</span>
-										<span className="text-muted-foreground">{item}</span>
+										<span className="text-muted-foreground text-sm sm:text-base">
+											{item}
+										</span>
 									</li>
 								))}
 							</ul>

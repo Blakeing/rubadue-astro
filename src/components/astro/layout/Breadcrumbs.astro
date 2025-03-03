@@ -12,13 +12,13 @@ const { segments } = Astro.props;
 <nav class="flex bg-foreground shadow-sm z-10" aria-label="Breadcrumb">
   <ol
     role="list"
-    class="flex items-center mx-auto max-w-7xl px-2 w-full sm:px-6 lg:px-8 py-2 space-x-4"
+    class="flex items-center mx-auto max-w-7xl px-4 w-full sm:px-6 lg:px-8 py-2 space-x-2 sm:space-x-4 overflow-x-auto"
   >
-    <li>
+    <li class="flex-shrink-0">
       <div>
         <a href="/" class="text-muted hover:text-background">
           <svg
-            class="h-5 w-5 flex-shrink-0"
+            class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0"
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -34,10 +34,10 @@ const { segments } = Astro.props;
     </li>
     {
       segments.map((segment, index) => (
-        <li>
+        <li class="flex-shrink-0">
           <div class="flex items-center">
             <svg
-              class="h-5 w-5 flex-shrink-0 text-muted"
+              class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-muted"
               viewBox="0 0 20 20"
               fill="currentColor"
               aria-hidden="true"
@@ -50,7 +50,7 @@ const { segments } = Astro.props;
             </svg>
             <a
               href={segment.href}
-              class={`ml-4 text-sm font-medium ${
+              class={`ml-2 sm:ml-4 text-xs sm:text-sm font-medium truncate ${
                 index === segments.length - 1
                   ? "text-background"
                   : "text-muted hover:text-background"

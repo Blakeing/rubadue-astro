@@ -332,20 +332,20 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 				<div
 					ref={productImageRef}
 					id="product-image"
-					className="lg:col-span-4 lg:row-end-1 "
+					className="lg:col-span-4 lg:row-end-1"
 				>
 					{typeof product.imageSrc === "string" ? (
 						<img
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							className="aspect-[4/3] w-full rounded-lg  bg-accent object-contain shadow-2xl"
+							className="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-lg sm:shadow-2xl"
 							onLoad={updateDetailsHeight}
 						/>
 					) : (
 						<Image
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							class="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-2xl"
+							class="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-lg sm:shadow-2xl"
 							width={1600}
 							height={900}
 							format="webp"
@@ -358,12 +358,12 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 				<div
 					ref={productDetailsRef}
 					id="product-details"
-					className="mx-auto mt-8 sm:mt-10 lg:mt-0 max-w-2xl lg:col-span-5 lg:row-span-2 lg:row-end-2 lg:max-w-none w-full"
+					className="mx-auto mt-6 sm:mt-8 lg:mt-0 max-w-2xl lg:col-span-5 lg:row-span-2 lg:row-end-2 lg:max-w-none w-full"
 				>
-					<h2 className="text-xl  font-bold tracking-tight text-foreground sm:text-3xl mb-4 lg:mb-6">
+					<h2 className="text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
 						Product Information
 					</h2>
-					<ScrollArea className="px-4 lg:px-6 py-2 border-0 lg:border rounded-lg">
+					<ScrollArea className="px-4 sm:px-6 lg:px-8 py-4 border-0 lg:border rounded-lg">
 						<div className="pb-4">
 							<Accordion
 								type="multiple"
@@ -379,7 +379,9 @@ export default function ProductPage({ product, license }: ProductPageProps) {
 												"data-[state=open]:border-b-0",
 										)}
 									>
-										<AccordionTrigger>{section.title}</AccordionTrigger>
+										<AccordionTrigger className="text-sm sm:text-base">
+											{section.title}
+										</AccordionTrigger>
 										<AccordionContent>{section.content}</AccordionContent>
 									</AccordionItem>
 								))}
