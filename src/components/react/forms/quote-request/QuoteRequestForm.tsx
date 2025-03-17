@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
 import { Alert, AlertDescription, Button, Form } from "@/components/react/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import type { FormValues, QuoteRequestFormProps } from "./types";
-import { formSchema } from "./types";
-import { PersonalInformation } from "./PersonalInformation";
+import { useForm } from "react-hook-form";
 import { CompanyAddress } from "./CompanyAddress";
 import { JobInformation } from "./JobInformation";
+import { PersonalInformation } from "./PersonalInformation";
+import type { FormValues, QuoteRequestFormProps } from "./types";
+import { formSchema } from "./types";
 
 import { Loader2 } from "lucide-react";
 
@@ -21,6 +21,7 @@ export function QuoteRequestForm({
 	onError,
 	className,
 }: QuoteRequestFormProps) {
+	console.log("QuoteRequestForm rendered");
 	const { toast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,52 +48,67 @@ export function QuoteRequestForm({
 			message: initialValues?.message || "",
 		},
 		mode: "onSubmit",
+		reValidateMode: "onSubmit",
 	});
 
-	const handleSubmit = form.handleSubmit(async (data) => {
-		setIsSubmitting(true);
+	const handleSubmit = form.handleSubmit(
+		async (data) => {
+			if (isSubmitting) return;
+			console.log("Form submitted with data:", data);
+			setIsSubmitting(true);
 
-		try {
-			const response = await fetch("/api/quote-request", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(data),
-			});
+			try {
+				console.log("Making API request...");
+				const response = await fetch("/api/quote-request", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				});
 
-			const responseData = await response.json();
+				const responseData = await response.json();
+				console.log("API response:", responseData);
 
-			if (!response.ok) {
-				throw new Error(responseData.error || "Failed to submit quote request");
+				if (!response.ok) {
+					throw new Error(
+						responseData.error || "Failed to submit quote request",
+					);
+				}
+
+				// Show success message
+				toast({
+					title: "Quote Request Submitted",
+					description: "Thank you for your request. We'll be in touch soon.",
+				});
+
+				// Reset form
+				form.reset();
+
+				// Call onSuccess callback if provided
+				await onSuccess?.(data);
+			} catch (error) {
+				console.error("Error submitting quote request:", error);
+				toast({
+					title: "Error",
+					description:
+						error instanceof Error
+							? error.message
+							: "There was a problem submitting your request. Please try again.",
+				});
+				onError?.(error);
+			} finally {
+				setIsSubmitting(false);
 			}
-
-			// Show success message
+		},
+		(errors) => {
+			console.log("Form validation errors:", errors);
 			toast({
-				title: "Quote Request Submitted",
-				description: "Thank you for your request. We'll be in touch soon.",
-			});
-
-			// Reset form
-			form.reset();
-
-			// Call onSuccess callback if provided
-			await onSuccess?.(data);
-		} catch (error) {
-			console.error("Error submitting quote request:", error);
-			toast({
-				variant: "destructive",
 				title: "Error",
-				description:
-					error instanceof Error
-						? error.message
-						: "There was a problem submitting your request. Please try again.",
+				description: "Please fill in all required fields correctly.",
 			});
-			onError?.(error);
-		} finally {
-			setIsSubmitting(false);
-		}
-	});
+		},
+	);
 
 	return (
 		<Form {...form}>

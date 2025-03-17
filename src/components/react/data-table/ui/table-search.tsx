@@ -1,8 +1,8 @@
-import * as React from "react";
 import { Button, Input } from "@/components/react/ui";
+import * as React from "react";
 
-import { Search, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Loader2, Search, X } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
 const searchInputStyles = `

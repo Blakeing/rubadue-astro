@@ -1,8 +1,30 @@
 "use client";
 
+import {
+	Button,
+	Checkbox,
+	Input,
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+	ScrollArea,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/react/ui";
+import { ChevronLeft, ChevronRight, Search, Star } from "lucide-react";
 import { useState } from "react";
-import { Button, Checkbox, Input, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, ScrollArea, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/react/ui";
-import { Star, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 const sortOptions = [
 	{ name: "Most Popular", value: "popular" },

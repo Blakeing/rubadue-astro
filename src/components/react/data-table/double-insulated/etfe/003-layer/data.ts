@@ -1,10 +1,10 @@
-import type { WireData } from "./types";
+import type { WireData } from "@/components/react/data-table/types/wire-data";
 
 export const wireData: WireData[] = [
 	{
 		partNumber: "D10A37TXX-3",
 		awg: 10,
-		conductor: { inches: 0.107, mm: 2.718 },
+		conductor: { inches: 0.107, mm: Math.E },
 		nominalOD: { inches: 0.119, mm: 3.023 },
 		weightLbFt: 30.45,
 	},

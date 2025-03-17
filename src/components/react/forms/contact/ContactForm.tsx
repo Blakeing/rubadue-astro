@@ -1,12 +1,23 @@
-import { useForm } from "react-hook-form";
-import { Button, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Textarea } from "@/components/react/ui";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	Button,
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Input,
+	Textarea,
+} from "@/components/react/ui";
 import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { type FormValues, type ContactFormProps, formSchema } from "./types";
+import { type ContactFormProps, type FormValues, formSchema } from "./types";
 
 export function ContactForm({
 	onSuccess,

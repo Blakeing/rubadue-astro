@@ -1,5 +1,5 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/react/ui";
+import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 import type { TripleInsulatedLitzSpec } from "./data";

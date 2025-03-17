@@ -1,13 +1,39 @@
 import type {
+	Cell,
 	ColumnDef,
 	Header,
-	Cell,
+	HeaderGroup,
+	PaginationState,
 	Row,
 	SortingState,
-	PaginationState,
-	HeaderGroup,
 } from "@tanstack/react-table";
 import type { ReactNode } from "react";
+
+/**
+ * Base interface for wire data
+ */
+export interface WireData {
+	/** The part number of the wire */
+	partNumber: string;
+	/** The AWG (American Wire Gauge) size */
+	awg: string | number;
+	/** The conductor dimensions */
+	conductor: {
+		/** Conductor diameter in inches */
+		inches: string | number;
+		/** Conductor diameter in millimeters */
+		mm: string | number;
+	};
+	/** The nominal outer diameter */
+	nominalOD: {
+		/** Outer diameter in inches */
+		inches: string | number;
+		/** Outer diameter in millimeters */
+		mm: string | number;
+	};
+	/** Weight in pounds per thousand feet */
+	weightLbKft: string | number;
+}
 
 /**
  * Data structure for tab configuration

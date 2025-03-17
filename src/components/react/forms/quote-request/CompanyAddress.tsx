@@ -1,6 +1,11 @@
-import type { FormValues } from "./types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/react/ui";
 import { InputField, SelectField } from "@/components/react/shared/FormFields";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@/components/react/ui";
+import type { FormValues } from "./types";
 import { countries } from "./types";
 
 import { useFormContext } from "react-hook-form";

@@ -1,6 +1,6 @@
-import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { BaseTable } from "./utils/base-table";
+import * as React from "react";
+import { BaseTable } from "./base-table";
 
 interface DataTableProps<TData extends object> {
 	data: TData[];

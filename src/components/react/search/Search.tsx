@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import type { SearchProps } from "./utils/types";
 import { PostCard } from "./components/PostCard";
 import { SearchInput } from "./components/SearchInput";
-import { TagList } from "./components/TagList";
 import { SearchPagination } from "./components/SearchPagination";
+import { TagList } from "./components/TagList";
 import { useSearch } from "./hooks/useSearch";
+import type { SearchProps } from "./utils/types";
 
 export function Search({ posts, className }: SearchProps) {
 	const {

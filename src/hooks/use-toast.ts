@@ -1,14 +1,14 @@
 "use client";
 
-// Inspired by react-hot-toast library
-import * as React from "react";
 import type {
-	ToasterToast,
-	ToastState,
 	ToastAction,
 	ToastActionType,
+	ToastState,
+	ToasterToast,
 } from "@/types/hooks";
 import { TOAST_ACTIONS } from "@/types/hooks";
+// Inspired by react-hot-toast library
+import * as React from "react";
 
 /**
  * Maximum number of toasts to show at once

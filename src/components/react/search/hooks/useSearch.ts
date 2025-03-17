@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo, useRef } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import type { Post } from "@/utils/types";
 import { POSTS_PER_PAGE } from "@/utils/types";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface UseSearchProps {
 	/** Array of posts to search through */

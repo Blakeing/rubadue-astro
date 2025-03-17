@@ -1,5 +1,5 @@
-import { escapeHtml, wrapEmailTemplate } from "./email-utils";
 import type { ContactFormData } from "@/types/forms";
+import { escapeHtml, wrapEmailTemplate } from "./email-utils";
 
 export type { ContactFormData };
 

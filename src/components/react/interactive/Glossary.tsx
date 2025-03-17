@@ -1,8 +1,15 @@
-import { useState, useEffect, useRef } from "react";
-import { Badge, Button, Card, CardContent, Input, ScrollArea } from "@/components/react/ui";
+import {
+	Badge,
+	Button,
+	Card,
+	CardContent,
+	Input,
+	ScrollArea,
+} from "@/components/react/ui";
+import { useEffect, useRef, useState } from "react";
 
-import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 
 interface GlossaryTerm {
 	term: string;

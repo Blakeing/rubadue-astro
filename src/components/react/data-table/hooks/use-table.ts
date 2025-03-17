@@ -1,7 +1,7 @@
 import {
 	type ColumnDef,
-	type SortingState,
 	type PaginationState,
+	type SortingState,
 	type Table,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -9,7 +9,7 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useDebouncedSearch } from "./use-debounced-search";
 
 /**

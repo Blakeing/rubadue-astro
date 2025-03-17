@@ -1,7 +1,7 @@
-import type { ColumnDef } from "@tanstack/table-core";
 import { Button } from "@/components/react/ui";
-import type { BareLitzWireSpec } from "./data";
+import type { ColumnDef } from "@tanstack/table-core";
 import { ArrowUpDown } from "lucide-react";
+import type { BareLitzWireSpec } from "./data";
 
 export const columns: ColumnDef<BareLitzWireSpec>[] = [
 	{

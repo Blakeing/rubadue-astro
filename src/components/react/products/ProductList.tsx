@@ -1,5 +1,5 @@
-import { Star } from "lucide-react";
 import { Badge, Card, CardContent } from "@/components/react/ui";
+import { Star } from "lucide-react";
 
 interface Product {
 	slug: string;

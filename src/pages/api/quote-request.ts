@@ -1,7 +1,7 @@
-import type { APIRoute } from "astro";
-import { z } from "zod";
-import { Resend } from "resend";
 import { generateQuoteRequestEmailHtml } from "@/lib/quote-email-template";
+import type { APIRoute } from "astro";
+import { Resend } from "resend";
+import { z } from "zod";
 
 // Email validation schema
 const emailSchema = z.object({
@@ -57,7 +57,7 @@ Company: ${validatedData.companyName}
 Company Address:
 --------------
 ${validatedData.streetAddress}
-${validatedData.addressLine2 ? validatedData.addressLine2 + "\n" : ""}
+${validatedData.addressLine2 ? `${validatedData.addressLine2}\n` : ""}
 ${validatedData.city}, ${validatedData.stateProvince} ${validatedData.zipCode}
 ${validatedData.country}
 

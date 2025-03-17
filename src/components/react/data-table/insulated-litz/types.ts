@@ -1,14 +1,28 @@
-export interface InsulatedLitzSpec extends Record<string, unknown> {
+/**
+ * Base interface for insulated litz wire specifications
+ */
+export interface InsulatedLitzSpec {
+	/** Part number of the wire */
 	partNumber: string;
-	equivalentAWG: string;
-	coreDiameter: string;
-	circularMils: string;
-	numberOfStrands: string;
-	awgOfStrands: string;
-	nominalOD: string;
-	suggestedOperatingFreq: string;
+	/** Equivalent AWG size */
+	equivalentAWG?: number;
+	/** Core diameter in inches */
+	coreDiameter?: number;
+	/** Circular mils */
+	circularMils?: number;
+	/** Number of strands */
+	numberOfStrands?: number;
+	/** AWG size of individual strands */
+	awgOfStrands?: number;
+	/** Nominal outer diameter in inches */
+	nominalOD?: number;
+	/** Suggested operating frequency */
+	suggestedOperatingFreq?: string;
 }
 
-export type SingleInsulatedLitzSpec = InsulatedLitzSpec;
-export type DoubleInsulatedLitzSpec = InsulatedLitzSpec;
-export type TripleInsulatedLitzSpec = InsulatedLitzSpec;
+/**
+ * Interface for triple insulated litz wire specifications
+ */
+export interface TripleInsulatedLitzSpec extends InsulatedLitzSpec {
+	/** Additional properties specific to triple insulated litz wire can be added here */
+} 

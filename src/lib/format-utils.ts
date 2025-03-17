@@ -1,4 +1,4 @@
-import type { JobFunction, Country } from "@/types/forms";
+import type { Country, JobFunction } from "@/types/forms";
 
 /**
  * Job function display names

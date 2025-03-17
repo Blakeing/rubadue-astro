@@ -1,7 +1,7 @@
-import type * as React from "react";
 import { Button } from "@/components/react/ui";
-import { TableSearch } from "./table-search";
 import { cn } from "@/lib/utils";
+import type * as React from "react";
+import { TableSearch } from "./table-search";
 
 import { Filter, RotateCcw } from "lucide-react";
 

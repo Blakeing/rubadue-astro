@@ -1,6 +1,6 @@
+import { DataTable } from "@/components/react/data-table";
 import { columns } from "./columns";
 import { tripleInsulatedLitzData } from "./data";
-import { DataTable } from "@/components/react/data-table/data-table";
 
 export function TripleInsulatedLitzTable() {
 	return <DataTable columns={columns} data={tripleInsulatedLitzData} />;

@@ -1,11 +1,11 @@
 import type {
 	AWGValue,
+	CalculationResults,
+	FormValues,
 	MaterialKey,
 	TemperatureUnit,
-	FormValues,
-	CalculationResults,
 } from "./types";
-import { materialPresets, awgData } from "./types";
+import { awgData, materialPresets } from "./types";
 
 /**
  * Convert temperature from Fahrenheit to Celsius

@@ -1,5 +1,5 @@
+import type { ToastProps } from "@radix-ui/react-toast";
 import type { FieldValues } from "react-hook-form";
-import type { ToastProps } from "@/components/react/ui";
 
 import type { ReactNode } from "react";
 

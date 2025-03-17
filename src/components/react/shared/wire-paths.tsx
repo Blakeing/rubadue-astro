@@ -1,5 +1,5 @@
-import type { SVGProps } from "react";
 import { motion } from "framer-motion";
+import type { SVGProps } from "react";
 
 interface WirePathsProps extends SVGProps<SVGSVGElement> {
 	/**

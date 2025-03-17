@@ -1,5 +1,13 @@
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/react/ui";
 import { cn } from "@/lib/utils";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/react/ui";
 
 interface SearchPaginationProps {
 	currentPage: number;

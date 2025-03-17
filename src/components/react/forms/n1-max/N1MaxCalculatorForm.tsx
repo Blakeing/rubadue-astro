@@ -1,31 +1,52 @@
-import { useForm } from "react-hook-form";
-import { Button, Card, CardContent, Form, FormControl, FormField, FormItem, FormLabel, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/react/ui";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect, useCallback } from "react";
-
 import {
-	LineChart,
-	Line,
-	XAxis,
-	YAxis,
+	Button,
+	Card,
+	CardContent,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	Input,
+	Label,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+	Switch,
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/react/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { InfoIcon } from "lucide-react";
+import {
 	CartesianGrid,
+	Line,
+	LineChart,
 	Tooltip as RechartsTooltip,
 	ResponsiveContainer,
+	XAxis,
+	YAxis,
 } from "recharts";
-import { InfoIcon } from "lucide-react";
 
-import { SelectField, InputField } from "@/components/react/shared/FormFields";
+import { InputField, SelectField } from "@/components/react/shared/FormFields";
 import type {
+	CalculationResults,
 	FormValues,
 	MaterialKey,
 	TemperatureUnit,
-	CalculationResults,
 } from "./types";
 import {
-	formSchema,
-	materialPresets,
 	awgData,
 	calculatorDescription,
+	formSchema,
+	materialPresets,
 } from "./types";
 import {
 	calculateResults,

@@ -1,10 +1,10 @@
-import * as React from "react";
 import { TableCell, TableRow } from "@/components/react/ui";
-import { flexRender, type Row } from "@tanstack/react-table";
+import { type Row, flexRender } from "@tanstack/react-table";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import type { TableContentProps } from "./types";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import type { TableContentProps } from "./types";
 
 /**
  * Props for the TableRowMemo component

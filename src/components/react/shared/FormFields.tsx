@@ -1,12 +1,28 @@
 import type {
-import { Checkbox, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from "@/components/react/ui";
 	Control,
 	FieldPath,
 	FieldValues,
 	ValidationRule,
 	Path,
 } from "react-hook-form";
-
+import {
+	Checkbox,
+	Input,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+	Textarea,
+} from "@/components/react/ui";
+import {
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/react/ui/form";
 import { cn } from "@/lib/utils";
 import { useController } from "react-hook-form";
 
@@ -116,6 +132,19 @@ export interface SelectWithCustomInputProps<T extends FieldValues>
 }
 
 /**
+ * Field render props from react-hook-form
+ */
+interface FieldRenderProps<T> {
+	field: {
+		value: T;
+		onChange: (event: T | React.ChangeEvent<HTMLElement>) => void;
+		onBlur: () => void;
+		name: string;
+		ref: React.Ref<HTMLElement>;
+	};
+}
+
+/**
  * Select field component
  */
 export function SelectField<T extends FieldValues>({
@@ -132,7 +161,7 @@ export function SelectField<T extends FieldValues>({
 			control={control}
 			name={name}
 			rules={{ required: required ? "This field is required" : false }}
-			render={({ field }) => (
+			render={({ field }: FieldRenderProps<string>) => (
 				<FormItem className={className}>
 					<FormLabel
 						className={cn(
@@ -143,11 +172,12 @@ export function SelectField<T extends FieldValues>({
 					</FormLabel>
 					<FormControl>
 						<Select
+							value={field.value}
+							name={field.name}
 							onValueChange={(value) => {
 								field.onChange(value);
 								onChange?.(value);
 							}}
-							defaultValue={field.value}
 						>
 							<SelectTrigger>
 								<SelectValue placeholder="Select an option" />
@@ -203,7 +233,9 @@ export function InputField<T extends FieldValues>({
 							<FormControl>
 								<Checkbox
 									checked={field.value}
-									onCheckedChange={field.onChange}
+									onCheckedChange={(checked) => {
+										field.onChange(checked);
+									}}
 									onBlur={field.onBlur}
 								/>
 							</FormControl>
@@ -224,14 +256,7 @@ export function InputField<T extends FieldValues>({
 										{...field}
 										placeholder={placeholder}
 										rows={rows}
-										onChange={(e) => {
-											field.onChange(e);
-											onChange?.(e.target.value);
-										}}
-										onBlur={() => {
-											field.onBlur();
-											onBlur?.();
-										}}
+										className="resize-none"
 									/>
 								) : (
 									<Input
@@ -242,14 +267,6 @@ export function InputField<T extends FieldValues>({
 										max={max}
 										step={step}
 										inputMode={inputMode}
-										onChange={(e) => {
-											field.onChange(e);
-											onChange?.(e.target.value);
-										}}
-										onBlur={() => {
-											field.onBlur();
-											onBlur?.();
-										}}
 									/>
 								)}
 							</FormControl>
@@ -284,7 +301,7 @@ export function SelectWithCustomInput<T extends FieldValues>({
 			control={control}
 			name={name}
 			rules={{ required: required ? "This field is required" : false }}
-			render={({ field }) => (
+			render={({ field }: FieldRenderProps<string>) => (
 				<FormItem className={className}>
 					<FormLabel
 						className={cn(
@@ -293,37 +310,38 @@ export function SelectWithCustomInput<T extends FieldValues>({
 					>
 						{label}
 					</FormLabel>
-					<Select
-						onValueChange={(value) => {
-							field.onChange(value);
-							onChange?.(value);
-							setShowCustomInput(value === customOptionValue);
-						}}
-						defaultValue={field.value}
-					>
-						<FormControl>
+					<FormControl>
+						<Select
+							value={field.value}
+							name={field.name}
+							onValueChange={(value) => {
+								field.onChange(value);
+								onChange?.(value);
+								setShowCustomInput(value === customOptionValue);
+							}}
+						>
 							<SelectTrigger>
 								<SelectValue placeholder="Select an option" />
 							</SelectTrigger>
-						</FormControl>
-						<SelectContent>
-							{options.map((option) => (
-								<SelectItem key={option.value} value={option.value}>
-									{option.label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+							<SelectContent>
+								{options.map((option) => (
+									<SelectItem key={option.value} value={option.value}>
+										{option.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</FormControl>
 					{showCustomInput && (
-						<FormControl>
-							<Input
-								{...customInputProps}
-								onChange={(e) => {
-									onCustomInputChange?.(e);
-								}}
-								className="mt-2"
-							/>
-						</FormControl>
+						<Input
+							type={customInputProps?.type}
+							min={customInputProps?.min}
+							max={customInputProps?.max}
+							step={customInputProps?.step}
+							placeholder={customInputProps?.placeholder}
+							onChange={onCustomInputChange}
+							className="mt-2"
+						/>
 					)}
 					<FormMessage />
 				</FormItem>

@@ -3,6 +3,12 @@
  * @module UI
  */
 
+export {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "./accordion";
 export { Button, type ButtonProps, buttonVariants } from "./button";
 export {
 	Card,
@@ -37,7 +43,16 @@ export { Alert, AlertDescription, AlertTitle } from "./alert";
 export { Badge } from "./badge";
 export { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "./breadcrumb";
 export { Checkbox } from "./checkbox";
-export { Form } from "./form";
+export {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	useFormField,
+} from "./form";
 export { Label } from "./label";
 export {
 	NavigationMenu,
@@ -64,15 +79,28 @@ export {
 } from "./select";
 export {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
+	SheetFooter,
 	SheetHeader,
+	SheetOverlay,
+	SheetPortal,
 	SheetTitle,
 	SheetTrigger,
 } from "./sheet";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 export { Textarea } from "./textarea";
-export { Toast, ToastAction, ToastDescription, type ToastProps } from "./toast";
+export {
+	Toast,
+	ToastAction,
+	ToastClose,
+	ToastDescription,
+	ToastProvider,
+	ToastTitle,
+	ToastViewport,
+	type ToastProps,
+} from "./toast";
 export { Toaster } from "./toaster";
 export {
 	Tooltip,

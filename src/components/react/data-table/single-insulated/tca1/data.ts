@@ -1,4 +1,4 @@
-import type { WireData } from "./columns";
+import type { WireData } from "@/components/react/data-table/types";
 
 export const wireData: WireData[] = [
 	{

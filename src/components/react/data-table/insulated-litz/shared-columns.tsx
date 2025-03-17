@@ -1,9 +1,9 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/react/ui";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { InsulatedLitzSpec } from "./types";
 
-import { ArrowUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArrowUpDown } from "lucide-react";
 
 export const createInsulatedLitzColumns = <
 	T extends InsulatedLitzSpec,

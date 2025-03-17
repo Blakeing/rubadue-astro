@@ -1,30 +1,37 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Form } from "@/components/react/ui";
-import { useForm } from "react-hook-form";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+	Form,
+} from "@/components/react/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 import {
-	SelectField,
 	InputField,
-	SelectWithCustomInput,
+	SelectField,
 	type SelectOption,
+	SelectWithCustomInput,
 } from "@/components/react/shared/FormFields";
-import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 import { PartNumberDisplay } from "./PartNumberDisplay";
-import { generatePartNumber } from "./utils";
 import {
-	type FormValues,
-	type InsulatedWindingWirePartNumberBuilderProps,
-	formSchema,
-	LAYERS_OPTIONS,
-	CONDUCTOR_MATERIALS,
-	STRANDS_OPTIONS,
-	INSULATION_TYPES,
 	COLOR_CODES,
-	THICKNESS_OPTIONS,
+	CONDUCTOR_MATERIALS,
+	type FormValues,
+	INSULATION_TYPES,
+	type InsulatedWindingWirePartNumberBuilderProps,
+	LAYERS_OPTIONS,
 	MAGNET_WIRE_GRADES,
+	STRANDS_OPTIONS,
+	THICKNESS_OPTIONS,
+	formSchema,
 } from "./types";
+import { generatePartNumber } from "./utils";
 
 // Convert readonly arrays to mutable arrays for SelectField
 const layersOptions: SelectOption[] = [...LAYERS_OPTIONS];

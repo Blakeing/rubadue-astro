@@ -1,24 +1,31 @@
-import { useForm } from "react-hook-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Form } from "@/components/react/ui";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+	Form,
+} from "@/components/react/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import {
-	SelectField,
 	InputField,
+	SelectField,
 	type SelectOption,
 } from "@/components/react/shared/FormFields";
-import { PartNumberDisplay } from "./PartNumberDisplay";
-import { generatePartNumber } from "./utils";
-import {
-	type FormValues,
-	type LitzWireFormProps,
-	formSchema,
-	CONDUCTOR_MATERIALS,
-	INSULATION_TYPES,
-	COLOR_CODES,
-	MAGNET_WIRE_GRADES,
-} from "./types";
 import { usePartNumber } from "@/hooks/use-part-number";
+import { PartNumberDisplay } from "./PartNumberDisplay";
+import {
+	COLOR_CODES,
+	CONDUCTOR_MATERIALS,
+	type FormValues,
+	INSULATION_TYPES,
+	type LitzWireFormProps,
+	MAGNET_WIRE_GRADES,
+	formSchema,
+} from "./types";
+import { generatePartNumber } from "./utils";
 
 // Convert readonly arrays to mutable arrays for SelectField
 const conductorOptions: SelectOption[] = [...CONDUCTOR_MATERIALS];

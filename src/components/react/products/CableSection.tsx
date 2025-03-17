@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { WaveBackground } from "@/components/react/animations";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
+import doubleInsulatedImage from "@/assets/double_insulated-removebg-preview.png";
 // Import images
 import litzWireImage from "@/assets/litz-wire-removebg-preview.png";
 import singleInsulatedImage from "@/assets/single_insulated-removebg-preview.png";
-import doubleInsulatedImage from "@/assets/double_insulated-removebg-preview.png";
 import tripleInsulatedImage from "@/assets/triple_insulated-removebg-preview.png";
 
 const features = [

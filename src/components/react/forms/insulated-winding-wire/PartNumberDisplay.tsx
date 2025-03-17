@@ -1,7 +1,12 @@
-
-
+import {
+	Button,
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+	Input,
+} from "@/components/react/ui";
 import { Copy } from "lucide-react";
-import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@/components/react/ui";
 import { toast } from "sonner";
 import { EXAMPLE_PART_NUMBERS } from "./utils";
 

@@ -1,10 +1,10 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import type {
 	WireData,
 	WireDataBase,
-	WireDataWithKft,
 	WireDataWithFt,
-} from "@/types/wire-data";
+	WireDataWithKft,
+} from "@/components/react/data-table/types/wire-data";
+import type { ColumnDef } from "@tanstack/react-table";
 
 interface CreateWireColumnsOptions {
 	/** Whether to format numeric values with fixed decimal places */

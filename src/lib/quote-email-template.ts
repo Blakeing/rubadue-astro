@@ -1,7 +1,7 @@
-import { formatCountry, formatJobFunction } from "./format-utils";
-import { escapeHtml, wrapEmailTemplate } from "./email-utils";
 import type { QuoteRequestData } from "@/types/forms";
 import { WIRE_TYPES, WIRE_TYPE_NAMES } from "@/types/forms";
+import { escapeHtml, wrapEmailTemplate } from "./email-utils";
+import { formatCountry, formatJobFunction } from "./format-utils";
 
 export type { QuoteRequestData };
 

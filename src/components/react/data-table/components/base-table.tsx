@@ -1,13 +1,13 @@
-import type * as React from "react";
 import { Table, TableBody, TableHeader } from "@/components/react/ui";
+import type * as React from "react";
 
-import { useTable } from "./use-table";
 import { cn } from "@/lib/utils";
-import { TableToolbar, TableWrapper } from "./table-toolbar";
-import { TablePagination } from "./table-pagination";
-import { TableContent } from "./table-content";
-import { TableHeaderContent } from "./table-header";
-import type { BaseTableProps } from "./types";
+import { TableContent } from "../ui/table-content";
+import { TableHeaderContent } from "../ui/table-header";
+import { TablePagination } from "../ui/table-pagination";
+import { TableToolbar, TableWrapper } from "../ui/table-toolbar";
+import type { BaseTableProps } from "../types";
+import { useTable } from "../hooks/use-table";
 
 /**
  * A flexible table component with sorting, filtering, and pagination

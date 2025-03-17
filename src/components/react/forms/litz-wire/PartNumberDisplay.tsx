@@ -1,6 +1,11 @@
-
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/react/ui";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/react/ui";
 
 interface PartNumberDisplayProps {
 	partNumber: string;
