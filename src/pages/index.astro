@@ -1,12 +1,11 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import { Header } from "@/components/react/Header";
+import { Header } from "@/components/react/layout";
 import Footer from "@/components/astro/layout/Footer.astro";
 import Hero from "@/components/astro/layout/Hero.astro";
-import CableSection from "@/components/react/CableSection";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import { CableSection } from "@/components/react/products";
 import "@/styles/global.css";
-import CoreExpertise from "@/components/react/CoreExpertise";
+
 const title = "Rubadue Wire - Advanced Wire Solutions";
 const description =
   "Specializing in Litz wire manufacturing, we deliver innovative solutions for high-frequency applications, transformers, and power supplies with unmatched quality and precision.";
@@ -22,7 +21,6 @@ const description =
     <main>
       <Hero />
       <CableSection client:load />
-      <!-- <CoreExpertise client:load /> -->
     </main>
     <Footer />
   </body>

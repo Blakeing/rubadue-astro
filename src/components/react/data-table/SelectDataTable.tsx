@@ -1,64 +1,53 @@
 import * as React from "react";
-import type { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "./data-table";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/react/ui/select";
-import { Label } from "@/components/react/ui/label";
-import { Separator } from "../ui";
+} from "@/components/react/ui";
+import type { ColumnDef } from "@tanstack/react-table";
+import { BaseTable } from "./utils/base-table";
 
-interface TabData<TData> {
-	label: string;
-	value: string;
-	data: TData[];
-}
+import type { TabData } from "./utils/types";
 
-interface SelectDataTableProps<TData, TValue> {
+interface SelectDataTableProps<TData extends object> {
 	tabs: TabData<TData>[];
-	columns: ColumnDef<TData, TValue>[];
+	columns: ColumnDef<TData, unknown>[];
 	defaultTab?: string;
 	placeholder?: string;
+	title?: string;
 }
 
-export function SelectDataTable<TData, TValue>({
+export function SelectDataTable<TData extends object>({
 	tabs,
 	columns,
 	defaultTab,
 	placeholder = "Please select an option",
-}: SelectDataTableProps<TData, TValue>) {
-	// Initialize with defaultTab to show checkmark on load
-	const [selectedValue, setSelectedValue] = React.useState<string>(
+	title,
+}: SelectDataTableProps<TData>) {
+	if (!tabs.length) {
+		throw new Error("SelectDataTable requires at least one tab");
+	}
+
+	const [selectedValue, setSelectedValue] = React.useState(
 		defaultTab || tabs[0].value,
 	);
-	const [activeData, setActiveData] = React.useState<TData[]>(() => {
-		const initialTab = tabs.find((tab) => tab.value === defaultTab) || tabs[0];
-		return initialTab.data;
-	});
-
-	const handleValueChange = (value: string) => {
-		setSelectedValue(value);
-		const selectedTab = tabs.find((tab) => tab.value === value);
-		if (selectedTab) {
-			setActiveData(selectedTab.data);
-		}
-	};
+	const selectedTab =
+		tabs.find((tab) => tab.value === selectedValue) || tabs[0];
 
 	return (
 		<div className="not-prose">
-			<h3 className="text-xl  font-bold tracking-tight text-foreground sm:text-2xl mb-4">
-				Wire Specifications
-			</h3>
+			{title && (
+				<h3 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl mb-4">
+					{title}
+				</h3>
+			)}
 			<div className="space-y-2">
-				<Select value={selectedValue} onValueChange={handleValueChange}>
-					<SelectTrigger className="w-[300px] ">
+				<Select value={selectedValue} onValueChange={setSelectedValue}>
+					<SelectTrigger className="w-[300px]">
 						<SelectValue placeholder={placeholder}>
-							{selectedValue
-								? tabs.find((tab) => tab.value === selectedValue)?.label
-								: null}
+							{selectedTab.label}
 						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
@@ -70,7 +59,13 @@ export function SelectDataTable<TData, TValue>({
 					</SelectContent>
 				</Select>
 			</div>
-			<DataTable columns={columns} data={activeData} />
+			<BaseTable
+				data={selectedTab.data}
+				columns={columns}
+				title={title}
+				pageSize={10}
+				enableMultiSort={true}
+			/>
 		</div>
 	);
 }

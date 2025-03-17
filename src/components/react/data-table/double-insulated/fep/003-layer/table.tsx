@@ -1,16 +1,13 @@
-import { SimpleDataTable } from "@/components/react/data-table/simple-data-table";
+"use client";
+
+import { DataTable } from "@/components/react/data-table/data-table";
 import { columns } from "./columns";
 import { wireData } from "./data";
-import type { WireData } from "./types";
-import type { ColumnDef } from "@tanstack/react-table";
 
 export function DoubleInsulatedTable() {
 	return (
 		<div className="">
-			<SimpleDataTable
-				columns={columns as ColumnDef<WireData>[]}
-				data={wireData}
-			/>
+			<DataTable columns={columns} data={wireData} simple />
 		</div>
 	);
 }

@@ -1,13 +1,4 @@
-export type TripleInsulatedLitzSpec = {
-	partNumber: string;
-	equivalentAWG: string;
-	coreDiameter: string;
-	circularMils: string;
-	numberOfStrands: string;
-	awgOfStrands: string;
-	nominalOD: string;
-	suggestedOperatingFreq: string;
-};
+import type { TripleInsulatedLitzSpec } from "@/../types";
 
 export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 	{

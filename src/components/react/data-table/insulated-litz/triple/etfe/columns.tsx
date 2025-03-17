@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/react/ui";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/components/react/ui/button";
+
 import type { TripleInsulatedLitzSpec } from "./data";
 
 export const columns: ColumnDef<TripleInsulatedLitzSpec>[] = [

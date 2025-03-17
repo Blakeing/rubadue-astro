@@ -1,8 +1,9 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import { Header } from "@/components/react/Header";
+import { Card, CardContent } from "@/components/react/ui";
+import { Header } from "@/components/react/layout";
 import Footer from "@/components/astro/layout/Footer.astro";
-import ProductPage from "@/components/react/ProductPage";
+import { ProductPage } from "@/components/react/pages";
 import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
 import { Image } from "astro:assets";
 
@@ -70,7 +71,7 @@ if (pathParts.length > 2) {
 
 // Default placeholder image
 import placeholderImage from "@/assets/rubadue-hero.webp";
-import { Card, CardContent } from "@/components/react/ui/card";
+
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
 const heroImage = props.heroImage || placeholderImage;
 ---

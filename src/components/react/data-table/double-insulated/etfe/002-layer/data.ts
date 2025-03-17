@@ -1,4 +1,4 @@
-import type { WireData } from "./columns";
+import type { WireData } from "./types";
 
 export const wireData: WireData[] = [
 	{

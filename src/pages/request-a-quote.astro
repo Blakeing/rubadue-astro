@@ -1,13 +1,8 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import QuoteRequestForm from "../components/react/QuoteRequestForm";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from "@/components/react/ui/card";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/react/ui";
+import { QuoteRequestForm } from "@/components/react/forms/quote-request/QuoteRequestForm";
+
 ---
 
 <BaseLayout
@@ -35,3 +30,7 @@ import {
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  // Any client-side JavaScript can go here
+</script>

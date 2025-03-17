@@ -1,18 +1,14 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import { Header } from "@/components/react/Header";
+import { Header } from "@/components/react/layout";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { getCollection } from "astro:content";
-import ProductListingPage from "@/components/react/ProductListingPage";
+import { ProductListingPage } from "@/components/react/pages";
 import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
 
 // Get all products from both directory structures
-const products = await getCollection("products", (product) => {
-  // Debug log to see what's being found
-  console.log("Found product:", product.id, product.slug);
-  return true;
-});
+const products = await getCollection("products");
 
 // Map collection data to match Product interface
 const mappedProducts = products.map((product) => ({

@@ -1,16 +1,4 @@
-export type WireData = {
-	partNumber: string;
-	awg: string;
-	conductor: {
-		inches: string;
-		mm: string;
-	};
-	nominalOD: {
-		inches: string;
-		mm: string;
-	};
-	weightLbFt: string;
-};
+import type { WireData } from "./types";
 
 export const wireData: WireData[] = [
 	{

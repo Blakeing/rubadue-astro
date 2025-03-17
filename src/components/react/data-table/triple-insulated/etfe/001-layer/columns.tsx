@@ -1,4 +1,4 @@
-import { createColumnHelper } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 
 export type WireData = {
 	partNumber: string;
@@ -14,38 +14,43 @@ export type WireData = {
 	weightLbKft: string;
 };
 
-const columnHelper = createColumnHelper<WireData>();
-
-export const columns = [
-	columnHelper.accessor("partNumber", {
-		header: ({ header }) => (header.depth === 0 ? "" : "PART NUMBER"),
-	}),
-	columnHelper.accessor("awg", {
-		header: ({ header }) => (header.depth === 0 ? "" : "AWG"),
-	}),
-	columnHelper.group({
+export const columns: ColumnDef<WireData>[] = [
+	{
+		accessorKey: "partNumber",
+		header: "PART NUMBER",
+	},
+	{
+		accessorKey: "awg",
+		header: "AWG",
+	},
+	{
 		header: "CONDUCTOR",
 		columns: [
-			columnHelper.accessor("conductor.inches", {
+			{
+				accessorKey: "conductor.inches",
 				header: "INCHES",
-			}),
-			columnHelper.accessor("conductor.mm", {
+			},
+			{
+				accessorKey: "conductor.mm",
 				header: "MM",
-			}),
+			},
 		],
-	}),
-	columnHelper.group({
+	},
+	{
 		header: "NOMINAL O.D.",
 		columns: [
-			columnHelper.accessor("nominalOD.inches", {
+			{
+				accessorKey: "nominalOD.inches",
 				header: "INCHES",
-			}),
-			columnHelper.accessor("nominalOD.mm", {
+			},
+			{
+				accessorKey: "nominalOD.mm",
 				header: "MM",
-			}),
+			},
 		],
-	}),
-	columnHelper.accessor("weightLbKft", {
-		header: ({ header }) => (header.depth === 0 ? "" : "WEIGHT LB/KFT"),
-	}),
+	},
+	{
+		accessorKey: "weightLbKft",
+		header: "WEIGHT LB/KFT",
+	},
 ];
