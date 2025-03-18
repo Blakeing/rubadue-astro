@@ -1,8 +1,8 @@
-import { SwitchableDataTable } from "../components/switchable-data-table";
+import { SwitchableDataTable } from "@/components/react/data-table";
 import { columns } from "./columns";
 import { tabs } from "./data";
 
-export function BareLitzWireTable() {
+export function BareLitzTable() {
 	return (
 		<SwitchableDataTable
 			items={tabs}

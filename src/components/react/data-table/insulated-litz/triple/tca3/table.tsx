@@ -1,13 +1,19 @@
-import { DataTable } from "@/components/react/data-table";
+import { DataTable } from "@/components/react/data-table/components/data-table";
 import { columns } from "./columns";
 import { tripleInsulatedLitzData } from "./data";
 
 export function TripleInsulatedLitzTable() {
 	return (
-		<DataTable
-			columns={columns}
-			data={tripleInsulatedLitzData}
-			title="Triple TCA3 Insulated Litz Wire Specifications"
-		/>
+		<div className="not-prose">
+			<DataTable
+				columns={columns}
+				data={tripleInsulatedLitzData}
+				simple
+				pageSize={10}
+				enableMultiSort={true}
+				hideSearch={false}
+				hidePagination={false}
+			/>
+		</div>
 	);
 }

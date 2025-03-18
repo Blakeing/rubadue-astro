@@ -1,191 +1,222 @@
 import { Button } from "@/components/react/ui";
-import type { ColumnDef } from "@tanstack/table-core";
-import { ArrowUpDown } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { BareLitzWireSpec } from "./data";
+import { cn } from "@/lib/utils";
+import { ArrowUpDown } from "lucide-react";
 
-export const columns: ColumnDef<BareLitzWireSpec>[] = [
+/**
+ * Safely formats a number with the specified decimal places
+ */
+function formatNumber(
+	value: string | number | undefined | null,
+	decimals: number,
+): string {
+	if (value == null) return "";
+	const num = typeof value === "string" ? Number.parseFloat(value) : value;
+	return Number.isNaN(num) ? "" : num.toFixed(decimals);
+}
+
+export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	{
 		accessorKey: "equivalentAWG",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Equivalent AWG
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					AWG
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.equivalentAWG) - Number(rowB.original.equivalentAWG),
+		cell: ({ row }) => formatNumber(row.original.equivalentAWG, 0),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.equivalentAWG);
+			const b = Number(rowB.original.equivalentAWG);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
+		},
 	},
 	{
 		accessorKey: "nominalCircularMil",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Nominal Circular Mil
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					CIRCULAR MIL
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		cell: ({ row }) => {
-			const value = Number.parseInt(row.getValue("nominalCircularMil"));
-			return value.toLocaleString();
+		cell: ({ row }) => formatNumber(row.original.nominalCircularMil, 0),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.nominalCircularMil);
+			const b = Number(rowB.original.nominalCircularMil);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.nominalCircularMil) -
-			Number(rowB.original.nominalCircularMil),
 	},
 	{
 		accessorKey: "numberOfWires",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Number of Wires
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					# OF WIRES
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		cell: ({ row }) => {
-			const value = Number.parseInt(row.getValue("numberOfWires"));
-			return value.toLocaleString();
+		cell: ({ row }) => formatNumber(row.original.numberOfWires, 0),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.numberOfWires);
+			const b = Number(rowB.original.numberOfWires);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.numberOfWires) - Number(rowB.original.numberOfWires),
 	},
 	{
 		accessorKey: "magnetWireSize",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Magnet Wire Size (AWG)
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					MAGNET WIRE SIZE
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.magnetWireSize) -
-			Number(rowB.original.magnetWireSize),
+		cell: ({ row }) => formatNumber(row.original.magnetWireSize, 0),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.magnetWireSize);
+			const b = Number(rowB.original.magnetWireSize);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
+		},
 	},
 	{
 		accessorKey: "litzWireType",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Litz Wire Type
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					LITZ WIRE TYPE
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.litzWireType) - Number(rowB.original.litzWireType),
 	},
 	{
 		accessorKey: "nominalODIn",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Nominal OD (in.)
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					NOMINAL O.D. (IN.)
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		cell: ({ row }) => {
-			const value = Number.parseFloat(row.getValue("nominalODIn"));
-			return value.toFixed(3);
+		cell: ({ row }) => formatNumber(row.original.nominalODIn, 3),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.nominalODIn);
+			const b = Number(rowB.original.nominalODIn);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.nominalODIn) - Number(rowB.original.nominalODIn),
-	},
-	{
-		accessorKey: "nominalODMm",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Nominal OD (mm)
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
-		cell: ({ row }) => {
-			const value = Number.parseFloat(row.getValue("nominalODMm"));
-			return value.toFixed(3);
-		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.nominalODMm) - Number(rowB.original.nominalODMm),
 	},
 	{
 		accessorKey: "maxDCResistance",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Maximum DC Resistance
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					MAX DC RESISTANCE
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		cell: ({ row }) => {
-			const value = Number.parseFloat(row.getValue("maxDCResistance"));
-			return value.toFixed(5);
+		cell: ({ row }) => formatNumber(row.original.maxDCResistance, 5),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.maxDCResistance);
+			const b = Number(rowB.original.maxDCResistance);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.maxDCResistance) -
-			Number(rowB.original.maxDCResistance),
 	},
 	{
 		accessorKey: "nominalLbs1000Ft",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Nominal Lbs/1,000 Ft.
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					WEIGHT LB/KFT
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},
-		cell: ({ row }) => {
-			const value = Number.parseFloat(row.getValue("nominalLbs1000Ft"));
-			return value.toFixed(1);
+		cell: ({ row }) => formatNumber(row.original.nominalLbs1000Ft, 3),
+		sortingFn: (rowA, rowB) => {
+			const a = Number(rowA.original.nominalLbs1000Ft);
+			const b = Number(rowB.original.nominalLbs1000Ft);
+			return Number.isNaN(a) || Number.isNaN(b) ? 0 : a - b;
 		},
-		sortingFn: (rowA, rowB) =>
-			Number(rowA.original.nominalLbs1000Ft) -
-			Number(rowB.original.nominalLbs1000Ft),
 	},
 	{
 		accessorKey: "litzWireConstruction",
 		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
 			return (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => column.toggleSorting(isSorted === "asc")}
+					className="hover:bg-muted/50"
 				>
-					Litz Wire Construction
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					CONSTRUCTION
+					<ArrowUpDown
+						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
+					/>
 				</Button>
 			);
 		},

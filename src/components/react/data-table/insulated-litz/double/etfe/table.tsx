@@ -1,13 +1,19 @@
-import { DataTable } from "@/components/react/data-table";
+import { DataTable } from "@/components/react/data-table/components/data-table";
 import { columns } from "./columns";
 import { doubleInsulatedLitzData } from "./data";
 
 export function DoubleInsulatedLitzTable() {
 	return (
-		<DataTable
-			columns={columns}
-			data={doubleInsulatedLitzData}
-			title="Double ETFE Insulated Litz Wire Specifications"
-		/>
+		<div className="not-prose">
+			<DataTable
+				columns={columns}
+				data={doubleInsulatedLitzData}
+				simple
+				pageSize={10}
+				enableMultiSort={true}
+				hideSearch={false}
+				hidePagination={false}
+			/>
+		</div>
 	);
 }

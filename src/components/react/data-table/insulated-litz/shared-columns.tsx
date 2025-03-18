@@ -1,225 +1,210 @@
 import { Button } from "@/components/react/ui";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { InsulatedLitzSpec } from "@/components/react/data-table/insulated-litz/types";
+import { ChevronsUpDown } from "lucide-react";
+import type { InsulatedLitzSpec } from "./types";
 
-import { cn } from "@/lib/utils";
-import { ArrowUpDown } from "lucide-react";
+const formatNumber = (value: string | number | null | undefined): string => {
+	if (value == null) return "";
+	if (typeof value === "string") {
+		const num = Number(value);
+		return Number.isNaN(num) ? value : num.toLocaleString();
+	}
+	return value.toLocaleString();
+};
 
-export const createInsulatedLitzColumns = <
+export function createInsulatedLitzColumns<
 	T extends InsulatedLitzSpec,
->(): ColumnDef<T>[] => [
-	{
-		accessorKey: "partNumber",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Part Number ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Part Number
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
+>(): ColumnDef<T, unknown>[] {
+	return [
+		{
+			accessorKey: "partNumber",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						PART NUMBER
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">{row.getValue("partNumber")}</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.partNumber;
+				const b = rowB.original.partNumber;
+				return a.localeCompare(b);
+			},
 		},
-	},
-	{
-		accessorKey: "equivalentAWG",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Equiv. AWG ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Equiv. AWG
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
+		{
+			accessorKey: "equivalentAWG",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						EQUIVALENT AWG
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("equivalentAWG"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.equivalentAWG;
+				const b = rowB.original.equivalentAWG;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.equivalentAWG;
-			const b = rowB.original.equivalentAWG;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
+		{
+			accessorKey: "coreDiameter",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						CORE DIAMETER (IN)
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("coreDiameter"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.coreDiameter;
+				const b = rowB.original.coreDiameter;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-	},
-	{
-		accessorKey: "coreDiameter",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Core O.D. ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Core O.D. (in.)
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
+		{
+			accessorKey: "circularMils",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						CIRCULAR MILS
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("circularMils"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.circularMils;
+				const b = rowB.original.circularMils;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.coreDiameter;
-			const b = rowB.original.coreDiameter;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
+		{
+			accessorKey: "numberOfStrands",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						NUMBER OF STRANDS
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("numberOfStrands"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.numberOfStrands;
+				const b = rowB.original.numberOfStrands;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-	},
-	{
-		accessorKey: "circularMils",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Cir. Mils ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Cir. Mils
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
+		{
+			accessorKey: "awgOfStrands",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						AWG OF STRANDS
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("awgOfStrands"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.awgOfStrands;
+				const b = rowB.original.awgOfStrands;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-		cell: ({ row }) => {
-			const value = row.original.circularMils;
-			return value?.toLocaleString() ?? "";
+		{
+			accessorKey: "nominalOD",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						NOMINAL OD (IN)
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{formatNumber(row.getValue("nominalOD"))}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.nominalOD;
+				const b = rowB.original.nominalOD;
+				return a == null || b == null ? 0 : Number(a) - Number(b);
+			},
 		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.circularMils;
-			const b = rowB.original.circularMils;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
+		{
+			accessorKey: "suggestedOperatingFreq",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						SUGGESTED OPERATING FREQ
+						<ChevronsUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => (
+				<div className="w-[100px]">
+					{row.getValue("suggestedOperatingFreq")}
+				</div>
+			),
+			sortingFn: (rowA, rowB) => {
+				const a = rowA.original.suggestedOperatingFreq;
+				const b = rowB.original.suggestedOperatingFreq;
+				return a == null || b == null ? 0 : a.localeCompare(b);
+			},
 		},
-	},
-	{
-		accessorKey: "numberOfStrands",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by No. Strands ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					No. Strands
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
-		},
-		cell: ({ row }) => {
-			const value = row.original.numberOfStrands;
-			return value?.toLocaleString() ?? "";
-		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.numberOfStrands;
-			const b = rowB.original.numberOfStrands;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
-		},
-	},
-	{
-		accessorKey: "awgOfStrands",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by AWG of Strands ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					AWG of Strands
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
-		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.awgOfStrands;
-			const b = rowB.original.awgOfStrands;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
-		},
-	},
-	{
-		accessorKey: "nominalOD",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Nominal O.D. ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Nominal O.D. (in.)
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
-		},
-		sortingFn: (rowA, rowB) => {
-			const a = rowA.original.nominalOD;
-			const b = rowB.original.nominalOD;
-			return a == null || b == null ? 0 : Number(a) - Number(b);
-		},
-	},
-	{
-		accessorKey: "suggestedOperatingFreq",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-					aria-label={`Sort by Suggested Operating Frequency ${
-						isSorted === "asc" ? "descending" : "ascending"
-					}`}
-				>
-					Suggested Operating Frequency
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-						aria-hidden="true"
-					/>
-				</Button>
-			);
-		},
-	},
-];
+	];
+}
