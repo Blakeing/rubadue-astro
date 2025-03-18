@@ -1,10 +1,8 @@
-"use client";
-
 import { DataTable } from "@/components/react/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import { columns } from "./columns";
 import { wireData } from "./data";
-import type { WireData } from "./types";
+import type { WireData } from "@/components/react/data-table/types";
 
 export function DoubleInsulatedTable() {
 	return (

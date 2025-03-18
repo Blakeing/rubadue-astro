@@ -1,4 +1,4 @@
-import type { WireData } from "@/components/react/data-table/types/wire-data";
+import type { WireData } from "@/components/react/data-table/types";
 
 export const wireData: WireData[] = [
 	{
@@ -12,7 +12,7 @@ export const wireData: WireData[] = [
 			inches: "0.0140",
 			mm: "0.356",
 		},
-		weightLbFt: "0.36",
+		weightLbKft: "0.36",
 	},
 	{
 		partNumber: "D31A01TXX-1",
@@ -25,7 +25,7 @@ export const wireData: WireData[] = [
 			inches: "0.0129",
 			mm: "0.328",
 		},
-		weightLbFt: "0.29",
+		weightLbKft: "0.29",
 	},
 	{
 		partNumber: "D32A01TXX-1",
@@ -38,7 +38,7 @@ export const wireData: WireData[] = [
 			inches: "0.0120",
 			mm: "0.305",
 		},
-		weightLbFt: "0.24",
+		weightLbKft: "0.24",
 	},
 	{
 		partNumber: "D33A01TXX-1",
@@ -51,7 +51,7 @@ export const wireData: WireData[] = [
 			inches: "0.0111",
 			mm: "0.282",
 		},
-		weightLbFt: "0.20",
+		weightLbKft: "0.20",
 	},
 	{
 		partNumber: "D34A01TXX-1",
@@ -64,7 +64,7 @@ export const wireData: WireData[] = [
 			inches: "0.0103",
 			mm: "0.262",
 		},
-		weightLbFt: "0.16",
+		weightLbKft: "0.16",
 	},
 	{
 		partNumber: "D35A01TXX-1",
@@ -77,7 +77,7 @@ export const wireData: WireData[] = [
 			inches: "0.0096",
 			mm: "0.244",
 		},
-		weightLbFt: "0.13",
+		weightLbKft: "0.13",
 	},
 	{
 		partNumber: "D36A01TXX-1",
@@ -90,7 +90,7 @@ export const wireData: WireData[] = [
 			inches: "0.0090",
 			mm: "0.229",
 		},
-		weightLbFt: "0.11",
+		weightLbKft: "0.11",
 	},
 	{
 		partNumber: "D37A01TXX-1",
@@ -103,7 +103,7 @@ export const wireData: WireData[] = [
 			inches: "0.0085",
 			mm: "0.216",
 		},
-		weightLbFt: "0.09",
+		weightLbKft: "0.09",
 	},
 	{
 		partNumber: "D38A01TXX-1",
@@ -116,7 +116,7 @@ export const wireData: WireData[] = [
 			inches: "0.0080",
 			mm: "0.203",
 		},
-		weightLbFt: "0.08",
+		weightLbKft: "0.08",
 	},
 	{
 		partNumber: "D39A01TXX-1",
@@ -129,7 +129,7 @@ export const wireData: WireData[] = [
 			inches: "0.0075",
 			mm: "0.191",
 		},
-		weightLbFt: "0.06",
+		weightLbKft: "0.06",
 	},
 	{
 		partNumber: "D40A01TXX-1",
@@ -142,6 +142,6 @@ export const wireData: WireData[] = [
 			inches: "0.0071",
 			mm: "0.180",
 		},
-		weightLbFt: "0.05",
+		weightLbKft: "0.05",
 	},
 ];

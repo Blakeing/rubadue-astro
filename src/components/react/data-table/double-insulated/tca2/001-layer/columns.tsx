@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { WireData } from "./types";
+import type { WireData } from "@/components/react/data-table/types";
 
 export const columns: ColumnDef<WireData>[] = [
 	{
@@ -16,12 +16,18 @@ export const columns: ColumnDef<WireData>[] = [
 			{
 				accessorKey: "conductor.inches",
 				header: "INCHES",
-				cell: ({ row }) => row.original.conductor.inches.toFixed(4),
+				cell: ({ row }) => {
+					const value = row.original.conductor.inches;
+					return typeof value === "number" ? value.toFixed(4) : value;
+				},
 			},
 			{
 				accessorKey: "conductor.mm",
 				header: "MM",
-				cell: ({ row }) => row.original.conductor.mm.toFixed(3),
+				cell: ({ row }) => {
+					const value = row.original.conductor.mm;
+					return typeof value === "number" ? value.toFixed(3) : value;
+				},
 			},
 		],
 	},
@@ -31,18 +37,27 @@ export const columns: ColumnDef<WireData>[] = [
 			{
 				accessorKey: "nominalOD.inches",
 				header: "INCHES",
-				cell: ({ row }) => row.original.nominalOD.inches.toFixed(4),
+				cell: ({ row }) => {
+					const value = row.original.nominalOD.inches;
+					return typeof value === "number" ? value.toFixed(4) : value;
+				},
 			},
 			{
 				accessorKey: "nominalOD.mm",
 				header: "MM",
-				cell: ({ row }) => row.original.nominalOD.mm.toFixed(3),
+				cell: ({ row }) => {
+					const value = row.original.nominalOD.mm;
+					return typeof value === "number" ? value.toFixed(3) : value;
+				},
 			},
 		],
 	},
 	{
-		accessorKey: "weightLbFt",
-		header: "WEIGHT LB/FT",
-		cell: ({ row }) => row.original.weightLbFt.toFixed(2),
+		accessorKey: "weightLbKft",
+		header: "WEIGHT LB/KFT",
+		cell: ({ row }) => {
+			const value = row.original.weightLbKft;
+			return typeof value === "number" ? value.toFixed(2) : value;
+		},
 	},
 ];

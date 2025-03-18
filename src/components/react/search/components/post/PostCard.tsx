@@ -1,7 +1,7 @@
-import { formatDate } from "@/../utils/helpers";
+import { formatDate } from "@/components/react/search/utils/helpers";
 import { Card, CardContent, CardHeader } from "@/components/react/ui";
 import { cn } from "@/lib/utils";
-import type { Post } from "@/types/search";
+import type { Post } from "@/components/react/search/utils/types";
 
 interface PostCardProps {
 	post: Post;

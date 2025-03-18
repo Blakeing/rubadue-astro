@@ -1,4 +1,4 @@
-import type { TripleInsulatedLitzSpec } from "@/../types";
+import type { TripleInsulatedLitzSpec } from "@/components/react/data-table/insulated-litz/types";
 
 export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 	{

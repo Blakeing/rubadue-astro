@@ -1,6 +1,6 @@
 import { Input } from "@/components/react/ui";
 import { cn } from "@/lib/utils";
-import { searchInputStyles } from "@/utils/helpers";
+import { searchInputStyles } from "@/components/react/search/utils/helpers";
 
 interface SearchInputProps {
 	value: string;

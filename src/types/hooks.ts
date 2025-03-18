@@ -29,6 +29,8 @@ export interface ToasterToast extends Omit<ToastProps, "title"> {
 	description?: string | ReactNode;
 	/** Toast action element */
 	action?: ReactNode;
+	/** Toast variant */
+	variant?: "default" | "destructive";
 }
 
 /**

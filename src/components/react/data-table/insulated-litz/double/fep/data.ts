@@ -1,6 +1,6 @@
-import type { DoubleInsulatedLitzSpec } from "@/../types";
+import type { InsulatedLitzSpec } from "../../types";
 
-export const doubleInsulatedLitzData: DoubleInsulatedLitzSpec[] = [
+export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 	{
 		partNumber: "DXXL825/44FXX-3(MWXX)",
 		equivalentAWG: "15",

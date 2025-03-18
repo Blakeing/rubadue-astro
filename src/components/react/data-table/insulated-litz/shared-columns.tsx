@@ -1,6 +1,6 @@
 import { Button } from "@/components/react/ui";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { InsulatedLitzSpec } from "./types";
+import type { InsulatedLitzSpec } from "@/components/react/data-table/insulated-litz/types";
 
 import { cn } from "@/lib/utils";
 import { ArrowUpDown } from "lucide-react";

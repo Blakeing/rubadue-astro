@@ -1,9 +1,4 @@
-import type {
-	WireData,
-	WireDataBase,
-	WireDataWithFt,
-	WireDataWithKft,
-} from "@/components/react/data-table/types/wire-data";
+import type { WireData } from "../types";
 import type { ColumnDef } from "@tanstack/react-table";
 
 interface CreateWireColumnsOptions {
@@ -37,7 +32,7 @@ function formatNumber(
  */
 export function createWireColumns<T extends WireData>(
 	options: CreateWireColumnsOptions = {},
-): ColumnDef<T>[] {
+): ColumnDef<T, unknown>[] {
 	const { formatNumeric = false, useKft = true } = options;
 
 	return [
@@ -130,22 +125,16 @@ export function createWireColumns<T extends WireData>(
 			],
 		},
 		{
-			id: useKft ? "weightLbKft" : "weightLbFt",
-			accessorKey: useKft ? "weightLbKft" : "weightLbFt",
+			id: "weightLbKft",
+			accessorKey: "weightLbKft",
 			header: ({ header }) =>
 				header.depth === 0 ? "" : useKft ? "WEIGHT LB/KFT" : "WEIGHT LB/FT",
 			cell: formatNumeric
-				? ({ row }) => {
-						const value = useKft
-							? (row.original as WireDataWithKft).weightLbKft
-							: (row.original as WireDataWithFt).weightLbFt;
-						return formatNumber(value, 2);
-					}
+				? ({ row }) => formatNumber(row.original.weightLbKft, 2)
 				: undefined,
 			sortingFn: (rowA, rowB) => {
-				const key = useKft ? "weightLbKft" : "weightLbFt";
-				const a = Number.parseFloat(String(rowA.getValue(key))) || 0;
-				const b = Number.parseFloat(String(rowB.getValue(key))) || 0;
+				const a = Number.parseFloat(String(rowA.getValue("weightLbKft"))) || 0;
+				const b = Number.parseFloat(String(rowB.getValue("weightLbKft"))) || 0;
 				return a - b;
 			},
 		},

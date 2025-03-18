@@ -97,6 +97,7 @@ export default function CableSection() {
 										className="relative cursor-pointer select-none"
 										onHoverStart={() => setActiveFeature(index)}
 										onClick={() => setActiveFeature(index)}
+										initial={{ color: "hsl(var(--muted-foreground))" }}
 										animate={{
 											color:
 												activeFeature === index

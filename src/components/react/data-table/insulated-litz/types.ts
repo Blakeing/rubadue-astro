@@ -5,19 +5,33 @@ export interface InsulatedLitzSpec {
 	/** Part number of the wire */
 	partNumber: string;
 	/** Equivalent AWG size */
-	equivalentAWG?: number;
+	equivalentAWG?: string | number;
 	/** Core diameter in inches */
-	coreDiameter?: number;
+	coreDiameter?: string | number;
 	/** Circular mils */
-	circularMils?: number;
+	circularMils?: string | number;
 	/** Number of strands */
-	numberOfStrands?: number;
+	numberOfStrands?: string | number;
 	/** AWG size of individual strands */
-	awgOfStrands?: number;
+	awgOfStrands?: string | number;
 	/** Nominal outer diameter in inches */
-	nominalOD?: number;
+	nominalOD?: string | number;
 	/** Suggested operating frequency */
 	suggestedOperatingFreq?: string;
+}
+
+/**
+ * Interface for single insulated litz wire specifications
+ */
+export interface SingleInsulatedLitzSpec extends InsulatedLitzSpec {
+	/** Additional properties specific to single insulated litz wire can be added here */
+}
+
+/**
+ * Interface for double insulated litz wire specifications
+ */
+export interface DoubleInsulatedLitzSpec extends InsulatedLitzSpec {
+	/** Additional properties specific to double insulated litz wire can be added here */
 }
 
 /**
