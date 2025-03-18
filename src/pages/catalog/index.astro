@@ -32,12 +32,34 @@ const categories = [
   ...new Set(mappedProducts.map((post) => post.data.category)),
 ];
 
+// Get URL parameters for filters
+const url = new URL(Astro.request.url);
+const searchParams = url.searchParams;
+
+// Parse filter parameters
+const typeFilters = searchParams.getAll("type");
+const materialFilters = searchParams.getAll("material");
+const searchQuery = searchParams.get("q") || "";
+
+// Build filter state object
+const filterState = {
+  type: typeFilters,
+  material: materialFilters,
+  search: searchQuery,
+};
+
+// Build breadcrumb segments with filter context
+const segments = [
+  { name: "Products", href: "/products" },
+  {
+    name: "Catalog",
+    href: `/catalog${url.search ? `?${url.search}` : ""}`,
+  },
+];
+
 const title = "Product Catalog";
 const description =
   "Browse our complete catalog of high-quality wire and cable products.";
-
-// Build breadcrumb segments
-const segments = [{ name: "Products", href: "/products" }];
 ---
 
 <!doctype html>
@@ -54,6 +76,7 @@ const segments = [{ name: "Products", href: "/products" }];
           client:load
           products={sortedProducts}
           categories={categories}
+          initialFilters={filterState}
         />
       </div>
     </main>

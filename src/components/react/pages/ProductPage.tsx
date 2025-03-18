@@ -50,11 +50,46 @@ interface ProductPageProps {
 		summary: string;
 		content: string;
 	};
+
+	// Add filter context for breadcrumbs
+	filterContext?: {
+		type: string[];
+		material: string[];
+		search: string;
+	};
 }
 
-export default function ProductPage({ product, license }: ProductPageProps) {
+export default function ProductPage({
+	product,
+	license,
+	filterContext,
+}: ProductPageProps) {
 	const productImageRef = useRef<HTMLDivElement>(null);
 	const productDetailsRef = useRef<HTMLDivElement>(null);
+
+	// Build catalog URL with filter context
+	const getCatalogUrl = () => {
+		if (!filterContext) return "/catalog";
+
+		const params = new URLSearchParams();
+
+		// Add type filters
+		for (const type of filterContext.type) {
+			params.append("type", type);
+		}
+
+		// Add material filters
+		for (const material of filterContext.material) {
+			params.append("material", material);
+		}
+
+		// Add search query if exists
+		if (filterContext.search) {
+			params.set("q", filterContext.search);
+		}
+
+		return `/catalog${params.toString() ? `?${params.toString()}` : ""}`;
+	};
 
 	// Function to update the details height based on image height
 	const updateDetailsHeight = useCallback(() => {

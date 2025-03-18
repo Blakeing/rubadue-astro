@@ -24,7 +24,7 @@ import {
 	SheetTrigger,
 } from "@/components/react/ui";
 import { ChevronLeft, ChevronRight, Search, Star } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const sortOptions = [
 	{ name: "Most Popular", value: "popular" },
@@ -119,6 +119,11 @@ type ActiveFilters = {
 interface ProductListingPageProps {
 	products: Product[];
 	categories: string[];
+	initialFilters?: {
+		type: string[];
+		material: string[];
+		search: string;
+	};
 }
 
 const ITEMS_PER_PAGE = 9; // Number of products per page
@@ -165,14 +170,43 @@ function generatePaginationItems(currentPage: number, totalPages: number) {
 export default function ProductListingPage({
 	products,
 	categories,
-}: ProductListingPageProps) {
-	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [currentPage, setCurrentPage] = useState(1);
-	const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
+	initialFilters = {
 		type: [],
 		material: [],
+		search: "",
+	},
+}: ProductListingPageProps) {
+	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState(initialFilters.search);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
+		type: initialFilters.type,
+		material: initialFilters.material,
 	});
+
+	// Update URL when filters change
+	useEffect(() => {
+		const params = new URLSearchParams();
+
+		// Add type filters
+		for (const type of activeFilters.type) {
+			params.append("type", type);
+		}
+
+		// Add material filters
+		for (const material of activeFilters.material) {
+			params.append("material", material);
+		}
+
+		// Add search query if exists
+		if (searchQuery) {
+			params.set("q", searchQuery);
+		}
+
+		// Update URL without reloading the page
+		const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`;
+		window.history.replaceState({}, "", newUrl);
+	}, [activeFilters, searchQuery]);
 
 	// Clear all filters
 	const clearFilters = () => {
@@ -244,15 +278,30 @@ export default function ProductListingPage({
 	// Toggle filter handler
 	const toggleFilter = (category: FilterCategory, value: string) => {
 		setCurrentPage(1); // Reset to first page when filter changes
+
+		// Get the list of known materials
+		const knownMaterials = filters.material.map((m) => m.value);
+
+		// Determine the actual category based on whether the value is a known material
+		const actualCategory = knownMaterials.includes(value)
+			? "material"
+			: category;
+
 		setActiveFilters((prev) => {
-			const currentFilters = prev[category];
+			const currentFilters = prev[actualCategory];
 			return {
 				...prev,
-				[category]: currentFilters.includes(value)
+				[actualCategory]: currentFilters.includes(value)
 					? currentFilters.filter((v: string) => v !== value)
 					: [...currentFilters, value],
 			};
 		});
+	};
+
+	// Update the search input onChange handler
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(e.target.value);
+		setCurrentPage(1);
 	};
 
 	return (
@@ -379,10 +428,7 @@ export default function ProductListingPage({
 										<Input
 											placeholder="Search products..."
 											value={searchQuery}
-											onChange={(e) => {
-												setSearchQuery(e.target.value);
-												setCurrentPage(1);
-											}}
+											onChange={handleSearchChange}
 											className="pl-8"
 										/>
 									</div>
@@ -432,10 +478,7 @@ export default function ProductListingPage({
 									<Input
 										placeholder="Search products..."
 										value={searchQuery}
-										onChange={(e) => {
-											setSearchQuery(e.target.value);
-											setCurrentPage(1);
-										}}
+										onChange={handleSearchChange}
 										className="pl-8 text-sm"
 									/>
 								</div>
