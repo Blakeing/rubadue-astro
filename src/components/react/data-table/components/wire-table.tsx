@@ -2,6 +2,7 @@ import type { ColumnDef, Header, Row } from "@tanstack/react-table";
 import type * as React from "react";
 import { DataTable } from "./data-table";
 import type { WireData } from "../types";
+import { cn } from "@/lib/utils";
 
 interface BaseWireTableProps<TData extends object> {
 	/** The data to display in the table */
@@ -101,7 +102,7 @@ export function WireTable<TData extends object = WireData>({
 		| undefined;
 
 	return (
-		<div className={className}>
+		<div className={cn("not-prose", className)}>
 			<DataTable<TData>
 				columns={typedColumns}
 				data={typedData}
