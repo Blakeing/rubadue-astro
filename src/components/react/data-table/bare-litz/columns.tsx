@@ -2,7 +2,28 @@ import { Button } from "@/components/react/ui";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BareLitzWireSpec } from "./data";
 import { cn } from "@/lib/utils";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import { createSortableHeader } from "../utils/sorting";
+
+// Helper function to get sort icon
+function getSortIcon(isSorted: boolean | string) {
+	if (isSorted === "asc") {
+		return <ArrowUp className="ml-2 h-4 w-4 text-primary" />;
+	}
+	if (isSorted === "desc") {
+		return <ArrowDown className="ml-2 h-4 w-4 text-primary" />;
+	}
+	return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />;
+}
+
+// Helper function to get next sort state
+function getNextSortState(
+	currentState: boolean | string,
+): "asc" | "desc" | false {
+	if (currentState === false) return "asc";
+	if (currentState === "asc") return "desc";
+	return false;
+}
 
 /**
  * Safely formats a number with the specified decimal places
@@ -19,21 +40,7 @@ function formatNumber(
 export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	{
 		accessorKey: "equivalentAWG",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					AWG
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("AWG", column),
 		cell: ({ row }) => formatNumber(row.original.equivalentAWG, 0),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.equivalentAWG);
@@ -43,21 +50,7 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "nominalCircularMil",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					CIRCULAR MIL
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("CIRCULAR MIL", column),
 		cell: ({ row }) => formatNumber(row.original.nominalCircularMil, 0),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.nominalCircularMil);
@@ -67,21 +60,7 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "numberOfWires",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					# OF WIRES
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("# OF WIRES", column),
 		cell: ({ row }) => formatNumber(row.original.numberOfWires, 0),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.numberOfWires);
@@ -91,21 +70,7 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "magnetWireSize",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					MAGNET WIRE SIZE
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("MAGNET WIRE SIZE", column),
 		cell: ({ row }) => formatNumber(row.original.magnetWireSize, 0),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.magnetWireSize);
@@ -115,39 +80,11 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "litzWireType",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					LITZ WIRE TYPE
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("LITZ WIRE TYPE", column),
 	},
 	{
 		accessorKey: "nominalODIn",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					NOMINAL O.D. (IN.)
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("NOMINAL O.D. (IN.)", column),
 		cell: ({ row }) => formatNumber(row.original.nominalODIn, 3),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.nominalODIn);
@@ -157,21 +94,7 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "maxDCResistance",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					MAX DC RESISTANCE
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("MAX DC RESISTANCE", column),
 		cell: ({ row }) => formatNumber(row.original.maxDCResistance, 5),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.maxDCResistance);
@@ -181,21 +104,7 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "nominalLbs1000Ft",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					WEIGHT LB/KFT
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("WEIGHT LB/KFT", column),
 		cell: ({ row }) => formatNumber(row.original.nominalLbs1000Ft, 3),
 		sortingFn: (rowA, rowB) => {
 			const a = Number(rowA.original.nominalLbs1000Ft);
@@ -205,20 +114,6 @@ export const columns: ColumnDef<BareLitzWireSpec, unknown>[] = [
 	},
 	{
 		accessorKey: "litzWireConstruction",
-		header: ({ column }) => {
-			const isSorted = column.getIsSorted();
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(isSorted === "asc")}
-					className="hover:bg-muted/50"
-				>
-					CONSTRUCTION
-					<ArrowUpDown
-						className={cn("ml-2 h-4 w-4", isSorted && "text-primary")}
-					/>
-				</Button>
-			);
-		},
+		header: ({ column }) => createSortableHeader("CONSTRUCTION", column),
 	},
 ];

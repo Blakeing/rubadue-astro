@@ -58,7 +58,6 @@ interface ProductPageProps {
 
 export default function ProductPage({
 	product,
-	license,
 	filterContext,
 }: ProductPageProps) {
 	const getCatalogUrl = () => {
@@ -84,10 +83,8 @@ export default function ProductPage({
 		return (
 			<>
 				{construction.sizeRange && (
-					<div className="flex items-center">
-						<dt className="pr-2 flex-none text-sm text-muted-foreground">
-							Size Range:
-						</dt>
+					<div className="space-y-1">
+						<dt className="text-sm text-muted-foreground">Size Range:</dt>
 						<dd className="text-sm text-foreground">
 							{construction.sizeRange}
 						</dd>
@@ -95,10 +92,8 @@ export default function ProductPage({
 				)}
 
 				{construction.numberWires && (
-					<div className="flex items-center">
-						<dt className="pr-2 flex-none text-sm text-muted-foreground">
-							Number of Wires:
-						</dt>
+					<div className="space-y-1">
+						<dt className="text-sm text-muted-foreground">Number of Wires:</dt>
 						<dd className="text-sm text-foreground">
 							{construction.numberWires}
 						</dd>
@@ -106,10 +101,8 @@ export default function ProductPage({
 				)}
 
 				{construction.conductor && (
-					<div className="flex items-center">
-						<dt className="pr-2 flex-none text-sm text-muted-foreground">
-							Conductor:
-						</dt>
+					<div className="space-y-1">
+						<dt className="text-sm text-muted-foreground">Conductor:</dt>
 						<dd className="text-sm text-foreground">
 							{construction.conductor}
 						</dd>
@@ -117,10 +110,8 @@ export default function ProductPage({
 				)}
 
 				{construction.insulation && (
-					<div className="flex items-center">
-						<dt className="pr-2 flex-none text-sm text-muted-foreground">
-							Insulation:
-						</dt>
+					<div className="space-y-1">
+						<dt className="text-sm text-muted-foreground">Insulation:</dt>
 						<dd className="text-sm text-foreground">
 							{construction.insulation}
 						</dd>
@@ -130,20 +121,16 @@ export default function ProductPage({
 				{construction.rating && (
 					<div className="flex flex-col space-y-2">
 						{construction.rating.temperature && (
-							<div className="flex items-center">
-								<dt className="pr-2 flex-none text-sm text-muted-foreground">
-									Temperature:
-								</dt>
+							<div className="space-y-1">
+								<dt className="text-sm text-muted-foreground">Temperature:</dt>
 								<dd className="text-sm text-foreground">
 									{construction.rating.temperature}
 								</dd>
 							</div>
 						)}
 						{construction.rating.voltage && (
-							<div className="flex items-center">
-								<dt className="pr-2 flex-none text-sm text-muted-foreground">
-									Voltage:
-								</dt>
+							<div className="space-y-1">
+								<dt className="text-sm text-muted-foreground">Voltage:</dt>
 								<dd className="text-sm text-foreground">
 									{construction.rating.voltage.join(", ")}
 								</dd>
@@ -155,14 +142,14 @@ export default function ProductPage({
 				{construction.coatings && (
 					<div
 						className={cn(
-							"flex items-center",
+							"space-y-1",
 							construction.coatings.length > 1 && "flex-col items-start",
 						)}
 					>
 						<dt
 							className={cn(
-								"pr-2 flex-none text-sm text-muted-foreground",
-								construction.coatings.length > 1 && "mb-2 pr-0",
+								"text-sm text-muted-foreground",
+								construction.coatings.length > 1 && "mb-2",
 							)}
 						>
 							Coatings:
@@ -226,7 +213,7 @@ export default function ProductPage({
 			content: (
 				<div className="space-y-4">
 					{product.compliances && (
-						<div>
+						<div className="space-y-2">
 							<dt className="sr-only">Compliances:</dt>
 							<dd>
 								<ul className="list-disc space-y-2 pl-5 text-sm">
@@ -238,8 +225,8 @@ export default function ProductPage({
 						</div>
 					)}
 					{product.systemApprovals && (
-						<div className="mt-4">
-							<dt className="text-sm text-muted-foreground mb-2">
+						<div className="space-y-2">
+							<dt className="text-sm text-muted-foreground">
 								System Approvals:
 							</dt>
 							<dd>
@@ -252,8 +239,8 @@ export default function ProductPage({
 						</div>
 					)}
 					{product.tensileStrength && (
-						<div className="flex items-center">
-							<dt className="flex-none text-sm text-muted-foreground pr-2">
+						<div className="space-y-1">
+							<dt className="text-sm text-muted-foreground">
 								Tensile Strength:
 							</dt>
 							<dd className="text-sm text-foreground">
@@ -277,13 +264,13 @@ export default function ProductPage({
 						<img
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							className="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-lg sm:shadow-2xl"
+							className="aspect-[4/3] w-full rounded-lg bg-accent/80 object-contain shadow-lg sm:shadow-2xl"
 						/>
 					) : (
 						<Image
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							class="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-lg sm:shadow-2xl"
+							class="aspect-[4/3] w-full rounded-lg bg-accent/80 object-contain shadow-lg sm:shadow-2xl"
 							width={1600}
 							height={900}
 							format="webp"
@@ -299,7 +286,7 @@ export default function ProductPage({
 					<h2 className="text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
 						Product Information
 					</h2>
-					<ScrollArea className="h-96 px-4 lg:px-6 border-0 lg:border rounded-lg">
+					<ScrollArea className="lg:h-96 lg:px-6 border-0 lg:border rounded-lg">
 						<Accordion
 							type="multiple"
 							defaultValue={defaultSection ? [defaultSection] : []}

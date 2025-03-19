@@ -2,6 +2,7 @@ import { Button } from "@/components/react/ui";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ChevronsUpDown } from "lucide-react";
 import type { InsulatedLitzSpec } from "./types";
+import { createSortableHeader } from "../utils/sorting";
 
 const formatNumber = (value: string | number | null | undefined): string => {
 	if (value == null) return "";
@@ -18,17 +19,7 @@ export function createInsulatedLitzColumns<
 	return [
 		{
 			accessorKey: "partNumber",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						PART NUMBER
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("PART NUMBER", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">{row.getValue("partNumber")}</div>
 			),
@@ -40,17 +31,7 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "equivalentAWG",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						EQUIVALENT AWG
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("EQUIVALENT AWG", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("equivalentAWG"))}
@@ -64,17 +45,8 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "coreDiameter",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						CORE DIAMETER (IN)
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) =>
+				createSortableHeader("CORE DIAMETER (IN)", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("coreDiameter"))}
@@ -88,17 +60,7 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "circularMils",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						CIRCULAR MILS
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("CIRCULAR MILS", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("circularMils"))}
@@ -112,17 +74,7 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "numberOfStrands",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						NUMBER OF STRANDS
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("NUMBER OF STRANDS", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("numberOfStrands"))}
@@ -136,17 +88,7 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "awgOfStrands",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						AWG OF STRANDS
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("AWG OF STRANDS", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("awgOfStrands"))}
@@ -160,17 +102,7 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "nominalOD",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						NOMINAL OD (IN)
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) => createSortableHeader("NOMINAL OD (IN)", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{formatNumber(row.getValue("nominalOD"))}
@@ -184,17 +116,8 @@ export function createInsulatedLitzColumns<
 		},
 		{
 			accessorKey: "suggestedOperatingFreq",
-			header: ({ column }) => {
-				return (
-					<Button
-						variant="ghost"
-						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					>
-						SUGGESTED OPERATING FREQ
-						<ChevronsUpDown className="ml-2 h-4 w-4" />
-					</Button>
-				);
-			},
+			header: ({ column }) =>
+				createSortableHeader("SUGGESTED OPERATING FREQ", column),
 			cell: ({ row }) => (
 				<div className="w-[100px]">
 					{row.getValue("suggestedOperatingFreq")}

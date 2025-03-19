@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import type { TableContentProps } from "./types";
+import type { TableContentProps } from "@/components/react/data-table/types";
 
 /**
  * Props for the TableRowMemo component
@@ -181,7 +181,7 @@ export function TableContent<TData extends object>({
 	// Render all rows if virtualization is disabled
 	return (
 		<>
-			{rows.map((row, index) => (
+			{rows.map((row: Row<TData>, index: number) => (
 				<TableRowMemo<TData>
 					key={row.id}
 					row={row}

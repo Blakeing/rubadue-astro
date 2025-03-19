@@ -44,7 +44,9 @@ const segments = pathname
 if (segments.length === 0 || segments[0].name !== "Home") {
   segments.unshift({ name: "Home", href: "/" });
 }
+
+// Only render breadcrumbs if there are more than 2 segments (Home + at least 2 other segments)
+const shouldShowBreadcrumbs = segments.length > 2;
 ---
 
-<BaseBreadcrumbs segments={segments} />
-
+{shouldShowBreadcrumbs && <BaseBreadcrumbs segments={segments} />}

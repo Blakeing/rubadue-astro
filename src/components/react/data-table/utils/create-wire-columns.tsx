@@ -1,8 +1,7 @@
 import type { WireData } from "../types";
 import type { ColumnDef, HeaderContext } from "@tanstack/react-table";
 import { Button } from "@/components/react/ui";
-import { ArrowUpDown } from "lucide-react";
-import * as React from "react";
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 
 /**
  * Safely formats a number with the specified decimal places
@@ -19,6 +18,26 @@ function formatNumber(
 	return Number.isNaN(num) ? "" : num.toFixed(decimals);
 }
 
+// Helper function to get sort icon
+function getSortIcon(isSorted: boolean | string) {
+	if (isSorted === "asc") {
+		return <ArrowUp className="ml-2 h-4 w-4 text-primary" />;
+	}
+	if (isSorted === "desc") {
+		return <ArrowDown className="ml-2 h-4 w-4 text-primary" />;
+	}
+	return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />;
+}
+
+// Helper function to get next sort state
+function getNextSortState(
+	currentState: boolean | string,
+): "asc" | "desc" | false {
+	if (currentState === false) return "asc";
+	if (currentState === "asc") return "desc";
+	return false;
+}
+
 /**
  * Creates column definitions for wire tables
  * @returns Array of column definitions
@@ -33,17 +52,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 			header: ({ column }: HeaderContext<T, unknown>) => (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => {
+						const nextState = getNextSortState(column.getIsSorted());
+						if (nextState === false) {
+							column.clearSorting();
+						} else {
+							column.toggleSorting(nextState === "desc");
+						}
+					}}
 					className="hover:bg-muted/50"
 				>
 					PART NUMBER
-					<ArrowUpDown
-						className={
-							column.getIsSorted()
-								? "ml-2 h-4 w-4 text-primary"
-								: "ml-2 h-4 w-4"
-						}
-					/>
+					{getSortIcon(column.getIsSorted())}
 				</Button>
 			),
 			sortingFn: (rowA, rowB) => {
@@ -57,17 +77,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 			header: ({ column }: HeaderContext<T, unknown>) => (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => {
+						const nextState = getNextSortState(column.getIsSorted());
+						if (nextState === false) {
+							column.clearSorting();
+						} else {
+							column.toggleSorting(nextState === "desc");
+						}
+					}}
 					className="hover:bg-muted/50"
 				>
 					AWG
-					<ArrowUpDown
-						className={
-							column.getIsSorted()
-								? "ml-2 h-4 w-4 text-primary"
-								: "ml-2 h-4 w-4"
-						}
-					/>
+					{getSortIcon(column.getIsSorted())}
 				</Button>
 			),
 			cell: ({ row }) => {
@@ -83,7 +104,7 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 		{
 			id: "conductor",
 			header: () => (
-				<div className="text-muted-foreground font-medium">CONDUCTOR</div>
+				<div className="px-4 text-muted-foreground font-medium">CONDUCTOR</div>
 			),
 			columns: [
 				{
@@ -92,19 +113,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 					header: ({ column }: HeaderContext<T, unknown>) => (
 						<Button
 							variant="ghost"
-							onClick={() =>
-								column.toggleSorting(column.getIsSorted() === "asc")
-							}
+							onClick={() => {
+								const nextState = getNextSortState(column.getIsSorted());
+								if (nextState === false) {
+									column.clearSorting();
+								} else {
+									column.toggleSorting(nextState === "desc");
+								}
+							}}
 							className="hover:bg-muted/50"
 						>
 							INCHES
-							<ArrowUpDown
-								className={
-									column.getIsSorted()
-										? "ml-2 h-4 w-4 text-primary"
-										: "ml-2 h-4 w-4"
-								}
-							/>
+							{getSortIcon(column.getIsSorted())}
 						</Button>
 					),
 					cell: ({ row }) => {
@@ -123,19 +143,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 					header: ({ column }: HeaderContext<T, unknown>) => (
 						<Button
 							variant="ghost"
-							onClick={() =>
-								column.toggleSorting(column.getIsSorted() === "asc")
-							}
+							onClick={() => {
+								const nextState = getNextSortState(column.getIsSorted());
+								if (nextState === false) {
+									column.clearSorting();
+								} else {
+									column.toggleSorting(nextState === "desc");
+								}
+							}}
 							className="hover:bg-muted/50"
 						>
 							MM
-							<ArrowUpDown
-								className={
-									column.getIsSorted()
-										? "ml-2 h-4 w-4 text-primary"
-										: "ml-2 h-4 w-4"
-								}
-							/>
+							{getSortIcon(column.getIsSorted())}
 						</Button>
 					),
 					cell: ({ row }) => {
@@ -153,7 +172,9 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 		{
 			id: "nominalOD",
 			header: () => (
-				<div className="text-muted-foreground font-medium">NOMINAL O.D.</div>
+				<div className="px-4 text-muted-foreground font-medium">
+					NOMINAL O.D.
+				</div>
 			),
 			columns: [
 				{
@@ -162,19 +183,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 					header: ({ column }: HeaderContext<T, unknown>) => (
 						<Button
 							variant="ghost"
-							onClick={() =>
-								column.toggleSorting(column.getIsSorted() === "asc")
-							}
+							onClick={() => {
+								const nextState = getNextSortState(column.getIsSorted());
+								if (nextState === false) {
+									column.clearSorting();
+								} else {
+									column.toggleSorting(nextState === "desc");
+								}
+							}}
 							className="hover:bg-muted/50"
 						>
 							INCHES
-							<ArrowUpDown
-								className={
-									column.getIsSorted()
-										? "ml-2 h-4 w-4 text-primary"
-										: "ml-2 h-4 w-4"
-								}
-							/>
+							{getSortIcon(column.getIsSorted())}
 						</Button>
 					),
 					cell: ({ row }) => {
@@ -193,19 +213,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 					header: ({ column }: HeaderContext<T, unknown>) => (
 						<Button
 							variant="ghost"
-							onClick={() =>
-								column.toggleSorting(column.getIsSorted() === "asc")
-							}
+							onClick={() => {
+								const nextState = getNextSortState(column.getIsSorted());
+								if (nextState === false) {
+									column.clearSorting();
+								} else {
+									column.toggleSorting(nextState === "desc");
+								}
+							}}
 							className="hover:bg-muted/50"
 						>
 							MM
-							<ArrowUpDown
-								className={
-									column.getIsSorted()
-										? "ml-2 h-4 w-4 text-primary"
-										: "ml-2 h-4 w-4"
-								}
-							/>
+							{getSortIcon(column.getIsSorted())}
 						</Button>
 					),
 					cell: ({ row }) => {
@@ -225,17 +244,18 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 			header: ({ column }: HeaderContext<T, unknown>) => (
 				<Button
 					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					onClick={() => {
+						const nextState = getNextSortState(column.getIsSorted());
+						if (nextState === false) {
+							column.clearSorting();
+						} else {
+							column.toggleSorting(nextState === "desc");
+						}
+					}}
 					className="hover:bg-muted/50"
 				>
 					WEIGHT LB/KFT
-					<ArrowUpDown
-						className={
-							column.getIsSorted()
-								? "ml-2 h-4 w-4 text-primary"
-								: "ml-2 h-4 w-4"
-						}
-					/>
+					{getSortIcon(column.getIsSorted())}
 				</Button>
 			),
 			cell: ({ row }) => {

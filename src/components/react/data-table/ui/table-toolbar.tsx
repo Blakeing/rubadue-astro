@@ -3,7 +3,13 @@ import { cn } from "@/lib/utils";
 import type * as React from "react";
 import { TableSearch } from "./table-search";
 
-import { Filter, RotateCcw } from "lucide-react";
+import {
+	Filter,
+	RotateCcw,
+	ArrowUp,
+	ArrowDown,
+	ArrowUpDown,
+} from "lucide-react";
 
 /**
  * Props for the table wrapper component
@@ -176,7 +182,9 @@ export function TableToolbar({
 							size="sm"
 							className="h-8 px-2 lg:px-3"
 						>
-							<Filter className="h-4 w-4" />
+							<ArrowUpDown
+								className={cn("h-4 w-4", isFilterActive && "text-primary")}
+							/>
 							<span className="ml-2 hidden lg:inline-block">Filter</span>
 							{activeFilterCount > 0 && (
 								<span className="ml-1 rounded bg-primary px-1 text-xs font-medium text-primary-foreground">
