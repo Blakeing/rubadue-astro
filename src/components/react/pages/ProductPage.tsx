@@ -7,8 +7,7 @@ import {
 	ScrollArea,
 } from "@/components/react/ui";
 import type { ImageMetadata } from "astro";
-import { Star } from "lucide-react";
-import { Fragment, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 

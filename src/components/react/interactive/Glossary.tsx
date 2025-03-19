@@ -1,11 +1,4 @@
-import {
-	Badge,
-	Button,
-	Card,
-	CardContent,
-	Input,
-	ScrollArea,
-} from "@/components/react/ui";
+import { Badge, Button, Card, CardContent, Input } from "@/components/react/ui";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";

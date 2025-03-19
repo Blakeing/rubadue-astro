@@ -1,5 +1,3 @@
-"use client";
-
 import {
 	Button,
 	Checkbox,
@@ -23,15 +21,8 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/react/ui";
-import { ChevronLeft, ChevronRight, Search, Star } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
-
-const sortOptions = [
-	{ name: "Most Popular", value: "popular" },
-	{ name: "Newest", value: "newest" },
-	{ name: "Price: Low to High", value: "price-asc" },
-	{ name: "Price: High to Low", value: "price-desc" },
-];
 
 type FilterCategory = "type" | "material";
 

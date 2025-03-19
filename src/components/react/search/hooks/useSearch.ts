@@ -158,7 +158,7 @@ export function useSearch({
 	// Reset page when filters change
 	useEffect(() => {
 		setCurrentPage(1);
-	}, [selectedTag]);
+	}, []);
 
 	// Handle search state
 	useEffect(() => {

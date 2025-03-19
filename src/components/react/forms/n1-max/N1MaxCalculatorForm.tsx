@@ -15,25 +15,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Switch,
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
 } from "@/components/react/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { InfoIcon } from "lucide-react";
-import {
-	CartesianGrid,
-	Line,
-	LineChart,
-	Tooltip as RechartsTooltip,
-	ResponsiveContainer,
-	XAxis,
-	YAxis,
-} from "recharts";
 
 import { InputField, SelectField } from "@/components/react/shared/FormFields";
 import type {

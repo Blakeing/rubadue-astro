@@ -5,7 +5,7 @@ import {
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "./ui/tooltip";
+} from "@/components/react/ui";
 
 interface LocationDetails {
 	lat: number;

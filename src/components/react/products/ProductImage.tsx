@@ -1,4 +1,3 @@
-import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
 interface ProductImageProps {

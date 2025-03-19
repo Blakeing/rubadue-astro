@@ -108,3 +108,4 @@ export {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./tooltip";
+export { Switch } from "./switch";

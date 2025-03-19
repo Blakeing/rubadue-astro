@@ -5,7 +5,6 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-	NavigationMenuViewport,
 	Sheet,
 	SheetClose,
 	SheetContent,
@@ -15,15 +14,7 @@ import {
 	navigationMenuTriggerStyle,
 } from "@/components/react/ui";
 import { cn } from "@/lib/utils";
-import {
-	Book,
-	Cable,
-	FileText,
-	Menu,
-	Settings,
-	Shield,
-	Wrench,
-} from "lucide-react";
+import { Book, Cable, Menu, Settings, Shield, Wrench } from "lucide-react";
 import * as React from "react";
 import { TextLogo } from "./TextLogo";
 

@@ -11,6 +11,7 @@ export const WaveBackground = ({
 }) => {
 	return (
 		<div className={cn("absolute inset-0 -z-10 overflow-hidden", className)}>
+			{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 			<svg
 				width="100%"
 				height="100%"
