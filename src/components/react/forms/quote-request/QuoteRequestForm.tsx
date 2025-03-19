@@ -1,4 +1,6 @@
-import { Alert, AlertDescription, Button, Form } from "@/components/react/ui";
+import { Alert, AlertDescription } from "@/components/react/ui/alert";
+import { Button } from "@/components/react/ui/button";
+import { Form } from "@/components/react/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -7,8 +9,6 @@ import { JobInformation } from "./JobInformation";
 import { PersonalInformation } from "./PersonalInformation";
 import type { FormValues, QuoteRequestFormProps } from "./types";
 import { formSchema } from "./types";
-
-import { Loader2 } from "lucide-react";
 
 import { useToast } from "@/hooks/use-toast";
 
@@ -127,7 +127,6 @@ export function QuoteRequestForm({
 					)}
 
 					<Button type="submit" disabled={isSubmitting}>
-						{isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 						{isSubmitting ? "Submitting..." : "Submit Request"}
 					</Button>
 				</div>

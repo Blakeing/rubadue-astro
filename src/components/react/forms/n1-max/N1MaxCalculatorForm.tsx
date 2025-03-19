@@ -1,21 +1,22 @@
+import { Button } from "@/components/react/ui/button";
+import { Card, CardContent } from "@/components/react/ui/card";
 import {
-	Button,
-	Card,
-	CardContent,
 	Form,
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
-	Input,
-	Label,
+} from "@/components/react/ui/form";
+import { Input } from "@/components/react/ui/input";
+import { Label } from "@/components/react/ui/label";
+import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-	Switch,
-} from "@/components/react/ui";
+} from "@/components/react/ui/select";
+import { Switch } from "@/components/react/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -38,8 +39,6 @@ import {
 	celsiusToFahrenheit,
 	fahrenheitToCelsius,
 } from "./utils";
-
-import { MinusIcon, PlusIcon } from "lucide-react";
 
 /**
  * Props for the N1 Max Calculator form

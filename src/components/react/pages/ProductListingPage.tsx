@@ -1,7 +1,7 @@
+import { Button } from "@/components/react/ui/button";
+import { Checkbox } from "@/components/react/ui/checkbox";
+import { Input } from "@/components/react/ui/input";
 import {
-	Button,
-	Checkbox,
-	Input,
 	Pagination,
 	PaginationContent,
 	PaginationEllipsis,
@@ -9,18 +9,22 @@ import {
 	PaginationLink,
 	PaginationNext,
 	PaginationPrevious,
-	ScrollArea,
+} from "@/components/react/ui/pagination";
+import { ScrollArea } from "@/components/react/ui/scroll-area";
+import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
+} from "@/components/react/ui/select";
+import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "@/components/react/ui";
+} from "@/components/react/ui/sheet";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 

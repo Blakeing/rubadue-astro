@@ -6,7 +6,7 @@ import {
 	PaginationLink,
 	PaginationNext,
 	PaginationPrevious,
-} from "@/components/react/ui";
+} from "@/components/react/ui/pagination";
 import { cn } from "@/lib/utils";
 
 interface SearchPaginationProps {

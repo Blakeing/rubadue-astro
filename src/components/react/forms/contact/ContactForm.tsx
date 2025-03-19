@@ -1,5 +1,5 @@
+import { Button } from "@/components/react/ui/button";
 import {
-	Button,
 	Form,
 	FormControl,
 	FormDescription,
@@ -7,9 +7,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Input,
-	Textarea,
-} from "@/components/react/ui";
+} from "@/components/react/ui/form";
+import { Input } from "@/components/react/ui/input";
+import { Textarea } from "@/components/react/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
