@@ -1,7 +1,7 @@
 ---
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import PageBreadcrumbs from "@/components/astro/layout/PageBreadcrumbs.astro";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { Toaster } from "@/components/react/ui";
@@ -23,19 +23,43 @@ const {
   headerDescription = "",
 } = Astro.props;
 
+// Page name mapping for better breadcrumb display
+const pageNameMap: Record<string, string> = {
+  about: "About Us",
+  markets: "Markets",
+  careers: "Careers",
+  contact: "Contact Us",
+  "request-a-quote": "Request a Quote",
+  "part-number-builders": "Part Number Builders",
+  glossary: "Glossary",
+  "knowledge-base": "Knowledge Base",
+  "health-safety": "Health & Safety",
+  leadership: "Leadership",
+  partnerships: "Partnerships",
+  "n1-max-calculator": "N1 Max Calculator",
+  "thank-you": "Thank You",
+};
+
 // Build breadcrumb segments based on current URL path
 const segments = Astro.url.pathname
   .split("/")
   .filter(Boolean)
   .map((segment, index, array) => {
     const href = `/${array.slice(0, index + 1).join("/")}`;
-    // Convert kebab case to title case for display
-    const name = segment
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    // Use mapped name if available, otherwise convert kebab case to title case
+    const name =
+      pageNameMap[segment] ||
+      segment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
     return { name, href };
   });
+
+// Add home as first segment if not already present
+if (segments.length === 0 || segments[0].name !== "Home") {
+  segments.unshift({ name: "Home", href: "/" });
+}
 ---
 
 <!doctype html>
@@ -52,7 +76,7 @@ const segments = Astro.url.pathname
       )
     }
     <main>
-      <Breadcrumbs segments={segments} />
+      <PageBreadcrumbs pathname={Astro.url.pathname} />
       <slot />
     </main>
     <Footer />

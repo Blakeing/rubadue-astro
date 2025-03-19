@@ -2,7 +2,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.astro";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { ProductPage } from "@/components/react/pages";
@@ -85,7 +85,7 @@ const knownMaterials = ["ETFE", "FEP", "PFA", "TCA"];
 
 // Start with static segments
 const segments = [
-  { name: "", href: "/" }, // Home icon
+  { name: "Home", href: "/" }, // Home icon
   { name: "Catalog", href: "/catalog" }, // Static catalog link
 ];
 
@@ -153,7 +153,7 @@ const category = product.data.category;
   <body class="min-h-screen bg-background">
     <Header client:load />
     <BaseHeader eyebrow={category} title={title} />
-    <Breadcrumbs segments={segments} />
+    <ProductBreadcrumbs segments={segments} />
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <ProductPage

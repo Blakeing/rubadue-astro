@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseHead from "@/components/astro/layout/BaseHead.astro";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.astro";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { ProductListingPage } from "@/components/react/pages";
@@ -50,7 +50,7 @@ const filterState = {
 
 // Build breadcrumb segments with filter context
 const segments = [
-  { name: "Products", href: "/products" },
+  { name: "Home", href: "/" },
   {
     name: "Catalog",
     href: `/catalog${url.search ? `?${url.search}` : ""}`,
@@ -70,6 +70,7 @@ const description =
   <body class="min-h-screen bg-background">
     <Header client:load />
     <BaseHeader eyebrow="Product" title="Catalog" />
+    <ProductBreadcrumbs segments={segments} />
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <ProductListingPage

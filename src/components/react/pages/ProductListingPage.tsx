@@ -21,6 +21,7 @@ import {
 import {
 	Sheet,
 	SheetContent,
+	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
@@ -332,6 +333,10 @@ export default function ProductListingPage({
 					<SheetContent side="left" className="flex h-full flex-col">
 						<SheetHeader>
 							<SheetTitle>Filters</SheetTitle>
+							<SheetDescription>
+								Filter products by type and material. Select multiple options to
+								narrow down your search.
+							</SheetDescription>
 						</SheetHeader>
 
 						<ScrollArea className="px-4">

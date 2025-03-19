@@ -4,12 +4,16 @@ interface Props {
     name: string;
     href: string;
   }[];
+  className?: string;
 }
 
-const { segments } = Astro.props;
+const { segments, className = "" } = Astro.props;
 ---
 
-<nav class="flex bg-foreground shadow-sm z-10" aria-label="Breadcrumb">
+<nav
+  class={`flex bg-background border-b shadow-sm z-10 ${className}`}
+  aria-label="Breadcrumb"
+>
   <ol
     role="list"
     class="flex items-center mx-auto max-w-7xl px-4 w-full sm:px-6 lg:px-8 py-2 space-x-2 sm:space-x-4 overflow-x-auto"
@@ -20,7 +24,7 @@ const { segments } = Astro.props;
           <div class="flex items-center">
             {index > 0 && (
               <svg
-                class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-muted"
+                class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-muted-foreground"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -33,7 +37,10 @@ const { segments } = Astro.props;
               </svg>
             )}
             {index === 0 ? (
-              <a href={segment.href} class="text-muted hover:text-background">
+              <a
+                href={segment.href}
+                class="text-muted-foreground hover:text-foreground"
+              >
                 <svg
                   class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0"
                   viewBox="0 0 20 20"
@@ -53,8 +60,8 @@ const { segments } = Astro.props;
                 href={segment.href}
                 class={`${index > 0 ? "ml-2 sm:ml-4" : ""} text-xs sm:text-sm font-medium truncate ${
                   index === segments.length - 1
-                    ? "text-background"
-                    : "text-muted hover:text-background"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
                 aria-current={
                   index === segments.length - 1 ? "page" : undefined

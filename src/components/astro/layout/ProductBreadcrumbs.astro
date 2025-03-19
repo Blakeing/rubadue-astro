@@ -1,0 +1,14 @@
+---
+import BaseBreadcrumbs from "./BaseBreadcrumbs.astro";
+
+interface Props {
+  segments: {
+    name: string;
+    href: string;
+  }[];
+}
+
+const { segments } = Astro.props;
+---
+
+<BaseBreadcrumbs segments={segments} />
