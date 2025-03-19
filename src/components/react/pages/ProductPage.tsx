@@ -7,7 +7,6 @@ import {
 	ScrollArea,
 } from "@/components/react/ui";
 import type { ImageMetadata } from "astro";
-import { useCallback, useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -50,7 +49,6 @@ interface ProductPageProps {
 		content: string;
 	};
 
-	// Add filter context for breadcrumbs
 	filterContext?: {
 		type: string[];
 		material: string[];
@@ -63,118 +61,130 @@ export default function ProductPage({
 	license,
 	filterContext,
 }: ProductPageProps) {
-	const productImageRef = useRef<HTMLDivElement>(null);
-	const productDetailsRef = useRef<HTMLDivElement>(null);
-
-	// Build catalog URL with filter context
 	const getCatalogUrl = () => {
 		if (!filterContext) return "/catalog";
 
 		const params = new URLSearchParams();
-
-		// Add type filters
 		for (const type of filterContext.type) {
 			params.append("type", type);
 		}
-
-		// Add material filters
 		for (const material of filterContext.material) {
 			params.append("material", material);
 		}
-
-		// Add search query if exists
-		if (filterContext.search) {
-			params.set("q", filterContext.search);
-		}
+		if (filterContext.search) params.set("q", filterContext.search);
 
 		return `/catalog${params.toString() ? `?${params.toString()}` : ""}`;
 	};
 
-	// Function to update the details height based on image height
-	const updateDetailsHeight = useCallback(() => {
-		if (productImageRef.current && productDetailsRef.current) {
-			const imageHeight = productImageRef.current.offsetHeight;
-			// Find the ScrollArea viewport element
-			const scrollAreaViewport = productDetailsRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]",
-			);
-			if (scrollAreaViewport) {
-				// Only apply fixed height on larger screens (lg and up)
-				if (window.innerWidth >= 1024) {
-					// 1024px is the lg breakpoint in Tailwind
-					// Subtract space for the heading (approximately 80px)
-					(scrollAreaViewport as HTMLElement).style.height =
-						`${imageHeight - 80}px`;
-				} else {
-					// Remove fixed height on mobile
-					(scrollAreaViewport as HTMLElement).style.height = "auto";
-				}
-			}
-		}
-	}, []);
+	const renderConstructionDetails = (
+		construction: ProductPageProps["product"]["construction"],
+	) => {
+		if (!construction) return null;
 
-	useEffect(() => {
-		// Check if we're on mobile initially
-		const isMobile = window.innerWidth < 1024;
+		return (
+			<>
+				{construction.sizeRange && (
+					<div className="flex items-center">
+						<dt className="pr-2 flex-none text-sm text-muted-foreground">
+							Size Range:
+						</dt>
+						<dd className="text-sm text-foreground">
+							{construction.sizeRange}
+						</dd>
+					</div>
+				)}
 
-		// Initial setup based on screen size
-		if (productDetailsRef.current) {
-			const scrollAreaViewport = productDetailsRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]",
-			);
+				{construction.numberWires && (
+					<div className="flex items-center">
+						<dt className="pr-2 flex-none text-sm text-muted-foreground">
+							Number of Wires:
+						</dt>
+						<dd className="text-sm text-foreground">
+							{construction.numberWires}
+						</dd>
+					</div>
+				)}
 
-			if (scrollAreaViewport) {
-				if (isMobile) {
-					// On mobile, set height to auto
-					(scrollAreaViewport as HTMLElement).style.height = "auto";
-				} else {
-					// On desktop, calculate based on image height
-					updateDetailsHeight();
-				}
-			}
-		}
+				{construction.conductor && (
+					<div className="flex items-center">
+						<dt className="pr-2 flex-none text-sm text-muted-foreground">
+							Conductor:
+						</dt>
+						<dd className="text-sm text-foreground">
+							{construction.conductor}
+						</dd>
+					</div>
+				)}
 
-		// Handle window resize for responsive behavior
-		const handleResize = () => {
-			// Find the ScrollArea viewport element
-			if (productDetailsRef.current) {
-				const scrollAreaViewport = productDetailsRef.current.querySelector(
-					"[data-radix-scroll-area-viewport]",
-				);
+				{construction.insulation && (
+					<div className="flex items-center">
+						<dt className="pr-2 flex-none text-sm text-muted-foreground">
+							Insulation:
+						</dt>
+						<dd className="text-sm text-foreground">
+							{construction.insulation}
+						</dd>
+					</div>
+				)}
 
-				if (scrollAreaViewport) {
-					// On mobile, ensure height is auto
-					if (window.innerWidth < 1024) {
-						(scrollAreaViewport as HTMLElement).style.height = "auto";
-					} else {
-						// On desktop, recalculate based on image height
-						updateDetailsHeight();
-					}
-				}
-			}
-		};
+				{construction.rating && (
+					<div className="flex flex-col space-y-2">
+						{construction.rating.temperature && (
+							<div className="flex items-center">
+								<dt className="pr-2 flex-none text-sm text-muted-foreground">
+									Temperature:
+								</dt>
+								<dd className="text-sm text-foreground">
+									{construction.rating.temperature}
+								</dd>
+							</div>
+						)}
+						{construction.rating.voltage && (
+							<div className="flex items-center">
+								<dt className="pr-2 flex-none text-sm text-muted-foreground">
+									Voltage:
+								</dt>
+								<dd className="text-sm text-foreground">
+									{construction.rating.voltage.join(", ")}
+								</dd>
+							</div>
+						)}
+					</div>
+				)}
 
-		// Update on window resize
-		window.addEventListener("resize", handleResize);
-
-		// Add multiple checks to ensure images are loaded (only needed for desktop)
-		const imageLoadTimers = !isMobile
-			? [
-					setTimeout(updateDetailsHeight, 100),
-					setTimeout(updateDetailsHeight, 300),
-					setTimeout(updateDetailsHeight, 800),
-					setTimeout(updateDetailsHeight, 1500),
-				]
-			: [];
-
-		// Cleanup
-		return () => {
-			window.removeEventListener("resize", handleResize);
-			for (const timer of imageLoadTimers) {
-				clearTimeout(timer);
-			}
-		};
-	}, [updateDetailsHeight]);
+				{construction.coatings && (
+					<div
+						className={cn(
+							"flex items-center",
+							construction.coatings.length > 1 && "flex-col items-start",
+						)}
+					>
+						<dt
+							className={cn(
+								"pr-2 flex-none text-sm text-muted-foreground",
+								construction.coatings.length > 1 && "mb-2 pr-0",
+							)}
+						>
+							Coatings:
+						</dt>
+						<dd>
+							{construction.coatings.length > 1 ? (
+								<ul className="list-disc space-y-2 pl-5 text-sm">
+									{construction.coatings.map((coating) => (
+										<li key={coating}>{coating}</li>
+									))}
+								</ul>
+							) : (
+								<p className="text-sm text-foreground">
+									{construction.coatings[0]}
+								</p>
+							)}
+						</dd>
+					</div>
+				)}
+			</>
+		);
+	};
 
 	const sections = [
 		{
@@ -201,107 +211,7 @@ export default function ProductPage({
 			show: !!product.construction,
 			content: (
 				<div className="space-y-4">
-					{product.construction && (
-						<>
-							{product.construction.sizeRange && (
-								<div className="flex items-center">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Size Range:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{product.construction.sizeRange}
-									</dd>
-								</div>
-							)}
-
-							{product.construction.numberWires && (
-								<div className="flex items-center">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Number of Wires:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{product.construction.numberWires}
-									</dd>
-								</div>
-							)}
-
-							{product.construction.conductor && (
-								<div className="flex items-center">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Conductor:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{product.construction.conductor}
-									</dd>
-								</div>
-							)}
-							{product.construction.insulation && (
-								<div className="flex items-center">
-									<dt className="pr-2 flex-none text-sm text-muted-foreground">
-										Insulation:
-									</dt>
-									<dd className="text-sm text-foreground">
-										{product.construction.insulation}
-									</dd>
-								</div>
-							)}
-							{product.construction.rating && (
-								<div className="flex flex-col space-y-2">
-									{product.construction.rating.temperature && (
-										<div className="flex items-center">
-											<dt className="pr-2 flex-none text-sm text-muted-foreground">
-												Temperature:
-											</dt>
-											<dd className="text-sm text-foreground">
-												{product.construction.rating.temperature}
-											</dd>
-										</div>
-									)}
-									{product.construction.rating.voltage && (
-										<div className="flex items-center">
-											<dt className="pr-2 flex-none text-sm text-muted-foreground">
-												Voltage:
-											</dt>
-											<dd className="text-sm text-foreground">
-												{product.construction.rating.voltage.join(", ")}
-											</dd>
-										</div>
-									)}
-								</div>
-							)}
-							{product.construction.coatings && (
-								<div
-									className={cn(
-										"flex items-center",
-										product.construction.coatings.length > 1 &&
-											"flex-col items-start",
-									)}
-								>
-									<dt
-										className={cn(
-											"pr-2 flex-none text-sm text-muted-foreground",
-											product.construction.coatings.length > 1 && "mb-2 pr-0",
-										)}
-									>
-										Coatings:
-									</dt>
-									<dd>
-										{product.construction.coatings.length > 1 ? (
-											<ul className="list-disc space-y-2 pl-5 text-sm">
-												{product.construction.coatings.map((coating) => (
-													<li key={coating}>{coating}</li>
-												))}
-											</ul>
-										) : (
-											<p className="text-sm text-foreground">
-												{product.construction.coatings[0]}
-											</p>
-										)}
-									</dd>
-								</div>
-							)}
-						</>
-					)}
+					{renderConstructionDetails(product.construction)}
 				</div>
 			),
 		},
@@ -361,20 +271,13 @@ export default function ProductPage({
 
 	return (
 		<div className="relative">
-			{/* Product */}
 			<div className="lg:grid lg:grid-cols-9 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
-				{/* Product image */}
-				<div
-					ref={productImageRef}
-					id="product-image"
-					className="lg:col-span-4 lg:row-end-1"
-				>
+				<div id="product-image" className="lg:col-span-4 lg:row-end-1">
 					{typeof product.imageSrc === "string" ? (
 						<img
 							src={product.imageSrc}
 							alt={product.imageAlt}
 							className="aspect-[4/3] w-full rounded-lg bg-accent object-contain shadow-lg sm:shadow-2xl"
-							onLoad={updateDetailsHeight}
 						/>
 					) : (
 						<Image
@@ -389,39 +292,38 @@ export default function ProductPage({
 					)}
 				</div>
 
-				{/* Product details */}
 				<div
-					ref={productDetailsRef}
 					id="product-details"
 					className="mx-auto mt-6 sm:mt-8 lg:mt-0 max-w-2xl lg:col-span-5 lg:row-span-2 lg:row-end-2 lg:max-w-none w-full"
 				>
 					<h2 className="text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
 						Product Information
 					</h2>
-					<ScrollArea className="px-4 sm:px-6 lg:px-8 py-4 border-0 lg:border rounded-lg">
-						<div className="pb-4">
-							<Accordion
-								type="multiple"
-								defaultValue={defaultSection ? [defaultSection] : []}
-								className="w-full"
-							>
-								{visibleSections.map((section, index) => (
-									<AccordionItem
-										key={section.id}
-										value={section.id}
-										className={cn(
-											index === visibleSections.length - 1 &&
-												"data-[state=open]:border-b-0",
-										)}
-									>
-										<AccordionTrigger className="text-sm sm:text-base">
-											{section.title}
-										</AccordionTrigger>
-										<AccordionContent>{section.content}</AccordionContent>
-									</AccordionItem>
-								))}
-							</Accordion>
-						</div>
+					<ScrollArea className="h-96 px-4 lg:px-6 border-0 lg:border rounded-lg">
+						<Accordion
+							type="multiple"
+							defaultValue={defaultSection ? [defaultSection] : []}
+							className="w-full [&_[data-state=open]]:animate-none"
+						>
+							{visibleSections.map((section, index) => (
+								<AccordionItem
+									key={section.id}
+									value={section.id}
+									className={cn(
+										index === visibleSections.length - 1 &&
+											"data-[state=open]:border-b-0",
+										index === 0 && "data-[state=open]",
+									)}
+								>
+									<AccordionTrigger className="text-sm sm:text-base">
+										{section.title}
+									</AccordionTrigger>
+									<AccordionContent className="data-[state=open]:animate-none">
+										{section.content}
+									</AccordionContent>
+								</AccordionItem>
+							))}
+						</Accordion>
 					</ScrollArea>
 				</div>
 			</div>

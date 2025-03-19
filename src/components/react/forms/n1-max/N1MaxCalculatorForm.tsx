@@ -203,7 +203,6 @@ export default function N1MaxCalculatorForm({
 	return (
 		<div className={className}>
 			<div className="mb-6 space-y-2">
-				<h2 className="text-2xl font-bold">{calculatorDescription.title}</h2>
 				<p className="text-muted-foreground">
 					{calculatorDescription.description}
 				</p>
