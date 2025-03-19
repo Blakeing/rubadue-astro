@@ -1,11 +1,4 @@
-"use client";
-
-import type {
-	ToastAction,
-	ToastActionType,
-	ToastState,
-	ToasterToast,
-} from "@/types/hooks";
+import type { ToastAction, ToastState, ToasterToast } from "@/types/hooks";
 import { TOAST_ACTIONS } from "@/types/hooks";
 // Inspired by react-hot-toast library
 import * as React from "react";

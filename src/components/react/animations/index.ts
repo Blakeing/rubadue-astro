@@ -4,6 +4,4 @@
  * @module Animations
  */
 
-export { WireAnimation } from "./WireAnimation";
-export { GeminiEffect } from "./GeminiEffect";
 export { WaveBackground } from "./WaveBackground";

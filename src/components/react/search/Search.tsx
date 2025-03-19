@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { PostCard } from "./components/PostCard";
+import { PostCard } from "./components/post/PostCard";
 import { SearchInput } from "./components/SearchInput";
 import { SearchPagination } from "./components/SearchPagination";
 import { TagList } from "./components/TagList";
