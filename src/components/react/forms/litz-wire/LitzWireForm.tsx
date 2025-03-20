@@ -55,17 +55,13 @@ export function LitzWireForm({
 	});
 
 	const formValues = form.watch();
-	console.log("Form Values Changed:", formValues);
 
 	useEffect(() => {
 		try {
-			console.log("Generating part number with values:", formValues);
 			const newPartNumber = generatePartNumber(formValues);
-			console.log("Generated part number:", newPartNumber);
 			setPartNumber(newPartNumber);
 			onSuccess?.(newPartNumber);
 		} catch (error) {
-			console.error("Error generating part number:", error);
 			onError?.(
 				error instanceof Error
 					? error
@@ -75,21 +71,15 @@ export function LitzWireForm({
 	}, [formValues, onSuccess, onError]);
 
 	const handleNumberOfStrandsChange = (value: string) => {
-		console.log("Number of strands changed to:", value);
 		const currentStrandSize = form.getValues("strandSize");
 		if (currentStrandSize) {
 			const size = currentStrandSize.split("/")[1] || currentStrandSize;
-			console.log(
-				"Updating strand size with number of strands:",
-				`${value}/${size}`,
-			);
 			form.setValue("strandSize", `${value}/${size}`, {
 				shouldValidate: true,
 				shouldDirty: true,
 				shouldTouch: true,
 			});
 		} else {
-			console.log("Setting number of strands value:", value);
 			form.setValue("numberOfStrands", value, {
 				shouldValidate: true,
 				shouldDirty: true,
@@ -99,20 +89,14 @@ export function LitzWireForm({
 	};
 
 	const handleStrandSizeChange = (value: string) => {
-		console.log("Strand size changed to:", value);
 		const currentNumberOfStrands = form.getValues("numberOfStrands");
 		if (currentNumberOfStrands) {
-			console.log(
-				"Updating strand size with size:",
-				`${currentNumberOfStrands}/${value}`,
-			);
 			form.setValue("strandSize", `${currentNumberOfStrands}/${value}`, {
 				shouldValidate: true,
 				shouldDirty: true,
 				shouldTouch: true,
 			});
 		} else {
-			console.log("Setting strand size value:", value);
 			form.setValue("strandSize", value, {
 				shouldValidate: true,
 				shouldDirty: true,
@@ -189,7 +173,6 @@ export function LitzWireForm({
 									options={magnetWireGradeOptions}
 									required
 									onChange={(value) => {
-										console.log("Magnet wire grade changed to:", value);
 										form.setValue("magnetWireGrade", value, {
 											shouldValidate: true,
 											shouldDirty: true,
@@ -205,7 +188,6 @@ export function LitzWireForm({
 									placeholder="Select serve layers"
 									options={serveLayerOptions}
 									onChange={(value) => {
-										console.log("Serve layers changed to:", value);
 										form.setValue("serveLayers", value, {
 											shouldValidate: true,
 											shouldDirty: true,
@@ -217,19 +199,12 @@ export function LitzWireForm({
 								<InputField
 									control={form.control}
 									name="uniqueIdentifier"
-									label="Unique Identifier (optional)"
-									placeholder="Enter identifier (default: XX)"
-									type="text"
+									label="Unique Identifier (Optional)"
+									placeholder="Enter unique identifier"
 									onChange={(value) => {
-										console.log("Unique identifier changed to:", value);
-										form.setValue(
-											"uniqueIdentifier",
-											value.toUpperCase() || "XX",
-											{
-												shouldDirty: true,
-												shouldTouch: true,
-											},
-										);
+										form.setValue("uniqueIdentifier", value.toUpperCase(), {
+											shouldValidate: false,
+										});
 									}}
 								/>
 							</form>

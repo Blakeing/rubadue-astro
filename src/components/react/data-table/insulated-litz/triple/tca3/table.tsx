@@ -8,6 +8,7 @@ export function TripleInsulatedLitzTable() {
 			<DataTable
 				columns={columns}
 				data={tripleInsulatedLitzData}
+				title="Wire Specifications"
 				simple
 				pageSize={10}
 				enableMultiSort={true}

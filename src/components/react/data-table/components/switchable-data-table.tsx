@@ -79,7 +79,7 @@ export function SwitchableDataTable<TData extends object>({
 	items,
 	columns,
 	defaultValue,
-	title,
+	title = "Wire Specifications",
 	variant,
 	placeholder = "Please select an option",
 	pageSize,
@@ -137,7 +137,7 @@ export function SwitchableDataTable<TData extends object>({
 				<DataTable<TData>
 					columns={columns}
 					data={activeItem.data}
-					title={title}
+					// title={title}
 					pageSize={pageSize}
 					simple={simple}
 					enableMultiSort={enableMultiSort}

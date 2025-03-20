@@ -8,6 +8,7 @@ export function DoubleInsulatedLitzTable() {
 			<DataTable
 				columns={columns}
 				data={doubleInsulatedLitzData}
+				title="Wire Specifications"
 				simple
 				pageSize={10}
 				enableMultiSort={true}

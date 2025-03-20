@@ -8,7 +8,6 @@ import {
 } from "@/components/react/ui";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect } from "react";
 
 interface PartNumberDisplayProps {
 	partNumber: string;
@@ -19,10 +18,6 @@ export function PartNumberDisplay({
 	partNumber,
 	className,
 }: PartNumberDisplayProps) {
-	useEffect(() => {
-		console.log("PartNumberDisplay received new part number:", partNumber);
-	}, [partNumber]);
-
 	const handleCopy = async () => {
 		if (!partNumber) return;
 
