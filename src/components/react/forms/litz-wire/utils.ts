@@ -2,39 +2,67 @@ import type { FormValues } from "./types";
 
 /**
  * Generates a part number for a litz wire based on the form values
+ * Format: RL-strands-strand_size_enamel_grade[-serve]-identifier
+ * Example: RL-2500-44S77-SN-XX
  * @param values Form values
  * @returns Generated part number
  */
 export function generatePartNumber(values: FormValues): string {
 	const {
-		conductor,
-		magnetWireSize,
-		strands,
+		numberOfStrands,
+		strandSize,
 		insulation,
-		color,
 		magnetWireGrade,
+		serveLayers,
+		uniqueIdentifier,
 	} = values;
 
-	// Validate all required fields are present
-	if (
-		!conductor ||
-		!magnetWireSize ||
-		!strands ||
-		!insulation ||
-		!color ||
-		!magnetWireGrade
-	) {
-		throw new Error("All fields are required to generate a part number");
+	const parts = ["RL"];
+	const middleParts = [];
+
+	// Add number of strands (show placeholder if empty)
+	if (numberOfStrands) {
+		const num = Number(numberOfStrands);
+		if (num < 1000) {
+			parts.push(num.toString().padStart(4, ""));
+		} else {
+			parts.push(num.toString());
+		}
+	} else {
+		parts.push("XXXX");
 	}
 
-	// Format the magnet wire size to be 2 digits
-	const formattedSize = Number(magnetWireSize).toString().padStart(2, "0");
+	// Add strand size (show placeholder if empty)
+	if (strandSize) {
+		middleParts.push(strandSize);
+	} else {
+		middleParts.push("XX");
+	}
 
-	// Format the strands to be 3 digits
-	const formattedStrands = Number(strands).toString().padStart(3, "0");
+	// Add enamel build (show placeholder if empty)
+	if (insulation) {
+		middleParts.push(insulation);
+	} else {
+		middleParts.push("X");
+	}
 
-	// Combine all parts to create the part number
-	// Format: L{conductor}{size}{strands}{insulation}{color}{grade}
-	// Example: LC36042HN1 = Copper, 36 AWG, 42 strands, Heavy insulation, Natural color, Grade 1
-	return `L${conductor}${formattedSize}${formattedStrands}${insulation}${color}${magnetWireGrade}`;
+	// Add magnet wire grade (show placeholder if empty)
+	if (magnetWireGrade) {
+		middleParts.push(magnetWireGrade.replace("MW", ""));
+	} else {
+		middleParts.push("XX");
+	}
+
+	// Join middle parts without hyphens
+	parts.push(middleParts.join(""));
+
+	// Add serve layers if selected (no need to check if other fields are filled)
+	if (serveLayers) {
+		parts.push(serveLayers);
+	}
+
+	// Add unique identifier (defaults to XX)
+	parts.push(uniqueIdentifier || "XX");
+
+	return parts.join("-");
 }

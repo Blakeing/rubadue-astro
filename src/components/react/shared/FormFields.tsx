@@ -76,6 +76,8 @@ export interface InputFieldProps<T extends FieldValues>
 	max?: number;
 	/** Step value for number inputs */
 	step?: number;
+	/** Maximum length for text inputs */
+	maxLength?: number;
 	/** Input mode */
 	inputMode?:
 		| "text"
@@ -85,6 +87,8 @@ export interface InputFieldProps<T extends FieldValues>
 		| "email"
 		| "url"
 		| "search";
+	/** Input pattern for validation */
+	pattern?: string;
 	/** Whether the input is a textarea */
 	multiline?: boolean;
 	/** Number of rows for textarea */
@@ -104,6 +108,15 @@ export interface CustomInputProps {
 	max?: number;
 	step?: number;
 	placeholder?: string;
+	inputMode?:
+		| "text"
+		| "numeric"
+		| "decimal"
+		| "tel"
+		| "email"
+		| "url"
+		| "search";
+	pattern?: string;
 }
 
 /**
@@ -204,6 +217,7 @@ export function InputField<T extends FieldValues>({
 	min,
 	max,
 	step,
+	maxLength,
 	inputMode,
 	multiline,
 	rows = 3,
@@ -304,12 +318,17 @@ export function SelectWithCustomInput<T extends FieldValues>({
 					</FormLabel>
 					<FormControl>
 						<Select
-							value={field.value}
+							value={showCustomInput ? customOptionValue : field.value}
 							name={field.name}
 							onValueChange={(value) => {
-								field.onChange(value);
+								if (value === customOptionValue) {
+									field.onChange(value);
+									setShowCustomInput(true);
+								} else {
+									field.onChange(value);
+									setShowCustomInput(false);
+								}
 								onChange?.(value);
-								setShowCustomInput(value === customOptionValue);
 							}}
 						>
 							<SelectTrigger>
@@ -333,6 +352,12 @@ export function SelectWithCustomInput<T extends FieldValues>({
 							placeholder={customInputProps?.placeholder}
 							onChange={onCustomInputChange}
 							className="mt-2"
+							inputMode={
+								customInputProps?.type === "number" ? "numeric" : "text"
+							}
+							pattern={
+								customInputProps?.type === "number" ? "[0-9]*" : undefined
+							}
 						/>
 					)}
 					<FormMessage />

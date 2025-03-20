@@ -71,7 +71,6 @@ export function InsulatedWindingWireForm({
 
 	const formValues = form.watch();
 
-	// Update part number when form values change
 	useEffect(() => {
 		try {
 			const newPartNumber = generatePartNumber(formValues);
@@ -85,6 +84,54 @@ export function InsulatedWindingWireForm({
 			);
 		}
 	}, [formValues, onSuccess, onError]);
+
+	const handleConductorChange = (value: string) => {
+		setIsLitzWire(value === "L");
+		if (value === "L") {
+			form.setValue("awgSize", "XX", { shouldValidate: false });
+		} else {
+			form.setValue("magnetWireSize", "", { shouldValidate: false });
+			form.setValue("magnetWireGrade", undefined, { shouldValidate: false });
+		}
+	};
+
+	const handleStrandsChange = (value: string) => {
+		setShowCustomStrands(value === "custom");
+	};
+
+	const handleStrandsCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		const num = Number.parseInt(value, 10);
+		if (!Number.isNaN(num) && num > 0) {
+			const formattedValue = num < 10 ? `0${num}` : `${num}`;
+			form.setValue("strands", formattedValue, { shouldValidate: true });
+		} else {
+			form.setValue("strands", value, { shouldValidate: true });
+		}
+	};
+
+	const handleMagnetWireSizeChange = (value: string) => {
+		const currentStrands = form.getValues("strands");
+		const newValue = currentStrands ? `${currentStrands}/${value}` : value;
+		form.setValue("magnetWireSize", newValue, { shouldValidate: true });
+	};
+
+	const handleThicknessChange = (value: string) => {
+		setShowCustomThickness(value === "other");
+	};
+
+	const handleThicknessCustomInput = (
+		e: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const value = Number.parseFloat(e.target.value);
+		if (!e.target.value) {
+			form.setValue("thickness", "", { shouldValidate: true });
+		} else if (value >= 0.001 && value <= 0.25) {
+			form.setValue("thickness", `-${value}`, { shouldValidate: true });
+		} else {
+			form.setValue("thickness", "-invalid", { shouldValidate: true });
+		}
+	};
 
 	return (
 		<div
@@ -108,7 +155,6 @@ export function InsulatedWindingWireForm({
 								className="space-y-6"
 								noValidate
 							>
-								{/* Layers of Insulation */}
 								<SelectField
 									control={form.control}
 									name="layers"
@@ -118,7 +164,6 @@ export function InsulatedWindingWireForm({
 									required
 								/>
 
-								{/* Conductor Material */}
 								<SelectField
 									control={form.control}
 									name="conductor"
@@ -126,33 +171,26 @@ export function InsulatedWindingWireForm({
 									placeholder="Select conductor"
 									options={conductorOptions}
 									required
-									onChange={(value) => {
-										setIsLitzWire(value === "L");
-
-										// Reset related fields when changing conductor type
-										if (value === "L") {
-											form.setValue("awgSize", "", { shouldValidate: false });
-										} else {
-											form.setValue("magnetWireSize", "", {
-												shouldValidate: false,
-											});
-											form.setValue("magnetWireGrade", "", {
-												shouldValidate: false,
-											});
-										}
-									}}
+									onChange={handleConductorChange}
 								/>
 
-								{/* AWG Size - Only show if not Litz wire */}
 								{!isLitzWire && (
 									<InputField
 										control={form.control}
 										name="awgSize"
 										label="AWG Size (4-40)"
 										placeholder="Enter AWG size (4-40)"
+										type="number"
+										min={4}
+										max={40}
+										step={1}
 										required
+										inputMode="numeric"
+										pattern="[0-9]*"
 										onChange={(value) => {
-											form.setValue("awgSize", value.toUpperCase());
+											form.setValue("awgSize", value.toUpperCase(), {
+												shouldValidate: true,
+											});
 										}}
 									/>
 								)}
@@ -178,10 +216,16 @@ export function InsulatedWindingWireForm({
 										const value = e.target.value;
 										const num = Number.parseInt(value, 10);
 										if (!Number.isNaN(num) && num > 0) {
-											form.setValue("strands", num < 10 ? `0${num}` : `${num}`);
+											const formattedValue = num < 10 ? `0${num}` : `${num}`;
+											form.setValue("strands", formattedValue, {
+												shouldValidate: true,
+											});
 										} else {
-											form.setValue("strands", value);
+											form.setValue("strands", value, { shouldValidate: true });
 										}
+									}}
+									onChange={(value) => {
+										setShowCustomStrands(value === "custom");
 									}}
 								/>
 
@@ -197,6 +241,22 @@ export function InsulatedWindingWireForm({
 										max={50}
 										step={1}
 										required
+										inputMode="numeric"
+										pattern="[0-9]*"
+										onChange={(value) => {
+											const currentStrands = form.getValues("strands");
+											if (currentStrands) {
+												form.setValue(
+													"magnetWireSize",
+													`${currentStrands}/${value}`,
+													{ shouldValidate: true },
+												);
+											} else {
+												form.setValue("magnetWireSize", value, {
+													shouldValidate: true,
+												});
+											}
+										}}
 									/>
 								)}
 
@@ -218,6 +278,10 @@ export function InsulatedWindingWireForm({
 									placeholder="Select color"
 									options={colorOptions}
 									required
+									onChange={(value) => {
+										// Just set the value directly without adding X's
+										form.setValue("color", value, { shouldValidate: true });
+									}}
 								/>
 
 								{/* Insulation Thickness */}
@@ -241,14 +305,19 @@ export function InsulatedWindingWireForm({
 									onCustomInputChange={(e) => {
 										const value = Number.parseFloat(e.target.value);
 										if (!e.target.value) {
-											form.setValue("thickness", "");
+											form.setValue("thickness", "", { shouldValidate: true });
 										} else if (value >= 0.001 && value <= 0.25) {
-											form.setValue("thickness", `-${value}`);
-											form.trigger("thickness");
+											form.setValue("thickness", `-${value}`, {
+												shouldValidate: true,
+											});
 										} else {
-											form.setValue("thickness", "-invalid");
-											form.trigger("thickness");
+											form.setValue("thickness", "-invalid", {
+												shouldValidate: true,
+											});
 										}
+									}}
+									onChange={(value) => {
+										setShowCustomThickness(value === "other");
 									}}
 								/>
 
@@ -261,6 +330,11 @@ export function InsulatedWindingWireForm({
 										placeholder="Select grade"
 										options={magnetWireGradeOptions}
 										required
+										onChange={(value) => {
+											form.setValue("magnetWireGrade", value, {
+												shouldValidate: true,
+											});
+										}}
 									/>
 								)}
 							</form>
