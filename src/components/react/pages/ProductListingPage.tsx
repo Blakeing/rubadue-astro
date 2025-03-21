@@ -11,13 +11,7 @@ import {
 	PaginationPrevious,
 } from "@/components/react/ui/pagination";
 import { ScrollArea } from "@/components/react/ui/scroll-area";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/react/ui/select";
+
 import {
 	Sheet,
 	SheetContent,
@@ -87,9 +81,9 @@ type Filters = {
 const filters: Filters = {
 	type: [
 		{ label: "Litz Wire", value: "Litz Wire" },
+		{ label: "Single Insulated", value: "Single Insulated" },
 		{ label: "Double Insulated", value: "Double Insulated" },
 		{ label: "Triple Insulated", value: "Triple Insulated" },
-		{ label: "Single Insulated", value: "Single Insulated" },
 	],
 	material: [
 		{ label: "ETFE", value: "ETFE" },
@@ -161,6 +155,18 @@ function generatePaginationItems(currentPage: number, totalPages: number) {
 	}
 
 	return items;
+}
+
+// Add mapping function for legacy categories
+function getCategoryFromCollection(collection: string): string {
+	const categoryMap: Record<string, string> = {
+		"litz-wire": "Litz Wire",
+		"single-insulated": "Single Insulated",
+		"double-insulated": "Double Insulated",
+		"triple-insulated": "Triple Insulated",
+	};
+
+	return categoryMap[collection] || collection;
 }
 
 export default function ProductListingPage({
@@ -408,7 +414,7 @@ export default function ProductListingPage({
 
 					<div className="grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
 						{/* Filters */}
-						<div className="hidden lg:block">
+						<div className="hidden lg:block sticky top-6 h-[calc(100vh-3rem)] overflow-y-auto">
 							<div className="border-b border-muted pb-6">
 								<div className="flex items-center justify-between">
 									<h3 className="text-sm font-medium">Filter Products</h3>
@@ -499,7 +505,7 @@ export default function ProductListingPage({
 										href={`/catalog/${product.slug}`}
 										className="group relative"
 									>
-										<div className="aspect-square w-full overflow-hidden rounded-lg bg-muted">
+										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-muted">
 											<img
 												src={product.data.heroImage || "/rubadue-hero.webp"}
 												alt={product.data.title}
@@ -516,7 +522,9 @@ export default function ProductListingPage({
 													{product.data.title}
 												</h3>
 												<p className="mt-1 text-xs sm:text-sm text-muted-foreground">
-													{product.data.category}
+													{product.data.category === "Wire"
+														? getCategoryFromCollection(product.collection)
+														: product.data.category}
 												</p>
 											</div>
 										</div>
