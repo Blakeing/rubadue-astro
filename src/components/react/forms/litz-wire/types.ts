@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const SERVE_LAYERS = [
+	{ value: "none", label: "None" },
 	{ value: "SN", label: "Single Nylon serve" },
 	{ value: "DN", label: "Double Nylon serve" },
 ] as const;

@@ -36,7 +36,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="companyName"
 						label="Company Name"
 						placeholder="Company Inc."
-						required
 						className="text-sm sm:text-base"
 					/>
 					<InputField
@@ -44,7 +43,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="streetAddress"
 						label="Street Address"
 						placeholder="123 Main St"
-						required
 						className="text-sm sm:text-base"
 					/>
 					<InputField
@@ -62,7 +60,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="city"
 						label="City"
 						placeholder="New York"
-						required
 						className="text-sm sm:text-base"
 					/>
 					<InputField
@@ -70,7 +67,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="stateProvince"
 						label="State/Province"
 						placeholder="NY"
-						required
 						className="text-sm sm:text-base"
 					/>
 				</div>
@@ -81,7 +77,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="zipCode"
 						label="Postal Code"
 						placeholder="10001"
-						required
 						className="text-sm sm:text-base"
 					/>
 					<SelectField
@@ -89,7 +84,6 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="country"
 						label="Country"
 						options={[...countries]}
-						required
 						className="text-sm sm:text-base"
 					/>
 				</div>

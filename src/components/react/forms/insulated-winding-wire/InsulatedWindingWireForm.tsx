@@ -70,6 +70,7 @@ export function InsulatedWindingWireForm({
 	});
 
 	const formValues = form.watch();
+	const thicknessValue = form.watch("thickness");
 
 	useEffect(() => {
 		try {
@@ -123,15 +124,43 @@ export function InsulatedWindingWireForm({
 	const handleThicknessCustomInput = (
 		e: React.ChangeEvent<HTMLInputElement>,
 	) => {
-		const value = Number.parseFloat(e.target.value);
-		if (!e.target.value) {
+		const value = e.target.value;
+
+		if (!value) {
 			form.setValue("thickness", "", { shouldValidate: true });
-		} else if (value >= 0.001 && value <= 0.25) {
-			form.setValue("thickness", `-${value}`, { shouldValidate: true });
 		} else {
-			form.setValue("thickness", "-invalid", { shouldValidate: true });
+			// Remove leading zeros after decimal point
+			const cleanedValue = value.replace(/\.0+/, ".");
+
+			const numValue = Number.parseFloat(cleanedValue);
+			if (numValue >= 0.001 && numValue <= 0.25) {
+				form.setValue("thickness", cleanedValue, { shouldValidate: true });
+			} else {
+				form.setValue("thickness", "invalid", { shouldValidate: true });
+			}
 		}
 	};
+
+	// Transform the thickness value for display
+	useEffect(() => {
+		if (thicknessValue && thicknessValue !== "invalid") {
+			const value = Number.parseFloat(thicknessValue);
+			if (!Number.isNaN(value)) {
+				// If the value is already transformed (1-250), don't transform again
+				if (value >= 1 && value <= 250) {
+					form.setValue("thickness", `-${value}`, { shouldValidate: false });
+				} else if (value >= 0.001 && value <= 0.25) {
+					// Transform original value (0.001-0.25) to display value (1-250)
+					const multipliedValue = (value * 1000)
+						.toFixed(2)
+						.replace(/\.?0+$/, "");
+					form.setValue("thickness", `-${multipliedValue}`, {
+						shouldValidate: false,
+					});
+				}
+			}
+		}
+	}, [thicknessValue, form]);
 
 	return (
 		<div
@@ -178,11 +207,11 @@ export function InsulatedWindingWireForm({
 									<InputField
 										control={form.control}
 										name="awgSize"
-										label="AWG Size (4-40)"
-										placeholder="Enter AWG size (4-40)"
+										label="AWG Size (4-50)"
+										placeholder="Enter AWG size (4-50)"
 										type="number"
 										min={4}
-										max={40}
+										max={50}
 										step={1}
 										required
 										inputMode="numeric"
@@ -301,17 +330,19 @@ export function InsulatedWindingWireForm({
 										min: 0.001,
 										max: 0.25,
 										placeholder: "Enter thickness (0.001-0.250)",
+										pattern: "[0-9]*.?[0-9]{0,3}",
 									}}
 									onCustomInputChange={(e) => {
 										const value = Number.parseFloat(e.target.value);
 										if (!e.target.value) {
 											form.setValue("thickness", "", { shouldValidate: true });
 										} else if (value >= 0.001 && value <= 0.25) {
-											form.setValue("thickness", `-${value}`, {
+											// Store the original value for validation
+											form.setValue("thickness", value.toString(), {
 												shouldValidate: true,
 											});
 										} else {
-											form.setValue("thickness", "-invalid", {
+											form.setValue("thickness", "invalid", {
 												shouldValidate: true,
 											});
 										}

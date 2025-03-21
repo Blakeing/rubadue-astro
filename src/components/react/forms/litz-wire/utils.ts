@@ -56,8 +56,8 @@ export function generatePartNumber(values: FormValues): string {
 	// Join middle parts without hyphens
 	parts.push(middleParts.join(""));
 
-	// Add serve layers if selected (no need to check if other fields are filled)
-	if (serveLayers) {
+	// Add serve layers if selected and not "none"
+	if (serveLayers && serveLayers !== "none") {
 		parts.push(serveLayers);
 	}
 

@@ -36,7 +36,6 @@ export function JobInformation({ className }: JobInformationProps) {
 						name="jobFunction"
 						label="Job Function"
 						options={[...jobFunctions]}
-						required
 						className="text-sm sm:text-base"
 					/>
 				</div>
@@ -44,7 +43,6 @@ export function JobInformation({ className }: JobInformationProps) {
 				<div className="space-y-3">
 					<div className="block text-sm sm:text-base font-medium">
 						Wire Types
-						<span className="text-red-500">*</span>
 					</div>
 					<div className="space-y-2">
 						{wireTypeOptions.map((option) => (
@@ -67,7 +65,6 @@ export function JobInformation({ className }: JobInformationProps) {
 						name="message"
 						label="Message"
 						placeholder="Please provide details about your wire requirements..."
-						required
 						className="text-sm sm:text-base"
 						multiline
 						rows={4}

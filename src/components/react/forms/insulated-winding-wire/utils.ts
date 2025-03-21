@@ -44,11 +44,11 @@ export function generatePartNumber(values: FormValues): string {
 			? `(${values.magnetWireGrade})`
 			: "";
 
-		return `${values.layers}XXL${strandInfo}${values.insulation}${colorWithX}${values.thickness}${magnetWireGrade}`;
+		return `${values.layers}XXL${strandInfo}${values.insulation}${colorWithX}${values.thickness === "invalid" ? "" : values.thickness}${magnetWireGrade}`;
 	}
 
 	// Standard wire format
-	return `${values.layers}${formattedAwgSize}${values.conductor}${values.strands}${values.insulation}${colorWithX}${values.thickness}`;
+	return `${values.layers}${formattedAwgSize}${values.conductor}${values.strands}${values.insulation}${colorWithX}${values.thickness === "invalid" ? "" : values.thickness}`;
 }
 
 /**
@@ -65,6 +65,6 @@ export const EXAMPLE_PART_NUMBERS = [
 		id: "example-2",
 		number: "DXXL360/44T3X-1.5(MW79)",
 		description:
-			'Double Insulated (2), Litz Wire, 360 Strands of 44 AWG, ETFE, Orange with X suffix, .0015"/layer, MW79 grade',
+			'Double Insulated (2), Litz Wire, 360 Strands of 44 AWG, ETFE, Orange with X suffix, .0015"/layer, MW79',
 	},
 ] as const;

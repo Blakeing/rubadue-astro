@@ -8,6 +8,7 @@ import {
 } from "@/components/react/ui";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface PartNumberDisplayProps {
 	partNumber: string;
@@ -34,8 +35,33 @@ export function PartNumberDisplay({
 	};
 
 	return (
-		<div className={className}>
+		<div className={cn("sticky top-[120px] h-fit", className)}>
 			<Card>
+				<CardHeader>
+					<CardTitle>Example Part Numbers</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-8">
+					<div>
+						<div className="font-medium font-mono tracking-wider mb-2">
+							RL-2500-44S77-XX
+						</div>
+						<p className="text-sm text-muted-foreground">
+							Litz wire with 2500 strands of 44 AWG strand size, Single build
+							enamel, MW77-C grade
+						</p>
+					</div>
+					<div>
+						<div className="font-medium font-mono tracking-wider mb-2">
+							RL-400-40H79-SN-XX
+						</div>
+						<p className="text-sm text-muted-foreground">
+							Litz wire with 400 strands of 40 AWG strand size, Heavy build
+							enamel, MW79-C grade, Single Nylon serve
+						</p>
+					</div>
+				</CardContent>
+			</Card>
+			<Card className="mt-6">
 				<CardHeader>
 					<CardTitle>Generated Part Number</CardTitle>
 				</CardHeader>
@@ -63,50 +89,6 @@ export function PartNumberDisplay({
 								Copy
 							</Button>
 						</div>
-					</div>
-				</CardContent>
-			</Card>
-
-			<Card className="mt-6">
-				<CardHeader>
-					<CardTitle>Example Part Numbers</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-8">
-					<div>
-						<div className="font-medium font-mono tracking-wider mb-2">
-							RL-2500-44S77-XX
-						</div>
-						<p className="text-sm text-muted-foreground">
-							Litz wire with 2500 strands of 44 AWG strand size, Single build
-							enamel, MW77-C grade
-						</p>
-					</div>
-					<div>
-						<div className="font-medium font-mono tracking-wider mb-2">
-							RL-400-40H79-SN-XX
-						</div>
-						<p className="text-sm text-muted-foreground">
-							Litz wire with 400 strands of 40 AWG strand size, Heavy build
-							enamel, MW79-C grade, Single Nylon serve
-						</p>
-					</div>
-					<div>
-						<div className="font-medium font-mono tracking-wider mb-2">
-							RL-500-36Q80-DN-XX
-						</div>
-						<p className="text-sm text-muted-foreground">
-							Litz wire with 500 strands of 36 AWG strand size, Quad build
-							enamel, MW80-C grade, Double Nylon serve
-						</p>
-					</div>
-					<div>
-						<div className="font-medium font-mono tracking-wider mb-2">
-							RL-1500-38T80-XX
-						</div>
-						<p className="text-sm text-muted-foreground">
-							Litz wire with 1500 strands of 38 AWG strand size, Triple build
-							enamel, MW80-C grade
-						</p>
 					</div>
 				</CardContent>
 			</Card>

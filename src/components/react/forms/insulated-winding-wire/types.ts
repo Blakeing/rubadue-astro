@@ -92,9 +92,9 @@ export const formSchema = z
 			.string()
 			.refine(
 				(val) =>
-					val === "" || val === "XX" || (Number(val) >= 4 && Number(val) <= 40),
+					val === "" || val === "XX" || (Number(val) >= 4 && Number(val) <= 50),
 				{
-					message: "AWG size must be 'XX' or a number between 4 and 40",
+					message: "AWG size must be 'XX' or a number between 4 and 50",
 				},
 			),
 		strands: z
@@ -125,10 +125,17 @@ export const formSchema = z
 		thickness: z.string().refine((val) => {
 			if (val === "") return true;
 			if (THICKNESS_OPTIONS.some((o) => o.value === val)) return true;
+
+			// Handle values with dash prefix (display values)
 			if (val.startsWith("-")) {
 				const num = Number(val.substring(1));
-				return !Number.isNaN(num) && num >= 0.001 && num <= 0.25;
+				if (!Number.isNaN(num) && num >= 1 && num <= 250) return true;
 			}
+
+			// Handle original input values (0.001-0.25)
+			const num = Number(val);
+			if (!Number.isNaN(num) && num >= 0.001 && num <= 0.25) return true;
+
 			return false;
 		}, "Thickness must be a valid option or between 0.001 and 0.250"),
 		magnetWireGrade: z

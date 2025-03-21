@@ -49,7 +49,7 @@ export function LitzWireForm({
 			insulation: initialValues?.insulation ?? "",
 			magnetWireGrade: initialValues?.magnetWireGrade ?? "",
 			serveLayers: initialValues?.serveLayers,
-			uniqueIdentifier: initialValues?.uniqueIdentifier ?? "XX",
+			uniqueIdentifier: "XX",
 		},
 		mode: "onChange",
 	});
@@ -188,23 +188,15 @@ export function LitzWireForm({
 									placeholder="Select serve layers"
 									options={serveLayerOptions}
 									onChange={(value) => {
-										form.setValue("serveLayers", value, {
-											shouldValidate: true,
-											shouldDirty: true,
-											shouldTouch: true,
-										});
-									}}
-								/>
-
-								<InputField
-									control={form.control}
-									name="uniqueIdentifier"
-									label="Unique Identifier (Optional)"
-									placeholder="Enter unique identifier"
-									onChange={(value) => {
-										form.setValue("uniqueIdentifier", value.toUpperCase(), {
-											shouldValidate: false,
-										});
+										form.setValue(
+											"serveLayers",
+											value === "none" ? undefined : value,
+											{
+												shouldValidate: true,
+												shouldDirty: true,
+												shouldTouch: true,
+											},
+										);
 									}}
 								/>
 							</form>

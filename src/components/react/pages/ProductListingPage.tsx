@@ -412,68 +412,72 @@ export default function ProductListingPage({
 						Products
 					</h2>
 
-					<div className="grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
+					<div className="relative grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
 						{/* Filters */}
-						<div className="hidden lg:block sticky top-6 h-[calc(100vh-3rem)] overflow-y-auto">
-							<div className="border-b border-muted pb-6">
-								<div className="flex items-center justify-between">
-									<h3 className="text-sm font-medium">Filter Products</h3>
-									<Button
-										variant="ghost"
-										size="sm"
-										onClick={clearFilters}
-										className="text-sm text-muted-foreground hover:text-foreground"
-									>
-										Clear all
-									</Button>
-								</div>
-								{/* Search input */}
-								<div className="mt-4">
-									<div className="relative">
-										<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-										<Input
-											placeholder="Search products..."
-											value={searchQuery}
-											onChange={handleSearchChange}
-											className="pl-8"
-										/>
+						<aside className="hidden lg:block">
+							<div className="lg:sticky lg:top-32">
+								<div className="border-b border-muted pb-6">
+									<div className="flex items-center justify-between">
+										<h3 className="text-sm font-medium">Filter Products</h3>
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={clearFilters}
+											className="text-sm text-muted-foreground hover:text-foreground"
+										>
+											Clear all
+										</Button>
+									</div>
+									{/* Search input */}
+									<div className="mt-4">
+										<div className="relative">
+											<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+											<Input
+												placeholder="Search products..."
+												value={searchQuery}
+												onChange={handleSearchChange}
+												className="pl-8"
+											/>
+										</div>
 									</div>
 								</div>
-							</div>
 
-							{Object.entries(filters).map(([category, options]) => (
-								<div key={category} className="border-b border-muted py-6">
-									<h3 className="text-sm font-medium capitalize">{category}</h3>
-									<div className="mt-4 space-y-4">
-										{options.map((option) => {
-											const inputId = `filter-${category}-${option.value}`;
-											return (
-												<div key={option.value} className="flex items-center">
-													<Checkbox
-														id={inputId}
-														checked={activeFilters[
-															category as FilterCategory
-														].includes(option.value)}
-														onCheckedChange={() =>
-															toggleFilter(
-																category as FilterCategory,
-																option.value,
-															)
-														}
-													/>
-													<label
-														htmlFor={inputId}
-														className="ml-3 text-sm text-foreground"
-													>
-														{option.label}
-													</label>
-												</div>
-											);
-										})}
+								{Object.entries(filters).map(([category, options]) => (
+									<div key={category} className="border-b border-muted py-6">
+										<h3 className="text-sm font-medium capitalize">
+											{category}
+										</h3>
+										<div className="mt-4 space-y-4">
+											{options.map((option) => {
+												const inputId = `filter-${category}-${option.value}`;
+												return (
+													<div key={option.value} className="flex items-center">
+														<Checkbox
+															id={inputId}
+															checked={activeFilters[
+																category as FilterCategory
+															].includes(option.value)}
+															onCheckedChange={() =>
+																toggleFilter(
+																	category as FilterCategory,
+																	option.value,
+																)
+															}
+														/>
+														<label
+															htmlFor={inputId}
+															className="ml-3 text-sm text-foreground"
+														>
+															{option.label}
+														</label>
+													</div>
+												);
+											})}
+										</div>
 									</div>
-								</div>
-							))}
-						</div>
+								))}
+							</div>
+						</aside>
 
 						{/* Product grid */}
 						<div className="lg:col-span-3">

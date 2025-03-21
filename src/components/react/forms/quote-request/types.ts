@@ -21,21 +21,25 @@ export const formSchema = z.object({
 	firstName: z.string().min(1, "First name is required"),
 	lastName: z.string().min(1, "Last name is required"),
 	email: z.string().min(1, "Email is required").email("Invalid email address"),
-	phone: z.string().min(1, "Phone number is required"),
+	phone: z.string().optional(),
 	companyName: z.string().min(1, "Company name is required"),
 
 	// Company Address
-	streetAddress: z.string().min(1, "Street address is required"),
+	streetAddress: z.string().optional(),
 	addressLine2: z.string().optional(),
-	city: z.string().min(1, "City is required"),
-	stateProvince: z.string().min(1, "State/Province is required"),
-	zipCode: z.string().min(1, "Postal code is required"),
-	country: z.string().min(1, "Country is required"),
+	city: z.string().optional(),
+	stateProvince: z.string().optional(),
+	zipCode: z.string().optional(),
+	country: z.string().optional(),
 
 	// Job Information
-	jobFunction: z.string().min(1, "Job function is required"),
-	wireTypes: wireTypesSchema,
-	message: z.string().min(1, "Message is required"),
+	jobFunction: z.string().optional(),
+	wireTypes: z.object({
+		litzWire: z.boolean().default(false),
+		windingWire: z.boolean().default(false),
+		customCable: z.boolean().default(false),
+	}),
+	message: z.string().optional(),
 });
 
 /**

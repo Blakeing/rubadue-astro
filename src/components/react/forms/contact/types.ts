@@ -18,22 +18,8 @@ export const formSchema = z.object({
 		.email("Invalid email address")
 		.min(1, "Email is required")
 		.max(100, "Email must be less than 100 characters"),
-	phone: z
-		.string()
-		.min(1, "Phone number is required")
-		.regex(
-			phoneRegex,
-			"Please enter a valid phone number (e.g. +1 (555) 000-0000)",
-		)
-		.transform((val) => {
-			// Extract digits and format consistently
-			const digits = val.replace(/\D/g, "");
-			return `+1 (${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-		}),
-	message: z
-		.string()
-		.min(10, "Message must be at least 10 characters")
-		.max(1000, "Message must be less than 1000 characters"),
+	phone: z.string().optional(),
+	message: z.string().optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

@@ -9,6 +9,7 @@ import {
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { EXAMPLE_PART_NUMBERS } from "./utils";
+import { cn } from "@/lib/utils";
 
 interface PartNumberDisplayProps {
 	partNumber: string;
@@ -35,8 +36,25 @@ export function PartNumberDisplay({
 	};
 
 	return (
-		<div className={className}>
+		<div className={cn("sticky top-[120px] h-fit", className)}>
 			<Card>
+				<CardHeader>
+					<CardTitle>Example Part Numbers</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-8">
+					{EXAMPLE_PART_NUMBERS.map((example) => (
+						<div key={example.id}>
+							<div className="font-medium font-mono tracking-wider mb-2">
+								{example.number}
+							</div>
+							<p className="text-sm text-muted-foreground">
+								{example.description}
+							</p>
+						</div>
+					))}
+				</CardContent>
+			</Card>
+			<Card className="mt-6">
 				<CardHeader>
 					<CardTitle>Generated Part Number</CardTitle>
 				</CardHeader>
@@ -65,24 +83,6 @@ export function PartNumberDisplay({
 							</Button>
 						</div>
 					</div>
-				</CardContent>
-			</Card>
-
-			<Card className="mt-6">
-				<CardHeader>
-					<CardTitle>Example Part Numbers</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-8">
-					{EXAMPLE_PART_NUMBERS.map((example) => (
-						<div key={example.id}>
-							<div className="font-medium font-mono tracking-wider mb-2">
-								{example.number}
-							</div>
-							<p className="text-sm text-muted-foreground">
-								{example.description}
-							</p>
-						</div>
-					))}
 				</CardContent>
 			</Card>
 		</div>

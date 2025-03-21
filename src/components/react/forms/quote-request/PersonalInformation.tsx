@@ -64,7 +64,6 @@ export function PersonalInformation({ className }: PersonalInformationProps) {
 						label="Phone"
 						placeholder="+1 (555) 000-0000"
 						type="tel"
-						required
 						className="text-sm sm:text-base"
 					/>
 				</div>
