@@ -68,17 +68,20 @@ if (segments.length === 0 || segments[0].name !== "Home") {
     <BaseHead title={title} description={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
-    <Header client:load />
-    {
-      eyebrow && headerTitle && (
-        <BaseHeader eyebrow={eyebrow} title={headerTitle} />
-      )
-    }
-    <main>
+  <body
+    class="bg-background font-sans antialiased min-h-screen flex flex-col relative"
+  >
+    <main class="flex-1 relative z-10">
+      <Header client:load />
+      {
+        eyebrow && headerTitle && (
+          <BaseHeader eyebrow={eyebrow} title={headerTitle} />
+        )
+      }
       <PageBreadcrumbs pathname={Astro.url.pathname} />
       <slot />
     </main>
+
     <Footer />
     <Toaster client:load />
   </body>

@@ -5,6 +5,7 @@ import Hero from "@/components/astro/layout/Hero.astro";
 import { Header } from "@/components/react/layout";
 import { CableSection } from "@/components/react/products";
 import "@/styles/global.css";
+import TestHero from "@/components/astro/layout/TestHero.astro";
 
 const title = "Rubadue Wire - Advanced Wire Solutions";
 const description =
@@ -16,10 +17,11 @@ const description =
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
+  <body class="bg-background font-sans antialiased">
     <Header client:load />
-    <main>
+    <main class="">
       <Hero />
+      <!-- <TestHero /> -->
       <CableSection client:load />
     </main>
     <Footer />

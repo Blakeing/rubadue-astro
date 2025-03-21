@@ -66,8 +66,15 @@ export function Header() {
 	return (
 		<header className="bg-background shadow sticky top-0 z-50">
 			<nav className="mx-auto flex max-w-7xl px-4 sm:px-6 lg:px-8 items-center justify-between py-3 sm:py-4 md:py-6">
-				<a href="/" className="-m-1.5 p-1.5">
+				{/* <a className="font-semibold tracking-wide" href="/" className="-m-1.5 p-1.5">
 					<TextLogo className="h-4 lg:h-5" />
+				</a> */}
+				<a
+					href="/"
+					// style={{ textShadow: "0 0 1px hsla(20 14.3% 4.1% / 0.5)" }}
+					className="font-display text-xl lg:text-3xl tracking-tight"
+				>
+					Rubadue <span className="text-primary -ml-[8px]">Wire</span>
 				</a>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
 					<NavigationMenu className="mr-4" data-hover="false">
@@ -77,7 +84,9 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/catalog">Catalog</a>
+									<a className="font-semibold tracking-wide" href="/catalog">
+										Catalog
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 
@@ -86,7 +95,9 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/about">About</a>
+									<a className="font-semibold tracking-wide" href="/about">
+										About
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 
@@ -95,7 +106,9 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/markets">Markets</a>
+									<a className="font-semibold tracking-wide" href="/markets">
+										Markets
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
@@ -103,7 +116,9 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/careers">Careers</a>
+									<a className="font-semibold tracking-wide" href="/careers">
+										Careers
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
@@ -111,7 +126,9 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/contact">Contact Us</a>
+									<a className="font-semibold tracking-wide" href="/contact">
+										Contact Us
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
@@ -119,12 +136,19 @@ export function Header() {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<a href="/request-a-quote">Request a Quote</a>
+									<a
+										className="font-semibold tracking-wide"
+										href="/request-a-quote"
+									>
+										Request a Quote
+									</a>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 
 							<NavigationMenuItem>
-								<NavigationMenuTrigger>Resources</NavigationMenuTrigger>
+								<NavigationMenuTrigger className="font-semibold tracking-wide">
+									Resources
+								</NavigationMenuTrigger>
 								<NavigationMenuContent>
 									<div className="min-w-60 p-6">
 										<div className="space-y-2">

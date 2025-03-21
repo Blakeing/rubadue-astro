@@ -1,6 +1,5 @@
 import { Button } from "@/components/react/ui";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ChevronsUpDown } from "lucide-react";
 import type { InsulatedLitzSpec } from "./types";
 import { createSortableHeader } from "../utils/sorting";
 

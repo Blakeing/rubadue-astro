@@ -10,26 +10,23 @@ import tripleInsulatedImage from "@/assets/triple_insulated-removebg-preview.png
 const features = [
 	{
 		name: "Single Insulated",
-		description:
-			"Rubadue Wire manufactures wires with a single layer of insulation for applications requiring basic insulation.",
+		description: "wires for applications requiring basic insulation.",
 		image: singleInsulatedImage,
 	},
 	{
 		name: "Double Insulated",
-		description:
-			"Rubadue Wire manufactures double insulated wires for use in supplementary insulation applications.",
+		description: "wires for use in supplementary insulation applications.",
 		image: doubleInsulatedImage,
 	},
 	{
 		name: "Triple Insulated",
-		description:
-			"Rubadue Wire manufactures triple insulated wires with extruded insulation.",
+		description: "with extruded insulation.",
 		image: tripleInsulatedImage,
 	},
 	{
 		name: "Bare Litz",
 		description:
-			"Litz wire is made of several strands of enameled magnet wire that are bunched or stranded together to reduce skin and proximity effect losses at higher frequencies.",
+			"wires made of several strands of enameled magnet wire that are bunched or stranded together to reduce skin and proximity effect losses at higher frequencies.",
 		image: litzWireImage,
 	},
 ];
@@ -78,50 +75,48 @@ export default function CableSection() {
 		<div className="overflow-hidden py-8 sm:py-12 md:py-16 lg:py-24">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2 lg:items-start">
-					<div className="px-4 sm:px-6 lg:px-8">
-						<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-							<h2 className="text-base sm:text-lg font-display text-accent-foreground">
-								Wire <span className="text-primary">Types</span>
-							</h2>
-							<p className="mt-4 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
-								Cables to Meet Your Needs
-							</p>
-							<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
-								All cable components can be adapted to meet your requirements.
-							</p>
-							<dl className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-sm sm:text-base text-muted-foreground lg:max-w-none">
-								{features.map((feature, index) => (
-									<motion.div
-										key={feature.name}
-										className="relative cursor-pointer select-none"
-										onHoverStart={() => setActiveFeature(index)}
-										onClick={() => setActiveFeature(index)}
-										initial={{ color: "hsl(var(--muted-foreground))" }}
-										animate={{
-											color:
-												activeFeature === index
-													? "hsl(var(--primary))"
-													: "hsl(var(--muted-foreground))",
-										}}
-										transition={{ duration: 0.15 }}
-									>
-										<dt className="inline font-semibold text-foreground">
-											{feature.name}
-										</dt>{" "}
-										<dd className="inline">{feature.description}</dd>
-									</motion.div>
-								))}
-							</dl>
-						</div>
+					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
+						<h2 className="text-base sm:text-lg font-display text-accent-foreground">
+							Wire <span className="text-primary">Types</span>
+						</h2>
+						<p className="mt-4 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
+							Cables to Meet Your Needs
+						</p>
+						<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
+							All cable components can be adapted to meet your requirements.
+						</p>
+						<dl className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-sm sm:text-base text-muted-foreground lg:max-w-none">
+							{features.map((feature, index) => (
+								<motion.div
+									key={feature.name}
+									className="relative cursor-pointer select-none"
+									onHoverStart={() => setActiveFeature(index)}
+									onClick={() => setActiveFeature(index)}
+									initial={{ color: "hsl(var(--muted-foreground))" }}
+									animate={{
+										color:
+											activeFeature === index
+												? "hsl(var(--primary) / 0.8)"
+												: "hsl(var(--muted-foreground))",
+									}}
+									transition={{ duration: 0.15 }}
+								>
+									<dt className="inline font-semibold text-foreground">
+										{feature.name}
+									</dt>{" "}
+									<dd className="inline">{feature.description}</dd>
+								</motion.div>
+							))}
+						</dl>
 					</div>
 					<div className="mt-4 sm:mt-6 lg:mt-0">
-						<div className="relative isolate overflow-hidden bg-muted/05 px-4 sm:px-6 lg:px-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl lg:mx-0 lg:max-w-none">
+						<div className="relative isolate overflow-hidden bg-muted/05 pl-4 sm:pl-6 lg:pl-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl lg:mx-0 lg:max-w-none">
 							<div
 								className="absolute -inset-y-px -left-3 -z-10 w-full origin-bottom-left skew-x-[-49deg] bg-muted opacity-20 ring-1 ring-inset ring-ring"
 								aria-hidden="true"
 							/>
 							<div className="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
-								<div className="relative w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[450px] sm:w-[33rem]">
+								<div className="relative w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[450px] ">
 									<AnimatePresence mode="popLayout">
 										<motion.div
 											key={activeFeature}

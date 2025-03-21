@@ -3,23 +3,36 @@ import { Image } from "astro:assets";
 import heroImage from "@/assets/rubadue-hero.webp";
 ---
 
-<div class="relative isolate overflow-hidden h-[calc(100vh-73px)]">
+<div
+  class="relative isolate overflow-hidden h-[calc(100svh-52px)] md:h-[calc(100vh-76px)] lg:h-[calc(100vh-88px)]"
+>
   <Image
     src={heroImage}
     alt="Rubadue hero background"
-    class="absolute inset-0 -z-10 object-cover w-full h-full"
+    class="absolute inset-0 -z-10 object-cover w-full h-full grayscale mix-blend-multiply saturate-150"
     quality={90}
     format="webp"
   />
 
   <div
-    class="absolute inset-0 -z-10 opacity-20"
+    class="absolute inset-0 -z-10 opacity-10"
     style="background-image: url('/images/iron-grip.png'); "
   >
   </div>
 
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full flex items-center">
-    <div class="mr-auto max-w-5xl mb-[10vh] sm:mb-[20vh]">
+  <div
+    class="absolute inset-x-0 -top-[20vh] transform-gpu -z-10 overflow-hidden blur-3xl"
+    aria-hidden="true"
+  >
+    <div
+      class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[hsl(var(--foreground))] to-[hsl(var(--primary/80))] opacity-40 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+      style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+    >
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full flex">
+    <div class="mr-auto max-w-6xl mt-[15svh] lg:mt-[20svh]">
       <!-- <div class="flex gap-2 mb-4 sm:mb-8">
         <img
           src="/icon-dot-circles.svg"
@@ -31,7 +44,7 @@ import heroImage from "@/assets/rubadue-hero.webp";
       </div> -->
       <div class="hidden sm:mb-8 sm:flex">
         <div
-          class="relative rounded-full bg-background/20 backdrop-blur-sm px-3 py-1 text-sm/6 text-foreground ring-1 ring-foreground/20 hover:ring-foreground/40"
+          class="relative rounded-full bg-background/40 backdrop-blur-sm px-3 py-1 text-sm/6 text-foreground ring-1 ring-foreground/20 hover:ring-foreground/40"
         >
           Discover our latest wire innovations.{" "}
           <a href="/knowledge-base" class="font-semibold text-foreground">
@@ -42,7 +55,8 @@ import heroImage from "@/assets/rubadue-hero.webp";
       </div>
       <div class="text-left">
         <h1
-          class="text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+          style={{ textShadow: "0 0 4px hsla(20 14.3% 4.1% / 0.5)" }}
+          class="font-display text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-5xl 2xl:text-6xl"
         >
           Advanced Wire Solutions
         </h1>
@@ -60,7 +74,7 @@ import heroImage from "@/assets/rubadue-hero.webp";
             href="/catalog"
             class="rounded-md bg-primary px-3 py-2 sm:px-3.5 sm:py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            View Products
+            View Catalog
           </a>
           <a
             href="/contact"

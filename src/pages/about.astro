@@ -7,6 +7,8 @@ import {
   CardTitle,
   Separator,
 } from "@/components/react/ui";
+import Timeline from "@/components/react/about/Timeline";
+import type { IconName } from "@/components/react/icons";
 
 interface Person {
   name: string;
@@ -52,51 +54,62 @@ const timelineEvents = [
     year: "1977",
     description:
       "Rubadue Wire Company was founded by Bill Rubadue in Loveland, Colorado.",
+    icon: "building" as IconName,
   },
   {
     year: "1977-1995",
     description: "First to market extruded triple insulated wire.",
+    icon: "award" as IconName,
   },
   {
     year: "1995",
     description: "Moved to Greeley, Colorado to accommodate growth.",
+    icon: "move" as IconName,
   },
   {
     year: "2002",
     description:
       "Rubadue Wire won the Dupont Plunkett Award for new use of FEP.",
+    icon: "trophy" as IconName,
   },
   {
     year: "2013",
     description: "Expanded Greeley facility to meet growing demand.",
+    icon: "building2" as IconName,
   },
   {
     year: "2014",
     description: "Acquired by PHGI and converted to 100% Employee Owned.",
+    icon: "users" as IconName,
   },
   {
     year: "2015",
     description:
       "Acquired Kerrigan-Lewis Wire Products, a specialty manufacturer of Litz Wire.",
+    icon: "merge" as IconName,
   },
   {
     year: "2018",
     description:
       "Moved to larger facility in Loveland, Colorado to support continued growth.",
+    icon: "move" as IconName,
   },
   {
     year: "2019",
     description: "PHGI rebrands to Wire Experts Group.",
+    icon: "refresh-cw" as IconName,
   },
   {
     year: "2022-2023",
     description:
       "Installed 5 new extrusion lines & increased respool capacity.",
+    icon: "settings" as IconName,
   },
   {
     year: "2024",
     description:
       "Active projects to expand Litz capabilities & add new production line for customer specific project.",
+    icon: "rocket" as IconName,
   },
 ];
 
@@ -145,7 +158,7 @@ const stats = [
   description="Since 1977, Rubadue Wire has been pioneering wire solutions with cutting-edge technology, specializing in triple-insulated wire and Litz wire. As a 100% employee-owned company, we solve wire and cable challenges when high performance and reliability are critical."
   category="About"
   eyebrow="About"
-  headerTitle="Rubadue Wire"
+  headerTitle="About"
 >
   <div class="py-8 sm:py-12 md:py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -261,6 +274,7 @@ const stats = [
           }
         </ul>
       </div>
+
       <Separator className="my-12 sm:my-16" />
       {/* History Timeline Section */}
       <div>
@@ -278,7 +292,7 @@ const stats = [
         </div>
 
         {/* Timeline section */}
-        <div class="mx-auto max-w-7xl">
+        <!-- <div class="mx-auto max-w-7xl">
           <div
             class="mx-auto grid max-w-2xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 overflow-hidden lg:mx-0 lg:max-w-none"
           >
@@ -371,7 +385,8 @@ const stats = [
               </div>
             )
           }
-        </div>
+        </div> -->
+        <Timeline client:visible data={timelineEvents} />
       </div>
     </div>
   </div>
