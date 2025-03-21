@@ -11,7 +11,7 @@ export type TripleInsulatedLitzSpec = {
 
 export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 	{
-		partNumber: "TXXL180/38TXXX-2(MW)(XX)",
+		partNumber: "TXXL180/38TXXX-2(MWXX)",
 		equivalentAWG: "16",
 		coreDiameter: "0.0746",
 		circularMils: "2880",
@@ -21,7 +21,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
-		partNumber: "TXXL180/38TXXX-3(MW)(XX)",
+		partNumber: "TXXL180/38TXXX-3(MWXX)",
 		equivalentAWG: "16",
 		coreDiameter: "0.0746",
 		circularMils: "2880",
@@ -31,7 +31,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
-		partNumber: "TXXL15/30TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL15/30TXXX-1.5(MWXX)",
 		equivalentAWG: "19",
 		coreDiameter: "0.0488",
 		circularMils: "1500",
@@ -41,7 +41,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "1-10 kHz",
 	},
 	{
-		partNumber: "TXXL15/30TXXX-3(MW)(XX)",
+		partNumber: "TXXL15/30TXXX-3(MWXX)",
 		equivalentAWG: "19",
 		coreDiameter: "0.0488",
 		circularMils: "1500",
@@ -51,7 +51,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "1-10 kHz",
 	},
 	{
-		partNumber: "TXXL360/44TXXX-2(MW)(XX)",
+		partNumber: "TXXL360/44TXXX-2(MWXX)",
 		equivalentAWG: "19",
 		coreDiameter: "0.0504",
 		circularMils: "1440",
@@ -61,7 +61,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
-		partNumber: "TXXL360/44TXXX-3(MW)(XX)",
+		partNumber: "TXXL360/44TXXX-3(MWXX)",
 		equivalentAWG: "19",
 		coreDiameter: "0.0504",
 		circularMils: "1440",
@@ -71,7 +71,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
-		partNumber: "TXXL19/36TXXX-2(MW)(XX)",
+		partNumber: "TXXL19/36TXXX-2(MWXX)",
 		equivalentAWG: "24",
 		coreDiameter: "0.0280",
 		circularMils: "475",
@@ -81,7 +81,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "20-50 kHz",
 	},
 	{
-		partNumber: "TXXL19/36TXXX-3(MW)(XX)",
+		partNumber: "TXXL19/36TXXX-3(MWXX)",
 		equivalentAWG: "24",
 		coreDiameter: "0.0280",
 		circularMils: "475",
@@ -91,7 +91,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "20-50 kHz",
 	},
 	{
-		partNumber: "TXXL35/38TXXX-2(MW)(XX)",
+		partNumber: "TXXL35/38TXXX-2(MWXX)",
 		equivalentAWG: "23",
 		coreDiameter: "0.0307",
 		circularMils: "560",
@@ -101,7 +101,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
-		partNumber: "TXXL35/38TXXX-3(MW)(XX)",
+		partNumber: "TXXL35/38TXXX-3(MWXX)",
 		equivalentAWG: "23",
 		coreDiameter: "0.0307",
 		circularMils: "560",
@@ -111,7 +111,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
-		partNumber: "TXXL07/30TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL07/30TXXX-1.5(MWXX)",
 		equivalentAWG: "22",
 		coreDiameter: "0.0327",
 		circularMils: "700",
@@ -121,7 +121,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "1-10 kHz",
 	},
 	{
-		partNumber: "TXXL07/30TXXX-2(MW)(XX)",
+		partNumber: "TXXL07/30TXXX-2(MWXX)",
 		equivalentAWG: "22",
 		coreDiameter: "0.0327",
 		circularMils: "700",
@@ -131,7 +131,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "1-10 kHz",
 	},
 	{
-		partNumber: "TXXL230/44TXXX-2(MW)(XX)",
+		partNumber: "TXXL230/44TXXX-2(MWXX)",
 		equivalentAWG: "21",
 		coreDiameter: "0.0403",
 		circularMils: "920",
@@ -141,7 +141,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
-		partNumber: "TXXL230/44TXXX-3(MW)(XX)",
+		partNumber: "TXXL230/44TXXX-3(MWXX)",
 		equivalentAWG: "21",
 		coreDiameter: "0.0403",
 		circularMils: "920",
@@ -151,7 +151,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
-		partNumber: "TXXL40/40TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL40/40TXXX-1.5(MWXX)",
 		equivalentAWG: "25",
 		coreDiameter: "0.0256",
 		circularMils: "384",
@@ -161,7 +161,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "100-200 kHz",
 	},
 	{
-		partNumber: "TXXL40/40TXXX-2(MW)(XX)",
+		partNumber: "TXXL40/40TXXX-2(MWXX)",
 		equivalentAWG: "25",
 		coreDiameter: "0.0256",
 		circularMils: "384",
@@ -171,7 +171,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "100-200 kHz",
 	},
 	{
-		partNumber: "TXXL07/32TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL07/32TXXX-1.5(MWXX)",
 		equivalentAWG: "24",
 		coreDiameter: "0.0264",
 		circularMils: "448",
@@ -181,7 +181,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "10 kHz",
 	},
 	{
-		partNumber: "TXXL07/32TXXX-2(MW)(XX)",
+		partNumber: "TXXL07/32TXXX-2(MWXX)",
 		equivalentAWG: "24",
 		coreDiameter: "0.0264",
 		circularMils: "448",
@@ -191,7 +191,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "10 kHz",
 	},
 	{
-		partNumber: "TXXL19/40TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL19/40TXXX-1.5(MWXX)",
 		equivalentAWG: "28",
 		coreDiameter: "0.0175",
 		circularMils: "183",
@@ -201,7 +201,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "100-200 kHz",
 	},
 	{
-		partNumber: "TXXL19/40TXXX-2(MW)(XX)",
+		partNumber: "TXXL19/40TXXX-2(MWXX)",
 		equivalentAWG: "28",
 		coreDiameter: "0.0175",
 		circularMils: "183",
@@ -211,7 +211,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "100-200 kHz",
 	},
 	{
-		partNumber: "TXXL05/32TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL05/32TXXX-1.5(MWXX)",
 		equivalentAWG: "25",
 		coreDiameter: "0.0238",
 		circularMils: "320",
@@ -221,7 +221,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "10 kHz",
 	},
 	{
-		partNumber: "TXXL05/32TXXX-2(MW)(XX)",
+		partNumber: "TXXL05/32TXXX-2(MWXX)",
 		equivalentAWG: "25",
 		coreDiameter: "0.0238",
 		circularMils: "320",
@@ -231,7 +231,7 @@ export const tripleInsulatedLitzData: TripleInsulatedLitzSpec[] = [
 		suggestedOperatingFreq: "10 kHz",
 	},
 	{
-		partNumber: "TXXL16/44TXXX-1.5(MW)(XX)",
+		partNumber: "TXXL16/44TXXX-1.5(MWXX)",
 		equivalentAWG: "32",
 		coreDiameter: "0.0108",
 		circularMils: "64",
