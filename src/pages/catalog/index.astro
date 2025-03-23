@@ -1,18 +1,14 @@
 ---
-import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import { Header } from "@/components/react/Header";
-import Footer from "@/components/astro/layout/Footer.astro";
 import { getCollection } from "astro:content";
-import ProductListingPage from "@/components/react/ProductListingPage";
-import Breadcrumbs from "@/components/astro/layout/Breadcrumbs.astro";
+import BaseHead from "@/components/astro/layout/BaseHead.astro";
 import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
+import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.astro";
+import Footer from "@/components/astro/layout/Footer.astro";
+import { Header } from "@/components/react/layout";
+import { ProductListingPage } from "@/components/react/pages";
 
 // Get all products from both directory structures
-const products = await getCollection("products", (product) => {
-  // Debug log to see what's being found
-  console.log("Found product:", product.id, product.slug);
-  return true;
-});
+const products = await getCollection("products");
 
 // Map collection data to match Product interface
 const mappedProducts = products.map((product) => ({
@@ -36,12 +32,34 @@ const categories = [
   ...new Set(mappedProducts.map((post) => post.data.category)),
 ];
 
+// Get URL parameters for filters
+const url = new URL(Astro.request.url);
+const searchParams = url.searchParams;
+
+// Parse filter parameters
+const typeFilters = searchParams.getAll("type");
+const materialFilters = searchParams.getAll("material");
+const searchQuery = searchParams.get("q") || "";
+
+// Build filter state object
+const filterState = {
+  type: typeFilters,
+  material: materialFilters,
+  search: searchQuery,
+};
+
+// Build breadcrumb segments with filter context
+const segments = [
+  { name: "Home", href: "/" },
+  {
+    name: "Catalog",
+    href: `/catalog${url.search ? `?${url.search}` : ""}`,
+  },
+];
+
 const title = "Product Catalog";
 const description =
   "Browse our complete catalog of high-quality wire and cable products.";
-
-// Build breadcrumb segments
-const segments = [{ name: "Products", href: "/products" }];
 ---
 
 <!doctype html>
@@ -52,12 +70,14 @@ const segments = [{ name: "Products", href: "/products" }];
   <body class="min-h-screen bg-background">
     <Header client:load />
     <BaseHeader eyebrow="Product" title="Catalog" />
+    <!-- <ProductBreadcrumbs segments={segments} /> -->
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <ProductListingPage
           client:load
           products={sortedProducts}
           categories={categories}
+          initialFilters={filterState}
         />
       </div>
     </main>

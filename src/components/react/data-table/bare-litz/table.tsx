@@ -1,14 +1,15 @@
+import { SwitchableDataTable } from "@/components/react/data-table";
 import { columns } from "./columns";
-import { SelectDataTable } from "../SelectDataTable";
 import { tabs } from "./data";
 
-export function BareLitzWireTable() {
+export function BareLitzTable() {
 	return (
-		<SelectDataTable
-			tabs={tabs}
+		<SwitchableDataTable
+			items={tabs}
 			columns={columns}
 			placeholder="Select Frequency"
-			defaultTab="60hz-1khz"
+			defaultValue="60hz-1khz"
+			variant="select"
 		/>
 	);
 }

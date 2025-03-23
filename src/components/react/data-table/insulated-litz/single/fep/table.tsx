@@ -1,7 +1,20 @@
+import { DataTable } from "@/components/react/data-table/components/data-table";
 import { columns } from "./columns";
 import { singleInsulatedLitzData } from "./data";
-import { DataTable } from "@/components/react/data-table/data-table";
 
 export function SingleInsulatedLitzTable() {
-	return <DataTable columns={columns} data={singleInsulatedLitzData} />;
+	return (
+		<div className="not-prose">
+			<DataTable
+				columns={columns}
+				data={singleInsulatedLitzData}
+				title="Wire Specifications"
+				simple
+				pageSize={10}
+				enableMultiSort={true}
+				hideSearch={false}
+				hidePagination={false}
+			/>
+		</div>
+	);
 }

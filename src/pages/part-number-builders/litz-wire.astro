@@ -1,5 +1,5 @@
 ---
-import LitzWirePartNumberBuilderForm from "@/components/react/LitzWirePartNumberBuilderForm";
+import { LitzWireForm } from "@/components/react/forms/litz-wire/LitzWireForm";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
@@ -10,5 +10,5 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   eyebrow="Part Number Builder"
   headerTitle="Litz Wire"
 >
-  <LitzWirePartNumberBuilderForm client:load />
+  <LitzWireForm client:load />
 </BaseLayout>

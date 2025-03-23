@@ -1,0 +1,52 @@
+---
+import BaseBreadcrumbs from "./BaseBreadcrumbs.astro";
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+
+// Page name mapping for better breadcrumb display
+const pageNameMap: Record<string, string> = {
+  about: "About Us",
+  markets: "Markets",
+  careers: "Careers",
+  contact: "Contact Us",
+  "request-a-quote": "Request a Quote",
+  "part-number-builders": "Part Number Builders",
+  glossary: "Glossary",
+  "knowledge-base": "Knowledge Base",
+  "health-safety": "Health & Safety",
+  leadership: "Leadership",
+  partnerships: "Partnerships",
+  "n1-max-calculator": "N1 Max Calculator",
+  "thank-you": "Thank You",
+};
+
+// Build breadcrumb segments based on current URL path
+const segments = pathname
+  .split("/")
+  .filter(Boolean)
+  .map((segment: string, index: number, array: string[]) => {
+    const href = `/${array.slice(0, index + 1).join("/")}`;
+    // Use mapped name if available, otherwise convert kebab case to title case
+    const name =
+      pageNameMap[segment] ||
+      segment
+        .split("-")
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    return { name, href };
+  });
+
+// Add home as first segment if not already present
+if (segments.length === 0 || segments[0].name !== "Home") {
+  segments.unshift({ name: "Home", href: "/" });
+}
+
+// Only render breadcrumbs if there are more than 2 segments (Home + at least 2 other segments)
+const shouldShowBreadcrumbs = segments.length > 2;
+---
+
+{shouldShowBreadcrumbs && <BaseBreadcrumbs segments={segments} />}

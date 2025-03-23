@@ -7,7 +7,17 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/.next/**",
+			"**/.astro/**",
+			"**/build/**",
+			"**/coverage/**",
+			"**/*.min.*",
+			"**/types/wire-data.ts",
+			"**/data-table/**/types.ts"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -21,7 +31,18 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true
-		}
+		},
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/.next/**",
+			"**/.astro/**",
+			"**/build/**",
+			"**/coverage/**",
+			"**/*.min.*",
+			"**/types/wire-data.ts",
+			"**/data-table/**/types.ts"
+		]
 	},
 	"javascript": {
 		"formatter": {

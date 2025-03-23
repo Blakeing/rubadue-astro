@@ -1,13 +1,12 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import ContactForm from "../components/react/ContactForm";
-import { WorldMap } from "@/components/react/WorldMap";
+import { ContactForm } from "@/components/react/forms/contact/ContactForm";
 import {
   Card,
-  CardHeader,
   CardContent,
   CardDescription,
-} from "@/components/react/ui/card";
+  CardHeader,
+} from "@/components/react/ui";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Manager {
   title: string;
@@ -65,106 +64,106 @@ const generalInquiries = {
 
 <BaseLayout
   title="Contact Us | Rubadue Wire"
-  description="Contact Rubadue Wire for sales, support, and more."
+  description="Get in touch with Rubadue Wire for all your wire and cable needs. We're here to help with technical support, quotes, and more."
   category="Contact"
   eyebrow="Contact"
-  headerTitle="Get in touch"
+  headerTitle="Get in Touch"
 >
   <div class="relative isolate bg-background">
-    <div
-      class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-16 sm:pb-24 md:pb-28 lg:pb-32"
-    >
-      <div
-        class="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
-      >
-        {/* Left Column - Contact Info */}
-        <div>
-          <div class="max-w-2xl">
-            <div class="space-y-8 sm:space-y-12">
-              {
-                regions.map((region) => (
-                  <div class="space-y-4 sm:space-y-6">
-                    <div>
-                      <h3 class="text-xl sm:text-2xl font-semibold text-foreground">
-                        {region.name}
-                      </h3>
-                      <p class="text-base sm:text-lg text-muted-foreground">
-                        {region.location}
-                      </p>
-                    </div>
-                    {region.manager && (
-                      <div class="space-y-3 sm:space-y-4">
-                        <div>
-                          <p class="text-sm sm:text-base font-semibold text-foreground">
-                            {region.manager.title}
-                          </p>
-                          <p class="text-sm sm:text-base text-accent-foreground">
-                            {region.manager.name}
-                          </p>
-                        </div>
-                        <div class="space-y-1 sm:space-y-2">
-                          <a
-                            href={`mailto:${region.manager.email}`}
-                            class="block text-sm sm:text-base text-primary hover:underline"
-                          >
-                            {region.manager.email}
-                          </a>
-                          <a
-                            href={`tel:${region.manager.phone}`}
-                            class="block text-sm sm:text-base text-primary/80 hover:underline"
-                          >
-                            {region.manager.phone}
-                          </a>
-                        </div>
+    <div class="py-8 sm:py-12 md:py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div
+          class="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+        >
+          {/* Left Column - Contact Info */}
+          <div>
+            <div class="max-w-2xl">
+              <div class="space-y-8 sm:space-y-12">
+                {
+                  regions.map((region) => (
+                    <div class="space-y-4 sm:space-y-6">
+                      <div>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-foreground">
+                          {region.name}
+                        </h3>
+                        <p class="text-base sm:text-lg text-muted-foreground">
+                          {region.location}
+                        </p>
                       </div>
-                    )}
+                      {region.manager && (
+                        <div class="space-y-3 sm:space-y-4">
+                          <div>
+                            <p class="text-sm sm:text-base font-semibold text-foreground">
+                              {region.manager.title}
+                            </p>
+                            <p class="text-sm sm:text-base text-accent-foreground">
+                              {region.manager.name}
+                            </p>
+                          </div>
+                          <div class="space-y-1 sm:space-y-2">
+                            <a
+                              href={`mailto:${region.manager.email}`}
+                              class="block text-sm sm:text-base text-primary hover:underline"
+                            >
+                              {region.manager.email}
+                            </a>
+                            <a
+                              href={`tel:${region.manager.phone}`}
+                              class="block text-sm sm:text-base text-primary/80 hover:underline"
+                            >
+                              {region.manager.phone}
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                }
+
+                {/* General Inquiries */}
+                <div class="pt-4 sm:pt-6 border-t border-border">
+                  <h3 class="text-lg sm:text-xl font-semibold text-foreground">
+                    General Inquiries
+                  </h3>
+                  <div class="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
+                    <a
+                      href={`mailto:${generalInquiries.email}`}
+                      class="block text-sm sm:text-base text-primary hover:underline"
+                    >
+                      {generalInquiries.email}
+                    </a>
+
+                    <a
+                      href={`tel:${generalInquiries.phone}`}
+                      class="block text-sm sm:text-base text-primary hover:underline"
+                    >
+                      {generalInquiries.phone}
+                    </a>
                   </div>
-                ))
-              }
-
-              {/* General Inquiries */}
-              <div class="pt-4 sm:pt-6 border-t border-border">
-                <h3 class="text-lg sm:text-xl font-semibold text-foreground">
-                  General Inquiries
-                </h3>
-                <div class="mt-3 sm:mt-4 space-y-1 sm:space-y-2">
-                  <a
-                    href={`mailto:${generalInquiries.email}`}
-                    class="block text-sm sm:text-base text-primary hover:underline"
-                  >
-                    {generalInquiries.email}
-                  </a>
-
-                  <a
-                    href={`tel:${generalInquiries.phone}`}
-                    class="block text-sm sm:text-base text-primary hover:underline"
-                  >
-                    {generalInquiries.phone}
-                  </a>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right Column - Contact Form */}
-        <div
-          class="mt-8 lg:mt-0 lg:pl-8 lg:border-l border-border lg:col-span-2"
-        >
-          <Card className="shadow-lg">
-            <CardHeader className="space-y-2">
-              <h3 class="text-xl sm:text-2xl font-semibold">
-                Let's talk about your project.
-              </h3>
-              <CardDescription className="text-base sm:text-lg">
-                Fill out the form below and we'll get back to you as soon as
-                possible to discuss your needs.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ContactForm client:load />
-            </CardContent>
-          </Card>
+          {/* Right Column - Contact Form */}
+          <div
+            class="mt-8 lg:mt-0 lg:pl-8 lg:border-l border-border lg:col-span-2"
+          >
+            <Card className="shadow-lg">
+              <CardHeader className="space-y-2">
+                <h3 class="text-xl sm:text-2xl font-semibold">
+                  Let's talk about your project.
+                </h3>
+                <CardDescription className="text-base sm:text-lg">
+                  Fill out the form below and we'll get back to you as soon as
+                  possible to discuss your needs.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ContactForm client:load />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

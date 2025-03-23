@@ -1,11 +1,17 @@
-import { SimpleDataTable } from "@/components/react/data-table/simple-data-table";
+import { WireTable } from "@/components/react/data-table";
 import { columns } from "./columns";
 import { wireData } from "./data";
 
 export function DoubleInsulatedTable() {
 	return (
-		<div className="">
-			<SimpleDataTable columns={columns} data={wireData} />
-		</div>
+		<WireTable
+			columns={columns}
+			data={wireData}
+			simple
+			pageSize={10}
+			enableMultiSort={true}
+			hideSearch={false}
+			hidePagination={false}
+		/>
 	);
 }

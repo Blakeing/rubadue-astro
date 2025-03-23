@@ -1,7 +1,17 @@
-import { DataTable } from "@/components/react/data-table/data-table";
+import { WireTable } from "@/components/react/data-table";
 import { columns } from "./columns";
 import { wireData } from "./data";
 
-export function PfaWireTable() {
-	return <DataTable columns={columns} data={wireData} />;
+export function TripleInsulatedTable() {
+	return (
+		<WireTable
+			columns={columns}
+			data={wireData}
+			simple
+			pageSize={10}
+			enableMultiSort={true}
+			hideSearch={false}
+			hidePagination={false}
+		/>
+	);
 }

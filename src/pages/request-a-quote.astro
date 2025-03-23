@@ -1,13 +1,6 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import QuoteRequestForm from "../components/react/QuoteRequestForm";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from "@/components/react/ui/card";
+import { RequestQuotePage } from "@/components/react/pages/RequestQuotePage";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
@@ -17,21 +10,9 @@ import {
   eyebrow="Request a Quote"
   headerTitle="Get Started"
 >
-  <div class="isolate relative">
-    <div
-      class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-24"
-    >
-      <Card className="shadow-lg">
-        <CardHeader className="space-y-2 pb-4 sm:pb-6">
-          <CardDescription className="text-base sm:text-lg">
-            Please fill out the form below and we'll get back to you as soon as
-            possible with a quote for your wire and cable needs.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-4 sm:p-6 lg:p-8">
-          <QuoteRequestForm client:load />
-        </CardContent>
-      </Card>
-    </div>
-  </div>
+  <RequestQuotePage client:load />
 </BaseLayout>
+
+<script>
+  // Any client-side JavaScript can go here
+</script>

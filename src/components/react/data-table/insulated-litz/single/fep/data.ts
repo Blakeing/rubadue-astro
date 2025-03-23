@@ -1,13 +1,4 @@
-export type SingleInsulatedLitzSpec = {
-	partNumber: string;
-	equivalentAWG: string;
-	coreDiameter: string;
-	circularMils: string;
-	numberOfStrands: string;
-	awgOfStrands: string;
-	nominalOD: string;
-	suggestedOperatingFreq: string;
-};
+import type { SingleInsulatedLitzSpec } from "@/components/react/data-table/insulated-litz/types";
 
 export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 	{
@@ -18,7 +9,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "825",
 		awgOfStrands: "44",
 		nominalOD: "0.0877",
-		suggestedOperatingFreq: "400-850 khz",
+		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
 		partNumber: "SXXL120/38FX-3(MWXX)",
@@ -28,7 +19,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "120",
 		awgOfStrands: "38",
 		nominalOD: "0.0629",
-		suggestedOperatingFreq: "50-100 khz",
+		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
 		partNumber: "SXXL550/44FX-3(MWXX)",
@@ -38,7 +29,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "550",
 		awgOfStrands: "44",
 		nominalOD: "0.0683",
-		suggestedOperatingFreq: "400-850 khz",
+		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
 		partNumber: "SXXL100/38FX-3(MWXX)",
@@ -48,7 +39,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "100",
 		awgOfStrands: "38",
 		nominalOD: "0.0580",
-		suggestedOperatingFreq: "50-100 khz",
+		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
 		partNumber: "SXXL07/28FX-3(MWXX)",
@@ -58,7 +49,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "28",
 		nominalOD: "0.0471",
-		suggestedOperatingFreq: "60hz-1 khz",
+		suggestedOperatingFreq: "60 Hz-1 kHz",
 	},
 	{
 		partNumber: "SXXL66/38FX-3(MWXX)",
@@ -68,7 +59,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "66",
 		awgOfStrands: "38",
 		nominalOD: "0.0462",
-		suggestedOperatingFreq: "50-100 khz",
+		suggestedOperatingFreq: "50-100 kHz",
 	},
 	{
 		partNumber: "SXXL360/44FX-3(MWXX)",
@@ -78,7 +69,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "360",
 		awgOfStrands: "44",
 		nominalOD: "0.0564",
-		suggestedOperatingFreq: "400-850 khz",
+		suggestedOperatingFreq: "400-850 kHz",
 	},
 	{
 		partNumber: "SXXL20/34FX-3(MWXX)",
@@ -88,7 +79,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "2",
 		awgOfStrands: "34",
 		nominalOD: "0.0432",
-		suggestedOperatingFreq: "20 khz",
+		suggestedOperatingFreq: "20 kHz",
 	},
 	{
 		partNumber: "SXXL07/30FX-3(MWXX)",
@@ -98,7 +89,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "30",
 		nominalOD: "0.0387",
-		suggestedOperatingFreq: "1-10 khz",
+		suggestedOperatingFreq: "1-10 kHz",
 	},
 	{
 		partNumber: "SXXL19/36FX-3(MWXX)",
@@ -108,7 +99,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "19",
 		awgOfStrands: "36",
 		nominalOD: "0.0320",
-		suggestedOperatingFreq: "20-50 khz",
+		suggestedOperatingFreq: "20-50 kHz",
 	},
 	{
 		partNumber: "SXXL19/36FX-3(MWXX)",
@@ -118,7 +109,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "1",
 		awgOfStrands: "36",
 		nominalOD: "0.0340",
-		suggestedOperatingFreq: "20-50 khz",
+		suggestedOperatingFreq: "20-50 kHz",
 	},
 	{
 		partNumber: "SXXL07/32FX-2(MWXX)",
@@ -128,7 +119,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "32",
 		nominalOD: "0.0304",
-		suggestedOperatingFreq: "10 khz",
+		suggestedOperatingFreq: "10 kHz",
 	},
 	{
 		partNumber: "SXXL07/32FX-3(MWXX)",
@@ -138,7 +129,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "32",
 		nominalOD: "0.0324",
-		suggestedOperatingFreq: "10 khz",
+		suggestedOperatingFreq: "10 kHz",
 	},
 	{
 		partNumber: "SXXL40/40FX-2(MWXX)",
@@ -148,7 +139,7 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "40",
 		awgOfStrands: "40",
 		nominalOD: "0.0296",
-		suggestedOperatingFreq: "100-200 khz",
+		suggestedOperatingFreq: "100-200 kHz",
 	},
 	{
 		partNumber: "SXXL230/44FX-3(MWXX)",
@@ -158,6 +149,6 @@ export const singleInsulatedLitzData: SingleInsulatedLitzSpec[] = [
 		numberOfStrands: "230",
 		awgOfStrands: "44",
 		nominalOD: "0.0463",
-		suggestedOperatingFreq: "400-850 khz",
+		suggestedOperatingFreq: "400-850 kHz",
 	},
 ];
