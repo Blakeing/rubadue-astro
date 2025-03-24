@@ -2,58 +2,6 @@ import type { WireData } from "@/components/react/data-table/types";
 
 export const wireData: WireData[] = [
 	{
-		partNumber: "S16A01TX-3",
-		awg: "16",
-		conductor: {
-			inches: "0.0508",
-			mm: "1.290",
-		},
-		nominalOD: {
-			inches: "0.0568",
-			mm: "1.443",
-		},
-		weightLbKft: "8.18",
-	},
-	{
-		partNumber: "S18A01TX-3",
-		awg: "18",
-		conductor: {
-			inches: "0.0403",
-			mm: "1.024",
-		},
-		nominalOD: {
-			inches: "0.0463",
-			mm: "1.176",
-		},
-		weightLbKft: "5.22",
-	},
-	{
-		partNumber: "S20A01TX-3",
-		awg: "20",
-		conductor: {
-			inches: "0.0320",
-			mm: "0.813",
-		},
-		nominalOD: {
-			inches: "0.0380",
-			mm: "0.965",
-		},
-		weightLbKft: "3.33",
-	},
-	{
-		partNumber: "S21A01TX-3",
-		awg: "21",
-		conductor: {
-			inches: "0.0285",
-			mm: "0.724",
-		},
-		nominalOD: {
-			inches: "0.0345",
-			mm: "0.876",
-		},
-		weightLbKft: "2.68",
-	},
-	{
 		partNumber: "S22A01TX-3",
 		awg: "22",
 		conductor: {

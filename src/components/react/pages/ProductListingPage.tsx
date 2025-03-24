@@ -509,7 +509,7 @@ export default function ProductListingPage({
 										href={`/catalog/${product.slug}`}
 										className="group relative"
 									>
-										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-muted">
+										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-background">
 											<img
 												src={product.data.heroImage || "/rubadue-hero.webp"}
 												alt={product.data.title}

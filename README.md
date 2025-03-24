@@ -2,3 +2,4 @@
 - Fix markets icons
 - Fix litz wire builder
 - Fix calcualted product information accordion
+- Add request button style

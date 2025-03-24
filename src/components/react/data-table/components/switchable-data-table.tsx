@@ -118,9 +118,12 @@ export function SwitchableDataTable<TData extends object>({
 						{title}
 					</h3>
 				)}
+				<h4 className="text-base font-semibold tracking-tight text-foreground/80  mb-2">
+					Select Frequency
+				</h4>
 				<div className="space-y-2">
 					<Select value={activeValue} onValueChange={setActiveValue}>
-						<SelectTrigger className="w-[300px]">
+						<SelectTrigger className="w-[300px] ring-1 ring-primary">
 							<SelectValue placeholder={placeholder}>
 								{activeItem.label}
 							</SelectValue>

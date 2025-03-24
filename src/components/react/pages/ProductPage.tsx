@@ -169,6 +169,15 @@ export default function ProductPage({
 						</dd>
 					</div>
 				)}
+
+				{product.tensileStrength && (
+					<div className="space-y-1">
+						<dt className="text-sm text-muted-foreground">Tensile Strength:</dt>
+						<dd className="text-sm text-foreground">
+							{product.tensileStrength}
+						</dd>
+					</div>
+				)}
 			</>
 		);
 	};
@@ -195,7 +204,7 @@ export default function ProductPage({
 		{
 			id: "construction",
 			title: "Product Construction",
-			show: !!product.construction,
+			show: !!product.construction || !!product.tensileStrength,
 			content: (
 				<div className="space-y-4">
 					{renderConstructionDetails(product.construction)}
@@ -205,11 +214,7 @@ export default function ProductPage({
 		{
 			id: "compliances",
 			title: "Compliances",
-			show: !!(
-				product.compliances ||
-				product.systemApprovals ||
-				product.tensileStrength
-			),
+			show: !!(product.compliances || product.systemApprovals),
 			content: (
 				<div className="space-y-4">
 					{product.compliances && (
@@ -235,16 +240,6 @@ export default function ProductPage({
 										<li key={approval}>{approval}</li>
 									))}
 								</ul>
-							</dd>
-						</div>
-					)}
-					{product.tensileStrength && (
-						<div className="space-y-1">
-							<dt className="text-sm text-muted-foreground">
-								Tensile Strength:
-							</dt>
-							<dd className="text-sm text-foreground">
-								{product.tensileStrength}
 							</dd>
 						</div>
 					)}
