@@ -415,7 +415,7 @@ export default function ProductListingPage({
 					<div className="relative grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
 						{/* Filters */}
 						<aside className="hidden lg:block">
-							<div className="lg:sticky lg:top-32">
+							<div className="lg:sticky lg:top-40">
 								<div className="border-b border-muted pb-6">
 									<div className="flex items-center justify-between">
 										<h3 className="text-sm font-medium">Filter Products</h3>

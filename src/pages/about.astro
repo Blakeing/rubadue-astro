@@ -9,6 +9,7 @@ import {
 } from "@/components/react/ui";
 import Timeline from "@/components/react/about/Timeline";
 import type { IconName } from "@/components/react/icons";
+import { Target, Eye } from "lucide-react";
 
 interface Person {
   name: string;
@@ -20,34 +21,38 @@ interface Person {
 
 const people: Person[] = [
   {
-    name: "Sue Rubadue",
+    name: "Shawn Toland",
     role: "President",
-    imageUrl: "https://placehold.co/600x400",
+    imageUrl: "/team/shawn-toland.png",
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
   {
-    name: "Steve Rubadue",
-    role: "Vice President",
-    imageUrl: "https://placehold.co/600x400",
+    name: "Mike Skorupa",
+    role: "Director of Operations",
+    imageUrl: "/team/mike-skorupa.png",
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+
+  {
+    name: "Doug Ingenthron",
+    role: "Director of Sales",
+    imageUrl: "/team/doug-ingenthron.png",
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
   {
-    name: "Kathy Rubadue",
-    role: "Vice President",
-    imageUrl: "https://placehold.co/600x400",
-    xUrl: "#",
-    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
-  },
-  {
-    name: "Jared Rubadue",
-    role: "Vice President",
-    imageUrl: "https://placehold.co/600x400",
+    name: "Kyle Jensen",
+    role: "Director of Business Development",
+    imageUrl: "/team/kyle-jensen.png",
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
 ];
+
+const missionIcon: IconName = "target";
+const visionIcon: IconName = "eye";
 
 const timelineEvents = [
   {
@@ -172,33 +177,51 @@ const stats = [
       </div>
 
       {/* Mission & Vision Section */}
-      <div
-        class="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-2 my-8 sm:my-12 md:my-16"
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-primary">Our Mission</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p class="text-base sm:text-lg text-muted-foreground">
-              We solve wire and cable challenges when high performance and
-              reliability are critical.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-primary">Our Vision</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p class="text-base sm:text-lg text-muted-foreground">
-              Create the premier brand in developing and manufacturing specialty
-              wire and cable to support tomorrow's innovation.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <div class="my-12 sm:my-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+            >
+            </div>
+            <div class="p-6">
+              <h3
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight text-primary mb-6"
+              >
+                <Target className="w-6 h-6" />
+                Our Mission
+              </h3>
+              <p class="text-lg text-muted-foreground">
+                We solve wire and cable challenges when high performance and
+                reliability are critical.
+              </p>
+            </div>
+          </div>
 
+          <div
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+            >
+            </div>
+            <div class="p-6">
+              <h3
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight text-primary mb-6"
+              >
+                <Eye className="w-6 h-6" />
+                Our Vision
+              </h3>
+              <p class="text-lg text-muted-foreground">
+                Create the premier brand in developing and manufacturing
+                specialty wire and cable to support tomorrow's innovation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Leadership Section */}
       <div class="">
         <div class="mx-auto max-w-2xl lg:mx-0">
@@ -220,11 +243,14 @@ const stats = [
           {
             people.map((person) => (
               <li>
-                <img
-                  alt={`Photo of ${person.name}`}
-                  src={person.imageUrl}
-                  class="aspect-[3/2] w-full rounded-2xl object-cover"
-                />
+                <div class="relative">
+                  <div class="absolute inset-0 bg-gradient-to-b from-foreground/20 to-foreground/40 rounded-2xl" />
+                  <img
+                    alt={`Photo of ${person.name}`}
+                    src={person.imageUrl}
+                    class="aspect-square w-full rounded-2xl object-cover relative z-10"
+                  />
+                </div>
                 <h3 class="mt-4 sm:mt-6 text-base sm:text-lg/8 font-semibold text-foreground">
                   {person.name}
                 </h3>

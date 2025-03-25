@@ -17,6 +17,7 @@ interface MarketCardProps {
 	applications: string[];
 	products: string[];
 	icon: IconName;
+	image: string;
 }
 
 export function MarketCard({
@@ -26,6 +27,7 @@ export function MarketCard({
 	applications,
 	products,
 	icon,
+	image,
 }: MarketCardProps) {
 	const Icon = icons[icon];
 
@@ -39,6 +41,13 @@ export function MarketCard({
 		>
 			<Card className="relative border-border transition-all duration-300 hover:shadow-lg hover:border-primary/20 overflow-hidden">
 				<div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+				<div className="relative aspect-[16/9] w-full overflow-hidden">
+					<img
+						src={image}
+						alt={`${name} market`}
+						className="object-cover w-full h-full"
+					/>
+				</div>
 				<CardHeader>
 					<div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-x-4">
 						<div className="flex size-12 sm:size-16 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all duration-300  group-hover:shadow-lg">
