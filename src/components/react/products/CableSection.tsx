@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import doubleInsulatedImage from "@/assets/double_insulated-removebg-preview.png";
 // Import images
@@ -70,6 +70,34 @@ const variants = {
 
 export default function CableSection() {
 	const [activeFeature, setActiveFeature] = useState(0);
+	// State for resolved CSS variable colors
+	const [resolvedMutedFgColor, setResolvedMutedFgColor] = useState<
+		string | undefined
+	>(undefined);
+	const [resolvedPrimaryColor, setResolvedPrimaryColor] = useState<
+		string | undefined
+	>(undefined);
+
+	// Effect to read computed styles on mount
+	useEffect(() => {
+		const computedStyle = getComputedStyle(document.documentElement);
+		const mutedFg = computedStyle
+			.getPropertyValue("--muted-foreground")
+			?.trim();
+		const primary = computedStyle.getPropertyValue("--primary")?.trim();
+
+		if (mutedFg) {
+			setResolvedMutedFgColor(mutedFg);
+		}
+		if (primary) {
+			setResolvedPrimaryColor(primary);
+		}
+	}, []); // Empty dependency array ensures this runs only once on mount
+
+	// Helper to construct the primary color with alpha
+	const primaryColorWithAlpha = resolvedPrimaryColor
+		? `${resolvedPrimaryColor.slice(0, -1)} / 0.8)`
+		: undefined;
 
 	return (
 		<div className="overflow-hidden py-8 sm:py-12 md:py-16 lg:py-24">
@@ -92,12 +120,13 @@ export default function CableSection() {
 									className="relative cursor-pointer select-none"
 									onHoverStart={() => setActiveFeature(index)}
 									onClick={() => setActiveFeature(index)}
-									initial={{ color: "hsl(var(--muted-foreground))" }}
+									// Use resolved colors for animation
+									initial={{ color: resolvedMutedFgColor }}
 									animate={{
 										color:
 											activeFeature === index
-												? "hsl(var(--primary) / 0.8)"
-												: "hsl(var(--muted-foreground))",
+												? primaryColorWithAlpha // Use constructed alpha color
+												: resolvedMutedFgColor,
 									}}
 									transition={{ duration: 0.15 }}
 								>

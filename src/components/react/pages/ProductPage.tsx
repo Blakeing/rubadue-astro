@@ -259,13 +259,13 @@ export default function ProductPage({
 						<img
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							className="aspect-[4/3] w-full rounded-lg bg-background object-cover shadow-lg sm:shadow-2xl"
+							className="aspect-4/3 w-full rounded-lg bg-background object-cover shadow-lg sm:shadow-2xl"
 						/>
 					) : (
 						<Image
 							src={product.imageSrc}
 							alt={product.imageAlt}
-							class="aspect-[4/3] w-full rounded-lg bg-background object-contain shadow-lg sm:shadow-2xl"
+							class="aspect-4/3 w-full rounded-lg bg-background object-contain shadow-lg sm:shadow-2xl"
 							width={1600}
 							height={900}
 							format="webp"
@@ -285,7 +285,7 @@ export default function ProductPage({
 						<Accordion
 							type="multiple"
 							defaultValue={defaultSection ? [defaultSection] : []}
-							className="w-full [&_[data-state=open]]:animate-none"
+							className="w-full **:data-[state=open]:animate-none"
 						>
 							{visibleSections.map((section, index) => (
 								<AccordionItem

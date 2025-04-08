@@ -3,10 +3,11 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+// import tailwind from "@astrojs/tailwind"; // Removed
 import vercel from "@astrojs/vercel";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import tailwindcss from "@tailwindcss/vite"; // Added
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,9 +23,6 @@ export default defineConfig({
 		}),
 		sitemap(),
 		react(),
-		tailwind({
-			applyBaseStyles: false,
-		}),
 	],
 	image: {
 		remotePatterns: [{ protocol: "https" }],
@@ -35,4 +33,8 @@ export default defineConfig({
 	},
 	output: "server",
 	adapter: vercel(),
+	vite: {
+		// Added vite config
+		plugins: [tailwindcss()],
+	},
 });

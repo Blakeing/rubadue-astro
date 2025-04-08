@@ -138,7 +138,7 @@ const Timeline: React.FC<TimelineProps> = ({ data, title, description }) => {
 							whileInView="visible"
 							viewport={{ once: true }}
 							variants={ANIMATION_VARIANTS.dot}
-							className="absolute left-[calc(50%-8px)] -translate-x-[8px] flex items-center justify-center w-4 h-4 z-10"
+							className="absolute left-1/2 -translate-x-[8px] flex items-center justify-center w-4 h-4 z-10"
 						>
 							<div className="absolute w-4 h-4 rounded-full border-2 border-primary bg-background" />
 							<div className="absolute w-2 h-2 rounded-full bg-primary" />

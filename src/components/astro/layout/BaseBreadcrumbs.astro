@@ -11,7 +11,7 @@ const { segments, className = "" } = Astro.props;
 ---
 
 <nav
-  class={`flex bg-background border-b shadow-sm z-10 ${className}`}
+  class={`flex bg-background border-b shadow-xs z-10 ${className}`}
   aria-label="Breadcrumb"
 >
   <ol
@@ -20,11 +20,11 @@ const { segments, className = "" } = Astro.props;
   >
     {
       segments.map((segment, index) => (
-        <li class="flex-shrink-0">
+        <li class="shrink-0">
           <div class="flex items-center">
             {index > 0 && (
               <svg
-                class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-muted-foreground"
+                class="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-muted-foreground"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -42,7 +42,7 @@ const { segments, className = "" } = Astro.props;
                 class="text-muted-foreground hover:text-foreground"
               >
                 <svg
-                  class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0"
+                  class="h-4 w-4 sm:h-5 sm:w-5 shrink-0"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"

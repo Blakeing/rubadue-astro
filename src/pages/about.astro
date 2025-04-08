@@ -180,10 +180,10 @@ const stats = [
       <div class="my-12 sm:my-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div
-            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow-sm"
           >
             <div
-              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+              class="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary/40 via-primary to-primary/40"
             >
             </div>
             <div class="p-6">
@@ -201,10 +201,10 @@ const stats = [
           </div>
 
           <div
-            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow-sm"
           >
             <div
-              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+              class="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary/40 via-primary to-primary/40"
             >
             </div>
             <div class="p-6">
@@ -244,7 +244,7 @@ const stats = [
             people.map((person) => (
               <li>
                 <div class="relative">
-                  <div class="absolute inset-0 bg-gradient-to-b from-foreground/20 to-foreground/40 rounded-2xl" />
+                  <div class="absolute inset-0 bg-linear-to-b from-foreground/20 to-foreground/40 rounded-2xl" />
                   <img
                     alt={`Photo of ${person.name}`}
                     src={person.imageUrl}

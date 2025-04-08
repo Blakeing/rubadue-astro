@@ -77,14 +77,14 @@ export function Header() {
 
 						<a
 							href="/request-a-quote"
-							className="inline-flex items-center rounded-md bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+							className="inline-flex items-center rounded-md bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition-colors"
 						>
 							Request a Quote
 						</a>
 					</div>
 				</div>
 			</div>
-			<header className="bg-background shadow">
+			<header className="bg-background shadow-sm">
 				<nav className="mx-auto flex max-w-7xl px-4 sm:px-6 lg:px-8 items-center justify-between py-3 sm:py-4 md:py-6">
 					{/* <a className="font-semibold tracking-wide" href="/" className="-m-1.5 p-1.5">
 						<TextLogo className="h-4 lg:h-5" />
@@ -240,7 +240,7 @@ export function Header() {
 											<SheetClose asChild>
 												<a
 													href="/request-a-quote"
-													className="flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90"
+													className="flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-xs hover:bg-primary/90"
 												>
 													Request a Quote
 												</a>
@@ -267,7 +267,7 @@ const ListItem = React.forwardRef<
 				<a
 					ref={ref}
 					className={cn(
-						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
 						className,
 					)}
 					{...props}

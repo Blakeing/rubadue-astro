@@ -96,7 +96,7 @@ function SearchAndNavigation({
 	}, [currentActiveSection]);
 
 	return (
-		<div className="sticky top-[5.5rem] z-10 bg-background/80 backdrop-blur-sm mb-6">
+		<div className="sticky top-[5.5rem] z-10 bg-background/80 backdrop-blur-xs mb-6">
 			<div className="relative py-3">
 				<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 				<Input

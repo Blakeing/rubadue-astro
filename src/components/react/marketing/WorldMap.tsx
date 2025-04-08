@@ -67,12 +67,12 @@ export function WorldMap({
 
 	if (!svgMap) {
 		return (
-			<div className="w-full aspect-[2/1] bg-background rounded-lg relative font-sans" />
+			<div className="w-full aspect-2/1 bg-background rounded-lg relative font-sans" />
 		);
 	}
 
 	return (
-		<div className="w-full aspect-[2/1] bg-background rounded-lg relative font-sans">
+		<div className="w-full aspect-2/1 bg-background rounded-lg relative font-sans">
 			{/* Background map */}
 			{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 			<svg
@@ -142,7 +142,7 @@ export function WorldMap({
 									<TooltipTrigger asChild>
 										<button
 											type="button"
-											className="absolute rounded-full w-3 h-3 transform -translate-x-1/2 -translate-y-1/2 hover:opacity-80 focus:outline-none"
+											className="absolute rounded-full w-3 h-3 transform -translate-x-1/2 -translate-y-1/2 hover:opacity-80 focus:outline-hidden"
 											style={{
 												left: `${(startPoint.x / 800) * 100}%`,
 												top: `${(startPoint.y / 400) * 100}%`,
@@ -190,7 +190,7 @@ export function WorldMap({
 									<TooltipTrigger asChild>
 										<button
 											type="button"
-											className="absolute rounded-full w-3 h-3 transform -translate-x-1/2 -translate-y-1/2 hover:opacity-80 focus:outline-none"
+											className="absolute rounded-full w-3 h-3 transform -translate-x-1/2 -translate-y-1/2 hover:opacity-80 focus:outline-hidden"
 											style={{
 												left: `${(endPoint.x / 800) * 100}%`,
 												top: `${(endPoint.y / 400) * 100}%`,
