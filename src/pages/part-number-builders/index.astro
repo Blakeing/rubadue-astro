@@ -18,15 +18,19 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   headerTitle="Part Number Builders"
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-    <div class="max-w-3xl mb-12 sm:mb-16">
-      <h2 class="text-2xl sm:text-3xl font-semibold text-foreground mb-4">
-        Interactive Part Number Configuration
-      </h2>
-      <p class="text-muted-foreground text-base sm:text-lg">
-        Our part number builders help you configure custom wire specifications
-        with ease. Each builder provides:
-      </p>
-      <ul class="mt-6 space-y-3 text-muted-foreground">
+    <div class="mb-12 sm:mb-16">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-foreground mb-4">
+          Interactive Part Number Configuration
+        </h2>
+        <p class="text-muted-foreground text-base text-pretty sm:text-lg">
+          Our part number builders help you configure custom wire specifications
+          with ease. Each builder provides:
+        </p>
+      </div>
+      <ul
+        class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-muted-foreground"
+      >
         <li
           class="flex items-center gap-3 bg-card/50 p-3 rounded-lg border border-border/50 hover:border-border/80 transition-colors"
         >

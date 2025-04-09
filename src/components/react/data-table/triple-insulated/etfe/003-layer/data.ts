@@ -2,7 +2,7 @@ import type { WireData } from "@/components/react/data-table/types";
 
 export const wireData: WireData[] = [
 	{
-		partNumber: "T10A01TXX-3",
+		partNumber: "T10A01TXXX-3",
 		awg: "10",
 		conductor: {
 			inches: "0.1019",
@@ -15,8 +15,8 @@ export const wireData: WireData[] = [
 		weightLbKft: "33.74",
 	},
 	{
-		partNumber: "T12A37TXX-3",
-		awg: "12(7/25)",
+		partNumber: "T10A37TXXX-3",
+		awg: "10(37/26)",
 		conductor: {
 			inches: "0.1070",
 			mm: "2.718",
@@ -28,7 +28,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "31.30",
 	},
 	{
-		partNumber: "T12A01TXX-3",
+		partNumber: "T12A01TXXX-3",
 		awg: "12",
 		conductor: {
 			inches: "0.0808",
@@ -41,7 +41,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "21.67",
 	},
 	{
-		partNumber: "T12A51TXX-3",
+		partNumber: "T12A51TXXX-3",
 		awg: "12(19/25)",
 		conductor: {
 			inches: "0.0862",
@@ -54,7 +54,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "20.78",
 	},
 	{
-		partNumber: "T14A01TXX-3",
+		partNumber: "T14A01TXXX-3",
 		awg: "14",
 		conductor: {
 			inches: "0.0641",
@@ -67,8 +67,8 @@ export const wireData: WireData[] = [
 		weightLbKft: "13.92",
 	},
 	{
-		partNumber: "T14A01TXX-3",
-		awg: "14(7/22)",
+		partNumber: "T14A19TXXX-3",
+		awg: "14(19/27)",
 		conductor: {
 			inches: "0.0679",
 			mm: "1.725",
@@ -80,7 +80,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "13.40",
 	},
 	{
-		partNumber: "T16A01TXX-3",
+		partNumber: "T16A01TXXX-3",
 		awg: "16",
 		conductor: {
 			inches: "0.0508",
@@ -90,10 +90,10 @@ export const wireData: WireData[] = [
 			inches: "0.0688",
 			mm: "1.748",
 		},
-		weightLbKft: "9.05",
+		weightLbKft: "9.06",
 	},
 	{
-		partNumber: "T16A01TXX-3",
+		partNumber: "T16A19TXXX-3",
 		awg: "16(19/29)",
 		conductor: {
 			inches: "0.0539",
@@ -106,7 +106,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "8.77",
 	},
 	{
-		partNumber: "T18A01TXX-3",
+		partNumber: "T18A01TXXX-3",
 		awg: "18",
 		conductor: {
 			inches: "0.0403",
@@ -116,23 +116,23 @@ export const wireData: WireData[] = [
 			inches: "0.0583",
 			mm: "1.481",
 		},
-		weightLbKft: "5.93",
+		weightLbKft: "5.95",
 	},
 	{
-		partNumber: "T19A01TXX-3",
+		partNumber: "T18A19TXXX-3",
 		awg: "18(19/30)",
 		conductor: {
-			inches: "0.0478",
+			inches: "0.0476",
 			mm: "1.209",
 		},
 		nominalOD: {
-			inches: "0.0658",
-			mm: "1.661",
+			inches: "0.0656",
+			mm: "1.666",
 		},
 		weightLbKft: "7.05",
 	},
 	{
-		partNumber: "T20A01TXX-3",
+		partNumber: "T20A01TXXX-3",
 		awg: "20",
 		conductor: {
 			inches: "0.0320",
@@ -145,7 +145,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "3.94",
 	},
 	{
-		partNumber: "T20A19TXX-3",
+		partNumber: "T20A19TXXX-3",
 		awg: "20(19/32)",
 		conductor: {
 			inches: "0.0385",
@@ -158,7 +158,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "4.74",
 	},
 	{
-		partNumber: "T22A01TXX-3",
+		partNumber: "T22A01TXXX-3",
 		awg: "22",
 		conductor: {
 			inches: "0.0253",
@@ -171,7 +171,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "2.65",
 	},
 	{
-		partNumber: "T22A19TXX-3",
+		partNumber: "T22A19TXXX-3",
 		awg: "22(19/34)",
 		conductor: {
 			inches: "0.0295",
@@ -184,7 +184,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "3.13",
 	},
 	{
-		partNumber: "T24A01TXX-3",
+		partNumber: "T24A01TXXX-3",
 		awg: "24",
 		conductor: {
 			inches: "0.0201",
@@ -197,7 +197,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "1.83",
 	},
 	{
-		partNumber: "T24A19TXX-3",
+		partNumber: "T24A19TXXX-3",
 		awg: "24(19/36)",
 		conductor: {
 			inches: "0.0242",
@@ -210,7 +210,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "2.16",
 	},
 	{
-		partNumber: "T26A01TXX-3",
+		partNumber: "T26A01TXXX-3",
 		awg: "26",
 		conductor: {
 			inches: "0.0159",
@@ -223,7 +223,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "1.28",
 	},
 	{
-		partNumber: "T28A01TXX-3",
+		partNumber: "T28A01TXXX-3",
 		awg: "28",
 		conductor: {
 			inches: "0.0126",
@@ -236,7 +236,7 @@ export const wireData: WireData[] = [
 		weightLbKft: "0.93",
 	},
 	{
-		partNumber: "T30A01TXX-3",
+		partNumber: "T30A01TXXX-3",
 		awg: "30",
 		conductor: {
 			inches: "0.0100",
@@ -246,10 +246,10 @@ export const wireData: WireData[] = [
 			inches: "0.0280",
 			mm: "0.711",
 		},
-		weightLbKft: "0.69",
+		weightLbKft: "0.70",
 	},
 	{
-		partNumber: "T32A01TXX-3",
+		partNumber: "T32A01TXXX-3",
 		awg: "32",
 		conductor: {
 			inches: "0.0080",

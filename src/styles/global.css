@@ -58,6 +58,12 @@
 		--chart-3: 197 37% 24%;
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
+		/* Text Shadow Variables */
+		--text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.15);
+		--text-shadow-xs: 0px 1px 1px rgb(0 0 0 / 0.2);
+		--text-shadow-sm: 0px 1px 0px rgb(0 0 0 / 0.075), 0px 1px 1px rgb(0 0 0 / 0.075), 0px 2px 2px rgb(0 0 0 / 0.075);
+		--text-shadow-md: 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1);
+		--text-shadow-lg: 0px 1px 2px rgb(0 0 0 / 0.1), 0px 3px 2px rgb(0 0 0 / 0.1), 0px 4px 8px rgb(0 0 0 / 0.1);
 	}
 
 	* {
@@ -139,5 +145,26 @@
 
 	.container {
 		@apply px-4 xl:px-6 2xl:px-4 mx-auto max-w-[1536px];
+	}
+
+	/* Text Shadow Utilities */
+	.text-shadow-2xs {
+		text-shadow: var(--text-shadow-2xs); /* 0px 1px 0px rgb(0 0 0 / 0.15) */
+	}
+
+	.text-shadow-xs {
+		text-shadow: var(--text-shadow-xs); /* 0px 1px 1px rgb(0 0 0 / 0.2) */
+	}
+
+	.text-shadow-sm {
+		text-shadow: var(--text-shadow-sm); /* 0px 1px 0px rgb(0 0 0 / 0.075), 0px 1px 1px rgb(0 0 0 / 0.075), 0px 2px 2px rgb(0 0 0 / 0.075) */
+	}
+
+	.text-shadow-md {
+		text-shadow: var(--text-shadow-md); /* 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1) */
+	}
+
+	.text-shadow-lg {
+		text-shadow: var(--text-shadow-lg); /* 0px 1px 2px rgb(0 0 0 / 0.1), 0px 3px 2px rgb(0 0 0 / 0.1), 0px 4px 8px rgb(0 0 0 / 0.1) */
 	}
 }

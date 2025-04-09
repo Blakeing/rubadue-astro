@@ -1,9 +1,9 @@
 ---
 title: "Insulated Winding Wire 101: Selecting an Insulated Winding Wire Part I: Temperature Ratings"
-description: "Learn the key considerations for selecting insulated winding wire, focusing on temperature ratings, operating ranges, and thermal life expectations."
+description: "Learn about temperature ratings and thermal life considerations when selecting insulated winding wires."
 pubDate: "2023-12-21"
 heroImage: "/images/knowledge-base-hero-placeholder.webp"
-tags: ["Technical Guide", "Winding Wire", "Temperature Ratings", "Insulation"]
+tags: ["Technical Guide", "Insulated Winding Wire", "Temperature Ratings", "Thermal Life", "Reflow Soldering", "Insulation", "OBJT2"]
 ---
 
 When designing or selecting an insulated winding wire for use in a wound component, it is important to consider the following key factors:

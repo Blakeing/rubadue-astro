@@ -9,7 +9,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "825",
 		awgOfStrands: "44",
 		nominalOD: "0.0937",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 	{
 		partNumber: "DXXL120/38FXX-2(MWXX)",
@@ -19,17 +19,27 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "120",
 		awgOfStrands: "38",
 		nominalOD: "0.0649",
-		suggestedOperatingFreq: "50-100 kHz",
+		suggestedOperatingFreq: "50 - 100 khz",
 	},
 	{
-		partNumber: "DXXL550/44FXX-3(MWXX)",
+		partNumber: "DXXL120/38FXX-3(MWXX)",
+		equivalentAWG: "18",
+		coreDiameter: "0.0569",
+		circularMils: "1920",
+		numberOfStrands: "120",
+		awgOfStrands: "38",
+		nominalOD: "0.0689",
+		suggestedOperatingFreq: "50 - 100 khz",
+	},
+	{
+		partNumber: "DXXL550/44FXX-2(MWXX)",
 		equivalentAWG: "17",
 		coreDiameter: "0.0623",
 		circularMils: "2200",
 		numberOfStrands: "550",
 		awgOfStrands: "44",
 		nominalOD: "0.0703",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 	{
 		partNumber: "DXXL550/44FXX-3(MWXX)",
@@ -39,7 +49,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "550",
 		awgOfStrands: "44",
 		nominalOD: "0.0743",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 	{
 		partNumber: "DXXL100/38FXX-2(MWXX)",
@@ -49,7 +59,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "100",
 		awgOfStrands: "38",
 		nominalOD: "0.0600",
-		suggestedOperatingFreq: "50-100 kHz",
+		suggestedOperatingFreq: "50 - 100 khz",
 	},
 	{
 		partNumber: "DXXL100/38FXX-3(MWXX)",
@@ -59,7 +69,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "100",
 		awgOfStrands: "38",
 		nominalOD: "0.0640",
-		suggestedOperatingFreq: "50-100 kHz",
+		suggestedOperatingFreq: "50 - 100 khz",
 	},
 	{
 		partNumber: "DXXL07/28FXX-2(MWXX)",
@@ -69,7 +79,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "28",
 		nominalOD: "0.0491",
-		suggestedOperatingFreq: "60 Hz-1 kHz",
+		suggestedOperatingFreq: "60 hz - 1 khz",
 	},
 	{
 		partNumber: "DXXL07/28FXX-3(MWXX)",
@@ -79,7 +89,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "28",
 		nominalOD: "0.0531",
-		suggestedOperatingFreq: "60 Hz-1 kHz",
+		suggestedOperatingFreq: "60 hz - 1 khz",
 	},
 	{
 		partNumber: "DXXL66/38FXX-2(MWXX)",
@@ -89,7 +99,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "66",
 		awgOfStrands: "38",
 		nominalOD: "0.0502",
-		suggestedOperatingFreq: "50-100 kHz",
+		suggestedOperatingFreq: "50 - 100 khz",
 	},
 	{
 		partNumber: "DXXL66/38FXX-3(MWXX)",
@@ -99,7 +109,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "66",
 		awgOfStrands: "38",
 		nominalOD: "0.0542",
-		suggestedOperatingFreq: "50-100 kHz",
+		suggestedOperatingFreq: "50 - 100 khz",
 	},
 	{
 		partNumber: "DXXL360/44FXX-2(MWXX)",
@@ -109,7 +119,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "360",
 		awgOfStrands: "44",
 		nominalOD: "0.0584",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 	{
 		partNumber: "DXXL360/44FXX-3(MWXX)",
@@ -119,7 +129,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "360",
 		awgOfStrands: "44",
 		nominalOD: "0.0624",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 	{
 		partNumber: "DXXL20/34FXX-2(MWXX)",
@@ -129,7 +139,17 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "20",
 		awgOfStrands: "34",
 		nominalOD: "0.0452",
-		suggestedOperatingFreq: "20 kHz",
+		suggestedOperatingFreq: "20 khz",
+	},
+	{
+		partNumber: "DXXL20/34FXX-3(MWXX)",
+		equivalentAWG: "22",
+		coreDiameter: "0.0372",
+		circularMils: "794",
+		numberOfStrands: "20",
+		awgOfStrands: "34",
+		nominalOD: "0.0492",
+		suggestedOperatingFreq: "20 khz",
 	},
 	{
 		partNumber: "DXXL07/30FXX-2(MWXX)",
@@ -139,7 +159,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "30",
 		nominalOD: "0.0407",
-		suggestedOperatingFreq: "1-10 kHz",
+		suggestedOperatingFreq: "1 - 10 khz",
 	},
 	{
 		partNumber: "DXXL07/30FXX-3(MWXX)",
@@ -149,7 +169,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "30",
 		nominalOD: "0.0447",
-		suggestedOperatingFreq: "1-10 kHz",
+		suggestedOperatingFreq: "1 - 10 khz",
 	},
 	{
 		partNumber: "DXXL19/36FXX-2(MWXX)",
@@ -159,7 +179,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "19",
 		awgOfStrands: "36",
 		nominalOD: "0.0360",
-		suggestedOperatingFreq: "20-50 kHz",
+		suggestedOperatingFreq: "20 - 50 khz",
 	},
 	{
 		partNumber: "DXXL19/36FXX-3(MWXX)",
@@ -169,7 +189,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "19",
 		awgOfStrands: "36",
 		nominalOD: "0.0400",
-		suggestedOperatingFreq: "20-50 kHz",
+		suggestedOperatingFreq: "20 - 50 khz",
 	},
 	{
 		partNumber: "DXXL07/32FXX-2(MWXX)",
@@ -179,7 +199,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "32",
 		nominalOD: "0.0344",
-		suggestedOperatingFreq: "10 kHz",
+		suggestedOperatingFreq: "10 khz",
 	},
 	{
 		partNumber: "DXXL07/32FXX-3(MWXX)",
@@ -189,7 +209,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "7",
 		awgOfStrands: "32",
 		nominalOD: "0.0384",
-		suggestedOperatingFreq: "10 kHz",
+		suggestedOperatingFreq: "10 khz",
 	},
 	{
 		partNumber: "DXXL40/40FXX-2(MWXX)",
@@ -199,7 +219,7 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "40",
 		awgOfStrands: "40",
 		nominalOD: "0.0336",
-		suggestedOperatingFreq: "100-200 kHz",
+		suggestedOperatingFreq: "100 - 200 khz",
 	},
 	{
 		partNumber: "DXXL230/44FXX-2(MWXX)",
@@ -209,6 +229,6 @@ export const doubleInsulatedLitzData: InsulatedLitzSpec[] = [
 		numberOfStrands: "230",
 		awgOfStrands: "44",
 		nominalOD: "0.0483",
-		suggestedOperatingFreq: "400-850 kHz",
+		suggestedOperatingFreq: "400 - 850 khz",
 	},
 ];

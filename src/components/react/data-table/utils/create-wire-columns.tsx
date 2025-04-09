@@ -18,6 +18,24 @@ function formatNumber(
 	return Number.isNaN(num) ? "" : num.toFixed(decimals);
 }
 
+/**
+ * Formats an AWG value, handling both whole numbers and strand count formats
+ * @param value The AWG value to format
+ * @returns The formatted AWG value
+ */
+function formatAWG(value: string | number | undefined | null): string {
+	if (value == null) return "";
+	if (typeof value === "string") {
+		// If the value contains a slash, it's a strand count format
+		if (value.includes("/")) {
+			return value;
+		}
+		const num = Number.parseFloat(value);
+		return Number.isNaN(num) ? "" : num.toString();
+	}
+	return value.toString();
+}
+
 // Helper function to get sort icon
 function getSortIcon(isSorted: boolean | string) {
 	if (isSorted === "asc") {
@@ -93,7 +111,7 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 			),
 			cell: ({ row }) => {
 				const value = row.original.awg;
-				return formatNumber(value, 2);
+				return formatAWG(value);
 			},
 			sortingFn: (rowA, rowB) => {
 				const a = Number(rowA.original.awg);
@@ -260,7 +278,10 @@ export function createWireColumns<T extends WireData>(): ColumnDef<
 			),
 			cell: ({ row }) => {
 				const value = row.original.weightLbKft;
-				return formatNumber(value, 3);
+				if (typeof value === "string") {
+					return value;
+				}
+				return formatNumber(value, 2);
 			},
 			sortingFn: (rowA, rowB) => {
 				const a = Number(rowA.original.weightLbKft);

@@ -1,9 +1,9 @@
 ---
 title: "Skin Effect and Proximity Effect Losses in Litz Wires"
-description: "Understanding and minimizing skin effect and proximity effect losses in Litz wire design. Learn about strand-level and bundle-level losses and how to optimize your Litz wire performance."
-pubDate: "2022-07-21"
+description: "Understand the impact of skin effect and proximity effect on Litz wire performance and how to minimize these losses."
+pubDate: "2023-12-21"
 heroImage: "/images/knowledge-base-hero-placeholder.webp"
-tags: ["Technical", "Litz Wire", "Design Guide", "Electrical Engineering"]
+tags: ["Litz Wire", "Skin Effect", "Proximity Effect", "AC Losses", "Litz Design"]
 ---
 
 When designing or selecting a Litz wire for use in a winding, it is important to understand and minimize skin effect and proximity effect losses wherever it is possible to do so. The uneven distribution of current in a Litz wire conductor, due to skin effect and proximity effect losses, increases the overall resistance in an AC circuit. The purpose of this article is to briefly explain skin effect and proximity effect losses and what can be done to minimize them. For more advanced reading on the subject, see the works of Sullivan and Zhang referenced in the bibliography.

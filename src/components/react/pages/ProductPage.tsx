@@ -20,7 +20,7 @@ interface ProductPageProps {
 		imageSrc: string | ImageMetadata;
 		imageAlt: string;
 		construction?: {
-			sizeRange?: string;
+			sizeRange?: string | string[];
 			conductor?: string;
 			insulation?: string;
 			rating?: {
@@ -86,7 +86,15 @@ export default function ProductPage({
 					<div className="space-y-1">
 						<dt className="text-sm text-muted-foreground">Size Range:</dt>
 						<dd className="text-sm text-foreground">
-							{construction.sizeRange}
+							{Array.isArray(construction.sizeRange) ? (
+								<ul className="list-disc space-y-2 pl-5">
+									{construction.sizeRange.map((size) => (
+										<li key={size}>{size}</li>
+									))}
+								</ul>
+							) : (
+								construction.sizeRange
+							)}
 						</dd>
 					</div>
 				)}

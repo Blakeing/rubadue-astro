@@ -2,8 +2,8 @@ import type { WireData } from "@/components/react/data-table/types";
 
 export const wireData: WireData[] = [
 	{
-		partNumber: "S23A01FX-2",
-		awg: "23/19/35",
+		partNumber: "S22A19FX-2",
+		awg: "22 (19/32)",
 		conductor: {
 			inches: "0.0295",
 			mm: "0.749",
@@ -29,7 +29,7 @@ export const wireData: WireData[] = [
 	},
 	{
 		partNumber: "S24A19FX-2",
-		awg: "24/19/36",
+		awg: "24 (19/36)",
 		conductor: {
 			inches: "0.0242",
 			mm: "0.615",

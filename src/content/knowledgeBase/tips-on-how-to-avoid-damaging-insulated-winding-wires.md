@@ -1,9 +1,9 @@
 ---
 title: "Tips on How to Avoid Damaging Insulated Winding Wires in your Process"
-description: "Insulation walls on insulated winding wires are much thinner today than they were in decades past. Learn how to avoid damaging these sensitive components in your manufacturing process."
+description: "Learn best practices for handling and processing insulated winding wires to prevent damage."
 pubDate: "2023-12-21"
 heroImage: "/images/knowledge-base-hero-placeholder.webp"
-tags: ["Manufacturing", "Wire Protection", "Best Practices", "Quality Control"]
+tags: ["Winding processes", "Tips & Recommendations", "Insulated Winding Wire"]
 ---
 
 Insulation walls on insulated winding wires are much thinner today than they were in decades past. As the power electronics industry has sought to reduce the size of their components, winding wires have gotten smaller to accommodate the smaller package sizes. The reduction in size was achieved by reducing insulation walls. That reduction in insulation walls also comes with some consequences, and a greater susceptibility of the wires to physical damage during the winding and termination processes is one such consequence. The physical properties of the insulation materials have remained the same, but insulation walls have shrunk from .003" to .005" (0,076mm to 0,127mm) per layer down to .001" to .0015" (0,025mm to 0,038mm) per layer in some cases, meaning that the insulation layers experience higher stress when the same amount of force is applied. If that stress is high enough, it can result in a tear or other mechanical failure in the insulation material.

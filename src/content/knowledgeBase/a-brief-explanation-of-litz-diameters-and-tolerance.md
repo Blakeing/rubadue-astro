@@ -1,9 +1,9 @@
 ---
 title: "A Brief Explanation of Litz Diameters and Tolerances"
-description: "Understanding the differences in diameters and tolerances between solid conductor winding wires and Litz wires for transformer industry engineers."
-pubDate: "2022-04-21"
+description: "Understand the key factors affecting Litz wire diameters and tolerances, and how to specify them correctly."
+pubDate: "2023-12-21"
 heroImage: "/images/knowledge-base-hero-placeholder.webp"
-tags: ["Technical", "Litz Wire", "Design Guide", "Manufacturing"]
+tags: ["Litz Wire", "Tolerances", "Diameters", "Measurements"]
 ---
 
 For engineers in the transformer industry who are used to working with solid conductor winding wires, the larger diameters and wider tolerances on Litz wires may come as a bit of a shock. With Litz wires, overall diameters are larger and copper density is lower than on a solid conductor equivalent due to air gaps between the strands and the enamel layer around each strand.

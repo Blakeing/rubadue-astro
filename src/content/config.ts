@@ -27,7 +27,7 @@ const products = defineCollection({
 			.object({
 				numberWires: z.string().optional(),
 				coatings: z.array(z.string()).optional(),
-				sizeRange: z.string().optional(),
+				sizeRange: z.union([z.string(), z.array(z.string())]).optional(),
 				conductor: z.string().optional(),
 				insulation: z.string().optional(),
 				rating: z

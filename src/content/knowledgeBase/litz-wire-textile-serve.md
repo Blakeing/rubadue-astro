@@ -3,7 +3,7 @@ title: "Litz Wire 101: When is a textile serve appropriate for your application?
 description: "Learn about textile serves in Litz wires, their benefits for mechanical protection, and key considerations for choosing the right serve for your application."
 pubDate: "2023-12-21"
 heroImage: "/images/knowledge-base-hero-placeholder.webp"
-tags: ["Technical Guide", "Litz Wire", "Textile Serve", "Wire Protection"]
+tags: ["Technical Guide", "Litz Wire", "Serve", "Abrasion", "OBMW2"]
 ---
 
 Textile serves, when applied to Litz wires, act as an optional layer of added mechanical protection for the overall conductor. Serves are particularly effective at protecting the enamel layer on the individual strands of the conductor from abrasion during further processing. The serve acts as a physical barrier between the enamel layer and any contact points that may be present in the wire path of a cutting & terminating operation for the Litz wire.
@@ -13,7 +13,7 @@ Similar to the fiberglass braid on braided silicone wire, the serve helps to pro
 ## Manufacturing Capabilities
 
 At Rubadue Wire, we have the expertise and equipment to meet your needs for served Litz wires. We can apply serves to:
-- Litz conductors as small as 0.005" [0,13mm] in diameter
+- Litz conductors as small as 0.015" [0,38mm] in diameter
 - Recently expanded capabilities for larger Litz conductors with diameters greater than .340" [8,63mm]
 
 ## Key Considerations for Your Application
