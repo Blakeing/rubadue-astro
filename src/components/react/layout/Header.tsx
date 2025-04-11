@@ -92,7 +92,7 @@ export function Header() {
 					<a
 						href="/"
 						// style={{ textShadow: "0 0 1px hsla(20 14.3% 4.1% / 0.5)" }}
-						className="font-display text-xl lg:text-3xl tracking-tight"
+						className="font-display text-shadow-lg text-xl lg:text-3xl tracking-tight"
 					>
 						Rubadue <span className="text-primary -ml-[8px]">Wire</span>
 					</a>
