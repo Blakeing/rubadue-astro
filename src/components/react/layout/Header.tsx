@@ -17,42 +17,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Book, Cable, Menu, Settings, Shield, Wrench } from "lucide-react";
 import * as React from "react";
-import { TextLogo } from "./TextLogo";
 
-const navigation = [
+const mainNavigation = [
 	{ name: "Catalog", href: "/catalog" },
 	{ name: "About", href: "/about" },
 	{ name: "Markets", href: "/markets" },
+	{ name: "Custom Solutions", href: "/custom-solutions" },
 	{ name: "Careers", href: "/careers" },
-	{ name: "Contact Us", href: "/contact" },
-	{ name: "Request a Quote", href: "/request-a-quote" },
-	{ name: "Part Number Builders", href: "/part-number-builders" },
-	{ name: "Glossary", href: "/glossary" },
-	{ name: "Knowledge Base", href: "/knowledge-base" },
-];
-
-const wireTypes = [
-	{ name: "Bare Litz Wires", href: "/catalog", icon: Cable },
-	{
-		name: "Insulated Litz Wires",
-		href: "/catalog",
-		icon: Cable,
-	},
-	{
-		name: "Triple Insulated Wires",
-		href: "/catalog",
-		icon: Cable,
-	},
-	{
-		name: "Double Insulated Wires",
-		href: "/catalog",
-		icon: Cable,
-	},
-	{
-		name: "Single Insulated Wires",
-		href: "/catalog",
-		icon: Cable,
-	},
 ];
 
 const resources = [
@@ -87,12 +58,8 @@ export function Header() {
 			</div>
 			<header className="bg-background shadow">
 				<nav className="mx-auto flex max-w-7xl px-4 sm:px-6 lg:px-8 items-center justify-between py-3 sm:py-4 md:py-6">
-					{/* <a className="font-semibold tracking-wide" href="/" className="-m-1.5 p-1.5">
-						<TextLogo className="h-4 lg:h-5" />
-					</a> */}
 					<a
 						href="/"
-						// style={{ textShadow: "0 0 1px hsla(20 14.3% 4.1% / 0.5)" }}
 						className="font-display text-shadow-lg text-xl lg:text-3xl tracking-tight"
 					>
 						Rubadue <span className="text-primary -ml-[8px]">Wire</span>
@@ -100,84 +67,21 @@ export function Header() {
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
 						<NavigationMenu className="mr-4" data-hover="false">
 							<NavigationMenuList>
-								<NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a className="font-semibold tracking-wide" href="/catalog">
-											Catalog
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem>
-
-								<NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a className="font-semibold tracking-wide" href="/about">
-											About
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem>
-
-								<NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a className="font-semibold tracking-wide" href="/markets">
-											Markets
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem>
-								<NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a
-											className="font-semibold tracking-wide"
-											href="/custom-solutions"
+								{mainNavigation.map((item) => (
+									<NavigationMenuItem key={item.name}>
+										<NavigationMenuLink
+											asChild
+											className={navigationMenuTriggerStyle()}
 										>
-											Custom Solutions
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem>
-								<NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a className="font-semibold tracking-wide" href="/careers">
-											Careers
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem>
-								{/* <NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a className="font-semibold tracking-wide" href="/contact">
-											Contact Us
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem> */}
-								{/* <NavigationMenuItem>
-									<NavigationMenuLink
-										asChild
-										className={navigationMenuTriggerStyle()}
-									>
-										<a
-											className="font-semibold tracking-wide"
-											href="/request-a-quote"
-										>
-											Request a Quote
-										</a>
-									</NavigationMenuLink>
-								</NavigationMenuItem> */}
+											<a
+												className="font-semibold tracking-wide"
+												href={item.href}
+											>
+												{item.name}
+											</a>
+										</NavigationMenuLink>
+									</NavigationMenuItem>
+								))}
 
 								<NavigationMenuItem>
 									<NavigationMenuTrigger className="font-semibold tracking-wide">
@@ -226,7 +130,7 @@ export function Header() {
 								<div className="mt-6 flow-root">
 									<div className="-my-6 divide-y divide-border">
 										<div className="space-y-1 py-6">
-											{navigation.map((item) => (
+											{mainNavigation.map((item) => (
 												<SheetClose asChild key={item.name}>
 													<a
 														href={item.href}
@@ -236,6 +140,24 @@ export function Header() {
 													</a>
 												</SheetClose>
 											))}
+										</div>
+										<div className="py-6">
+											<h3 className="text-sm font-semibold text-muted-foreground px-3 mb-2">
+												Resources
+											</h3>
+											<div className="space-y-1">
+												{resources.map((item) => (
+													<SheetClose asChild key={item.name}>
+														<a
+															href={item.href}
+															className="flex items-center gap-x-2 -mx-3 rounded-lg px-3 py-2 text-base font-semibold text-foreground hover:bg-accent hover:text-accent-foreground"
+														>
+															<item.icon className="h-5 w-5 flex-none text-muted-foreground" />
+															<span>{item.name}</span>
+														</a>
+													</SheetClose>
+												))}
+											</div>
 										</div>
 										<div className="py-6">
 											<SheetClose asChild>
