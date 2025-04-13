@@ -1,26 +1,36 @@
 /**
  * Job function options
  */
-export const JOB_FUNCTIONS = {
-	ENGINEERING: "engineering",
-	PURCHASING: "purchasing",
-	MANAGEMENT: "management",
-	OTHER: "other",
-} as const;
+export const JOB_FUNCTIONS = [
+	{ value: "engineering", label: "Engineering" },
+	{ value: "purchasing", label: "Purchasing" },
+	{ value: "management", label: "Management" },
+	{ value: "other", label: "Other" },
+] as const;
 
-export type JobFunction = (typeof JOB_FUNCTIONS)[keyof typeof JOB_FUNCTIONS];
+export type JobFunction = (typeof JOB_FUNCTIONS)[number]["value"];
 
 /**
  * Country options
  */
-export const COUNTRIES = {
-	US: "US",
-	CA: "CA",
-	MX: "MX",
-	OTHER: "other",
-} as const;
+export const COUNTRIES = [
+	{ value: "US", label: "United States" },
+	{ value: "CA", label: "Canada" },
+	{ value: "MX", label: "Mexico" },
+	{ value: "UK", label: "United Kingdom" },
+	{ value: "DE", label: "Germany" },
+	{ value: "FR", label: "France" },
+	{ value: "IT", label: "Italy" },
+	{ value: "ES", label: "Spain" },
+	{ value: "AU", label: "Australia" },
+	{ value: "NZ", label: "New Zealand" },
+	{ value: "JP", label: "Japan" },
+	{ value: "KR", label: "South Korea" },
+	{ value: "CN", label: "China" },
+	{ value: "other", label: "Other" },
+] as const;
 
-export type Country = (typeof COUNTRIES)[keyof typeof COUNTRIES];
+export type Country = (typeof COUNTRIES)[number]["value"];
 
 /**
  * Wire type options

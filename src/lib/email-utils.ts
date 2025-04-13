@@ -13,14 +13,9 @@ export function wrapEmailTemplate(content: string): string {
 <html>
 <head>
     <meta charset="utf-8">
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .header { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        .message-box { background: #f5f5f5; padding: 15px; margin: 10px 0; }
-        .footer { margin-top: 20px; font-size: 12px; color: #666; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
     ${content}
 </body>
 </html>`;

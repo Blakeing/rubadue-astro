@@ -70,14 +70,9 @@ const TimelineCard: React.FC<{
 				<div
 					className={cn(
 						"flex items-center gap-3 mb-3",
-						isEven && "justify-end",
+						isEven && "md:justify-end",
 					)}
 				>
-					{!isEven && (
-						<h3 className="text-xl font-display text-foreground">
-							{entry.year}
-						</h3>
-					)}
 					{entry.icon && (
 						<div className="rounded-full bg-primary/10 p-2">
 							{React.createElement(icons[entry.icon], {
@@ -85,13 +80,24 @@ const TimelineCard: React.FC<{
 							})}
 						</div>
 					)}
+					{!isEven && (
+						<h3 className="text-xl font-display text-foreground">
+							{entry.year}
+						</h3>
+					)}
 					{isEven && (
 						<h3 className="text-xl font-display text-foreground">
 							{entry.year}
 						</h3>
 					)}
 				</div>
-				<p className="text-base text-muted-foreground leading-relaxed">
+				<p
+					className={cn(
+						"text-base text-muted-foreground leading-relaxed text-left",
+						"md:text-left",
+						isEven && "md:text-right",
+					)}
+				>
 					{entry.description}
 				</p>
 			</CardContent>
@@ -126,7 +132,7 @@ const Timeline: React.FC<TimelineProps> = ({ data, title, description }) => {
 	return (
 		<div className="relative">
 			<div ref={ref} className="relative mx-auto ">
-				<div className="absolute left-1/2 -translate-x-[1px] top-0 h-full w-[2px] bg-border" />
+				<div className="absolute hidden md:block left-1/2 -translate-x-[1px] top-0 h-full w-[2px] bg-border" />
 
 				{data.map((item, index) => (
 					<div
@@ -138,7 +144,7 @@ const Timeline: React.FC<TimelineProps> = ({ data, title, description }) => {
 							whileInView="visible"
 							viewport={{ once: true }}
 							variants={ANIMATION_VARIANTS.dot}
-							className="absolute left-[calc(50%-8px)] -translate-x-[8px] flex items-center justify-center w-4 h-4 z-10"
+							className="absolute hidden md:flex left-[calc(50%-8px)] -translate-x-[8px] items-center justify-center w-4 h-4 z-10"
 						>
 							<div className="absolute w-4 h-4 rounded-full border-2 border-primary bg-background" />
 							<div className="absolute w-2 h-2 rounded-full bg-primary" />
@@ -163,7 +169,7 @@ const Timeline: React.FC<TimelineProps> = ({ data, title, description }) => {
 				<motion.div
 					style={{ height: heightTransform, opacity: opacityTransform }}
 					transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-					className="absolute left-1/2 -translate-x-[1px] top-0 w-[2px] bg-primary/50 origin-top"
+					className="absolute hidden md:block left-1/2 -translate-x-[1px] top-0 w-[2px] bg-primary/50 origin-top"
 				/>
 			</div>
 		</div>

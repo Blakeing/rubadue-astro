@@ -2,6 +2,19 @@ import { generateQuoteRequestEmailHtml } from "@/lib/quote-email-template";
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
+import {
+	COUNTRIES,
+	JOB_FUNCTIONS,
+	type QuoteRequestData,
+	type Country,
+	type JobFunction,
+} from "@/types/forms";
+
+// Create literal types for the enums
+const countryValues = COUNTRIES.map((c) => c.value) as readonly Country[];
+const jobFunctionValues = JOB_FUNCTIONS.map(
+	(j) => j.value,
+) as readonly JobFunction[];
 
 // Email validation schema
 const emailSchema = z.object({
@@ -15,15 +28,15 @@ const emailSchema = z.object({
 	city: z.string().min(1, "City is required"),
 	stateProvince: z.string().min(1, "State/Province is required"),
 	zipCode: z.string().min(1, "Postal code is required"),
-	country: z.string().min(1, "Country is required"),
-	jobFunction: z.string().min(1, "Job function is required"),
+	country: z.enum(countryValues as [Country, ...Country[]]),
+	jobFunction: z.enum(jobFunctionValues as [JobFunction, ...JobFunction[]]),
 	wireTypes: z.object({
 		litzWire: z.boolean(),
 		windingWire: z.boolean(),
 		customCable: z.boolean(),
 	}),
 	message: z.string().min(1, "Message is required"),
-});
+}) satisfies z.ZodType<QuoteRequestData>;
 
 export const POST: APIRoute = async ({ request }) => {
 	const resend = new Resend(import.meta.env.RESEND_API_KEY);
@@ -32,7 +45,7 @@ export const POST: APIRoute = async ({ request }) => {
 		const data = await request.json();
 
 		// Validate the request data
-		const validatedData = emailSchema.parse(data);
+		const validatedData = emailSchema.parse(data) as QuoteRequestData;
 
 		// Generate the email HTML using our template function
 		const html = generateQuoteRequestEmailHtml(validatedData);
@@ -73,7 +86,8 @@ ${validatedData.message}
 
 		const { data: emailData, error } = await resend.emails.send({
 			from: "Rubadue Quote Request <onboarding@resend.dev>", // Update with your verified domain
-			to: ["blakeingenthron@gmail.com"], // Update with your email
+			to: ["blakeingenthron@gmail.com"],
+			// cc: ["blakeingenthron@gmail.com"], // Update with your email
 			subject: `New Quote Request from ${validatedData.firstName} ${validatedData.lastName}`,
 			html: html,
 			text: text,

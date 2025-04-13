@@ -22,14 +22,16 @@ import {
 } from "@/components/react/ui/sheet";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
+import { navigate } from "astro:transitions/client";
+import { Card } from "../ui/card";
 
-type FilterCategory = "type" | "material";
+export type FilterCategory = "type" | "material";
 
-type ProductTags = {
+export type ProductTags = {
 	[K in FilterCategory]?: string[];
 };
 
-interface ProductData {
+export interface ProductData {
 	title: string;
 	description: string;
 	heroImage?: string;
@@ -62,7 +64,7 @@ interface ProductData {
 	tags?: ProductTags;
 }
 
-interface Product {
+export interface Product {
 	id: string;
 	slug: string;
 	collection: string;
@@ -406,15 +408,15 @@ export default function ProductListingPage({
 
 				<section
 					aria-labelledby="products-heading"
-					className="pb-12 sm:pb-16 md:pb-24 pt-6 sm:pt-10 md:pt-16"
+					className="pb-12 sm:pb-16 md:pb-24 pt-6 sm:pt-10 md:pt-12"
 				>
 					<h2 id="products-heading" className="sr-only">
 						Products
 					</h2>
 
-					<div className="relative grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-4">
+					<div className="relative grid grid-cols-1 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:grid-cols-12">
 						{/* Filters */}
-						<aside className="hidden lg:block">
+						<aside className="hidden lg:block lg:col-span-3">
 							<div className="lg:sticky lg:top-40">
 								<div className="border-b border-muted pb-6">
 									<div className="flex items-center justify-between">
@@ -476,11 +478,28 @@ export default function ProductListingPage({
 										</div>
 									</div>
 								))}
+
+								<div className="mt-6 space-y-3 sm:space-y-4">
+									<h2 className="text-base font-semibold">
+										Cant find what you need?
+									</h2>
+									<p className="text-xs text-muted-foreground">
+										Create custom specifications with our interactive part
+										number builders.
+									</p>
+									<Button
+										asChild
+										size="sm"
+										className="w-full sm:w-auto text-xs"
+									>
+										<a href="/part-number-builders">Get Started</a>
+									</Button>
+								</div>
 							</div>
 						</aside>
 
 						{/* Product grid */}
-						<div className="lg:col-span-3">
+						<div className="lg:col-span-9">
 							{/* Mobile search and filter controls */}
 							<div className="mb-4 flex items-center justify-between lg:hidden">
 								<div className="relative flex-1 mr-2">
@@ -495,12 +514,13 @@ export default function ProductListingPage({
 							</div>
 
 							{/* Results count */}
-							<div className="mb-4 flex items-center justify-end h-9">
+							{/* <div className="mb-4 flex items-center justify-end h-9">
 								<p className="text-sm text-muted-foreground">
 									Showing {paginatedProducts.length} of{" "}
 									{filteredProducts.length} products
 								</p>
-							</div>
+					
+							</div> */}
 
 							<div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-6">
 								{paginatedProducts.map((product) => (

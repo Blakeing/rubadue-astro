@@ -165,7 +165,7 @@ const stats = [
   eyebrow="About"
   headerTitle="Our Story"
 >
-  <div class="py-8 sm:py-12 md:py-16 lg:py-24">
+  <div class="py-8 sm:py-12 md:py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       {/* Description Section */}
       <div class="mx-auto lg:mx-0">
@@ -188,9 +188,9 @@ const stats = [
             </div>
             <div class="p-6">
               <h3
-                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight text-primary mb-6"
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight mb-6"
               >
-                <Target className="w-6 h-6" />
+                <Target className="w-6 h-6 text-primary" />
                 Our Mission
               </h3>
               <p class="text-lg text-muted-foreground">
@@ -209,9 +209,9 @@ const stats = [
             </div>
             <div class="p-6">
               <h3
-                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight text-primary mb-6"
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight mb-6"
               >
-                <Eye className="w-6 h-6" />
+                <Eye className="w-6 h-6 text-primary" />
                 Our Vision
               </h3>
               <p class="text-lg text-muted-foreground">
@@ -223,7 +223,7 @@ const stats = [
         </div>
       </div>
       {/* Leadership Section */}
-      <div class="">
+      <!-- <div class="">
         <div class="mx-auto max-w-2xl lg:mx-0">
           <h2
             class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
@@ -301,7 +301,7 @@ const stats = [
         </ul>
       </div>
 
-      <Separator className="my-12 sm:my-16" />
+      <Separator className="my-12 sm:my-16" /> -->
       {/* History Timeline Section */}
       <div>
         <div class="mx-auto max-w-2xl lg:mx-0 mb-10 sm:mb-16">
@@ -317,101 +317,6 @@ const stats = [
           </p>
         </div>
 
-        {/* Timeline section */}
-        <!-- <div class="mx-auto max-w-7xl">
-          <div
-            class="mx-auto grid max-w-2xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 overflow-hidden lg:mx-0 lg:max-w-none"
-          >
-            {
-              [...timelineEvents]
-                .reverse()
-                .slice(0, 4)
-                .map((event) => (
-                  <div class="relative">
-                    <time class="flex items-center text-sm/6 font-semibold text-primary">
-                      <svg
-                        viewBox="0 0 4 4"
-                        class="mr-4 size-1 flex-none"
-                        aria-hidden="true"
-                      >
-                        <circle cx="2" cy="2" r="2" fill="currentColor" />
-                      </svg>
-                      {event.year}
-                      <div
-                        class="absolute -ml-2 h-px w-screen -translate-x-full bg-primary/20 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0 hidden sm:block"
-                        aria-hidden="true"
-                      />
-                    </time>
-                    <p class="mt-4 sm:mt-6 text-sm sm:text-base tracking-tight text-foreground/80">
-                      {event.description}
-                    </p>
-                  </div>
-                ))
-            }
-          </div>
-
-          {
-            timelineEvents.length > 4 && (
-              <div class="mt-10 sm:mt-16 mx-auto grid max-w-2xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 overflow-hidden lg:mx-0 lg:max-w-none">
-                {[...timelineEvents]
-                  .reverse()
-                  .slice(4, 8)
-                  .map((event) => (
-                    <div class="relative">
-                      <time class="flex items-center text-sm/6 font-semibold text-primary">
-                        <svg
-                          viewBox="0 0 4 4"
-                          class="mr-4 size-1 flex-none"
-                          aria-hidden="true"
-                        >
-                          <circle cx="2" cy="2" r="2" fill="currentColor" />
-                        </svg>
-                        {event.year}
-                        <div
-                          class="absolute -ml-2 h-px w-screen -translate-x-full bg-primary/20 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0 hidden sm:block"
-                          aria-hidden="true"
-                        />
-                      </time>
-                      <p class="mt-4 sm:mt-6 text-sm sm:text-base tracking-tight text-foreground/80">
-                        {event.description}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-            )
-          }
-
-          {
-            timelineEvents.length > 8 && (
-              <div class="mt-10 sm:mt-16 mx-auto grid max-w-2xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 overflow-hidden lg:mx-0 lg:max-w-none">
-                {[...timelineEvents]
-                  .reverse()
-                  .slice(8)
-                  .map((event) => (
-                    <div class="relative">
-                      <time class="flex items-center text-sm/6 font-semibold text-primary">
-                        <svg
-                          viewBox="0 0 4 4"
-                          class="mr-4 size-1 flex-none"
-                          aria-hidden="true"
-                        >
-                          <circle cx="2" cy="2" r="2" fill="currentColor" />
-                        </svg>
-                        {event.year}
-                        <div
-                          class="absolute -ml-2 h-px w-screen -translate-x-full bg-primary/20 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0 hidden sm:block"
-                          aria-hidden="true"
-                        />
-                      </time>
-                      <p class="mt-4 sm:mt-6 text-sm sm:text-base tracking-tight text-foreground/80">
-                        {event.description}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-            )
-          }
-        </div> -->
         <Timeline client:visible data={timelineEvents} />
       </div>
     </div>

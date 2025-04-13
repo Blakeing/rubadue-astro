@@ -6,20 +6,49 @@ import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.ast
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { ProductListingPage } from "@/components/react/pages";
+import type {
+  ProductData,
+  Product,
+} from "@/components/react/pages/ProductListingPage";
 
 // Get all products from both directory structures
 const products = await getCollection("products");
 
 // Map collection data to match Product interface
-const mappedProducts = products.map((product) => ({
-  id: product.id,
-  slug: product.slug,
-  collection: product.collection,
-  data: {
-    ...product.data,
-    pubDate: product.data.pubDate.toString(),
-  },
-}));
+const mappedProducts: Product[] = products.map((product) => {
+  const productData: ProductData = {
+    title: product.data.title,
+    description: product.data.description,
+    heroImage: product.data.heroImage,
+    category: product.data.category,
+    pubDate: product.data.pubDate.toISOString(),
+    tableType: product.data.tableType,
+    construction: product.data.construction
+      ? {
+          sizeRange: Array.isArray(product.data.construction.sizeRange)
+            ? product.data.construction.sizeRange.join(", ")
+            : product.data.construction.sizeRange,
+          conductor: product.data.construction.conductor,
+          insulation: product.data.construction.insulation,
+          rating: product.data.construction.rating,
+        }
+      : undefined,
+    applications: product.data.applications,
+    compliances: product.data.compliances,
+    systemApprovals: product.data.systemApprovals,
+    tensileStrength: product.data.tensileStrength,
+    breakdown: product.data.breakdown,
+    overview: product.data.overview,
+    tags: product.data.tags || {},
+  };
+
+  return {
+    id: product.id,
+    slug: product.slug,
+    collection: "products" as const,
+    data: productData,
+  };
+});
 
 // Sort products by date
 const sortedProducts = mappedProducts.sort(
@@ -47,15 +76,6 @@ const filterState = {
   material: materialFilters,
   search: searchQuery,
 };
-
-// Build breadcrumb segments with filter context
-const segments = [
-  { name: "Home", href: "/" },
-  {
-    name: "Catalog",
-    href: `/catalog${url.search ? `?${url.search}` : ""}`,
-  },
-];
 
 const title = "Product Catalog";
 const description =

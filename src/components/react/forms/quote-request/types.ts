@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { COUNTRIES, JOB_FUNCTIONS } from "@/types/forms";
 
 /**
  * Schema for wire types
@@ -12,6 +13,10 @@ export const wireTypesSchema = z
 	.refine((data) => data.litzWire || data.windingWire || data.customCable, {
 		message: "Please select at least one wire type",
 	});
+
+// Create literal types for the enums
+const countryValues = COUNTRIES.map((c) => c.value);
+const jobFunctionValues = JOB_FUNCTIONS.map((j) => j.value);
 
 /**
  * Schema for the quote request form
@@ -30,10 +35,10 @@ export const formSchema = z.object({
 	city: z.string().optional(),
 	stateProvince: z.string().optional(),
 	zipCode: z.string().optional(),
-	country: z.string().optional(),
+	country: z.enum(countryValues as [string, ...string[]]),
 
 	// Job Information
-	jobFunction: z.string().optional(),
+	jobFunction: z.enum(jobFunctionValues as [string, ...string[]]),
 	wireTypes: z.object({
 		litzWire: z.boolean().default(false),
 		windingWire: z.boolean().default(false),
@@ -67,34 +72,14 @@ export interface QuoteRequestFormProps {
 }
 
 /**
- * Available countries
+ * Available countries for the form select
  */
-export const countries = [
-	{ value: "us", label: "United States" },
-	{ value: "ca", label: "Canada" },
-	{ value: "mx", label: "Mexico" },
-	{ value: "uk", label: "United Kingdom" },
-	{ value: "de", label: "Germany" },
-	{ value: "fr", label: "France" },
-	{ value: "it", label: "Italy" },
-	{ value: "es", label: "Spain" },
-	{ value: "au", label: "Australia" },
-	{ value: "nz", label: "New Zealand" },
-	{ value: "jp", label: "Japan" },
-	{ value: "kr", label: "South Korea" },
-	{ value: "cn", label: "China" },
-	{ value: "other", label: "Other" },
-] as const;
+export const countries = COUNTRIES;
 
 /**
- * Available job functions
+ * Available job functions for the form select
  */
-export const jobFunctions = [
-	{ value: "engineering", label: "Engineering" },
-	{ value: "purchasing", label: "Purchasing" },
-	{ value: "management", label: "Management" },
-	{ value: "other", label: "Other" },
-] as const;
+export const jobFunctions = JOB_FUNCTIONS;
 
 /**
  * Available wire types

@@ -9,24 +9,21 @@ const { eyebrow, title } = Astro.props;
 
 <div class="py-8 relative overflow-hidden">
   <div
-    class="absolute inset-0 -z-10"
-    style="background-image: url('/images/iron-grip.png'); background-repeat: repeat; "
+    class="absolute inset-0 -z-10 brightness-75"
+    style="background-image: url('/images/knowledge-base-hero-placeholder.webp'); background-repeat: no-repeat; background-size: cover; background-position: right; transform: scaleX(-1);"
   >
   </div>
-  <div
-    class="absolute inset-0 -z-10 bg-gradient-to-b from-primary brightness-95 via-primary/80 to-primary/40"
-  >
-  </div>
+  <div class="absolute inset-0 -z-10 bg-primary/80 opacity-40"></div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
     <div class="mx-auto max-w-3xl lg:mx-0">
       <p
-        class="text-base sm:text-lg md:text-2xl text-shadow-lg text-primary-foreground/90"
+        class="text-base text-pretty sm:text-lg md:text-2xl text-shadow-lg text-primary-foreground/90"
       >
         {eyebrow}
       </p>
       <h2
-        class="text-3xl sm:text-4xl font-semibold text-shadow-lg text-primary-foreground"
+        class="text-3xl text-pretty sm:text-4xl font-semibold text-shadow-lg text-primary-foreground"
       >
         {title}
       </h2>
