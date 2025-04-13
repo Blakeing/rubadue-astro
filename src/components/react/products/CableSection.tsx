@@ -76,10 +76,10 @@ export default function CableSection() {
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2 lg:items-start">
 					<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
-						<h2 className="text-base sm:text-lg font-display text-accent-foreground">
-							Wire <span className="text-primary">Types</span>
+						<h2 className="text-base/7 font-semibold text-primary font-display">
+							Wire Types
 						</h2>
-						<p className="mt-4 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
+						<p className="mt-2 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
 							Cables to Meet Your Needs
 						</p>
 						<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">

@@ -202,13 +202,13 @@ export default function N1MaxCalculatorForm({
 
 	return (
 		<div className={className}>
-			<div className="mb-6 space-y-2">
+			<div className="mb-12 space-y-2">
 				<p className="text-muted-foreground">
 					{calculatorDescription.description}
 				</p>
-				<p className="text-sm text-muted-foreground">
+				{/* <p className="text-sm text-muted-foreground">
 					{calculatorDescription.frequencyNote}
-				</p>
+				</p> */}
 			</div>
 
 			<div className="grid gap-6 grid-cols-5">
