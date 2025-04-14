@@ -85,9 +85,9 @@ ${validatedData.message}
 		`.trim();
 
 		const { data: emailData, error } = await resend.emails.send({
-			from: "Rubadue Quote Request <onboarding@resend.dev>", // Update with your verified domain
-			to: ["blakeingenthron@gmail.com"],
-			// cc: ["blakeingenthron@gmail.com"], // Update with your email
+			from: "Rubadue Quote Request <sales@rubadue.com>", // Update with your verified domain
+			to: ["sales@rubadue.com"],
+			cc: ["blakeingenthron@gmail.com"], // Update with your email
 			subject: `New Quote Request from ${validatedData.firstName} ${validatedData.lastName}`,
 			html: html,
 			text: text,

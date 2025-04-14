@@ -28,9 +28,10 @@ ${message}
 `;
 
 		const { data, error } = await resend.emails.send({
-			from: "Rubadue Contact <onboarding@resend.dev>", // Using Resend test domain
-			to: ["blakeingenthron@gmail.com"], // Update with your email
-			subject: `New Contact Form Message from ${firstName} ${lastName}`,
+			from: "Rubadue Contact Form <sales@rubadue.com>", // Using Resend test domain
+			to: ["sales@rubadue.com"],
+			cc: ["blakeingenthron@gmail.com"], // Update with your email
+			subject: `New Contact Submission from ${firstName} ${lastName}`,
 			html: html,
 			text: text,
 		});
