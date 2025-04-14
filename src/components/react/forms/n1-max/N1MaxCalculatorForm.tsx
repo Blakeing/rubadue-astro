@@ -211,8 +211,8 @@ export default function N1MaxCalculatorForm({
 				</p> */}
 			</div>
 
-			<div className="grid gap-6 grid-cols-5">
-				<Card className="col-span-2">
+			<div className="grid gap-6 grid-cols-1 md:grid-cols-5">
+				<Card className="md:col-span-2">
 					<CardContent className="pt-6">
 						<Form {...form}>
 							<form className="space-y-4">
@@ -334,7 +334,7 @@ export default function N1MaxCalculatorForm({
 					</CardContent>
 				</Card>
 
-				<Card className="col-span-3">
+				<Card className="md:col-span-3">
 					<CardContent className="pt-6">
 						<div className="space-y-8">
 							<div>

@@ -67,6 +67,7 @@ if (segments.length === 0 || segments[0].name !== "Home") {
   <head>
     <BaseHead title={title} description={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <slot name="head" />
   </head>
   <body
     class="bg-background font-sans antialiased min-h-screen flex flex-col relative"

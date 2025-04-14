@@ -19,11 +19,13 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
+	SheetFooter,
 } from "@/components/react/ui/sheet";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { navigate } from "astro:transitions/client";
 import { Card } from "../ui/card";
+import { SearchPagination } from "@/components/react/search/components/SearchPagination";
 
 export type FilterCategory = "type" | "material";
 
@@ -122,41 +124,6 @@ const ITEMS_PER_PAGE = 9; // Number of products per page
 
 function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
-}
-
-// Function to generate pagination items
-function generatePaginationItems(currentPage: number, totalPages: number) {
-	const items: (number | "ellipsis")[] = [];
-	const maxVisiblePages = 5;
-
-	if (totalPages <= maxVisiblePages) {
-		// Show all pages if total pages is less than or equal to max visible pages
-		for (let i = 1; i <= totalPages; i++) {
-			items.push(i);
-		}
-	} else {
-		// Always show first page
-		items.push(1);
-
-		if (currentPage <= 3) {
-			// If current page is near the start
-			items.push(2, 3, 4);
-			items.push("ellipsis");
-			items.push(totalPages);
-		} else if (currentPage >= totalPages - 2) {
-			// If current page is near the end
-			items.push("ellipsis");
-			items.push(totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
-		} else {
-			// If current page is in the middle
-			items.push("ellipsis");
-			items.push(currentPage - 1, currentPage, currentPage + 1);
-			items.push("ellipsis");
-			items.push(totalPages);
-		}
-	}
-
-	return items;
 }
 
 // Add mapping function for legacy categories
@@ -317,7 +284,7 @@ export default function ProductListingPage({
 						<Button
 							variant="outline"
 							size="sm"
-							className="mr-2 flex items-center gap-1 lg:hidden"
+							className="lg:hidden flex items-center gap-1.5 px-2.5 py-1.5"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -335,74 +302,83 @@ export default function ProductListingPage({
 								<title>Filter icon</title>
 								<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
 							</svg>
-							Filters
+							<span className="text-sm">Filters</span>
 						</Button>
 					</SheetTrigger>
-					<SheetContent side="left" className="flex h-full flex-col">
-						<SheetHeader>
-							<SheetTitle>Filters</SheetTitle>
-							<SheetDescription>
-								Filter products by type and material. Select multiple options to
-								narrow down your search.
-							</SheetDescription>
-						</SheetHeader>
+					<SheetContent side="left" className="w-full max-w-xs sm:max-w-sm p-0">
+						<div className="flex h-full w-full flex-col">
+							<SheetHeader className="flex-none border-b p-6 text-left">
+								<SheetTitle className="text-lg">Filters</SheetTitle>
+								<SheetDescription className="text-sm">
+									Filter products by type and material. Select multiple options
+									to narrow down your search.
+								</SheetDescription>
+							</SheetHeader>
 
-						<ScrollArea className="px-4">
-							<form className="mt-4">
-								{Object.entries(filters).map(([filterName, options]) => (
-									<div key={filterName} className="border-b border-muted pb-6">
-										<h3 className="mb-4 font-medium capitalize">
-											{filterName}
-										</h3>
-										<div className="space-y-4">
-											{options.map((option) => {
-												const inputId = `mobile-filter-${filterName}-${option.value}`;
-												return (
-													<div
-														key={option.value}
-														className="flex items-center gap-2"
-													>
-														<Checkbox
-															id={inputId}
-															checked={activeFilters[
-																filterName as FilterCategory
-															].includes(option.value)}
-															onCheckedChange={() =>
-																toggleFilter(
-																	filterName as FilterCategory,
-																	option.value,
-																)
-															}
-														/>
-														<label
-															htmlFor={inputId}
-															className="text-sm text-muted-foreground"
-														>
-															{option.label}
-														</label>
+							<div className="flex-1 overflow-y-auto">
+								<div className="divide-y divide-border">
+									<div className="p-6">
+										<form>
+											{Object.entries(filters).map(([filterName, options]) => (
+												<div key={filterName} className="pb-6">
+													<h3 className="mb-4 font-medium capitalize">
+														{filterName}
+													</h3>
+													<div className="space-y-4">
+														{options.map((option) => {
+															const inputId = `mobile-filter-${filterName}-${option.value}`;
+															return (
+																<div
+																	key={option.value}
+																	className="flex items-center gap-2"
+																>
+																	<Checkbox
+																		id={inputId}
+																		checked={activeFilters[
+																			filterName as FilterCategory
+																		].includes(option.value)}
+																		onCheckedChange={() =>
+																			toggleFilter(
+																				filterName as FilterCategory,
+																				option.value,
+																			)
+																		}
+																	/>
+																	<label
+																		htmlFor={inputId}
+																		className="text-sm text-foreground"
+																	>
+																		{option.label}
+																	</label>
+																</div>
+															);
+														})}
 													</div>
-												);
-											})}
-										</div>
+												</div>
+											))}
+										</form>
 									</div>
-								))}
-							</form>
-							<div className="mt-6 flex justify-between">
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => {
-										clearFilters();
-										setMobileFiltersOpen(false);
-									}}
-								>
-									Clear all
-								</Button>
-								<Button size="sm" onClick={() => setMobileFiltersOpen(false)}>
-									Apply filters
-								</Button>
+								</div>
 							</div>
-						</ScrollArea>
+
+							<SheetFooter className="flex-none border-t p-6">
+								<div className="flex justify-start gap-2">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => {
+											clearFilters();
+											setMobileFiltersOpen(false);
+										}}
+									>
+										Clear all
+									</Button>
+									<Button size="sm" onClick={() => setMobileFiltersOpen(false)}>
+										Apply filters
+									</Button>
+								</div>
+							</SheetFooter>
+						</div>
 					</SheetContent>
 				</Sheet>
 
@@ -514,12 +490,11 @@ export default function ProductListingPage({
 							</div>
 
 							{/* Results count */}
-							{/* <div className="mb-4 flex items-center justify-end h-9">
+							{/* <div className="mb-4 flex items-center justify-between">
 								<p className="text-sm text-muted-foreground">
 									Showing {paginatedProducts.length} of{" "}
 									{filteredProducts.length} products
 								</p>
-					
 							</div> */}
 
 							<div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-6">
@@ -558,61 +533,13 @@ export default function ProductListingPage({
 
 							{/* Updated Pagination */}
 							{totalPages > 1 && (
-								<Pagination className="mt-6 sm:mt-8">
-									<PaginationContent>
-										<PaginationItem>
-											<PaginationPrevious
-												href="#"
-												onClick={(e) => {
-													e.preventDefault();
-													handlePageChange(currentPage - 1);
-												}}
-												className={
-													currentPage === 1
-														? "pointer-events-none opacity-50"
-														: ""
-												}
-											/>
-										</PaginationItem>
-
-										{generatePaginationItems(currentPage, totalPages).map(
-											(item, index) => (
-												// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-												<PaginationItem key={index}>
-													{item === "ellipsis" ? (
-														<PaginationEllipsis />
-													) : (
-														<PaginationLink
-															href="#"
-															onClick={(e) => {
-																e.preventDefault();
-																handlePageChange(item as number);
-															}}
-															isActive={currentPage === item}
-														>
-															{item}
-														</PaginationLink>
-													)}
-												</PaginationItem>
-											),
-										)}
-
-										<PaginationItem>
-											<PaginationNext
-												href="#"
-												onClick={(e) => {
-													e.preventDefault();
-													handlePageChange(currentPage + 1);
-												}}
-												className={
-													currentPage === totalPages
-														? "pointer-events-none opacity-50"
-														: ""
-												}
-											/>
-										</PaginationItem>
-									</PaginationContent>
-								</Pagination>
+								<div className="mt-6 sm:mt-8">
+									<SearchPagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={handlePageChange}
+									/>
+								</div>
 							)}
 						</div>
 					</div>
