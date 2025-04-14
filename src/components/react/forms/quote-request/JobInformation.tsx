@@ -35,6 +35,7 @@ export function JobInformation({ className }: JobInformationProps) {
 						control={control}
 						name="jobFunction"
 						label="Job Function"
+						required
 						options={[...jobFunctions]}
 						className="text-sm sm:text-base"
 					/>

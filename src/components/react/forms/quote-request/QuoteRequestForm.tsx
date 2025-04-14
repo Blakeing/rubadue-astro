@@ -38,8 +38,8 @@ export function QuoteRequestForm({
 			city: initialValues?.city || "",
 			stateProvince: initialValues?.stateProvince || "",
 			zipCode: initialValues?.zipCode || "",
-			country: initialValues?.country || "",
-			jobFunction: initialValues?.jobFunction || "",
+			country: initialValues?.country || undefined,
+			jobFunction: initialValues?.jobFunction || undefined,
 			wireTypes: {
 				litzWire: initialValues?.wireTypes?.litzWire || false,
 				windingWire: initialValues?.wireTypes?.windingWire || false,

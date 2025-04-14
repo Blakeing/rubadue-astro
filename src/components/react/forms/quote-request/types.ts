@@ -35,15 +35,23 @@ export const formSchema = z.object({
 	city: z.string().optional(),
 	stateProvince: z.string().optional(),
 	zipCode: z.string().optional(),
-	country: z.enum(countryValues as [string, ...string[]]),
+	country: z.enum(countryValues as [string, ...string[]]).optional(),
 
 	// Job Information
-	jobFunction: z.enum(jobFunctionValues as [string, ...string[]]),
-	wireTypes: z.object({
-		litzWire: z.boolean().default(false),
-		windingWire: z.boolean().default(false),
-		customCable: z.boolean().default(false),
+	jobFunction: z.enum(jobFunctionValues as [string, ...string[]], {
+		required_error: "Job function is required",
+		invalid_type_error: "Please select a valid job function",
 	}),
+	wireTypes: z
+		.object({
+			litzWire: z.boolean().default(false),
+			windingWire: z.boolean().default(false),
+			customCable: z.boolean().default(false),
+		})
+		.refine((data) => data.litzWire || data.windingWire || data.customCable, {
+			message: "Please select at least one wire type",
+			path: ["root"],
+		}),
 	message: z.string().optional(),
 });
 

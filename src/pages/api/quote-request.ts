@@ -21,21 +21,28 @@ const emailSchema = z.object({
 	firstName: z.string().min(1, "First name is required"),
 	lastName: z.string().min(1, "Last name is required"),
 	email: z.string().email("Invalid email address"),
-	phone: z.string().min(1, "Phone number is required"),
+	phone: z.string().optional(),
 	companyName: z.string().min(1, "Company name is required"),
-	streetAddress: z.string().min(1, "Street address is required"),
+	streetAddress: z.string().optional(),
 	addressLine2: z.string().optional(),
-	city: z.string().min(1, "City is required"),
-	stateProvince: z.string().min(1, "State/Province is required"),
-	zipCode: z.string().min(1, "Postal code is required"),
-	country: z.enum(countryValues as [Country, ...Country[]]),
-	jobFunction: z.enum(jobFunctionValues as [JobFunction, ...JobFunction[]]),
-	wireTypes: z.object({
-		litzWire: z.boolean(),
-		windingWire: z.boolean(),
-		customCable: z.boolean(),
+	city: z.string().optional(),
+	stateProvince: z.string().optional(),
+	zipCode: z.string().optional(),
+	country: z.enum(countryValues as [Country, ...Country[]]).optional(),
+	jobFunction: z.enum(jobFunctionValues as [JobFunction, ...JobFunction[]], {
+		required_error: "Job function is required",
+		invalid_type_error: "Please select a valid job function",
 	}),
-	message: z.string().min(1, "Message is required"),
+	wireTypes: z
+		.object({
+			litzWire: z.boolean(),
+			windingWire: z.boolean(),
+			customCable: z.boolean(),
+		})
+		.refine((data) => data.litzWire || data.windingWire || data.customCable, {
+			message: "Please select at least one wire type",
+		}),
+	message: z.string().optional(),
 }) satisfies z.ZodType<QuoteRequestData>;
 
 export const POST: APIRoute = async ({ request }) => {

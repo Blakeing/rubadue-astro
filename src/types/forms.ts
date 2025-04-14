@@ -59,8 +59,8 @@ export interface BaseFormData {
 	firstName: string;
 	lastName: string;
 	email: string;
-	phone: string;
-	message: string;
+	phone?: string;
+	message?: string;
 }
 
 /**
@@ -73,12 +73,12 @@ export type ContactFormData = BaseFormData;
  */
 export interface QuoteRequestData extends BaseFormData {
 	companyName: string;
-	streetAddress: string;
+	streetAddress?: string;
 	addressLine2?: string;
-	city: string;
-	stateProvince: string;
-	zipCode: string;
-	country: Country;
+	city?: string;
+	stateProvince?: string;
+	zipCode?: string;
+	country?: Country;
 	jobFunction: JobFunction;
 	wireTypes: Record<WireType, boolean>;
 }
