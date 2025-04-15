@@ -5,6 +5,7 @@ import PageBreadcrumbs from "@/components/astro/layout/PageBreadcrumbs.astro";
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { Toaster } from "@/components/react/ui";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
@@ -90,5 +91,6 @@ if (segments.length === 0 || segments[0].name !== "Home") {
 
     <Footer />
     <Toaster client:load />
+    <Analytics />
   </body>
 </html>
