@@ -2,6 +2,10 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { MarketCard } from "@/components/react/MarketCard";
 import type { IconName } from "@/components/react/icons";
+import automotiveImage from "@/assets/images/markets/automotive.webp";
+import medicalMriImage from "@/assets/images/markets/medical-mri.webp";
+import aerospaceImage from "@/assets/images/markets/aerospace.webp";
+import industrialImage from "@/assets/images/markets/industrial.webp";
 
 interface Market {
   name: string;
@@ -28,7 +32,7 @@ const markets: Market[] = [
       "Single & Multi-Layer Winding Wire",
     ],
     icon: "car",
-    image: "/images/markets/automotive.jpg",
+    image: automotiveImage.src,
   },
   {
     name: "Medical",
@@ -45,7 +49,7 @@ const markets: Market[] = [
       "Tight Tolerance Conductors",
     ],
     icon: "heart-pulse",
-    image: "/images/markets/medical-mri.jpg",
+    image: medicalMriImage.src,
   },
   {
     name: "Aerospace",
@@ -59,7 +63,7 @@ const markets: Market[] = [
       "Custom Cables",
     ],
     icon: "plane",
-    image: "/images/markets/aerospace.jpg",
+    image: aerospaceImage.src,
   },
   {
     name: "Industrial Controls",
@@ -77,7 +81,7 @@ const markets: Market[] = [
       "TCA-series Winding Wires",
     ],
     icon: "factory",
-    image: "/images/markets/industrial.jpg",
+    image: industrialImage.src,
   },
 ];
 ---

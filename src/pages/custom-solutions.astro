@@ -2,6 +2,8 @@
 import Separator from "@/components/react/ui/separator";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { Handshake, Rocket, Settings, Factory, Award } from "lucide-react";
+import { Image } from "astro:assets";
+import customSolutionsImage from "../assets/images/custom-solutions-featured.webp";
 ---
 
 <BaseLayout
@@ -22,10 +24,14 @@ import { Handshake, Rocket, Settings, Factory, Award } from "lucide-react";
             <div
               class="relative overflow-hidden rounded-3xl bg-card px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10"
             >
-              <img
+              <Image
+                src={customSolutionsImage}
+                alt="Custom Solutions"
                 class="absolute inset-0 size-full object-cover"
-                src="/images/custom-solutions-featured.png"
-                alt=""
+                width={800}
+                height={800}
+                quality={90}
+                format="webp"
               />
               <div class="absolute inset-0 bg-card mix-blend-multiply"></div>
               <div

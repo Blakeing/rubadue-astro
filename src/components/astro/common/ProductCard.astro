@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { getResolvedImageSource } from "@/utils/images";
+
+interface Props {
+  product: CollectionEntry<"products">;
+  className?: string;
+}
+
+const { product, className = "" } = Astro.props;
+const { title, description, heroImage } = product.data;
+
+const imageSrc = await getResolvedImageSource(heroImage, {
+  width: 800,
+  height: 800,
+});
+---
+
+<article class={`group relative ${className}`}>
+  <div
+    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
+  >
+    <Image
+      src={imageSrc}
+      alt={title}
+      width={800}
+      height={800}
+      class="h-full w-full object-cover object-center lg:h-full lg:w-full"
+    />
+  </div>
+  <div class="mt-4 flex justify-between">
+    <div>
+      <h3 class="text-sm text-gray-700">
+        <a href={`/products/${product.slug}`}>
+          <span aria-hidden="true" class="absolute inset-0"></span>
+          {title}
+        </a>
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">{description}</p>
+    </div>
+  </div>
+</article>

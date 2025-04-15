@@ -79,7 +79,12 @@ if (segments.length === 0 || segments[0].name !== "Home") {
           <BaseHeader eyebrow={eyebrow} title={headerTitle} />
         )
       }
-      <PageBreadcrumbs pathname={Astro.url.pathname} />
+      {/* Only render breadcrumbs if not on a knowledge base page */}
+      {
+        !Astro.url.pathname.startsWith("/knowledge-base") && (
+          <PageBreadcrumbs pathname={Astro.url.pathname} />
+        )
+      }
       <slot />
     </main>
 

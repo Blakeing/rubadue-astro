@@ -1,16 +1,28 @@
 ---
+import { getImage } from "astro:assets";
+import knowledgeBaseHero from "@/assets/backgrounds/knowledge-base-hero-placeholder.webp";
+
 interface Props {
   eyebrow: string | Date;
   title: string;
 }
 
 const { eyebrow, title } = Astro.props;
+
+// Generate optimized image
+const optimizedHero = await getImage({
+  src: knowledgeBaseHero,
+  width: 1920,
+  height: 1080,
+  format: "webp",
+  quality: 80,
+});
 ---
 
 <div class="py-8 relative overflow-hidden">
   <div
     class="absolute inset-0 -z-10 brightness-75"
-    style="background-image: url('/images/knowledge-base-hero-placeholder.webp'); background-repeat: no-repeat; background-size: cover; background-position: right; transform: scaleX(-1);"
+    style={`background-image: url('${optimizedHero.src}'); background-repeat: no-repeat; background-size: cover; background-position: right; transform: scaleX(-1);`}
   >
   </div>
   <div class="absolute inset-0 -z-10 bg-primary/80 opacity-40"></div>
