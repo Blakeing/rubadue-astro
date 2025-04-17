@@ -93,7 +93,7 @@ const TimelineCard: React.FC<{
 				</div>
 				<p
 					className={cn(
-						"text-base text-muted-foreground leading-relaxed text-left",
+						"text-base text-pretty text-muted-foreground leading-relaxed text-left",
 						"md:text-left",
 						isEven && "md:text-right",
 					)}

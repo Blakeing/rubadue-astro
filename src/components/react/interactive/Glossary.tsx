@@ -96,7 +96,7 @@ function SearchAndNavigation({
 	}, [currentActiveSection]);
 
 	return (
-		<div className="sticky top-[5.5rem] z-10 bg-background/80 backdrop-blur-sm mb-6">
+		<div className="sticky top-[60px] md:top-[92px] lg:top-[132px] z-10 bg-background/80 backdrop-blur-sm mb-6">
 			<div className="relative py-3">
 				<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 				<Input
@@ -176,6 +176,7 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 	const [currentActiveSection, setCurrentActiveSection] = useState<
 		string | null
 	>(null);
+	const [rootMarginTopOffset, setRootMarginTopOffset] = useState(0);
 
 	const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 	const observerRef = useRef<IntersectionObserver | null>(null);
@@ -191,6 +192,40 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 		filterGlossary(searchTerm, sections);
 	}, [glossaryTerms, searchTerm]);
 
+	// Calculate and update root margin offset on resize
+	useEffect(() => {
+		const calculateOffset = () => {
+			// Only run this code on the client side
+			if (typeof window === "undefined") {
+				return 173; // Default to mobile offset SSR
+			}
+
+			const screenWidth = window.innerWidth;
+			const stickyNavHeight = 113; // Estimated height of the sticky search/nav bar
+
+			if (screenWidth >= 1024) {
+				// Desktop: lg breakpoint (1024px) - Header 132px
+				return 132 + stickyNavHeight; // 245px
+			}
+			if (screenWidth >= 768) {
+				// Tablet: md breakpoint (768px) - Header 92px
+				return 92 + stickyNavHeight; // 205px
+			}
+			// Mobile: < md breakpoint - Header 60px
+			return 60 + stickyNavHeight; // 173px
+		};
+
+		const handleResize = () => {
+			setRootMarginTopOffset(calculateOffset());
+		};
+
+		// Set initial offset
+		handleResize();
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
 	// Keep ref in sync with state
 	useEffect(() => {
 		currentActiveSectionRef.current = currentActiveSection;
@@ -198,7 +233,15 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 
 	// Setup intersection observer
 	useEffect(() => {
+		// Ensure offset is calculated before setting up observer
+		if (rootMarginTopOffset === 0) return;
+
 		const sectionIntersections = new Map<string, number>();
+
+		// Disconnect previous observer if it exists
+		if (observerRef.current) {
+			observerRef.current.disconnect();
+		}
 
 		observerRef.current = new IntersectionObserver(
 			(entries) => {
@@ -232,36 +275,33 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 			},
 			{
 				threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-				rootMargin: "-20% 0px -60% 0px",
+				// Use dynamic top margin based on calculated offset, keep bottom margin percentage
+				rootMargin: `-${rootMarginTopOffset}px 0px -30% 0px`,
 			},
 		);
 
-		return () => {
-			if (observerRef.current) {
-				observerRef.current.disconnect();
-			}
-		};
-	}, []);
-
-	// Update observed elements when sections change
-	// biome-ignore lint/correctness/useExhaustiveDependencies: displayedSections is needed to re-observe elements after filtering
-	useEffect(() => {
-		if (!observerRef.current) return;
-
-		// Reset current active section
-		setCurrentActiveSection(null);
-
-		// Disconnect from all previous observations
-		observerRef.current.disconnect();
-
-		// Observe all current section refs
+		// Observe elements immediately after observer setup
+		const currentObserver = observerRef.current;
 		requestAnimationFrame(() => {
 			for (const element of Object.values(sectionRefs.current)) {
 				if (element) {
-					observerRef.current?.observe(element);
+					currentObserver?.observe(element);
 				}
 			}
 		});
+
+		return () => {
+			if (currentObserver) {
+				currentObserver.disconnect();
+			}
+		};
+	}, [rootMarginTopOffset]);
+
+	// Update observed elements when displayed sections change
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		// Reset current active section when filter changes
+		setCurrentActiveSection(null);
 	}, [displayedSections]);
 
 	const filterGlossary = (search: string, sections: GlossarySection[]) => {
@@ -287,8 +327,22 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 
 		const element = sectionRefs.current[letter];
 		if (element) {
-			// Calculate offset for header (88px) and search bar (approximately 140px)
-			const offset = 228;
+			// Calculate offset based on viewport width
+			const screenWidth = window.innerWidth;
+			let offset: number;
+			const stickyNavHeight = 113; // Estimated height of the sticky search/nav bar
+
+			if (screenWidth >= 1024) {
+				// Desktop: lg breakpoint (1024px) - Header 132px
+				offset = 132 + stickyNavHeight; // 245px
+			} else if (screenWidth >= 768) {
+				// Tablet: md breakpoint (768px) - Header 92px
+				offset = 92 + stickyNavHeight; // 205px
+			} else {
+				// Mobile: < md breakpoint - Header 60px
+				offset = 60 + stickyNavHeight; // 173px
+			}
+
 			const elementPosition = element.getBoundingClientRect().top;
 			const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -311,7 +365,8 @@ export function GlossaryComponent({ glossaryTerms }: GlossaryProps) {
 						sectionRefs.current[letter] = el;
 					}}
 					className={cn(
-						"glossary-section scroll-mt-[199px]",
+						// Responsive scroll margin top: Mobile 173px, Tablet 205px, Desktop 245px
+						"glossary-section scroll-mt-[173px] md:scroll-mt-[205px] lg:scroll-mt-[245px]",
 						index === 0 && "first-visible-section",
 					)}
 				>

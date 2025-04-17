@@ -83,7 +83,8 @@ export default function CableSection() {
 							Cables to Meet Your Needs
 						</p>
 						<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
-							All cable components can be adapted to meet your requirements.
+							All cable and wire components can be adapted to meet your
+							requirements.
 						</p>
 						<dl className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-sm sm:text-base text-muted-foreground lg:max-w-none">
 							{features.map((feature, index) => (
