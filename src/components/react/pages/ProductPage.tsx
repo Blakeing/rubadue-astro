@@ -1,4 +1,3 @@
-import { Image } from "astro:assets";
 import {
 	Accordion,
 	AccordionContent,
@@ -7,6 +6,7 @@ import {
 	ScrollArea,
 } from "@/components/react/ui";
 import type { ImageMetadata } from "astro";
+import ProductImage from "@/components/react/ProductImage";
 
 import { cn } from "@/lib/utils";
 
@@ -263,23 +263,17 @@ export default function ProductPage({
 		<div className="relative">
 			<div className="lg:grid lg:grid-cols-9 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
 				<div id="product-image" className="lg:col-span-4 lg:row-end-1">
-					{typeof product.imageSrc === "string" ? (
-						<img
-							src={product.imageSrc}
-							alt={product.imageAlt}
-							className="aspect-[4/3] w-full rounded-lg bg-background object-cover shadow-lg sm:shadow-2xl"
-						/>
-					) : (
-						<Image
-							src={product.imageSrc}
-							alt={product.imageAlt}
-							class="aspect-[4/3] w-full rounded-lg bg-background object-contain shadow-lg sm:shadow-2xl"
-							width={1600}
-							height={900}
-							format="webp"
-							quality={80}
-						/>
-					)}
+					<ProductImage
+						src={
+							typeof product.imageSrc === "string"
+								? product.imageSrc
+								: product.imageSrc?.src
+						}
+						alt={product.imageAlt}
+						width={1600}
+						height={900}
+						className="aspect-[4/3] w-full rounded-lg bg-background object-cover shadow-lg sm:shadow-2xl"
+					/>
 				</div>
 
 				<div

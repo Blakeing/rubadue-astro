@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
-import doubleInsulatedImage from "@/assets/double_insulated-removebg-preview.png";
+import doubleInsulatedImage from "@/assets/double_insulated.webp";
 // Import images
-import litzWireImage from "@/assets/litz-wire-removebg-preview.png";
-import singleInsulatedImage from "@/assets/single_insulated-removebg-preview.png";
-import tripleInsulatedImage from "@/assets/triple_insulated-removebg-preview.png";
+import litzWireImage from "@/assets/litz-wire.webp";
+import singleInsulatedImage from "@/assets/single_insulated.webp";
+import tripleInsulatedImage from "@/assets/triple_insulated.webp";
 
 const features = [
 	{
@@ -89,17 +89,9 @@ export default function CableSection() {
 							{features.map((feature, index) => (
 								<motion.div
 									key={feature.name}
-									className="relative cursor-pointer select-none"
+									className={`relative cursor-pointer select-none ${activeFeature === index ? "text-primary/80" : "text-muted-foreground"}`}
 									onHoverStart={() => setActiveFeature(index)}
 									onClick={() => setActiveFeature(index)}
-									initial={{ color: "hsl(var(--muted-foreground))" }}
-									animate={{
-										color:
-											activeFeature === index
-												? "hsl(var(--primary) / 0.8)"
-												: "hsl(var(--muted-foreground))",
-									}}
-									transition={{ duration: 0.15 }}
 								>
 									<dt className="inline font-semibold text-foreground">
 										{feature.name}

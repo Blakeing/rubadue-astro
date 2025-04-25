@@ -6,6 +6,7 @@ import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.ast
 import Footer from "@/components/astro/layout/Footer.astro";
 import { Header } from "@/components/react/layout";
 import { ProductPage } from "@/components/react/pages";
+import { getResolvedImageSource } from "@/utils/images";
 
 // Add prerender export to ensure static generation
 export const prerender = true;
@@ -21,6 +22,9 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"products">;
 const product = Astro.props;
 const { Content } = await product.render();
+
+// Resolve the image path server-side using the single utility function
+const resolvedImageSrc = await getResolvedImageSource(product.data.heroImage);
 
 // Get URL parameters for filter context
 const url = new URL(Astro.request.url);
@@ -127,7 +131,7 @@ segments.push({
 const mappedProduct = {
   name: product.data.title,
   description: product.data.description,
-  imageSrc: product.data.heroImage || "/rubadue-hero.webp",
+  imageSrc: resolvedImageSrc,
   imageAlt: product.data.title,
   category: product.data.category,
   overview: product.data.overview,

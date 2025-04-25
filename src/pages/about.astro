@@ -10,11 +10,17 @@ import {
 import Timeline from "@/components/react/about/Timeline";
 import type { IconName } from "@/components/react/icons";
 import { Target, Eye } from "lucide-react";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import shawnTolandImage from "../assets/images/team/shawn-toland.webp";
+import mikeSkorupaImage from "../assets/images/team/mike-skorupa.webp";
+import dougIngenthronImage from "../assets/images/team/doug-ingenthron.webp";
+import kyleJensenImage from "../assets/images/team/kyle-jensen.webp";
 
 interface Person {
   name: string;
   role: string;
-  imageUrl: string;
+  image: ImageMetadata;
   xUrl: string;
   linkedinUrl: string;
 }
@@ -23,29 +29,28 @@ const people: Person[] = [
   {
     name: "Shawn Toland",
     role: "President",
-    imageUrl: "/team/shawn-toland.png",
+    image: shawnTolandImage,
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
   {
     name: "Mike Skorupa",
     role: "Director of Operations",
-    imageUrl: "/team/mike-skorupa.png",
+    image: mikeSkorupaImage,
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
-
   {
     name: "Doug Ingenthron",
     role: "Director of Sales",
-    imageUrl: "/team/doug-ingenthron.png",
+    image: dougIngenthronImage,
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
   {
     name: "Kyle Jensen",
     role: "Director of Business Development",
-    imageUrl: "/team/kyle-jensen.png",
+    image: kyleJensenImage,
     xUrl: "#",
     linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
   },
@@ -245,10 +250,12 @@ const stats = [
               <li>
                 <div class="relative">
                   <div class="absolute inset-0 bg-gradient-to-b from-foreground/20 to-foreground/40 rounded-2xl" />
-                  <img
+                  <Image
                     alt={`Photo of ${person.name}`}
-                    src={person.imageUrl}
-                    class="aspect-square w-full rounded-2xl object-cover relative z-10"
+                    src={person.image}
+                    width={400}
+                    height={400}
+                    class="relative rounded-2xl object-cover"
                   />
                 </div>
                 <h3 class="mt-4 sm:mt-6 text-base sm:text-lg/8 font-semibold text-foreground">

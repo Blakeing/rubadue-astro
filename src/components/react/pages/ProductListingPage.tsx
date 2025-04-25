@@ -26,6 +26,8 @@ import { useState, useEffect } from "react";
 import { navigate } from "astro:transitions/client";
 import { Card } from "../ui/card";
 import { SearchPagination } from "@/components/react/search/components/SearchPagination";
+import ProductImage from "@/components/react/ProductImage";
+import defaultHeroImage from "@/assets/backgrounds/rubadue-hero.webp";
 
 export type FilterCategory = "type" | "material";
 
@@ -121,10 +123,6 @@ interface ProductListingPageProps {
 }
 
 const ITEMS_PER_PAGE = 9; // Number of products per page
-
-function classNames(...classes: string[]) {
-	return classes.filter(Boolean).join(" ");
-}
 
 // Add mapping function for legacy categories
 function getCategoryFromCollection(collection: string): string {
@@ -505,10 +503,10 @@ export default function ProductListingPage({
 										className="group relative"
 									>
 										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-background">
-											<img
-												src={product.data.heroImage || "/rubadue-hero.webp"}
+											<ProductImage
+												src={product.data.heroImage || defaultHeroImage.src}
 												alt={product.data.title}
-												className="h-full w-full object-contain object-center group-hover:opacity-75"
+												className="h-full w-full object-contain"
 											/>
 										</div>
 										<div className="mt-3 flex justify-between">
