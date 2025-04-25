@@ -24,6 +24,7 @@ const mainNavigation = [
 	{ name: "Catalog", href: "/catalog" },
 	{ name: "About", href: "/about" },
 	{ name: "Markets", href: "/markets" },
+	{ name: "Distributors", href: "/distributors" },
 	{ name: "Custom Solutions", href: "/custom-solutions" },
 	{ name: "Careers", href: "/careers" },
 ];

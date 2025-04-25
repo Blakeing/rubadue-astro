@@ -1,0 +1,163 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { WorldMap } from "@/components/react/interactive/WorldMap";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Separator,
+} from "@/components/react/ui";
+
+const startLocation = {
+  lat: 40.4,
+  lng: -105.05,
+  label: "Loveland, CO",
+};
+
+const distributors = {
+  asia: [
+    {
+      name: "Power-Well Technology Limited",
+      url: "http://powerwell.org/",
+      lat: 22.3,
+      lng: 114.18,
+      location: "Hong Kong",
+    },
+    {
+      name: "Vision Electronics (Hong Kong) Limited",
+      url: "http://www.vision-hk.com/",
+      lat: 22.3,
+      lng: 114.18,
+      location: "Hong Kong",
+    },
+    {
+      name: "Jasdi International Trading Co., Ltd",
+      url: "http://www.jasdi.com.cn/",
+      lat: 31.22,
+      lng: 121.47,
+      location: "Shanghai, China",
+    },
+    {
+      name: "Jasdi Chemicals Co., Ltd.",
+      url: "https://www.jasdi-che.com/index.html",
+      lat: 25.03,
+      lng: 121.57,
+      location: "Taipei, Taiwan",
+    },
+  ],
+  europe: [
+    {
+      name: "Karl Schupp AG",
+      url: "https://schupp.ch/",
+      lat: 47.45,
+      lng: 8.59,
+      location: "Kloten, Switzerland",
+    },
+  ],
+};
+
+const allDistributors = [...distributors.asia, ...distributors.europe];
+
+const mapDots = allDistributors.map((distributor) => ({
+  start: startLocation,
+  end: {
+    lat: distributor.lat,
+    lng: distributor.lng,
+    label: distributor.name,
+  },
+}));
+---
+
+<BaseLayout
+  title="Distributors | Rubadue Wire"
+  description="Learn about our distributors and how they help us deliver exceptional wire solutions."
+  category="About"
+  eyebrow="Our"
+  headerTitle="Distributors"
+>
+  <div class="relative max-w-7xl mx-auto aspect-[2/1]">
+    <WorldMap dots={mapDots} client:visible />
+  </div>
+
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-muted/20 rounded-lg p-8"
+  >
+    <Separator className="mb-8" client:visible />
+
+    <div class="mb-8">
+      <h2
+        class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-8"
+      >
+        Asia
+      </h2>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          distributors.asia.map((distributor) => (
+            <Card
+              client:visible
+              className="text-center flex flex-col relative overflow-hidden"
+            >
+              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+              <CardHeader>
+                <CardTitle className="text-lg text-pretty">
+                  {distributor.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mt-auto">
+                <a
+                  href={distributor.url}
+                  class="text-sm text-muted-foreground hover:text-primary break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {distributor.url}
+                </a>
+              </CardContent>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h2
+        class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-8"
+      >
+        Europe
+      </h2>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
+        {
+          distributors.europe.map((distributor) => (
+            <Card
+              client:visible
+              className="text-center flex flex-col relative overflow-hidden"
+            >
+              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+              <CardHeader>
+                <CardTitle className="text-lg text-pretty">
+                  {distributor.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="mt-auto">
+                <a
+                  href={distributor.url}
+                  class="text-sm text-muted-foreground hover:text-primary break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {distributor.url}
+                </a>
+              </CardContent>
+            </Card>
+          ))
+        }
+        <!-- Add more European distributors here if needed -->
+      </div>
+    </div>
+  </div>
+</BaseLayout>

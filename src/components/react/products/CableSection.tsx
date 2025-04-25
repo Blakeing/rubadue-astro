@@ -20,7 +20,7 @@ const features = [
 	},
 	{
 		name: "Triple Insulated",
-		description: "with extruded insulation.",
+		description: "wires with extruded insulation.",
 		image: tripleInsulatedImage,
 	},
 	{
@@ -80,12 +80,11 @@ export default function CableSection() {
 							Wire Types
 						</h2>
 						<p className="mt-2 text-pretty text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
-							Cables to Meet Your Needs
+							All wires can be customized to meet your requirements.
 						</p>
-						<p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
-							All cable and wire components can be adapted to meet your
-							requirements.
-						</p>
+						{/* <p className="mt-4 sm:mt-6 text-sm sm:text-base text-muted-foreground">
+							All wires can be customized to meet your requirements.
+						</p> */}
 						<dl className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-sm sm:text-base text-muted-foreground lg:max-w-none">
 							{features.map((feature, index) => (
 								<motion.div
