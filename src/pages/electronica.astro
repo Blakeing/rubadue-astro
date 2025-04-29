@@ -1,0 +1,81 @@
+---
+import { Image } from "astro:assets";
+// Import the image directly
+import eventImage from "@/assets/pcim-logo.png";
+import { PcimForm } from "@/components/react/forms/pcim/PcimForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/react/ui";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+// Placeholder image path - replace with actual path when available
+// const eventImage = "/Users/blakeing/Code/rubadue-astro/src/assets/pcim-logo.png;""
+---
+
+<BaseLayout
+  title="Thank You for Visiting Rubadue Wire at PCIM Europe 2025"
+  description="A thank you message from Rubadue Wire to visitors of our booth at PCIM Europe 2025 in Nuremberg. Let's discuss your wire and cable needs further."
+  category="Events"
+  eyebrow="PCIM 2025"
+  headerTitle="Let's Continue the Discussion"
+>
+  <div class="relative isolate bg-background">
+    <div class="py-8 sm:py-12 md:py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Restore two-column grid */}
+        <div
+          class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start"
+        >
+          {/* Left Column - Image Above H1 */}
+          <div class="space-y-6 lg:pr-8">
+            <Image
+              src={eventImage}
+              alt="PCIM Logo"
+              width={200}
+              height={200}
+              class="rounded-lg shadow-md object-contain w-full max-w-[200px] aspect-square mb-8 lg:mx-0 mx-auto"
+            />
+            <h1
+              class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
+            >
+              Thank you for visiting us at PCIM 2025!
+            </h1>
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+              <p>
+                It was a pleasure discussing how Rubadue Wire can support your
+                projects and growth with our specialized wire and cable
+                solutions.
+              </p>
+              <p>
+                With decades of experience in critical industries, Rubadue is
+                dedicated to providing reliable, high-performance wires that
+                meet your demanding standards. Our team is committed to ensuring
+                you receive top-quality solutions tailored to your unique
+                applications.
+              </p>
+              <p>
+                Please don't hesitate to reach out to us with any questions,
+                additional needs, or project support. We're here to make sure
+                you have the best wire solutions for your applications.
+              </p>
+              <p>Looking forward to working together,</p>
+              <p class="font-semibold">Rubadue Wire Team</p>
+            </div>
+          </div>
+
+          {/* Right Column - Form Only */}
+          <div class="">
+            <Card className="shadow-lg">
+              <CardContent className="pt-6">
+                <PcimForm client:load />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

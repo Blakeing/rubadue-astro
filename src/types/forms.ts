@@ -82,3 +82,12 @@ export interface QuoteRequestData extends BaseFormData {
 	jobFunction: JobFunction;
 	wireTypes: Record<WireType, boolean>;
 }
+
+// Type definition for the PCIM Follow-up Form
+export interface PcimFollowupFormData {
+	firstName: string;
+	lastName: string;
+	email: string;
+	company: string;
+	message?: string; // Message is optional
+}

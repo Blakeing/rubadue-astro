@@ -11,7 +11,8 @@ export function generateQuoteRequestEmailHtml(data: QuoteRequestData): string {
 		.filter(([_, isSelected]) => isSelected)
 		.map(([type]) => WIRE_TYPE_NAMES[type as keyof typeof WIRE_TYPE_NAMES]);
 
-	const escapedMessage = escapeHtml(data.message);
+	// Provide fallback for optional message
+	const escapedMessage = escapeHtml(data.message ?? "");
 
 	const content = `
     <div style="font-size: 24px; font-weight: bold; margin-bottom: 30px; color: #1a1a1a; text-align: center; padding-bottom: 20px; border-bottom: 2px solid #eeeeee;">
@@ -36,7 +37,7 @@ export function generateQuoteRequestEmailHtml(data: QuoteRequestData): string {
                 <p style="margin: 0 0 15px 0;"><strong style="color: #2a2a2a; display: block; margin-bottom: 5px;">Email:</strong>${escapeHtml(data.email)}</p>
               </td>
               <td style="width: 50%; vertical-align: top;">
-                <p style="margin: 0 0 15px 0;"><strong style="color: #2a2a2a; display: block; margin-bottom: 5px;">Phone:</strong>${escapeHtml(data.phone)}</p>
+                <p style="margin: 0 0 15px 0;"><strong style="color: #2a2a2a; display: block; margin-bottom: 5px;">Phone:</strong>${escapeHtml(data.phone ?? "N/A")}</p>
                 <p style="margin: 0;"><strong style="color: #2a2a2a; display: block; margin-bottom: 5px;">Job Function:</strong>${escapeHtml(formatJobFunction(data.jobFunction))}</p>
               </td>
             </tr>
@@ -57,10 +58,10 @@ export function generateQuoteRequestEmailHtml(data: QuoteRequestData): string {
           <div>
             <strong style="color: #2a2a2a; display: block; margin-bottom: 5px;">Address:</strong>
             <div style="line-height: 1.6;">
-              ${escapeHtml(data.streetAddress)}
+              ${escapeHtml(data.streetAddress ?? "")}
               ${data.addressLine2 ? `<br/>${escapeHtml(data.addressLine2)}` : ""}
-              <br/>${escapeHtml(data.city)}, ${escapeHtml(data.stateProvince)} ${escapeHtml(data.zipCode)}
-              <br/>${escapeHtml(formatCountry(data.country))}
+              <br/>${escapeHtml(data.city ?? "")}, ${escapeHtml(data.stateProvince ?? "")} ${escapeHtml(data.zipCode ?? "")}
+              <br/>${escapeHtml(formatCountry(data.country ?? "other"))}
             </div>
           </div>
         </td>
