@@ -19,7 +19,7 @@ export function PostCard({ post, className }: PostCardProps) {
 					<p className="text-xs font-display tracking-wider text-primary/80 mb-2">
 						{formatDate(post.data.pubDate)}
 					</p>
-					<h2 className="text-xl text-pretty sm:text-2xl font-bold leading-tight tracking-tighter mb-2  transition-colors line-clamp-2">
+					<h2 className="text-xl text-pretty sm:text-2xl font-semibold leading-tight tracking-tighter mb-2  transition-colors line-clamp-2">
 						{post.data.title}
 					</h2>
 					{post.data.description && (
