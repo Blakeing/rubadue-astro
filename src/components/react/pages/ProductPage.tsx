@@ -272,7 +272,7 @@ export default function ProductPage({
 						alt={product.imageAlt}
 						width={1600}
 						height={900}
-						className="aspect-[4/3] w-full rounded-lg bg-background object-cover shadow-lg sm:shadow-2xl"
+						className="aspect-[4/3] w-full rounded-lg bg-accent/25 object-cover shadow-lg sm:shadow-2xl"
 					/>
 				</div>
 
