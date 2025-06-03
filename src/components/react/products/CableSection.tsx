@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
-import doubleInsulatedImage from "@/assets/double_insulated.webp";
+import doubleInsulatedImage from "@/assets/images/categories/double_insulated.webp";
 // Import images
-import litzWireImage from "@/assets/litz-wire.webp";
-import singleInsulatedImage from "@/assets/single_insulated.webp";
-import tripleInsulatedImage from "@/assets/triple_insulated.webp";
+import litzWireImage from "@/assets/images/categories/litz-wire.webp";
+import singleInsulatedImage from "@/assets/images/categories/single_insulated.webp";
+import tripleInsulatedImage from "@/assets/images/categories/triple_insulated.webp";
 
 const features = [
 	{

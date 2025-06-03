@@ -3,7 +3,7 @@ import path from "node:path";
 import { glob } from "glob";
 
 const PRODUCTS_DIR = "src/content/products";
-const IMAGES_DIR = "src/assets/products/new";
+const IMAGES_DIR = "src/assets/products/catalog";
 
 async function verifyImages() {
 	try {

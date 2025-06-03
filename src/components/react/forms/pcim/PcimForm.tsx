@@ -46,15 +46,9 @@ export function PcimForm({
 	// Update onSubmit to use the new API endpoint
 	const onSubmit = async (data: PcimFormValues) => {
 		setIsSubmitting(true);
-		console.log("Submitting PCIM form data:", data);
 
 		try {
-			// Remove simulation
-			// await new Promise((resolve) => setTimeout(resolve, 1500));
-
-			// Uncomment and update fetch call
 			const response = await fetch("/api/pcim-followup", {
-				// Updated endpoint
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -74,8 +68,8 @@ export function PcimForm({
 			}
 
 			toast({
-				title: "Message Sent Successfully", // Updated title
-				description: "Thank you for your message. We'll be in touch soon.", // Updated description
+				title: "Message Sent Successfully",
+				description: "Thank you for your message. We'll be in touch soon.",
 			});
 
 			form.reset();
@@ -84,7 +78,7 @@ export function PcimForm({
 			const errorMessage =
 				error instanceof Error
 					? error.message
-					: "There was a problem sending your message"; // Generic error message
+					: "There was a problem sending your message";
 
 			toast({
 				variant: "destructive",

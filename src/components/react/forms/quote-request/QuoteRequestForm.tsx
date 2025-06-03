@@ -21,7 +21,6 @@ export function QuoteRequestForm({
 	onError,
 	className,
 }: QuoteRequestFormProps) {
-	console.log("QuoteRequestForm rendered");
 	const { toast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -54,11 +53,9 @@ export function QuoteRequestForm({
 	const handleSubmit = form.handleSubmit(
 		async (data) => {
 			if (isSubmitting) return;
-			console.log("Form submitted with data:", data);
 			setIsSubmitting(true);
 
 			try {
-				console.log("Making API request...");
 				const response = await fetch("/api/quote-request", {
 					method: "POST",
 					headers: {
@@ -68,7 +65,6 @@ export function QuoteRequestForm({
 				});
 
 				const responseData = await response.json();
-				console.log("API response:", responseData);
 
 				if (!response.ok) {
 					throw new Error(
@@ -88,7 +84,6 @@ export function QuoteRequestForm({
 				// Call onSuccess callback if provided
 				await onSuccess?.(data);
 			} catch (error) {
-				console.error("Error submitting quote request:", error);
 				toast({
 					title: "Error",
 					description:
@@ -102,7 +97,6 @@ export function QuoteRequestForm({
 			}
 		},
 		(errors) => {
-			console.log("Form validation errors:", errors);
 			toast({
 				title: "Error",
 				description: "Please fill in all required fields correctly.",
