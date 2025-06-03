@@ -1,21 +1,21 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import Timeline from "@/components/pages/company/Timeline";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   Separator,
-} from "@/components/react/ui";
-import Timeline from "@/components/react/about/Timeline";
-import type { IconName } from "@/components/react/icons";
-import { Target, Eye } from "lucide-react";
-import { Image } from "astro:assets";
+} from "@/components/ui";
+import type { IconName } from "@/components/ui/icons";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import type { ImageMetadata } from "astro";
-import shawnTolandImage from "../assets/images/team/shawn-toland.webp";
-import mikeSkorupaImage from "../assets/images/team/mike-skorupa.webp";
+import { Eye, Target } from "lucide-react";
 import dougIngenthronImage from "../assets/images/team/doug-ingenthron.webp";
 import kyleJensenImage from "../assets/images/team/kyle-jensen.webp";
+import mikeSkorupaImage from "../assets/images/team/mike-skorupa.webp";
+import shawnTolandImage from "../assets/images/team/shawn-toland.webp";
 
 interface Person {
   name: string;

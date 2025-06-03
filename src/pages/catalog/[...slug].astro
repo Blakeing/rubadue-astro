@@ -1,11 +1,11 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.astro";
-import Footer from "@/components/astro/layout/Footer.astro";
-import { Header } from "@/components/react/layout";
-import { ProductPage } from "@/components/react/pages";
+import { Header } from "@/components/layout";
+import BaseHead from "@/components/layout/BaseHead.astro";
+import BaseHeader from "@/components/layout/BaseHeader.astro";
+import Footer from "@/components/layout/Footer.astro";
+import ProductBreadcrumbs from "@/components/layout/ProductBreadcrumbs.astro";
+import { ProductDetailPage } from "@/components/pages";
 import { getResolvedImageSource } from "@/utils/images";
 
 // Add prerender export to ensure static generation
@@ -127,7 +127,7 @@ segments.push({
   href: "", // No link for current page
 });
 
-// Map product data to match ProductPage interface
+// Map product data to match ProductDetailPage interface
 const mappedProduct = {
   name: product.data.title,
   description: product.data.description,
@@ -160,7 +160,7 @@ const category = product.data.category;
     <ProductBreadcrumbs segments={segments} />
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16">
-        <ProductPage
+        <ProductDetailPage
           client:load
           product={mappedProduct}
           filterContext={filterContext}

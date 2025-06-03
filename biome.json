@@ -12,6 +12,8 @@
 			"**/dist/**",
 			"**/.next/**",
 			"**/.astro/**",
+			"**/.vercel/**",
+			"**/.vscode/**",
 			"**/build/**",
 			"**/coverage/**",
 			"**/*.min.*",
@@ -22,7 +24,13 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
-		"ignore": ["*.astro"]
+		"ignore": [
+			"*.astro",
+			"**/.vercel/**",
+			"**/dist/**",
+			"**/.astro/**",
+			"**/.vscode/**"
+		]
 	},
 	"organizeImports": {
 		"enabled": true
@@ -37,6 +45,8 @@
 			"**/dist/**",
 			"**/.next/**",
 			"**/.astro/**",
+			"**/.vercel/**",
+			"**/.vscode/**",
 			"**/build/**",
 			"**/coverage/**",
 			"**/*.min.*",

@@ -1,8 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import FormattedDate from "@/components/astro/common/FormattedDate.astro";
+import FormattedDate from "@/components/layout/containers/FormattedDate.astro";
+import { Button, Card, buttonVariants } from "@/components/ui";
 import BaseLayout from "./BaseLayout.astro";
-import { Button, Card, buttonVariants } from "@/components/react/ui";
 
 type Props = CollectionEntry<"knowledgeBase">["data"];
 

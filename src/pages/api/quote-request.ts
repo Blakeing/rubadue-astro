@@ -1,14 +1,14 @@
 import { generateQuoteRequestEmailHtml } from "@/lib/quote-email-template";
+import {
+	COUNTRIES,
+	type Country,
+	JOB_FUNCTIONS,
+	type JobFunction,
+	type QuoteRequestData,
+} from "@/types/forms";
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
-import {
-	COUNTRIES,
-	JOB_FUNCTIONS,
-	type QuoteRequestData,
-	type Country,
-	type JobFunction,
-} from "@/types/forms";
 
 // Create literal types for the enums
 const countryValues = COUNTRIES.map((c) => c.value) as readonly Country[];

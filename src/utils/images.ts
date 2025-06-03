@@ -1,6 +1,6 @@
-import type { ImageMetadata } from "astro";
 import { getImage } from "astro:assets"; // Import getImage
 import defaultHeroImageMetadata from "@/assets/backgrounds/rubadue-hero.webp"; // Keep fallback metadata import
+import type { ImageMetadata } from "astro";
 
 // We still need the glob to check if an asset path exists
 const images = import.meta.glob<{ default: ImageMetadata }>(

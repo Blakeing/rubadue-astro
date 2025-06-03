@@ -15,12 +15,12 @@ export const SITE = {
 
 // Export SITE_TITLE and SITE_DESCRIPTION for backward compatibility
 export const SITE_TITLE = SITE.TITLE;
-export const SITE_DESCRIPTION = SITE.DESCRIPTION;
+const SITE_DESCRIPTION = SITE.DESCRIPTION;
 
 /**
  * Social media links
  */
-export const SOCIAL = {
+const SOCIAL = {
 	LINKEDIN: "https://www.linkedin.com/company/rubadue-wire",
 	FACEBOOK: "https://www.facebook.com/RubadueWire",
 	TWITTER: "https://twitter.com/RubadueWire",
@@ -44,7 +44,7 @@ export const CONTACT = {
 /**
  * Navigation links
  */
-export const NAV = {
+const NAV = {
 	HOME: "/",
 	PRODUCTS: "/products",
 	ABOUT: "/about",
@@ -56,7 +56,7 @@ export const NAV = {
 /**
  * Product categories
  */
-export const PRODUCT_CATEGORIES = {
+const PRODUCT_CATEGORIES = {
 	LITZ_WIRE: "litz-wire",
 	WINDING_WIRE: "winding-wire",
 	CUSTOM_CABLE: "custom-cable",
