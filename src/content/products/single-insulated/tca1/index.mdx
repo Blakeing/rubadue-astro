@@ -52,6 +52,7 @@ breakdown: "Approx. 2000 V"
 additionalInfo: "TCA1 products come standard in Orange"
 ---
 
-import { SingleInsulatedTable } from "@/components/react/data-table/single-insulated/tca1/table";
+import { WireDataTable } from "@/components/react/data-table";
+import { wireData } from "@/components/react/data-table/single-insulated/tca1/data";
 
-<SingleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

@@ -1,4 +1,4 @@
-import { createInsulatedLitzColumns } from "@/components/react/data-table/insulated-litz/shared-columns";
-import type { TripleInsulatedLitzSpec } from "@/components/react/data-table/insulated-litz/types";
+import { createInsulatedLitzColumns } from "../../shared-columns";
+import type { InsulatedLitzSpec } from "../../types";
 
-export const columns = createInsulatedLitzColumns<TripleInsulatedLitzSpec>();
+export const columns = createInsulatedLitzColumns<InsulatedLitzSpec>();

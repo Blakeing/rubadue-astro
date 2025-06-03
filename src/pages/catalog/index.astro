@@ -20,7 +20,7 @@ const mappedProducts = await Promise.all(
   products.map(async (product) => {
     // Resolve the image path server-side using the single utility function
     const resolvedImageSrc = await getResolvedImageSource(
-      product.data.heroImage,
+      product.data.heroImage
     );
 
     const productData: ProductData = {
@@ -55,13 +55,13 @@ const mappedProducts = await Promise.all(
       collection: "products" as const,
       data: productData,
     };
-  }),
+  })
 );
 
 // Sort products by date
 const sortedProducts = mappedProducts.sort(
   (a, b) =>
-    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
 
 // Get unique categories
@@ -98,7 +98,6 @@ const description =
   <body class="min-h-screen bg-background">
     <Header client:load />
     <BaseHeader eyebrow="Product" title="Catalog" />
-    <!-- <ProductBreadcrumbs segments={segments} /> -->
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <ProductListingPage

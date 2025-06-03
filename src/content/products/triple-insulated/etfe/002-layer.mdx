@@ -47,8 +47,9 @@ license:
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
 ---
 
-import { TripleInsulatedTable } from "@/components/react/data-table/triple-insulated/etfe/002-layer/table";
+import { WireDataTable } from "@/components/react/data-table";
+import { wireData } from "@/components/react/data-table/triple-insulated/etfe/002-layer/data";
 
-<TripleInsulatedTable client:load />
+<WireDataTable data={wireData} client:load  />
 
 **Please Note:** For detailed specifications including breakdown voltage and other technical parameters, please request a specification sheet. Contact our Sales Department for additional constructions and custom requirements. RoHS Compliant. 

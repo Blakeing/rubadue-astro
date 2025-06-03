@@ -35,6 +35,7 @@ tensileStrength: "6500 psi"
 breakdown: "Approx. 6000 V"
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/etfe/002-layer/table";
+import { WireDataTable } from "@/components/react/data-table";
+import { wireData } from "@/components/react/data-table/double-insulated/etfe/002-layer/data";
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

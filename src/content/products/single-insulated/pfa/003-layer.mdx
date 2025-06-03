@@ -47,6 +47,7 @@ breakdown: "Approx. 6000 V"
 insulationTemperatureCapacity: "-260°C"
 ---
 
-import { SingleInsulatedTable } from "@/components/react/data-table/single-insulated/pfa/003-layer/table"
+import { WireDataTable } from "@/components/react/data-table";
+import { wireData } from "@/components/react/data-table/single-insulated/pfa/003-layer/data";
 
-<SingleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load /> 

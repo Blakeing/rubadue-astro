@@ -33,6 +33,7 @@ breakdown: "Approx. 6000 V"
 insulationTemperatureCapacity: "260°C"
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/pfa/0015-layer/table";
+import { WireDataTable } from "@/components/react/data-table";
+import { wireData } from "@/components/react/data-table/double-insulated/pfa/0015-layer/data";
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 
