@@ -1,0 +1,668 @@
+sheet,cell,formula
+Cover Sheet,B1,"=IF(AND(D9>4807,D5=1,D4>8),""CONSULT RUBADUE ENGINEERING WITH RESPECT TO THIS CONSTRUCTION."","""")"
+Cover Sheet,H3,"=IF(D5="""","""",IF(D3<26,K3,IF(D5=1,K4,IF(D5=2,K5,K6))))"
+Cover Sheet,H4,"=IFERROR(INDEX(litzBARE[#Data],MATCH(D4,litzBARE[AWG],0),MATCH(""MAX DCR"",litzBARE[#Headers],0)),"""")"
+Cover Sheet,D5,=H33
+Cover Sheet,H5,"=IFERROR(((H4/D3)*H3)/1000,"""")"
+Cover Sheet,D6,"=IF(H33=1,""Type 1"",IF(AND(D4<32,D3>M10),""Type 2"",""Select Type""))"
+Cover Sheet,H6,"=IFERROR(H5/0.3048,"""")"
+Cover Sheet,D7,"=IF(D6="""",""SELECT LITZ TYPE"",IF(D6=""Type 1"",VLOOKUP(D5,TYPE1,4,0),IF(AND(D5=4,D6=""TYPE 2"",D4<44),1.363,VLOOKUP(D5,TYPE2,4,0))))"
+Cover Sheet,E7,"=IF(AND(D5>3,D6=""Type 1""),""PLEASE CONSULT RUBADUE ENGINEERING FOR TYPE 1 LITZ CONSTRUCTIONS REQUIRING 4+ OPERATIONS."","""")"
+Cover Sheet,D8,"=IF(D6="""",""SELECT LITZ TYPE"",IF(D6=""Type 1"",VLOOKUP(D5,TYPE1,5,0),VLOOKUP(D5,TYPE2,5,0)))"
+Cover Sheet,E8,"=IF(AND(D5>3,D6=""Type 1""),""PLEASE CONSULT RUBADUE ENGINEERING FOR TYPE 1 LITZ CONSTRUCTIONS REQUIRING 4+ OPERATIONS."","""")"
+Cover Sheet,D9,"=IFERROR(INDEX(litzBARE[#Data],MATCH(D4,litzBARE[AWG],0),MATCH(""CMA SOLID"",litzBARE[#Headers],0))*$D$3,"""")"
+Cover Sheet,I9,"=""Default Litz Construction - ""&D6"
+Cover Sheet,D10,"=IFERROR($D$9*0.000506707,"""")"
+Cover Sheet,F10,"=IFERROR(IF((INDEX(awg_Stranded[],MATCH(D9,awg_Stranded[Min CMA],-1),1)+1)>50,"""",(INDEX(awg_Stranded[],MATCH(D9,awg_Stranded[Min CMA],-1),1)+1)&"" AWG""),"""")"
+Cover Sheet,I10,"=IF(H33=1,Q25,IF(D6=""Type 1"",VLOOKUP(D5,P25:Q27,2,0),VLOOKUP(D5,P28:Q32,2,0)))"
+Cover Sheet,M10,"=VLOOKUP(D4,MAXENDS,2,0)"
+Cover Sheet,B11,"=IF(AND(D9>4807,D5=1,D4>8),""CONSULT RUBADUE ENGINEERING WITH RESPECT TO THIS CONSTRUCTION."","""")"
+Cover Sheet,B14,=C14-5
+Cover Sheet,C14,=D14-5
+Cover Sheet,D14,=E14-5
+Cover Sheet,E14,=F14-5
+Cover Sheet,F14,=G14-5
+Cover Sheet,G14,"=IF(MOD(H14,5)=0,H14-5,ROUNDDOWN(H14,-1)+5)"
+Cover Sheet,H14,=D3
+Cover Sheet,I14,"=IF(MOD(H14,5)=0,H14+5,ROUNDUP(H14,-1))"
+Cover Sheet,J14,"=IF(MOD(I14,5)=0,I14+5,ROUNDUP(I14,-1))"
+Cover Sheet,K14,=J14+5
+Cover Sheet,L14,=K14+5
+Cover Sheet,M14,=L14+5
+Cover Sheet,B15,"=IFERROR(MOD(B14,5)=0,"""")"
+Cover Sheet,C15,"=IFERROR(MOD(C14,5)=0,"""")"
+Cover Sheet,D15,"=IFERROR(MOD(D14,5)=0,"""")"
+Cover Sheet,E15,"=IFERROR(MOD(E14,5)=0,"""")"
+Cover Sheet,F15,"=IFERROR(MOD(F14,5)=0,"""")"
+Cover Sheet,G15,"=IFERROR(MOD(G14,5)=0,"""")"
+Cover Sheet,H15,"=IFERROR(MOD(H14,5)=0,"""")"
+Cover Sheet,I15,"=IFERROR(MOD(I14,5)=0,"""")"
+Cover Sheet,J15,"=IFERROR(MOD(J14,5)=0,"""")"
+Cover Sheet,K15,"=IFERROR(MOD(K14,5)=0,"""")"
+Cover Sheet,L15,"=IFERROR(MOD(L14,5)=0,"""")"
+Cover Sheet,M15,"=IFERROR(MOD(M14,5)=0,"""")"
+Cover Sheet,B16,"=MOD(B14,3)=0"
+Cover Sheet,C16,"=MOD(C14,3)=0"
+Cover Sheet,D16,"=MOD(D14,3)=0"
+Cover Sheet,E16,"=MOD(E14,3)=0"
+Cover Sheet,F16,"=MOD(F14,3)=0"
+Cover Sheet,G16,"=MOD(G14,3)=0"
+Cover Sheet,H16,"=MOD(H14,3)=0"
+Cover Sheet,I16,"=MOD(I14,3)=0"
+Cover Sheet,J16,"=MOD(J14,3)=0"
+Cover Sheet,K16,"=MOD(K14,3)=0"
+Cover Sheet,L16,"=MOD(L14,3)=0"
+Cover Sheet,M16,"=MOD(M14,3)=0"
+Cover Sheet,B17,"=MOD(B14,4)=0"
+Cover Sheet,C17,"=MOD(C14,4)=0"
+Cover Sheet,D17,"=MOD(D14,4)=0"
+Cover Sheet,E17,"=MOD(E14,4)=0"
+Cover Sheet,F17,"=MOD(F14,4)=0"
+Cover Sheet,G17,"=MOD(G14,4)=0"
+Cover Sheet,H17,"=MOD(H14,4)=0"
+Cover Sheet,I17,"=MOD(I14,4)=0"
+Cover Sheet,J17,"=MOD(J14,4)=0"
+Cover Sheet,K17,"=MOD(K14,4)=0"
+Cover Sheet,L17,"=MOD(L14,4)=0"
+Cover Sheet,M17,"=MOD(M14,4)=0"
+Cover Sheet,B18,"=IF($D4<49,IF(B14>NOOFENDSMAX,IF(B15=TRUE,B14/5,IF(B16=TRUE,B14/3,IF(B17=TRUE,B14/4,""N/A""))),""N/A""),IF(B14<21,""N/A"",IF(AND(B15=TRUE,B14/5>9),B14/5,IF(AND(B16=TRUE,B14/3>9),B14/3,IF(AND(B17=TRUE,B14/4>9),B14/4,""N/A"")))))"
+Cover Sheet,C18,"=IF($D4<49,IF(C14>NOOFENDSMAX,IF(C15=TRUE,C14/5,IF(C16=TRUE,C14/3,IF(C17=TRUE,C14/4,""N/A""))),""N/A""),IF(C14<21,""N/A"",IF(AND(C15=TRUE,C14/5>9),C14/5,IF(AND(C16=TRUE,C14/3>9),C14/3,IF(AND(C17=TRUE,C14/4>9),C14/4,""N/A"")))))"
+Cover Sheet,D18,"=IF($D4<49,IF(D14>NOOFENDSMAX,IF(D15=TRUE,D14/5,IF(D16=TRUE,D14/3,IF(D17=TRUE,D14/4,""N/A""))),""N/A""),IF(D14<21,""N/A"",IF(AND(D15=TRUE,D14/5>9),D14/5,IF(AND(D16=TRUE,D14/3>9),D14/3,IF(AND(D17=TRUE,D14/4>9),D14/4,""N/A"")))))"
+Cover Sheet,E18,"=IF($D4<49,IF(E14>NOOFENDSMAX,IF(E15=TRUE,E14/5,IF(E16=TRUE,E14/3,IF(E17=TRUE,E14/4,""N/A""))),""N/A""),IF(E14<21,""N/A"",IF(AND(E15=TRUE,E14/5>9),E14/5,IF(AND(E16=TRUE,E14/3>9),E14/3,IF(AND(E17=TRUE,E14/4>9),E14/4,""N/A"")))))"
+Cover Sheet,F18,"=IF($D4<49,IF(F14>NOOFENDSMAX,IF(F15=TRUE,F14/5,IF(F16=TRUE,F14/3,IF(F17=TRUE,F14/4,""N/A""))),""N/A""),IF(F14<21,""N/A"",IF(AND(F15=TRUE,F14/5>9),F14/5,IF(AND(F16=TRUE,F14/3>9),F14/3,IF(AND(F17=TRUE,F14/4>9),F14/4,""N/A"")))))"
+Cover Sheet,G18,"=IF($D4<49,IF(G14>NOOFENDSMAX,IF(G15=TRUE,G14/5,IF(G16=TRUE,G14/3,IF(G17=TRUE,G14/4,""N/A""))),""N/A""),IF(G14<21,""N/A"",IF(AND(G15=TRUE,G14/5>9),G14/5,IF(AND(G16=TRUE,G14/3>9),G14/3,IF(AND(G17=TRUE,G14/4>9),G14/4,""N/A"")))))"
+Cover Sheet,H18,"=IF($D4<49,IF(H14>NOOFENDSMAX,IF(H15=TRUE,H14/5,IF(H16=TRUE,H14/3,IF(H17=TRUE,H14/4,""N/A""))),""N/A""),IF(H14<21,""N/A"",IF(AND(H15=TRUE,H14/5>9),H14/5,IF(AND(H16=TRUE,H14/3>9),H14/3,IF(AND(H17=TRUE,H14/4>9),H14/4,""N/A"")))))"
+Cover Sheet,I18,"=IF($D4<49,IF(I14>NOOFENDSMAX,IF(I15=TRUE,I14/5,IF(I16=TRUE,I14/3,IF(I17=TRUE,I14/4,""N/A""))),""N/A""),IF(I14<21,""N/A"",IF(AND(I15=TRUE,I14/5>9),I14/5,IF(AND(I16=TRUE,I14/3>9),I14/3,IF(AND(I17=TRUE,I14/4>9),I14/4,""N/A"")))))"
+Cover Sheet,J18,"=IF($D4<49,IF(J14>NOOFENDSMAX,IF(J15=TRUE,J14/5,IF(J16=TRUE,J14/3,IF(J17=TRUE,J14/4,""N/A""))),""N/A""),IF(J14<21,""N/A"",IF(AND(J15=TRUE,J14/5>9),J14/5,IF(AND(J16=TRUE,J14/3>9),J14/3,IF(AND(J17=TRUE,J14/4>9),J14/4,""N/A"")))))"
+Cover Sheet,K18,"=IF($D4<49,IF(K14>NOOFENDSMAX,IF(K15=TRUE,K14/5,IF(K16=TRUE,K14/3,IF(K17=TRUE,K14/4,""N/A""))),""N/A""),IF(K14<21,""N/A"",IF(AND(K15=TRUE,K14/5>9),K14/5,IF(AND(K16=TRUE,K14/3>9),K14/3,IF(AND(K17=TRUE,K14/4>9),K14/4,""N/A"")))))"
+Cover Sheet,L18,"=IF($D4<49,IF(L14>NOOFENDSMAX,IF(L15=TRUE,L14/5,IF(L16=TRUE,L14/3,IF(L17=TRUE,L14/4,""N/A""))),""N/A""),IF(L14<21,""N/A"",IF(AND(L15=TRUE,L14/5>9),L14/5,IF(AND(L16=TRUE,L14/3>9),L14/3,IF(AND(L17=TRUE,L14/4>9),L14/4,""N/A"")))))"
+Cover Sheet,M18,"=IF($D4<49,IF(M14>NOOFENDSMAX,IF(M15=TRUE,M14/5,IF(M16=TRUE,M14/3,IF(M17=TRUE,M14/4,""N/A""))),""N/A""),IF(M14<21,""N/A"",IF(AND(M15=TRUE,M14/5>9),M14/5,IF(AND(M16=TRUE,M14/3>9),M14/3,IF(AND(M17=TRUE,M14/4>9),M14/4,""N/A"")))))"
+Cover Sheet,B19,"=IF(B18=""N/A"","""",IFERROR(MOD(B18,5)=0,""""))"
+Cover Sheet,C19,"=IF(C18=""N/A"","""",IFERROR(MOD(C18,5)=0,""""))"
+Cover Sheet,D19,"=IF(D18=""N/A"","""",IFERROR(MOD(D18,5)=0,""""))"
+Cover Sheet,E19,"=IF(E18=""N/A"","""",IFERROR(MOD(E18,5)=0,""""))"
+Cover Sheet,F19,"=IF(F18=""N/A"","""",IFERROR(MOD(F18,5)=0,""""))"
+Cover Sheet,G19,"=IF(G18=""N/A"","""",IFERROR(MOD(G18,5)=0,""""))"
+Cover Sheet,H19,"=IF(H18=""N/A"","""",IFERROR(MOD(H18,5)=0,""""))"
+Cover Sheet,I19,"=IF(I18=""N/A"","""",IFERROR(MOD(I18,5)=0,""""))"
+Cover Sheet,J19,"=IF(J18=""N/A"","""",IFERROR(MOD(J18,5)=0,""""))"
+Cover Sheet,K19,"=IF(K18=""N/A"","""",IFERROR(MOD(K18,5)=0,""""))"
+Cover Sheet,L19,"=IF(L18=""N/A"","""",IFERROR(MOD(L18,5)=0,""""))"
+Cover Sheet,M19,"=IF(M18=""N/A"","""",IFERROR(MOD(M18,5)=0,""""))"
+Cover Sheet,B20,"=IF(B18=""N/A"","""",MOD(B18,3)=0)"
+Cover Sheet,C20,"=IF(C18=""N/A"","""",MOD(C18,3)=0)"
+Cover Sheet,D20,"=IF(D18=""N/A"","""",MOD(D18,3)=0)"
+Cover Sheet,E20,"=IF(E18=""N/A"","""",MOD(E18,3)=0)"
+Cover Sheet,F20,"=IF(F18=""N/A"","""",MOD(F18,3)=0)"
+Cover Sheet,G20,"=IF(G18=""N/A"","""",MOD(G18,3)=0)"
+Cover Sheet,H20,"=IF(H18=""N/A"","""",MOD(H18,3)=0)"
+Cover Sheet,I20,"=IF(I18=""N/A"","""",MOD(I18,3)=0)"
+Cover Sheet,J20,"=IF(J18=""N/A"","""",MOD(J18,3)=0)"
+Cover Sheet,K20,"=IF(K18=""N/A"","""",MOD(K18,3)=0)"
+Cover Sheet,L20,"=IF(L18=""N/A"","""",MOD(L18,3)=0)"
+Cover Sheet,M20,"=IF(M18=""N/A"","""",MOD(M18,3)=0)"
+Cover Sheet,B21,"=IF(B18=""N/A"","""",MOD(B18,4)=0)"
+Cover Sheet,C21,"=IF(C18=""N/A"","""",MOD(C18,4)=0)"
+Cover Sheet,D21,"=IF(D18=""N/A"","""",MOD(D18,4)=0)"
+Cover Sheet,E21,"=IF(E18=""N/A"","""",MOD(E18,4)=0)"
+Cover Sheet,F21,"=IF(F18=""N/A"","""",MOD(F18,4)=0)"
+Cover Sheet,G21,"=IF(G18=""N/A"","""",MOD(G18,4)=0)"
+Cover Sheet,H21,"=IF(H18=""N/A"","""",MOD(H18,4)=0)"
+Cover Sheet,I21,"=IF(I18=""N/A"","""",MOD(I18,4)=0)"
+Cover Sheet,J21,"=IF(J18=""N/A"","""",MOD(J18,4)=0)"
+Cover Sheet,K21,"=IF(K18=""N/A"","""",MOD(K18,4)=0)"
+Cover Sheet,L21,"=IF(L18=""N/A"","""",MOD(L18,4)=0)"
+Cover Sheet,M21,"=IF(M18=""N/A"","""",MOD(M18,4)=0)"
+Cover Sheet,B22,"=IF(B18=""N/A"",""N/A"",IF($D4<49,IF(B18>NOOFENDSMAX,IF(B19=TRUE,B18/5,IF(B20=TRUE,B18/3,IF(B21=TRUE,B18/4,""N/A""))),""N/A""),IF(B18<21,""N/A"",IF(AND(B19=TRUE,B18/5>9),B18/5,IF(AND(B20=TRUE,B18/3>9),B18/3,IF(AND(B21=TRUE,B18/4>9),B18/4,""N/A""))))))"
+Cover Sheet,C22,"=IF(C18=""N/A"",""N/A"",IF($D4<49,IF(C18>NOOFENDSMAX,IF(C19=TRUE,C18/5,IF(C20=TRUE,C18/3,IF(C21=TRUE,C18/4,""N/A""))),""N/A""),IF(C18<21,""N/A"",IF(AND(C19=TRUE,C18/5>9),C18/5,IF(AND(C20=TRUE,C18/3>9),C18/3,IF(AND(C21=TRUE,C18/4>9),C18/4,""N/A""))))))"
+Cover Sheet,D22,"=IF(D18=""N/A"",""N/A"",IF($D4<49,IF(D18>NOOFENDSMAX,IF(D19=TRUE,D18/5,IF(D20=TRUE,D18/3,IF(D21=TRUE,D18/4,""N/A""))),""N/A""),IF(D18<21,""N/A"",IF(AND(D19=TRUE,D18/5>9),D18/5,IF(AND(D20=TRUE,D18/3>9),D18/3,IF(AND(D21=TRUE,D18/4>9),D18/4,""N/A""))))))"
+Cover Sheet,E22,"=IF(E18=""N/A"",""N/A"",IF($D4<49,IF(E18>NOOFENDSMAX,IF(E19=TRUE,E18/5,IF(E20=TRUE,E18/3,IF(E21=TRUE,E18/4,""N/A""))),""N/A""),IF(E18<21,""N/A"",IF(AND(E19=TRUE,E18/5>9),E18/5,IF(AND(E20=TRUE,E18/3>9),E18/3,IF(AND(E21=TRUE,E18/4>9),E18/4,""N/A""))))))"
+Cover Sheet,F22,"=IF(F18=""N/A"",""N/A"",IF($D4<49,IF(F18>NOOFENDSMAX,IF(F19=TRUE,F18/5,IF(F20=TRUE,F18/3,IF(F21=TRUE,F18/4,""N/A""))),""N/A""),IF(F18<21,""N/A"",IF(AND(F19=TRUE,F18/5>9),F18/5,IF(AND(F20=TRUE,F18/3>9),F18/3,IF(AND(F21=TRUE,F18/4>9),F18/4,""N/A""))))))"
+Cover Sheet,G22,"=IF(G18=""N/A"",""N/A"",IF($D4<49,IF(G18>NOOFENDSMAX,IF(G19=TRUE,G18/5,IF(G20=TRUE,G18/3,IF(G21=TRUE,G18/4,""N/A""))),""N/A""),IF(G18<21,""N/A"",IF(AND(G19=TRUE,G18/5>9),G18/5,IF(AND(G20=TRUE,G18/3>9),G18/3,IF(AND(G21=TRUE,G18/4>9),G18/4,""N/A""))))))"
+Cover Sheet,H22,"=IF(H18=""N/A"",""N/A"",IF($D4<49,IF(H18>NOOFENDSMAX,IF(H19=TRUE,H18/5,IF(H20=TRUE,H18/3,IF(H21=TRUE,H18/4,""N/A""))),""N/A""),IF(H18<21,""N/A"",IF(AND(H19=TRUE,H18/5>9),H18/5,IF(AND(H20=TRUE,H18/3>9),H18/3,IF(AND(H21=TRUE,H18/4>9),H18/4,""N/A""))))))"
+Cover Sheet,I22,"=IF(I18=""N/A"",""N/A"",IF($D4<49,IF(I18>NOOFENDSMAX,IF(I19=TRUE,I18/5,IF(I20=TRUE,I18/3,IF(I21=TRUE,I18/4,""N/A""))),""N/A""),IF(I18<21,""N/A"",IF(AND(I19=TRUE,I18/5>9),I18/5,IF(AND(I20=TRUE,I18/3>9),I18/3,IF(AND(I21=TRUE,I18/4>9),I18/4,""N/A""))))))"
+Cover Sheet,J22,"=IF(J18=""N/A"",""N/A"",IF($D4<49,IF(J18>NOOFENDSMAX,IF(J19=TRUE,J18/5,IF(J20=TRUE,J18/3,IF(J21=TRUE,J18/4,""N/A""))),""N/A""),IF(J18<21,""N/A"",IF(AND(J19=TRUE,J18/5>9),J18/5,IF(AND(J20=TRUE,J18/3>9),J18/3,IF(AND(J21=TRUE,J18/4>9),J18/4,""N/A""))))))"
+Cover Sheet,K22,"=IF(K18=""N/A"",""N/A"",IF($D4<49,IF(K18>NOOFENDSMAX,IF(K19=TRUE,K18/5,IF(K20=TRUE,K18/3,IF(K21=TRUE,K18/4,""N/A""))),""N/A""),IF(K18<21,""N/A"",IF(AND(K19=TRUE,K18/5>9),K18/5,IF(AND(K20=TRUE,K18/3>9),K18/3,IF(AND(K21=TRUE,K18/4>9),K18/4,""N/A""))))))"
+Cover Sheet,L22,"=IF(L18=""N/A"",""N/A"",IF($D4<49,IF(L18>NOOFENDSMAX,IF(L19=TRUE,L18/5,IF(L20=TRUE,L18/3,IF(L21=TRUE,L18/4,""N/A""))),""N/A""),IF(L18<21,""N/A"",IF(AND(L19=TRUE,L18/5>9),L18/5,IF(AND(L20=TRUE,L18/3>9),L18/3,IF(AND(L21=TRUE,L18/4>9),L18/4,""N/A""))))))"
+Cover Sheet,M22,"=IF(M18=""N/A"",""N/A"",IF($D4<49,IF(M18>NOOFENDSMAX,IF(M19=TRUE,M18/5,IF(M20=TRUE,M18/3,IF(M21=TRUE,M18/4,""N/A""))),""N/A""),IF(M18<21,""N/A"",IF(AND(M19=TRUE,M18/5>9),M18/5,IF(AND(M20=TRUE,M18/3>9),M18/3,IF(AND(M21=TRUE,M18/4>9),M18/4,""N/A""))))))"
+Cover Sheet,B23,"=IF(B22=""N/A"","""",IFERROR(MOD(B22,5)=0,""""))"
+Cover Sheet,C23,"=IF(C22=""N/A"","""",IFERROR(MOD(C22,5)=0,""""))"
+Cover Sheet,D23,"=IF(D22=""N/A"","""",IFERROR(MOD(D22,5)=0,""""))"
+Cover Sheet,E23,"=IF(E22=""N/A"","""",IFERROR(MOD(E22,5)=0,""""))"
+Cover Sheet,F23,"=IF(F22=""N/A"","""",IFERROR(MOD(F22,5)=0,""""))"
+Cover Sheet,G23,"=IF(G22=""N/A"","""",IFERROR(MOD(G22,5)=0,""""))"
+Cover Sheet,H23,"=IF(H22=""N/A"","""",IFERROR(MOD(H22,5)=0,""""))"
+Cover Sheet,I23,"=IF(I22=""N/A"","""",IFERROR(MOD(I22,5)=0,""""))"
+Cover Sheet,J23,"=IF(J22=""N/A"","""",IFERROR(MOD(J22,5)=0,""""))"
+Cover Sheet,K23,"=IF(K22=""N/A"","""",IFERROR(MOD(K22,5)=0,""""))"
+Cover Sheet,L23,"=IF(L22=""N/A"","""",IFERROR(MOD(L22,5)=0,""""))"
+Cover Sheet,M23,"=IF(M22=""N/A"","""",IFERROR(MOD(M22,5)=0,""""))"
+Cover Sheet,B24,"=IF(B22=""N/A"","""",MOD(B22,3)=0)"
+Cover Sheet,C24,"=IF(C22=""N/A"","""",MOD(C22,3)=0)"
+Cover Sheet,D24,"=IF(D22=""N/A"","""",MOD(D22,3)=0)"
+Cover Sheet,E24,"=IF(E22=""N/A"","""",MOD(E22,3)=0)"
+Cover Sheet,F24,"=IF(F22=""N/A"","""",MOD(F22,3)=0)"
+Cover Sheet,G24,"=IF(G22=""N/A"","""",MOD(G22,3)=0)"
+Cover Sheet,H24,"=IF(H22=""N/A"","""",MOD(H22,3)=0)"
+Cover Sheet,I24,"=IF(I22=""N/A"","""",MOD(I22,3)=0)"
+Cover Sheet,J24,"=IF(J22=""N/A"","""",MOD(J22,3)=0)"
+Cover Sheet,K24,"=IF(K22=""N/A"","""",MOD(K22,3)=0)"
+Cover Sheet,L24,"=IF(L22=""N/A"","""",MOD(L22,3)=0)"
+Cover Sheet,M24,"=IF(M22=""N/A"","""",MOD(M22,3)=0)"
+Cover Sheet,B25,"=IF(B22=""N/A"","""",MOD(B22,4)=0)"
+Cover Sheet,C25,"=IF(C22=""N/A"","""",MOD(C22,4)=0)"
+Cover Sheet,D25,"=IF(D22=""N/A"","""",MOD(D22,4)=0)"
+Cover Sheet,E25,"=IF(E22=""N/A"","""",MOD(E22,4)=0)"
+Cover Sheet,F25,"=IF(F22=""N/A"","""",MOD(F22,4)=0)"
+Cover Sheet,G25,"=IF(G22=""N/A"","""",MOD(G22,4)=0)"
+Cover Sheet,H25,"=IF(H22=""N/A"","""",MOD(H22,4)=0)"
+Cover Sheet,I25,"=IF(I22=""N/A"","""",MOD(I22,4)=0)"
+Cover Sheet,J25,"=IF(J22=""N/A"","""",MOD(J22,4)=0)"
+Cover Sheet,K25,"=IF(K22=""N/A"","""",MOD(K22,4)=0)"
+Cover Sheet,L25,"=IF(L22=""N/A"","""",MOD(L22,4)=0)"
+Cover Sheet,M25,"=IF(M22=""N/A"","""",MOD(M22,4)=0)"
+Cover Sheet,B26,"=IF(B22=""N/A"",""N/A"",IF($D4<49,IF(B22>NOOFENDSMAX,IF(B23=TRUE,B22/5,IF(B24=TRUE,B22/3,IF(B25=TRUE,B22/4,""N/A""))),""N/A""),IF(B22<21,""N/A"",IF(AND(B23=TRUE,B22/5>9),B22/5,IF(AND(B24=TRUE,B22/3>9),B22/3,IF(AND(B25=TRUE,B22/4>9),B22/4,""N/A""))))))"
+Cover Sheet,C26,"=IF(C22=""N/A"",""N/A"",IF($D4<49,IF(C22>NOOFENDSMAX,IF(C23=TRUE,C22/5,IF(C24=TRUE,C22/3,IF(C25=TRUE,C22/4,""N/A""))),""N/A""),IF(C22<21,""N/A"",IF(AND(C23=TRUE,C22/5>9),C22/5,IF(AND(C24=TRUE,C22/3>9),C22/3,IF(AND(C25=TRUE,C22/4>9),C22/4,""N/A""))))))"
+Cover Sheet,D26,"=IF(D22=""N/A"",""N/A"",IF($D4<49,IF(D22>NOOFENDSMAX,IF(D23=TRUE,D22/5,IF(D24=TRUE,D22/3,IF(D25=TRUE,D22/4,""N/A""))),""N/A""),IF(D22<21,""N/A"",IF(AND(D23=TRUE,D22/5>9),D22/5,IF(AND(D24=TRUE,D22/3>9),D22/3,IF(AND(D25=TRUE,D22/4>9),D22/4,""N/A""))))))"
+Cover Sheet,E26,"=IF(E22=""N/A"",""N/A"",IF($D4<49,IF(E22>NOOFENDSMAX,IF(E23=TRUE,E22/5,IF(E24=TRUE,E22/3,IF(E25=TRUE,E22/4,""N/A""))),""N/A""),IF(E22<21,""N/A"",IF(AND(E23=TRUE,E22/5>9),E22/5,IF(AND(E24=TRUE,E22/3>9),E22/3,IF(AND(E25=TRUE,E22/4>9),E22/4,""N/A""))))))"
+Cover Sheet,F26,"=IF(F22=""N/A"",""N/A"",IF($D4<49,IF(F22>NOOFENDSMAX,IF(F23=TRUE,F22/5,IF(F24=TRUE,F22/3,IF(F25=TRUE,F22/4,""N/A""))),""N/A""),IF(F22<21,""N/A"",IF(AND(F23=TRUE,F22/5>9),F22/5,IF(AND(F24=TRUE,F22/3>9),F22/3,IF(AND(F25=TRUE,F22/4>9),F22/4,""N/A""))))))"
+Cover Sheet,G26,"=IF(G22=""N/A"",""N/A"",IF($D4<49,IF(G22>NOOFENDSMAX,IF(G23=TRUE,G22/5,IF(G24=TRUE,G22/3,IF(G25=TRUE,G22/4,""N/A""))),""N/A""),IF(G22<21,""N/A"",IF(AND(G23=TRUE,G22/5>9),G22/5,IF(AND(G24=TRUE,G22/3>9),G22/3,IF(AND(G25=TRUE,G22/4>9),G22/4,""N/A""))))))"
+Cover Sheet,H26,"=IF(H22=""N/A"",""N/A"",IF($D4<49,IF(H22>NOOFENDSMAX,IF(H23=TRUE,H22/5,IF(H24=TRUE,H22/3,IF(H25=TRUE,H22/4,""N/A""))),""N/A""),IF(H22<21,""N/A"",IF(AND(H23=TRUE,H22/5>9),H22/5,IF(AND(H24=TRUE,H22/3>9),H22/3,IF(AND(H25=TRUE,H22/4>9),H22/4,""N/A""))))))"
+Cover Sheet,I26,"=IF(I22=""N/A"",""N/A"",IF($D4<49,IF(I22>NOOFENDSMAX,IF(I23=TRUE,I22/5,IF(I24=TRUE,I22/3,IF(I25=TRUE,I22/4,""N/A""))),""N/A""),IF(I22<21,""N/A"",IF(AND(I23=TRUE,I22/5>9),I22/5,IF(AND(I24=TRUE,I22/3>9),I22/3,IF(AND(I25=TRUE,I22/4>9),I22/4,""N/A""))))))"
+Cover Sheet,J26,"=IF(J22=""N/A"",""N/A"",IF($D4<49,IF(J22>NOOFENDSMAX,IF(J23=TRUE,J22/5,IF(J24=TRUE,J22/3,IF(J25=TRUE,J22/4,""N/A""))),""N/A""),IF(J22<21,""N/A"",IF(AND(J23=TRUE,J22/5>9),J22/5,IF(AND(J24=TRUE,J22/3>9),J22/3,IF(AND(J25=TRUE,J22/4>9),J22/4,""N/A""))))))"
+Cover Sheet,K26,"=IF(K22=""N/A"",""N/A"",IF($D4<49,IF(K22>NOOFENDSMAX,IF(K23=TRUE,K22/5,IF(K24=TRUE,K22/3,IF(K25=TRUE,K22/4,""N/A""))),""N/A""),IF(K22<21,""N/A"",IF(AND(K23=TRUE,K22/5>9),K22/5,IF(AND(K24=TRUE,K22/3>9),K22/3,IF(AND(K25=TRUE,K22/4>9),K22/4,""N/A""))))))"
+Cover Sheet,L26,"=IF(L22=""N/A"",""N/A"",IF($D4<49,IF(L22>NOOFENDSMAX,IF(L23=TRUE,L22/5,IF(L24=TRUE,L22/3,IF(L25=TRUE,L22/4,""N/A""))),""N/A""),IF(L22<21,""N/A"",IF(AND(L23=TRUE,L22/5>9),L22/5,IF(AND(L24=TRUE,L22/3>9),L22/3,IF(AND(L25=TRUE,L22/4>9),L22/4,""N/A""))))))"
+Cover Sheet,M26,"=IF(M22=""N/A"",""N/A"",IF($D4<49,IF(M22>NOOFENDSMAX,IF(M23=TRUE,M22/5,IF(M24=TRUE,M22/3,IF(M25=TRUE,M22/4,""N/A""))),""N/A""),IF(M22<21,""N/A"",IF(AND(M23=TRUE,M22/5>9),M22/5,IF(AND(M24=TRUE,M22/3>9),M22/3,IF(AND(M25=TRUE,M22/4>9),M22/4,""N/A""))))))"
+Cover Sheet,B27,"=IF(B26=""N/A"","""",IFERROR(MOD(B26,5)=0,""""))"
+Cover Sheet,C27,"=IF(C26=""N/A"","""",IFERROR(MOD(C26,5)=0,""""))"
+Cover Sheet,D27,"=IF(D26=""N/A"","""",IFERROR(MOD(D26,5)=0,""""))"
+Cover Sheet,E27,"=IF(E26=""N/A"","""",IFERROR(MOD(E26,5)=0,""""))"
+Cover Sheet,F27,"=IF(F26=""N/A"","""",IFERROR(MOD(F26,5)=0,""""))"
+Cover Sheet,G27,"=IF(G26=""N/A"","""",IFERROR(MOD(G26,5)=0,""""))"
+Cover Sheet,H27,"=IF(H26=""N/A"","""",IFERROR(MOD(H26,5)=0,""""))"
+Cover Sheet,I27,"=IF(I26=""N/A"","""",IFERROR(MOD(I26,5)=0,""""))"
+Cover Sheet,J27,"=IF(J26=""N/A"","""",IFERROR(MOD(J26,5)=0,""""))"
+Cover Sheet,K27,"=IF(K26=""N/A"","""",IFERROR(MOD(K26,5)=0,""""))"
+Cover Sheet,L27,"=IF(L26=""N/A"","""",IFERROR(MOD(L26,5)=0,""""))"
+Cover Sheet,M27,"=IF(M26=""N/A"","""",IFERROR(MOD(M26,5)=0,""""))"
+Cover Sheet,B28,"=IF(B26=""N/A"","""",MOD(B26,3)=0)"
+Cover Sheet,C28,"=IF(C26=""N/A"","""",MOD(C26,3)=0)"
+Cover Sheet,D28,"=IF(D26=""N/A"","""",MOD(D26,3)=0)"
+Cover Sheet,E28,"=IF(E26=""N/A"","""",MOD(E26,3)=0)"
+Cover Sheet,F28,"=IF(F26=""N/A"","""",MOD(F26,3)=0)"
+Cover Sheet,G28,"=IF(G26=""N/A"","""",MOD(G26,3)=0)"
+Cover Sheet,H28,"=IF(H26=""N/A"","""",MOD(H26,3)=0)"
+Cover Sheet,I28,"=IF(I26=""N/A"","""",MOD(I26,3)=0)"
+Cover Sheet,J28,"=IF(J26=""N/A"","""",MOD(J26,3)=0)"
+Cover Sheet,K28,"=IF(K26=""N/A"","""",MOD(K26,3)=0)"
+Cover Sheet,L28,"=IF(L26=""N/A"","""",MOD(L26,3)=0)"
+Cover Sheet,M28,"=IF(M26=""N/A"","""",MOD(M26,3)=0)"
+Cover Sheet,B29,"=IF(B26=""N/A"","""",MOD(B26,4)=0)"
+Cover Sheet,C29,"=IF(C26=""N/A"","""",MOD(C26,4)=0)"
+Cover Sheet,D29,"=IF(D26=""N/A"","""",MOD(D26,4)=0)"
+Cover Sheet,E29,"=IF(E26=""N/A"","""",MOD(E26,4)=0)"
+Cover Sheet,F29,"=IF(F26=""N/A"","""",MOD(F26,4)=0)"
+Cover Sheet,G29,"=IF(G26=""N/A"","""",MOD(G26,4)=0)"
+Cover Sheet,H29,"=IF(H26=""N/A"","""",MOD(H26,4)=0)"
+Cover Sheet,I29,"=IF(I26=""N/A"","""",MOD(I26,4)=0)"
+Cover Sheet,J29,"=IF(J26=""N/A"","""",MOD(J26,4)=0)"
+Cover Sheet,K29,"=IF(K26=""N/A"","""",MOD(K26,4)=0)"
+Cover Sheet,L29,"=IF(L26=""N/A"","""",MOD(L26,4)=0)"
+Cover Sheet,M29,"=IF(M26=""N/A"","""",MOD(M26,4)=0)"
+Cover Sheet,B30,"=IF(B26=""N/A"",""N/A"",IF($D4<49,IF(B26>NOOFENDSMAX,IF(B27=TRUE,B26/5,IF(B28=TRUE,B26/3,IF(B29=TRUE,B26/4,""N/A""))),""N/A""),IF(B26<21,""N/A"",IF(AND(B27=TRUE,B26/5>9),B26/5,IF(AND(B28=TRUE,B26/3>9),B26/3,IF(AND(B29=TRUE,B26/4>9),B26/4,""N/A""))))))"
+Cover Sheet,C30,"=IF(C26=""N/A"",""N/A"",IF($D4<49,IF(C26>NOOFENDSMAX,IF(C27=TRUE,C26/5,IF(C28=TRUE,C26/3,IF(C29=TRUE,C26/4,""N/A""))),""N/A""),IF(C26<21,""N/A"",IF(AND(C27=TRUE,C26/5>9),C26/5,IF(AND(C28=TRUE,C26/3>9),C26/3,IF(AND(C29=TRUE,C26/4>9),C26/4,""N/A""))))))"
+Cover Sheet,D30,"=IF(D26=""N/A"",""N/A"",IF($D4<49,IF(D26>NOOFENDSMAX,IF(D27=TRUE,D26/5,IF(D28=TRUE,D26/3,IF(D29=TRUE,D26/4,""N/A""))),""N/A""),IF(D26<21,""N/A"",IF(AND(D27=TRUE,D26/5>9),D26/5,IF(AND(D28=TRUE,D26/3>9),D26/3,IF(AND(D29=TRUE,D26/4>9),D26/4,""N/A""))))))"
+Cover Sheet,E30,"=IF(E26=""N/A"",""N/A"",IF($D4<49,IF(E26>NOOFENDSMAX,IF(E27=TRUE,E26/5,IF(E28=TRUE,E26/3,IF(E29=TRUE,E26/4,""N/A""))),""N/A""),IF(E26<21,""N/A"",IF(AND(E27=TRUE,E26/5>9),E26/5,IF(AND(E28=TRUE,E26/3>9),E26/3,IF(AND(E29=TRUE,E26/4>9),E26/4,""N/A""))))))"
+Cover Sheet,F30,"=IF(F26=""N/A"",""N/A"",IF($D4<49,IF(F26>NOOFENDSMAX,IF(F27=TRUE,F26/5,IF(F28=TRUE,F26/3,IF(F29=TRUE,F26/4,""N/A""))),""N/A""),IF(F26<21,""N/A"",IF(AND(F27=TRUE,F26/5>9),F26/5,IF(AND(F28=TRUE,F26/3>9),F26/3,IF(AND(F29=TRUE,F26/4>9),F26/4,""N/A""))))))"
+Cover Sheet,G30,"=IF(G26=""N/A"",""N/A"",IF($D4<49,IF(G26>NOOFENDSMAX,IF(G27=TRUE,G26/5,IF(G28=TRUE,G26/3,IF(G29=TRUE,G26/4,""N/A""))),""N/A""),IF(G26<21,""N/A"",IF(AND(G27=TRUE,G26/5>9),G26/5,IF(AND(G28=TRUE,G26/3>9),G26/3,IF(AND(G29=TRUE,G26/4>9),G26/4,""N/A""))))))"
+Cover Sheet,H30,"=IF(H26=""N/A"",""N/A"",IF($D4<49,IF(H26>NOOFENDSMAX,IF(H27=TRUE,H26/5,IF(H28=TRUE,H26/3,IF(H29=TRUE,H26/4,""N/A""))),""N/A""),IF(H26<21,""N/A"",IF(AND(H27=TRUE,H26/5>9),H26/5,IF(AND(H28=TRUE,H26/3>9),H26/3,IF(AND(H29=TRUE,H26/4>9),H26/4,""N/A""))))))"
+Cover Sheet,I30,"=IF(I26=""N/A"",""N/A"",IF($D4<49,IF(I26>NOOFENDSMAX,IF(I27=TRUE,I26/5,IF(I28=TRUE,I26/3,IF(I29=TRUE,I26/4,""N/A""))),""N/A""),IF(I26<21,""N/A"",IF(AND(I27=TRUE,I26/5>9),I26/5,IF(AND(I28=TRUE,I26/3>9),I26/3,IF(AND(I29=TRUE,I26/4>9),I26/4,""N/A""))))))"
+Cover Sheet,J30,"=IF(J26=""N/A"",""N/A"",IF($D4<49,IF(J26>NOOFENDSMAX,IF(J27=TRUE,J26/5,IF(J28=TRUE,J26/3,IF(J29=TRUE,J26/4,""N/A""))),""N/A""),IF(J26<21,""N/A"",IF(AND(J27=TRUE,J26/5>9),J26/5,IF(AND(J28=TRUE,J26/3>9),J26/3,IF(AND(J29=TRUE,J26/4>9),J26/4,""N/A""))))))"
+Cover Sheet,K30,"=IF(K26=""N/A"",""N/A"",IF($D4<49,IF(K26>NOOFENDSMAX,IF(K27=TRUE,K26/5,IF(K28=TRUE,K26/3,IF(K29=TRUE,K26/4,""N/A""))),""N/A""),IF(K26<21,""N/A"",IF(AND(K27=TRUE,K26/5>9),K26/5,IF(AND(K28=TRUE,K26/3>9),K26/3,IF(AND(K29=TRUE,K26/4>9),K26/4,""N/A""))))))"
+Cover Sheet,L30,"=IF(L26=""N/A"",""N/A"",IF($D4<49,IF(L26>NOOFENDSMAX,IF(L27=TRUE,L26/5,IF(L28=TRUE,L26/3,IF(L29=TRUE,L26/4,""N/A""))),""N/A""),IF(L26<21,""N/A"",IF(AND(L27=TRUE,L26/5>9),L26/5,IF(AND(L28=TRUE,L26/3>9),L26/3,IF(AND(L29=TRUE,L26/4>9),L26/4,""N/A""))))))"
+Cover Sheet,M30,"=IF(M26=""N/A"",""N/A"",IF($D4<49,IF(M26>NOOFENDSMAX,IF(M27=TRUE,M26/5,IF(M28=TRUE,M26/3,IF(M29=TRUE,M26/4,""N/A""))),""N/A""),IF(M26<21,""N/A"",IF(AND(M27=TRUE,M26/5>9),M26/5,IF(AND(M28=TRUE,M26/3>9),M26/3,IF(AND(M29=TRUE,M26/4>9),M26/4,""N/A""))))))"
+Cover Sheet,B31,"=IF(B30=""N/A"",IF(B26=""N/A"",IF(B22=""N/A"",IF(B18=""N/A"",B14,B18),B22),B26),B30)"
+Cover Sheet,C31,"=IF(C30=""N/A"",IF(C26=""N/A"",IF(C22=""N/A"",IF(C18=""N/A"",C14,C18),C22),C26),C30)"
+Cover Sheet,D31,"=IF(D30=""N/A"",IF(D26=""N/A"",IF(D22=""N/A"",IF(D18=""N/A"",D14,D18),D22),D26),D30)"
+Cover Sheet,E31,"=IF(E30=""N/A"",IF(E26=""N/A"",IF(E22=""N/A"",IF(E18=""N/A"",E14,E18),E22),E26),E30)"
+Cover Sheet,F31,"=IF(F30=""N/A"",IF(F26=""N/A"",IF(F22=""N/A"",IF(F18=""N/A"",F14,F18),F22),F26),F30)"
+Cover Sheet,G31,"=IF(G30=""N/A"",IF(G26=""N/A"",IF(G22=""N/A"",IF(G18=""N/A"",G14,G18),G22),G26),G30)"
+Cover Sheet,H31,"=IF(H30=""N/A"",IF(H26=""N/A"",IF(H22=""N/A"",IF(H18=""N/A"",H14,H18),H22),H26),H30)"
+Cover Sheet,I31,"=IF(I30=""N/A"",IF(I26=""N/A"",IF(I22=""N/A"",IF(I18=""N/A"",I14,I18),I22),I26),I30)"
+Cover Sheet,J31,"=IF(J30=""N/A"",IF(J26=""N/A"",IF(J22=""N/A"",IF(J18=""N/A"",J14,J18),J22),J26),J30)"
+Cover Sheet,K31,"=IF(K30=""N/A"",IF(K26=""N/A"",IF(K22=""N/A"",IF(K18=""N/A"",K14,K18),K22),K26),K30)"
+Cover Sheet,L31,"=IF(L30=""N/A"",IF(L26=""N/A"",IF(L22=""N/A"",IF(L18=""N/A"",L14,L18),L22),L26),L30)"
+Cover Sheet,M31,"=IF(M30=""N/A"",IF(M26=""N/A"",IF(M22=""N/A"",IF(M18=""N/A"",M14,M18),M22),M26),M30)"
+Cover Sheet,B32,"=IF($D4<32,IF(B31<($M10+1),TRUE,FALSE),IF($D4<47,IF(B31<67,TRUE,FALSE),IF($D4<49,IF(B31<25,TRUE,FALSE),IF(OR(B31<10,B31>20),FALSE,TRUE))))"
+Cover Sheet,C32,"=IF($D4<32,IF(C31<($M10+1),TRUE,FALSE),IF($D4<47,IF(C31<67,TRUE,FALSE),IF($D4<49,IF(C31<25,TRUE,FALSE),IF(OR(C31<10,C31>20),FALSE,TRUE))))"
+Cover Sheet,D32,"=IF($D4<32,IF(D31<($M10+1),TRUE,FALSE),IF($D4<47,IF(D31<67,TRUE,FALSE),IF($D4<49,IF(D31<25,TRUE,FALSE),IF(OR(D31<10,D31>20),FALSE,TRUE))))"
+Cover Sheet,E32,"=IF($D4<32,IF(E31<($M10+1),TRUE,FALSE),IF($D4<47,IF(E31<67,TRUE,FALSE),IF($D4<49,IF(E31<25,TRUE,FALSE),IF(OR(E31<10,E31>20),FALSE,TRUE))))"
+Cover Sheet,F32,"=IF($D4<32,IF(F31<($M10+1),TRUE,FALSE),IF($D4<47,IF(F31<67,TRUE,FALSE),IF($D4<49,IF(F31<25,TRUE,FALSE),IF(OR(F31<10,F31>20),FALSE,TRUE))))"
+Cover Sheet,G32,"=IF($D4<32,IF(G31<($M10+1),TRUE,FALSE),IF($D4<47,IF(G31<67,TRUE,FALSE),IF($D4<49,IF(G31<25,TRUE,FALSE),IF(OR(G31<10,G31>20),FALSE,TRUE))))"
+Cover Sheet,H32,"=IF($D4<32,IF(H31<($M10+1),TRUE,FALSE),IF($D4<47,IF(H31<67,TRUE,FALSE),IF($D4<49,IF(H31<25,TRUE,FALSE),IF(OR(H31<10,H31>20),FALSE,TRUE))))"
+Cover Sheet,I32,"=IF($D4<32,IF(I31<($M10+1),TRUE,FALSE),IF($D4<47,IF(I31<67,TRUE,FALSE),IF($D4<49,IF(I31<25,TRUE,FALSE),IF(OR(I31<10,I31>20),FALSE,TRUE))))"
+Cover Sheet,J32,"=IF($D4<32,IF(J31<($M10+1),TRUE,FALSE),IF($D4<47,IF(J31<67,TRUE,FALSE),IF($D4<49,IF(J31<25,TRUE,FALSE),IF(OR(J31<10,J31>20),FALSE,TRUE))))"
+Cover Sheet,K32,"=IF($D4<32,IF(K31<($M10+1),TRUE,FALSE),IF($D4<47,IF(K31<67,TRUE,FALSE),IF($D4<49,IF(K31<25,TRUE,FALSE),IF(OR(K31<10,K31>20),FALSE,TRUE))))"
+Cover Sheet,L32,"=IF($D4<32,IF(L31<($M10+1),TRUE,FALSE),IF($D4<47,IF(L31<67,TRUE,FALSE),IF($D4<49,IF(L31<25,TRUE,FALSE),IF(OR(L31<10,L31>20),FALSE,TRUE))))"
+Cover Sheet,M32,"=IF($D4<32,IF(M31<($M10+1),TRUE,FALSE),IF($D4<47,IF(M31<67,TRUE,FALSE),IF($D4<49,IF(M31<25,TRUE,FALSE),IF(OR(M31<10,M31>20),FALSE,TRUE))))"
+Cover Sheet,B33,"=IF(B32=FALSE,"""",IF(B30=""N/A"",IF(B26=""N/A"",IF(B22=""N/A"",IF(B18=""N/A"",1,2),3),4),5))"
+Cover Sheet,C33,"=IF(C32=FALSE,"""",IF(C30=""N/A"",IF(C26=""N/A"",IF(C22=""N/A"",IF(C18=""N/A"",1,2),3),4),5))"
+Cover Sheet,D33,"=IF(D32=FALSE,"""",IF(D30=""N/A"",IF(D26=""N/A"",IF(D22=""N/A"",IF(D18=""N/A"",1,2),3),4),5))"
+Cover Sheet,E33,"=IF(E32=FALSE,"""",IF(E30=""N/A"",IF(E26=""N/A"",IF(E22=""N/A"",IF(E18=""N/A"",1,2),3),4),5))"
+Cover Sheet,F33,"=IF(F32=FALSE,"""",IF(F30=""N/A"",IF(F26=""N/A"",IF(F22=""N/A"",IF(F18=""N/A"",1,2),3),4),5))"
+Cover Sheet,G33,"=IF(G32=FALSE,"""",IF(G30=""N/A"",IF(G26=""N/A"",IF(G22=""N/A"",IF(G18=""N/A"",1,2),3),4),5))"
+Cover Sheet,H33,"=IF(H32=FALSE,"""",IF(H30=""N/A"",IF(H26=""N/A"",IF(H22=""N/A"",IF(H18=""N/A"",1,2),3),4),5))"
+Cover Sheet,I33,"=IF(I32=FALSE,"""",IF(I30=""N/A"",IF(I26=""N/A"",IF(I22=""N/A"",IF(I18=""N/A"",1,2),3),4),5))"
+Cover Sheet,J33,"=IF(J32=FALSE,"""",IF(J30=""N/A"",IF(J26=""N/A"",IF(J22=""N/A"",IF(J18=""N/A"",1,2),3),4),5))"
+Cover Sheet,K33,"=IF(K32=FALSE,"""",IF(K30=""N/A"",IF(K26=""N/A"",IF(K22=""N/A"",IF(K18=""N/A"",1,2),3),4),5))"
+Cover Sheet,L33,"=IF(L32=FALSE,"""",IF(L30=""N/A"",IF(L26=""N/A"",IF(L22=""N/A"",IF(L18=""N/A"",1,2),3),4),5))"
+Cover Sheet,M33,"=IF(M32=FALSE,"""",IF(M30=""N/A"",IF(M26=""N/A"",IF(M22=""N/A"",IF(M18=""N/A"",1,2),3),4),5))"
+Cover Sheet,B34,"=IF(D4>49,""FOR STRAND SIZES SMALLER THAN 48 AWG, PLEASE CONFIRM FINAL CONSTRUCTION WITH RUBADUE ENGINEERING."",IF(AND(D4<23,D3>8),""CONSULT RUBADUE ENGINEERING."",""""))"
+Cover Sheet,C39,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E39*$D$7,3),""""))"
+Cover Sheet,D39,=C39*25.4
+Cover Sheet,E39,"=IFERROR(INDEX(litzSINGLE[#Data],MATCH($D$4,litzSINGLE[AWG],0),MATCH(""MIN"",litzSINGLE[#Headers],0)),"""")"
+Cover Sheet,F39,=E39*25.4
+Cover Sheet,I39,"=IF(C39="""","""",ROUND(C39+0.002,3))"
+Cover Sheet,J39,=I39*25.4
+Cover Sheet,M39,"=IF(C39="""","""",ROUND(C39+0.004,3))"
+Cover Sheet,N39,=M39*25.4
+Cover Sheet,C40,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E40*$D$7,3),""""))"
+Cover Sheet,D40,=C40*25.4
+Cover Sheet,E40,"=IFERROR(INDEX(litzSINGLE[#Data],MATCH($D$4,litzSINGLE[AWG],0),MATCH(""NOM"",litzSINGLE[#Headers],0)),"""")"
+Cover Sheet,F40,=E40*25.4
+Cover Sheet,I40,"=IF(C40="""","""",ROUND(C40+0.002,3))"
+Cover Sheet,J40,=I40*25.4
+Cover Sheet,M40,"=IF(C40="""","""",ROUND(C40+0.004,3))"
+Cover Sheet,N40,=M40*25.4
+Cover Sheet,C41,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E41*$D$7,3),""""))"
+Cover Sheet,D41,=C41*25.4
+Cover Sheet,E41,"=IFERROR(INDEX(litzSINGLE[#Data],MATCH($D$4,litzSINGLE[AWG],0),MATCH(""MAX"",litzSINGLE[#Headers],0)),"""")"
+Cover Sheet,F41,=E41*25.4
+Cover Sheet,I41,"=IF(C41="""","""",ROUND(C41+0.003,3))"
+Cover Sheet,J41,=I41*25.4
+Cover Sheet,M41,"=IF(C41="""","""",ROUND(C41+0.006,3))"
+Cover Sheet,N41,=M41*25.4
+Cover Sheet,B42,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""S""&VLOOKUP($D$36,MagGrade,2,0)&""-XX"""
+Cover Sheet,H42,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""S""&VLOOKUP($D$36,MagGrade,2,0)&""-SN-XX"""
+Cover Sheet,L42,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""S""&VLOOKUP($D$36,MagGrade,2,0)&""-DN-XX"""
+Cover Sheet,C46,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E46*$D$7,3),""""))"
+Cover Sheet,D46,=C46*25.4
+Cover Sheet,E46,"=IFERROR(INDEX(litzHEAVY[#Data],MATCH($D$4,litzHEAVY[AWG],0),MATCH(""MIN"",litzHEAVY[#Headers],0)),"""")"
+Cover Sheet,F46,=E46*25.4
+Cover Sheet,I46,"=IF(C46="""","""",ROUND(C46+0.002,3))"
+Cover Sheet,J46,=I46*25.4
+Cover Sheet,M46,"=IF(C46="""","""",ROUND(C46+0.004,3))"
+Cover Sheet,N46,=M46*25.4
+Cover Sheet,C47,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E47*$D$7,3),""""))"
+Cover Sheet,D47,=C47*25.4
+Cover Sheet,E47,"=IFERROR(INDEX(litzHEAVY[#Data],MATCH($D$4,litzHEAVY[AWG],0),MATCH(""NOM"",litzHEAVY[#Headers],0)),"""")"
+Cover Sheet,F47,=E47*25.4
+Cover Sheet,I47,"=IF(C47="""","""",ROUND(C47+0.002,3))"
+Cover Sheet,J47,=I47*25.4
+Cover Sheet,M47,"=IF(C47="""","""",ROUND(C47+0.004,3))"
+Cover Sheet,N47,=M47*25.4
+Cover Sheet,C48,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E48*$D$7,3),""""))"
+Cover Sheet,D48,=C48*25.4
+Cover Sheet,E48,"=IFERROR(INDEX(litzHEAVY[#Data],MATCH($D$4,litzHEAVY[AWG],0),MATCH(""MAX"",litzHEAVY[#Headers],0)),"""")"
+Cover Sheet,F48,=E48*25.4
+Cover Sheet,I48,"=IF(C48="""","""",ROUND(C48+0.003,3))"
+Cover Sheet,J48,=I48*25.4
+Cover Sheet,M48,"=IF(C48="""","""",ROUND(C48+0.006,3))"
+Cover Sheet,N48,=M48*25.4
+Cover Sheet,B49,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""H""&VLOOKUP($D$36,MagGrade,2,0)&""-XX"""
+Cover Sheet,H49,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""H""&VLOOKUP($D$36,MagGrade,2,0)&""-SN-XX"""
+Cover Sheet,L49,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""H""&VLOOKUP($D$36,MagGrade,2,0)&""-DN-XX"""
+Cover Sheet,C53,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E53*$D$7,3),""""))"
+Cover Sheet,D53,=C53*25.4
+Cover Sheet,E53,"=IFERROR(INDEX(litzTRIPLE[#Data],MATCH($D$4,litzTRIPLE[AWG],0),MATCH(""MIN"",litzTRIPLE[#Headers],0)),"""")"
+Cover Sheet,F53,=E53*25.4
+Cover Sheet,I53,"=IF(OR(C53="""",C53=0),"""",ROUND(C53+0.002,3))"
+Cover Sheet,J53,=I53*25.4
+Cover Sheet,M53,"=IF(OR(C53="""",C53=0),"""",ROUND(C53+0.004,3))"
+Cover Sheet,N53,=M53*25.4
+Cover Sheet,C54,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E54*$D$7,3),""""))"
+Cover Sheet,D54,=C54*25.4
+Cover Sheet,E54,"=IFERROR(INDEX(litzTRIPLE[#Data],MATCH($D$4,litzTRIPLE[AWG],0),MATCH(""NOM"",litzTRIPLE[#Headers],0)),"""")"
+Cover Sheet,F54,=E54*25.4
+Cover Sheet,I54,"=IF(OR(C54="""",C54=0),"""",ROUND(C54+0.002,3))"
+Cover Sheet,J54,=I54*25.4
+Cover Sheet,M54,"=IF(OR(C54="""",C54=0),"""",ROUND(C54+0.004,3))"
+Cover Sheet,N54,=M54*25.4
+Cover Sheet,C55,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E55*$D$7,3),""""))"
+Cover Sheet,D55,=C55*25.4
+Cover Sheet,E55,"=IFERROR(INDEX(litzTRIPLE[#Data],MATCH($D$4,litzTRIPLE[AWG],0),MATCH(""MAX"",litzTRIPLE[#Headers],0)),"""")"
+Cover Sheet,F55,=E55*25.4
+Cover Sheet,I55,"=IF(OR(C55="""",C55=0),"""",ROUND(C55+0.003,3))"
+Cover Sheet,J55,=I55*25.4
+Cover Sheet,M55,"=IF(OR(C55="""",C55=0),"""",ROUND(C55+0.006,3))"
+Cover Sheet,N55,=M55*25.4
+Cover Sheet,B56,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""T""&VLOOKUP($D$36,MagGrade,2,0)&""-XX"""
+Cover Sheet,H56,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""T""&VLOOKUP($D$36,MagGrade,2,0)&""-SN-XX"""
+Cover Sheet,L56,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""T""&VLOOKUP($D$36,MagGrade,2,0)&""-DN-XX"""
+Cover Sheet,C60,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E60*$D$7,3),""""))"
+Cover Sheet,D60,=C60*25.4
+Cover Sheet,E60,"=IFERROR(INDEX(litzQUAD[#Data],MATCH($D$4,litzQUAD[AWG],0),MATCH(""MIN"",litzQUAD[#Headers],0)),"""")"
+Cover Sheet,F60,=E60*25.4
+Cover Sheet,I60,"=IF(OR(C60="""",C60=0),"""",ROUND(C60+0.002,3))"
+Cover Sheet,J60,=I60*25.4
+Cover Sheet,M60,"=IF(OR(C60="""",C60=0),"""",ROUND(C60+0.004,3))"
+Cover Sheet,N60,=M60*25.4
+Cover Sheet,C61,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E61*$D$7,3),""""))"
+Cover Sheet,D61,=C61*25.4
+Cover Sheet,E61,"=IFERROR(INDEX(litzQUAD[#Data],MATCH($D$4,litzQUAD[AWG],0),MATCH(""NOM"",litzQUAD[#Headers],0)),"""")"
+Cover Sheet,F61,=E61*25.4
+Cover Sheet,I61,"=IF(OR(C61="""",C61=0),"""",ROUND(C61+0.002,3))"
+Cover Sheet,J61,=I61*25.4
+Cover Sheet,M61,"=IF(OR(C61="""",C61=0),"""",ROUND(C61+0.004,3))"
+Cover Sheet,N61,=M61*25.4
+Cover Sheet,C62,"=IF(H32=FALSE,""ERROR"",IFERROR(ROUND(SQRT($D$3)*E62*$D$7,3),""""))"
+Cover Sheet,D62,=C62*25.4
+Cover Sheet,E62,"=IFERROR(INDEX(litzQUAD[#Data],MATCH($D$4,litzQUAD[AWG],0),MATCH(""MAX"",litzQUAD[#Headers],0)),"""")"
+Cover Sheet,F62,=E62*25.4
+Cover Sheet,I62,"=IF(OR(C62="""",C62=0),"""",ROUND(C62+0.003,3))"
+Cover Sheet,J62,=I62*25.4
+Cover Sheet,M62,"=IF(OR(C62="""",C62=0),"""",ROUND(C62+0.006,3))"
+Cover Sheet,N62,=M62*25.4
+Cover Sheet,B63,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""Q""&VLOOKUP($D$36,MagGrade,2,0)&""-XX"""
+Cover Sheet,H63,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""Q""&VLOOKUP($D$36,MagGrade,2,0)&""-SN-XX"""
+Cover Sheet,L63,"=""Rubadue Part Number:""&"" RL-""&$D$3&""-""&$D$4&""Q""&VLOOKUP($D$36,MagGrade,2,0)&""-DN-XX"""
+Cover Sheet,D67,=D36
+Cover Sheet,G67,"=IF(C40>0.2,""THIS PRODUCT WILL NOT CARRY ANY UL APPROVALS. CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm."","""")"
+Cover Sheet,F68,"=IF(D68=""ETFE"",""T"",IF(D68=""FEP"",""F"",IF(D68=""PFA"",""P"",""_"")))"
+Cover Sheet,G68,"=IF(C40>0.2,""MAXIMUM UL CONDUCTOR DIAMETER IS .200 in. / 5.0mm FOR INSULATED WINDING WIRES."",IF(D68=""FEP"","""",IF(D9>12404,""SELECT FEP INSULATION IF UL APPROVALS ARE DESIRED/NECESSARY."","""")))"
+Cover Sheet,C72,"=ROUND($C$39+2*E73-IF(C40>0.1,0.002,0.001),3)"
+Cover Sheet,D72,=C72*25.4
+Cover Sheet,C73,"=ROUND($C$40+2*E73,3)"
+Cover Sheet,D73,=C73*25.4
+Cover Sheet,E73,"=IF(OR(D68=""ETFE"",D68=""PFA""),IF(H73<0.0015,0.0015,H73),IF(AND(D68=""FEP"",D9<1939,H73<0.002),0.002,IF(AND(D68=""FEP"",D9>1938,D9<12405,H73<0.003),0.003,IF(AND(D68=""FEP"",D9>12404,D9<24978,H73<0.01),0.01,IF(AND(D68=""FEP"",D9>24977,H73<0.012),0.012,H73)))))"
+Cover Sheet,F73,=E73*25.4
+Cover Sheet,G73,=$C$40*0.06
+Cover Sheet,H73,"=IF(ROUND(G73,3)<G73,ROUND(G73,3)+0.0005,MROUND(G73,0.0005))"
+Cover Sheet,C74,"=ROUND($C$41+2*E73+IF(C40>0.1,0.002,0.001),3)"
+Cover Sheet,D74,=C74*25.4
+Cover Sheet,G74,"=IF(OR(D73<H73,D73<0.0015,),""CONSULT RUBADUE ENGINEERING TO VERIFY MANUFACTURING CAPABILITY ON THIS WALL THICKNESS."",IF(D9<9.61,""CONSULT RUBADUE ENGINEERING TO VERIFY MANUFACTURING CAPABILITY."",""""))"
+Cover Sheet,B75,"=""Rubadue Part Number: SXXL""&$D$3&""/""&$D$4&F68&""X-""&E73*1000&""(MW""&VLOOKUP($D$36,MagGrade,2,0)&"")"""
+Cover Sheet,G75,"=IF(D9<9.61,""CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS."",IF(OR(AND(D68=""FEP"",D9<1939,E73<0.002),AND(D68=""FEP"",D9>1938,D9<12405,E73<0.003),AND(D68=""FEP"",D9>12404,D9<24978,E73<0.01),AND(D68=""FEP"",D9>24977,D9<40000,E73<0.012),AND(D68=""ETFE"",E73<0.0015),AND(D68=""FEP"",E73<0.002),AND(D68=""PFA"",OR(AND(D9<187,E73<0.0015),AND(D9>186,D9<770,E73<0.002)))),""INCREASE WALL THICKNESSES IF UL APPROVALS ARE REQUIRED. IF UL APPROVALS ARE NOT REQUIRED, CONSULT THE FACTORY TO CONFIRM MANUFACTURABILITY."",IF(AND(OR(D68=""ETFE"",D68=""PFA""),D9>769),""THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR SUPPLEMENTAL/REINFORCED INSULATION."","""")))"
+Cover Sheet,F76,"=IF(D68=""ETFE"",""T"",IF(D68=""FEP"",""F"",IF(D68=""PFA"",""P"",""_"")))"
+Cover Sheet,C80,"=ROUND($C$39+2*2*E81-IF(C47>0.1,0.002,0.001),3)"
+Cover Sheet,D80,=C80*25.4
+Cover Sheet,C81,"=ROUND($C$40+2*2*E81,3)"
+Cover Sheet,D81,=C81*25.4
+Cover Sheet,E81,"=IF(D68=""ETFE"",IF(H81<0.001,0.001,H81),IF(D68=""PFA"",IF(H81<0.0015,0.0015,H81),IF(D68=""FEP"",IF(D9<12405,IF(H81<0.002,0.002,H81),IF(D9<24978,IF(H81<0.005,0.005,H81),IF(H81<0.006,0.006,H81))))))"
+Cover Sheet,F81,=E81*25.4
+Cover Sheet,G81,=$C$40*0.06
+Cover Sheet,H81,"=IF(ROUND(G81/2,3)<G81/2,ROUND(G81/2,3)+0.0005,IF(MROUND(G81/2,0.0005)<G81/2,ROUND(G81/2,3),MROUND(G81/2,0.0005)))"
+Cover Sheet,C82,"=ROUND($C$41+2*2*E81+IF(C47>0.1,0.002,0.001),3)"
+Cover Sheet,D82,=C82*25.4
+Cover Sheet,G82,"=IF(D81<H81,""CONSULT RUBADUE ENGINEERING TO VERIFY MANUFACTURING CAPABILITY ON THIS WALL THICKNESS."","""")"
+Cover Sheet,B83,"=""Rubadue Part Number: DXXL""&$D$3&""/""&$D$4&F76&""XX-""&E81*1000&""(MW""&VLOOKUP($D$36,MagGrade,2,0)&"")"""
+Cover Sheet,G83,"=IF(D9<9.61,""CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS."",IF(OR(AND(D68=""ETFE"",D9<122,E81<0.001),AND(D68=""ETFE"",D9>121,D9<2886,E81<0.0015),AND(D68=""ETFE"",D9>2885,D9<12405,E81<0.003)),""THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION."",IF(AND(D68=""ETFE"",D9>12404),""THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION."",IF(AND(D68=""PFA"",D9>1938),""THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION."",IF(OR(AND(D68=""FEP"",D9<12405,E81<0.002),AND(D68=""FEP"",D9>12404,D9<24978,E81<0.005),AND(D68=""FEP"",D9>24977,D9<40000,E81<0.006)),""INCREASE WALL THICKNESS IF UL APPROVAL IS REQUIRED."","""")))))"
+Cover Sheet,F84,"=IF(D68=""ETFE"",""T"",IF(D68=""FEP"",""F"",IF(D68=""PFA"",""P"",""_"")))"
+Cover Sheet,C88,"=ROUND($C$39+2*3*E89-IF(C54>0.1,0.002,0.001),3)"
+Cover Sheet,D88,=C88*25.4
+Cover Sheet,C89,"=ROUND($C$40+2*3*E89,3)"
+Cover Sheet,D89,=C89*25.4
+Cover Sheet,E89,"=IF(D68=""ETFE"",IF(H89<0.001,0.001,H89),IF(D68=""PFA"",IF(H89<0.0015,0.0015,H89),IF(D68=""FEP"",IF(D9<12405,IF(H89<0.002,0.002,H89),IF(H89<0.004,0.004,H89)))))"
+Cover Sheet,F89,=E89*25.4
+Cover Sheet,G89,=$C$40*0.06
+Cover Sheet,H89,"=IF(ROUND(G89/3,3)<G89/3,ROUND(G89/3,3)+0.0005,IF(MROUND(G89/3,0.0005)<G89/3,ROUND(G89/3,3),MROUND(G89/3,0.0005)))"
+Cover Sheet,C90,"=ROUND($C$41+2*3*E89+IF(C54>0.1,0.002,0.001),3)"
+Cover Sheet,D90,=C90*25.4
+Cover Sheet,G90,"=IF(D89<H89,""CONSULT RUBADUE ENGINEERING TO VERIFY MANUFACTURING CAPABILITY ON THIS WALL THICKNESS."","""")"
+Cover Sheet,B91,"=""Rubadue Part Number: TXXL""&$D$3&""/""&$D$4&F84&""XXX-""&E89*1000&""(MW""&VLOOKUP($D$36,MagGrade,2,0)&"")"""
+Cover Sheet,G91,"=IF(D9<9.61,""CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS."",IF(AND(D68=""FEP"",D9<12405,E89<0.002),""THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES."",IF(AND(D68=""FEP"",D9>12404,E89<0.004),""THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES."",IF(OR(AND(D68=""ETFE"",D9<1241,E89<0.001),AND(D68=""ETFE"",D9>1240,D9<4900,E89<0.0015),AND(D68=""ETFE"",D9>4899,D9<12405,E89<0.002),AND(OR(D68=""PFA"",D68=""ETFE""),D9>12404)),""THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION."",""""))))"
+N1 Max Calculator,E4,=1.72*10^-8
+N1 Max Calculator,E6,=PI()*4*(10^-7)
+N1 Max Calculator,Q6,=E4*(1+N6*(P6-O6))
+N1 Max Calculator,E8,=SQRT(E4/(PI()*E5*E6))
+N1 Max Calculator,E9,=E8*1000
+N1 Max Calculator,G9,=E9/25.4
+N1 Max Calculator,E11,=E9*2
+N1 Max Calculator,G11,=E11/25.4
+N1 Max Calculator,E14,"=VLOOKUP(E13,litzBARE11[[AWG]:[NOM BARE OD (in.)]],3,0)"
+N1 Max Calculator,E15,=E14*25.4
+N1 Max Calculator,E16,=E14*25.4/1000
+N1 Max Calculator,E17,"=ROUNDDOWN(4*(E8*E8/(E16*E16)),0)"
+Preferred strand sizes,B3,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D3,=(C3*1000)^2
+Preferred strand sizes,B4,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D4,=(C4*1000)^2
+Preferred strand sizes,B5,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D5,=(C5*1000)^2
+Preferred strand sizes,B6,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D6,=(C6*1000)^2
+Preferred strand sizes,B7,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D7,=(C7*1000)^2
+Preferred strand sizes,B8,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D8,=(C8*1000)^2
+Preferred strand sizes,B9,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D9,=(C9*1000)^2
+Preferred strand sizes,B10,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D10,=(C10*1000)^2
+Preferred strand sizes,B11,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D11,=(C11*1000)^2
+Preferred strand sizes,B12,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D12,=(C12*1000)^2
+Preferred strand sizes,B13,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D13,=(C13*1000)^2
+Preferred strand sizes,B14,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D14,=(C14*1000)^2
+Preferred strand sizes,B15,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D15,=(C15*1000)^2
+Preferred strand sizes,B16,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D16,=(C16*1000)^2
+Preferred strand sizes,B17,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D17,=(C17*1000)^2
+Preferred strand sizes,B18,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D18,=(C18*1000)^2
+Preferred strand sizes,B19,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D19,=(C19*1000)^2
+Preferred strand sizes,B20,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D20,=(C20*1000)^2
+Preferred strand sizes,B21,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D21,=(C21*1000)^2
+Preferred strand sizes,B22,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D22,=(C22*1000)^2
+Preferred strand sizes,B23,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D23,=(C23*1000)^2
+Preferred strand sizes,B24,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D24,=(C24*1000)^2
+Preferred strand sizes,B25,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D25,=(C25*1000)^2
+Preferred strand sizes,B26,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D26,=(C26*1000)^2
+Preferred strand sizes,B27,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D27,=(C27*1000)^2
+Preferred strand sizes,B28,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D28,=(C28*1000)^2
+Preferred strand sizes,B29,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D29,=(C29*1000)^2
+Preferred strand sizes,B30,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D30,=(C30*1000)^2
+Preferred strand sizes,B31,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D31,=(C31*1000)^2
+Preferred strand sizes,B32,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D32,=(C32*1000)^2
+Preferred strand sizes,B33,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D33,=(C33*1000)^2
+Preferred strand sizes,B34,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D34,=(C34*1000)^2
+Preferred strand sizes,B35,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D35,=(C35*1000)^2
+Preferred strand sizes,B36,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D36,=(C36*1000)^2
+Preferred strand sizes,B37,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D37,=(C37*1000)^2
+Preferred strand sizes,B38,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D38,=(C38*1000)^2
+Preferred strand sizes,B39,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D39,=(C39*1000)^2
+Preferred strand sizes,B40,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D40,=(C40*1000)^2
+Preferred strand sizes,B41,"=litzBARE11[[#This Row],[NOM BARE OD (in.)]]*25.4"
+Preferred strand sizes,D41,=(C41*1000)^2
+Magnet Wire,D3,=(C3*1000)^2
+Magnet Wire,D4,=(C4*1000)^2
+Magnet Wire,D5,=(C5*1000)^2
+Magnet Wire,D6,=(C6*1000)^2
+Magnet Wire,D7,=(C7*1000)^2
+Magnet Wire,D8,=(C8*1000)^2
+Magnet Wire,D9,=(C9*1000)^2
+Magnet Wire,D10,=(C10*1000)^2
+Magnet Wire,D11,=(C11*1000)^2
+Magnet Wire,D12,=(C12*1000)^2
+Magnet Wire,D13,=(C13*1000)^2
+Magnet Wire,D14,=(C14*1000)^2
+Magnet Wire,D15,=(C15*1000)^2
+Magnet Wire,D16,=(C16*1000)^2
+Magnet Wire,D17,=(C17*1000)^2
+Magnet Wire,D18,=(C18*1000)^2
+Magnet Wire,D19,=(C19*1000)^2
+Magnet Wire,D20,=(C20*1000)^2
+Magnet Wire,D21,=(C21*1000)^2
+Magnet Wire,D22,=(C22*1000)^2
+Magnet Wire,D23,=(C23*1000)^2
+Magnet Wire,D24,=(C24*1000)^2
+Magnet Wire,D25,=(C25*1000)^2
+Magnet Wire,D26,=(C26*1000)^2
+Magnet Wire,D27,=(C27*1000)^2
+Magnet Wire,D28,=(C28*1000)^2
+Magnet Wire,D29,=(C29*1000)^2
+Magnet Wire,D30,=(C30*1000)^2
+Magnet Wire,D31,=(C31*1000)^2
+Magnet Wire,D32,=(C32*1000)^2
+Magnet Wire,D33,=(C33*1000)^2
+Magnet Wire,D34,=(C34*1000)^2
+Magnet Wire,D35,=(C35*1000)^2
+Magnet Wire,D36,=(C36*1000)^2
+Magnet Wire,D37,=(C37*1000)^2
+Magnet Wire,D38,=(C38*1000)^2
+Magnet Wire,D39,=(C39*1000)^2
+Magnet Wire,D40,=(C40*1000)^2
+Magnet Wire,D41,=(C41*1000)^2
+AWG Reference,B5,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C5,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E5,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,B6,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C6,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E6,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,B7,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C7,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E7,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,B8,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C8,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E8,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,B9,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C9,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E9,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,B10,"=SQRT(awg_Solid[[#This Row],[Nom CMA]])/1000"
+AWG Reference,C10,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E10,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C11,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E11,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C12,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E12,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C13,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E13,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C14,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E14,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C15,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E15,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C16,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E16,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C17,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E17,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C18,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E18,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C19,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E19,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C20,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E20,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C21,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E21,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C22,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E22,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C23,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E23,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C24,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E24,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C25,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E25,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C26,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E26,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C27,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E27,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C28,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E28,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C29,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E29,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C30,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E30,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C31,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E31,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C32,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E32,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C33,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E33,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C34,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E34,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C35,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E35,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C36,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E36,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C37,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E37,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C38,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E38,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C39,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E39,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C40,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E40,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C41,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E41,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C42,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E42,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C43,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E43,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C44,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E44,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C45,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E45,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C46,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E46,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C47,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E47,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C48,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E48,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C49,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E49,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C50,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E50,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C51,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E51,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C52,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E52,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C53,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E53,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C54,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E54,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C55,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E55,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C56,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E56,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C57,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E57,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C58,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E58,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C59,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E59,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C60,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E60,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C61,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E61,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C62,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E62,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C63,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E63,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"
+AWG Reference,C64,"=awg_Solid[[#This Row],[Nom Dia. (in.)]]*25.4"
+AWG Reference,E64,"=awg_Solid[[#This Row],[Nom CMA]]/1973.52524139"

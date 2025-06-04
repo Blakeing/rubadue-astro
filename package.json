@@ -8,6 +8,10 @@
 		"build": "astro check && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:run": "vitest run",
+		"test:watch": "vitest --watch",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",
@@ -73,8 +77,11 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@tailwindcss/typography": "^0.5.16",
+		"@types/node": "^20.0.0",
+		"@vitest/ui": "^3.2.1",
 		"glob": "^11.0.1",
 		"knip": "^5.59.1",
-		"typescript": "^5.8.2"
+		"typescript": "^5.8.2",
+		"vitest": "^3.2.1"
 	}
 }
