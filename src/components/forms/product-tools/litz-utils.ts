@@ -30,6 +30,7 @@ import {
 export function calculateLitzConstruction(
 	strandCount: number | string,
 	awgSize: number | string,
+	constructionType?: LitzType, // Optional parameter, if not provided, auto-determine
 ): ConstructionResults {
 	// Convert and validate inputs
 	const validStrandCount = Number(strandCount);
@@ -48,16 +49,17 @@ export function calculateLitzConstruction(
 		awgSize: validAwgSize,
 	});
 
-	// Determine if Type 1 or Type 2 construction
+	// Use provided construction type or auto-determine if not provided
 	const maxEnds = getMaxEnds(validAwgSize);
-	const isType1 =
-		validAwgSize < 26 || (validAwgSize < 32 && validStrandCount <= maxEnds);
-	const type: LitzType = isType1 ? "Type 1" : "Type 2";
+	const type: LitzType = constructionType || (() => {
+		const isType1 = validAwgSize < 26 || (validAwgSize < 32 && validStrandCount <= maxEnds);
+		return isType1 ? "Type 1" : "Type 2";
+	})();
 
 	console.log("📊 Construction type determination:", {
 		maxEnds,
-		isType1,
-		type,
+		providedType: constructionType,
+		determinedType: type,
 	});
 
 	// Calculate construction operations using the Excel algorithm
@@ -149,8 +151,8 @@ export function calculateElectricalProperties(
 	strandCount: number | string,
 	awgSize: number | string,
 	temperature: number | string,
-	packingFactor: number | string,
 	frequency: number | string = 1000, // Hz, default to 1kHz
+	constructionType?: LitzType, // Optional construction type
 ): {
 	totalCMA: number;
 	dcResistance: number;
@@ -163,7 +165,6 @@ export function calculateElectricalProperties(
 	const validStrandCount = Number(strandCount);
 	const validAwgSize = Number(awgSize);
 	const validTemperature = Number(temperature);
-	const validPackingFactor = Number(packingFactor);
 	const validFrequency = Number(frequency);
 
 	// Input validation
@@ -176,9 +177,6 @@ export function calculateElectricalProperties(
 	if (Number.isNaN(validTemperature)) {
 		throw new Error(`Invalid temperature: ${temperature}`);
 	}
-	if (Number.isNaN(validPackingFactor) || validPackingFactor <= 0) {
-		throw new Error(`Invalid packing factor: ${packingFactor}`);
-	}
 	if (Number.isNaN(validFrequency) || validFrequency <= 0) {
 		throw new Error(`Invalid frequency: ${frequency}`);
 	}
@@ -187,7 +185,6 @@ export function calculateElectricalProperties(
 		strandCount: validStrandCount,
 		awgSize: validAwgSize,
 		temperature: validTemperature,
-		packingFactor: validPackingFactor,
 		frequency: validFrequency,
 	});
 
@@ -199,6 +196,22 @@ export function calculateElectricalProperties(
 	}
 
 	console.log("📊 AWG Data:", awgData);
+
+	// Get construction details to determine the correct factors
+	const construction = calculateLitzConstruction(validStrandCount, validAwgSize, constructionType);
+	
+	// Get the take up factor for resistance calculations (Excel D8 formula)
+	const takeUpFactor = getTakeUpFactor(
+		validStrandCount,
+		construction.operations,
+		construction.type,
+	);
+
+	console.log("🔧 Construction factors:", {
+		type: construction.type,
+		operations: construction.operations,
+		takeUpFactor,
+	});
 
 	// Calculate total CMA (D9 formula: CMA_SOLID * strand_count)
 	const totalCMA = awgData.cma * validStrandCount;
@@ -243,14 +256,15 @@ export function calculateElectricalProperties(
 				(validTemperature - temperatureCoefficients.referenceTemp),
 	});
 
-	// Apply packing factor for litz construction (H5 formula: (DCR/strand_count)*packing_factor/1000)
+	// Apply take up factor for litz construction (H5 formula: (DCR/strand_count)*take_up_factor/1000)
+	// This matches Excel line 5: =IFERROR(((H4/D3)*H3)/1000,"") where H3 is the take up factor
 	const dcResistancePerFoot =
-		((tempAdjustedDCR / validStrandCount) * validPackingFactor) / 1000;
+		((tempAdjustedDCR / validStrandCount) * takeUpFactor) / 1000;
 	const dcResistance = dcResistancePerFoot * 1000; // per 1000 feet
 
 	console.log("📐 Litz construction resistance:", {
 		perStrandDCR: tempAdjustedDCR / validStrandCount,
-		packingFactor: validPackingFactor,
+		takeUpFactor: takeUpFactor,
 		dcResistancePerFoot,
 		dcResistance,
 	});
@@ -302,20 +316,23 @@ export function calculateElectricalProperties(
 
 /**
  * Find equivalent solid AWG for given total CMA
+ * Uses Excel method: finds largest AWG with CMA ≤ input CMA (lower bound)
  */
 function findEquivalentAWG(totalCMA: number): string {
-	let closestAWG = awgOptions[0];
-	let minDifference = Math.abs(awgOptions[0].cma - totalCMA);
-
-	for (const awg of awgOptions) {
-		const difference = Math.abs(awg.cma - totalCMA);
-		if (difference < minDifference) {
-			minDifference = difference;
-			closestAWG = awg;
-		}
+	// Filter AWGs with CMA ≤ input CMA, then find the one with highest CMA
+	const validAWGs = awgOptions.filter((awg) => awg.cma <= totalCMA);
+	
+	if (validAWGs.length === 0) {
+		// If no AWG has CMA ≤ input, return the smallest AWG (highest number)
+		return awgOptions[awgOptions.length - 1].value;
 	}
+	
+	// Find the AWG with the highest CMA that's still ≤ input CMA
+	const equivalentAWG = validAWGs.reduce((prev, current) => 
+		(current.cma > prev.cma) ? current : prev
+	);
 
-	return closestAWG.value;
+	return equivalentAWG.value;
 }
 
 /**
@@ -327,6 +344,7 @@ export function calculateInsulationDimensions(
 	awgSize: number,
 	insulationType: InsulationType,
 	finalStrands: number,
+	constructionType?: LitzType, // Add optional construction type parameter
 ): DimensionResults {
 	const awgData = awgOptions.find((awg) => awg.value === awgSize.toString());
 	if (!awgData) {
@@ -334,11 +352,13 @@ export function calculateInsulationDimensions(
 	}
 
 	// Get construction info for proper packing factor calculation
-	const construction = calculateLitzConstruction(strandCount, awgSize);
+	// Use provided construction type instead of auto-determining
+	const construction = calculateLitzConstruction(strandCount, awgSize, constructionType);
 	const packingFactor = getPackingFactor(
 		strandCount,
 		construction.operations,
 		construction.type,
+		awgSize,
 	);
 
 	console.log("📐 calculateInsulationDimensions:", {
@@ -346,6 +366,8 @@ export function calculateInsulationDimensions(
 		awgSize,
 		insulationType,
 		finalStrands,
+		constructionType,
+		actualConstructionType: construction.type,
 		packingFactor,
 	});
 
@@ -601,64 +623,62 @@ function applyInsulationRules(
 }
 
 /**
- * Generate Rubadue part number
- * Implements the part number format from Excel formulas (B42, B49, B56, B63)
+ * Generate part number according to exact Excel format
+ * Implements the part number format from Excel formulas:
+ * - Bare: "Rubadue Part Number: RL-"&$D$3&"-"&$D$4&"S"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
+ * - Single Nylon: "Rubadue Part Number: RL-"&$D$3&"-"&$D$4&"S"&VLOOKUP($D$36,MagGrade,2,0)&"-SN-XX"
+ * - Double Nylon: "Rubadue Part Number: RL-"&$D$3&"-"&$D$4&"S"&VLOOKUP($D$36,MagGrade,2,0)&"-DN-XX"
+ * - Heavy Film: "RL-"&$D$3&"-"&$D$4&"H"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
+ * - Triple Film: "RL-"&$D$3&"-"&$D$4&"T"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
+ * - Quad Film: "RL-"&$D$3&"-"&$D$4&"Q"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
  */
 export function generatePartNumber(
 	strandCount: number,
 	awgSize: string,
 	layerType: InsulationLayerType,
 	magnetWireGrade: MagnetWireGrade,
+	insulationType?: InsulationType,
 ): string {
 	const gradeInfo = magnetWireGrades.find(
 		(grade) => grade.value === magnetWireGrade,
 	);
 	const gradeCode = gradeInfo?.code || "80";
 
-	const typeCode = getTypeCode(layerType);
-	const suffix = getSuffix(layerType);
+	// Base part number: RL-{strandCount}-{awgSize}
+	const basePartNumber = `RL-${strandCount}-${awgSize}`;
 
-	return `RL-${strandCount}-${awgSize}${typeCode}${gradeCode}-${suffix}`;
-}
-
-/**
- * Get type code for part number
- */
-function getTypeCode(layerType: InsulationLayerType): string {
+	// Determine film type code based on insulation layer type
+	let filmCode = "";
 	switch (layerType) {
 		case "BARE":
-			return "";
+			filmCode = "S"; // Single film for bare wire
+			break;
 		case "SINGLE":
-			return "S";
-		case "DOUBLE":
-			return "H"; // Heavy build
+			filmCode = "S"; // Single film
+			break;
+		case "DOUBLE": 
+			filmCode = "H"; // Heavy film for double insulated
+			break;
 		case "TRIPLE":
-			return "T";
+			filmCode = "T"; // Triple film
+			break;
 		case "QUAD":
-			return "Q";
+			filmCode = "Q"; // Quad film
+			break;
 		default:
-			return "";
+			filmCode = "S";
 	}
-}
 
-/**
- * Get suffix for part number
- */
-function getSuffix(layerType: InsulationLayerType): string {
-	switch (layerType) {
-		case "BARE":
-			return "XX";
-		case "SINGLE":
-			return "SN-XX";
-		case "DOUBLE":
-			return "DN-XX";
-		case "TRIPLE":
-			return "TN-XX";
-		case "QUAD":
-			return "QN-XX";
-		default:
-			return "XX";
+	// Add serving suffix for insulated versions
+	let servingSuffix = "";
+	if (layerType === "SINGLE") {
+		servingSuffix = "-SN"; // Single Nylon serve
+	} else if (layerType === "DOUBLE") {
+		servingSuffix = "-DN"; // Double Nylon serve  
 	}
+
+	// Final part number format: RL-{count}-{awg}{film}{grade}{serving}-XX
+	return `${basePartNumber}${filmCode}${gradeCode}${servingSuffix}-XX`;
 }
 
 /**
@@ -789,18 +809,29 @@ export function calculateN1Max(
 	});
 
 	// Skin depth calculation (E8 formula: SQRT(resistivity/(PI*permeability*frequency)))
-	const skinDepth = Math.sqrt(
+	const skinDepthMeters = Math.sqrt(
 		resistivity / (Math.PI * constants.PERMEABILITY_FREE_SPACE * frequency),
 	);
 
 	// Convert to mils (E9 formula: skin_depth * 1000)
-	const skinDepthMils = skinDepth * 1000;
+	const skinDepthMils = skinDepthMeters * 1000;
 
-	// Strand diameter in meters (E16 formula)
-	const strandDiameter = awgData.diameter * 0.0254; // Convert inches to meters
+	// Strand diameter in meters (E16 formula: AWG diameter * 0.0254 to convert inches to meters)
+	const strandDiameterMeters = awgData.diameter * 0.0254;
 
-	// N1 Max calculation (E17 formula: 4 * (skin_depth^2 / strand_diameter^2))
-	const n1Max = Math.floor(4 * (skinDepth / strandDiameter) ** 2);
+	// N1 Max calculation (E17 formula: ROUNDDOWN(4*(E8*E8/(E16*E16)),0))
+	// This is the exact Excel formula where E8=skinDepthMeters, E16=strandDiameterMeters
+	const n1Max = Math.floor(4 * (skinDepthMeters * skinDepthMeters) / (strandDiameterMeters * strandDiameterMeters));
+
+	console.log("🎯 N1 Max calculation (Excel E17 formula):", {
+		skinDepthMeters,
+		strandDiameterMeters,
+		ratio: skinDepthMeters / strandDiameterMeters,
+		ratioSquared: (skinDepthMeters / strandDiameterMeters) ** 2,
+		n1MaxBeforeFloor: 4 * (skinDepthMeters * skinDepthMeters) / (strandDiameterMeters * strandDiameterMeters),
+		n1Max,
+		excelFormula: "=ROUNDDOWN(4*(E8*E8/(E16*E16)),0)",
+	});
 
 	return {
 		skinDepth: skinDepthMils,
@@ -853,17 +884,19 @@ function getMaxOperations(type: string): number {
 
 /**
  * Get packing factor using Excel lookup tables (D7, D8 formulas)
- * Implements: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),VLOOKUP(D5,TYPE2,4,0))
+ * Implements: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),IF(AND(D5=4,D6="TYPE 2",D4<44),1.363,VLOOKUP(D5,TYPE2,4,0)))
  */
 function getPackingFactor(
 	strandCount: number,
 	operations: number,
 	litzType: LitzType,
+	awgSize?: number, // Add AWG size parameter for exact Excel formula match
 ): number {
 	console.log("📦 getPackingFactor lookup:", {
 		strandCount,
 		operations,
 		litzType,
+		awgSize,
 	});
 
 	// Select the appropriate lookup table based on construction type
@@ -885,9 +918,9 @@ function getPackingFactor(
 	}
 
 	// Excel D7 formula logic: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),IF(AND(D5=4,D6="TYPE 2",D4<44),1.363,VLOOKUP(D5,TYPE2,4,0)))
-	// Special case for Type 2, 4 operations (1.363 factor)
-	if (litzType === "Type 2" && operations === 4) {
-		console.log("✅ Using special Type 2, 4-operation factor: 1.363");
+	// Special case for Type 2, 4 operations, AND AWG < 44 (exact Excel logic)
+	if (litzType === "Type 2" && operations === 4 && awgSize && awgSize < 44) {
+		console.log("✅ Using special Type 2, 4-operation factor (AWG<44): 1.363");
 		return 1.363;
 	}
 
@@ -896,6 +929,40 @@ function getPackingFactor(
 	console.log(`✅ Packing factor from ${litzType} table:`, packingFactor);
 
 	return packingFactor;
+}
+
+/**
+ * Get take up factor (weight/resistance factor) using Excel lookup tables (D8 formula)
+ * Implements: IF(D6="Type 1",VLOOKUP(D5,TYPE1,5,0),VLOOKUP(D5,TYPE2,5,0))
+ */
+function getTakeUpFactor(
+	strandCount: number,
+	operations: number,
+	litzType: LitzType,
+): number {
+	console.log("📦 getTakeUpFactor lookup:", {
+		strandCount,
+		operations,
+		litzType,
+	});
+
+	// Select the appropriate lookup table based on construction type
+	const lookupTable =
+		litzType === "Type 1" ? type1ConstructionTable : type2ConstructionTable;
+
+	// Find the entry for the number of operations (D5 in Excel)
+	const entry = lookupTable.find((row) => row.operations === operations);
+
+	if (!entry) {
+		console.log("⚠️ No take up factor entry found, using default");
+		return 1.02; // Conservative default
+	}
+
+	// Use the take up factor from the lookup table (column 5 = packingFactor2)
+	const takeUpFactor = entry.packingFactor2;
+	console.log(`✅ Take up factor from ${litzType} table:`, takeUpFactor);
+
+	return takeUpFactor;
 }
 
 /**

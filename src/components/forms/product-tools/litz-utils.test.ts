@@ -55,7 +55,7 @@ describe("Litz Wire Calculator Utilities", () => {
 
 	describe("calculateElectricalProperties", () => {
 		it("should calculate electrical properties for standard litz wire", () => {
-			const result = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
+			const result = calculateElectricalProperties(20, 28, 20, 1000);
 
 			expect(result.totalCMA).toBeGreaterThan(0);
 			expect(result.dcResistance).toBeGreaterThan(0);
@@ -68,8 +68,8 @@ describe("Litz Wire Calculator Utilities", () => {
 		});
 
 		it("should calculate temperature-corrected resistance", () => {
-			const result20C = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
-			const result100C = calculateElectricalProperties(20, 28, 100, 1.2, 1000);
+			const result20C = calculateElectricalProperties(20, 28, 20, 1000);
+			const result100C = calculateElectricalProperties(20, 28, 100, 1000);
 
 			// Resistance should increase with temperature
 			expect(result100C.dcResistance).toBeGreaterThan(result20C.dcResistance);
@@ -86,8 +86,8 @@ describe("Litz Wire Calculator Utilities", () => {
 		});
 
 		it("should calculate frequency-dependent skin depth", () => {
-			const result1kHz = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
-			const result10kHz = calculateElectricalProperties(20, 28, 20, 1.2, 10000);
+			const result1kHz = calculateElectricalProperties(20, 28, 20, 1000);
+			const result10kHz = calculateElectricalProperties(20, 28, 20, 10000);
 
 			// Skin depth should decrease with higher frequency
 			expect(result10kHz.skinDepth).toBeLessThan(result1kHz.skinDepth);
@@ -100,7 +100,7 @@ describe("Litz Wire Calculator Utilities", () => {
 		});
 
 		it("should calculate equivalent AWG correctly", () => {
-			const result = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
+			const result = calculateElectricalProperties(20, 28, 20, 1000);
 
 			// For 20 strands of 28 AWG, should be equivalent to smaller AWG number
 			const equivalentNum = Number.parseInt(result.equivalentAWG);
@@ -176,16 +176,16 @@ describe("Litz Wire Calculator Utilities", () => {
 			const singlePN = generatePartNumber(20, "28", "SINGLE", "MW80C");
 			const doublePN = generatePartNumber(20, "28", "DOUBLE", "MW155C");
 
-			expect(barePN).toContain("RL-20-28");
-			expect(singlePN).toContain("RL-20-28S");
-			expect(doublePN).toContain("RL-20-28H");
-			expect(doublePN).toContain("155");
-
-			console.log("✅ Part number generation test:", {
+			console.log("🔧 Part number generation test:", {
 				bare: barePN,
 				single: singlePN,
 				double: doublePN,
 			});
+
+			// Update expectations for corrected Excel RL- format
+			expect(barePN).toBe("RL-20-28S80-XX"); // Excel RL- format
+			expect(singlePN).toBe("RL-20-28S80-SN-XX"); // Excel RL- format with Single Nylon
+			expect(doublePN).toBe("RL-20-28H155-DN-XX"); // Excel RL- format with Heavy film and Double Nylon
 		});
 	});
 
@@ -215,7 +215,7 @@ describe("Litz Wire Calculator Utilities", () => {
 			console.log("\n🧪 Integration Test: 20 × 28 AWG Litz Wire");
 
 			const construction = calculateLitzConstruction(20, 28);
-			const electrical = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
+			const electrical = calculateElectricalProperties(20, 28, 20, 1000);
 			const dimensions = calculateInsulationDimensions(
 				20,
 				28,
@@ -233,7 +233,7 @@ describe("Litz Wire Calculator Utilities", () => {
 
 			// Basic sanity checks
 			expect(construction.isValid).toBe(true);
-			expect(electrical.totalCMA).toBe(20 * 159.8); // 28 AWG CMA × 20 strands
+			expect(electrical.totalCMA).toBe(20 * 156); // 28 AWG CMA × 20 strands (corrected from Excel)
 			expect(electrical.equivalentAWG).toBeTruthy();
 			expect(dimensions.bare.nom).toBeGreaterThan(0);
 		});
@@ -246,7 +246,6 @@ describe("Litz Wire Calculator Utilities", () => {
 				100,
 				44,
 				20,
-				1.2,
 				100000,
 			);
 			const n1Max = calculateN1Max(44, 100000, 20);
@@ -279,7 +278,7 @@ describe("Helper Functions", () => {
 		];
 
 		for (const testCase of testCases) {
-			const result = calculateElectricalProperties(1, 28, 20, 1.0, 1000);
+			const result = calculateElectricalProperties(1, 28, 20, 1000);
 			console.log(`✅ CMA ${testCase.cma} test completed`);
 		}
 	});
@@ -302,9 +301,9 @@ describe("Helper Functions", () => {
 
 	it("should use Excel Q6 formula for temperature-corrected resistivity", () => {
 		// Test the enhanced temperature coefficient calculation
-		const result0C = calculateElectricalProperties(20, 28, 0, 1.2, 1000);
-		const result20C = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
-		const result100C = calculateElectricalProperties(20, 28, 100, 1.2, 1000);
+		const result0C = calculateElectricalProperties(20, 28, 0, 1000);
+		const result20C = calculateElectricalProperties(20, 28, 20, 1000);
+		const result100C = calculateElectricalProperties(20, 28, 100, 1000);
 
 		// Check temperature effects using Q6 formula: =E4*(1+N6*(P6-O6))
 		// where E4=resistivity, N6=temp_coeff, P6=operating_temp, O6=reference_temp
@@ -376,7 +375,7 @@ describe("Helper Functions", () => {
 		// Test the special Type 2 case where D5=4, D6="TYPE 2", D4<44 uses 1.363 factor
 		// This is from Excel D7 formula: IF(AND(D5=4,D6="TYPE 2",D4<44),1.363,VLOOKUP(...))
 		const construction = calculateLitzConstruction(16, 36); // Should trigger Type 2
-		const electrical = calculateElectricalProperties(16, 36, 20, 1.363, 1000);
+		const electrical = calculateElectricalProperties(16, 36, 20, 1000);
 
 		expect(construction.type).toBe("Type 2");
 		expect(electrical.totalCMA).toBe(16 * 25.0); // 36 AWG CMA × 16 strands
@@ -392,11 +391,11 @@ describe("Helper Functions", () => {
 // Additional precision tests for Excel formula alignment
 describe("Excel Formula Precision Tests", () => {
 	it("should match Excel precision for electrical calculations", () => {
-		// Test specific values that should match Excel exactly
-		const result = calculateElectricalProperties(20, 28, 20, 1.2, 1000);
+		// Test specific values that should match Excel exactly  
+		const result = calculateElectricalProperties(20, 28, 20, 1000);
 
-		// 20 strands × 159.8 CMA = 3196 CMA total (exact match expected)
-		expect(result.totalCMA).toBe(3196);
+		// 20 strands × 156 CMA = 3120 CMA total (corrected from Excel data)
+		expect(result.totalCMA).toBe(3120);
 
 		// Check that skin depth calculation matches Excel precision
 		expect(result.skinDepth).toBeCloseTo(2.087, 3); // Should be close to Excel value
@@ -410,8 +409,8 @@ describe("Excel Formula Precision Tests", () => {
 
 	it("should handle extreme temperature ranges correctly", () => {
 		// Test temperature coefficient formula at extreme ranges
-		const resultCold = calculateElectricalProperties(20, 28, -40, 1.2, 1000);
-		const resultHot = calculateElectricalProperties(20, 28, 200, 1.2, 1000);
+		const resultCold = calculateElectricalProperties(20, 28, -40, 1000);
+		const resultHot = calculateElectricalProperties(20, 28, 200, 1000);
 
 		// At -40°C, resistance should be significantly lower
 		// At 200°C, resistance should be significantly higher
@@ -444,7 +443,6 @@ describe("Excel Formula Precision Tests", () => {
 			testConfig.strandCount,
 			testConfig.awgSize,
 			testConfig.temperature,
-			1.2,
 			testConfig.frequency,
 		);
 		const dimensions = calculateInsulationDimensions(

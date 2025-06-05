@@ -38,6 +38,7 @@ export type InsulationLayerType =
 export interface LitzFormValues {
 	strandCount: number;
 	awgSize: string;
+	constructionType: LitzType;
 	insulationType: InsulationType;
 	magnetWireGrade: MagnetWireGrade;
 	temperature: number;
@@ -149,6 +150,7 @@ export const litzFormSchema = z.object({
 		z.number().min(1),
 	),
 	awgSize: z.string().min(1),
+	constructionType: z.enum(["Type 1", "Type 2"]),
 	insulationType: z.enum(["ETFE", "FEP", "PFA", "TCA1", "TCA2", "TCA3"]),
 	magnetWireGrade: z.enum([
 		"MW80C",
@@ -173,29 +175,47 @@ export const litzFormSchema = z.object({
 
 /**
  * AWG size options with electrical properties
+ * Data sourced directly from Excel workbook to ensure exact alignment
  */
 export const awgOptions: AWGData[] = [
-	{ value: "10", diameter: 0.1019, cma: 10380, resistance: 0.999 },
-	{ value: "12", diameter: 0.0808, cma: 6530, resistance: 1.588 },
-	{ value: "14", diameter: 0.0641, cma: 4107, resistance: 2.525 },
-	{ value: "16", diameter: 0.0508, cma: 2583, resistance: 4.016 },
-	{ value: "18", diameter: 0.0403, cma: 1624, resistance: 6.385 },
-	{ value: "20", diameter: 0.032, cma: 1022, resistance: 10.15 },
-	{ value: "22", diameter: 0.0253, cma: 640.4, resistance: 16.14 },
-	{ value: "24", diameter: 0.0201, cma: 404.0, resistance: 25.67 },
-	{ value: "26", diameter: 0.0159, cma: 254.1, resistance: 40.81 },
-	{ value: "28", diameter: 0.0126, cma: 159.8, resistance: 64.9 },
-	{ value: "30", diameter: 0.01, cma: 100.5, resistance: 103.2 },
-	{ value: "32", diameter: 0.008, cma: 63.21, resistance: 164.1 },
-	{ value: "34", diameter: 0.0063, cma: 39.75, resistance: 261.3 },
-	{ value: "36", diameter: 0.005, cma: 25.0, resistance: 414.8 },
-	{ value: "38", diameter: 0.004, cma: 15.72, resistance: 659.6 },
-	{ value: "40", diameter: 0.0031, cma: 9.888, resistance: 1049 },
-	{ value: "42", diameter: 0.0025, cma: 6.219, resistance: 1668 },
-	{ value: "44", diameter: 0.002, cma: 3.911, resistance: 2653 },
-	{ value: "46", diameter: 0.0016, cma: 2.461, resistance: 4217 },
-	{ value: "48", diameter: 0.0012, cma: 1.549, resistance: 6700 },
-	{ value: "50", diameter: 0.001, cma: 0.9753, resistance: 10650 },
+	{ value: "10", diameter: 0.1019, cma: 10380, resistance: 0.999 }, // Excel matches
+	{ value: "12", diameter: 0.0808, cma: 6530, resistance: 1.62 }, // Updated resistance from Excel
+	{ value: "14", diameter: 0.0641, cma: 4110, resistance: 2.572 }, // Updated CMA & resistance from Excel
+	{ value: "16", diameter: 0.0508, cma: 2580, resistance: 4.099 }, // Updated CMA & resistance from Excel
+	{ value: "18", diameter: 0.0403, cma: 1620, resistance: 6.514 }, // Updated CMA & resistance from Excel
+	{ value: "20", diameter: 0.032, cma: 1020, resistance: 10.32 }, // Updated CMA & resistance from Excel
+	{ value: "21", diameter: 0.0285, cma: 810, resistance: 13.05 }, // ADDED: Missing AWG 21 for proper Excel equivalent lookup
+	{ value: "22", diameter: 0.0253, cma: 640, resistance: 16.59 }, // Updated CMA & resistance from Excel
+	{ value: "24", diameter: 0.0201, cma: 404, resistance: 26.19 }, // Updated CMA & resistance from Excel
+	{ value: "26", diameter: 0.0159, cma: 253, resistance: 42.07 }, // Updated CMA & resistance from Excel
+	{ value: "28", diameter: 0.0126, cma: 156, resistance: 66.37 }, // CORRECTED: Excel shows 156 CMA and 66.37 resistance
+	{ value: "30", diameter: 0.01, cma: 100, resistance: 105.82 }, // Updated resistance from Excel
+	{ value: "32", diameter: 0.008, cma: 64, resistance: 166.18 }, // Updated CMA & resistance from Excel
+	{ value: "34", diameter: 0.0063, cma: 39.7, resistance: 269.8 }, // Updated CMA & resistance from Excel
+	{ value: "36", diameter: 0.005, cma: 25, resistance: 431.95 }, // Updated resistance from Excel
+	{ value: "38", diameter: 0.004, cma: 16, resistance: 681.85 }, // Updated CMA & resistance from Excel
+	{ value: "40", diameter: 0.0031, cma: 9.61, resistance: 1152.33 }, // Updated CMA & resistance from Excel
+	{ value: "42", diameter: 0.0025, cma: 6.25, resistance: 1800.52 }, // Updated CMA & resistance from Excel
+	{ value: "44", diameter: 0.002, cma: 4, resistance: 2872.85 }, // Updated CMA & resistance from Excel
+	{ value: "46", diameter: 0.00157, cma: 2.46, resistance: 4544 }, // Updated diameter, CMA & resistance from Excel
+	{ value: "48", diameter: 0.00124, cma: 1.54, resistance: 7285 }, // Updated diameter, CMA & resistance from Excel
+	{ value: "50", diameter: 0.00099, cma: 0.98, resistance: 11430 }, // Updated diameter, CMA & resistance from Excel
+];
+
+/**
+ * Construction type definitions
+ */
+export const constructionTypes = [
+	{
+		value: "Type 1" as const,
+		label: "Type 1",
+
+	},
+	{
+		value: "Type 2" as const,
+		label: "Type 2", 
+	
+	},
 ];
 
 /**
@@ -520,43 +540,43 @@ export const awgData: AWGDataEntry[] = [
 	{ awg: 11, nomDiameter: 0.0907, nomCMA: 8230, resistance: 1.3 },
 	{ awg: 12, nomDiameter: 0.0808, nomCMA: 6530, resistance: 1.62 },
 	{ awg: 13, nomDiameter: 0.072, nomCMA: 5180, resistance: 2.04 },
-	{ awg: 14, nomDiameter: 0.0641, nomCMA: 4110, resistance: 2.57 },
+	{ awg: 14, nomDiameter: 0.0641, nomCMA: 4110, resistance: 2.572 },
 	{ awg: 15, nomDiameter: 0.0571, nomCMA: 3260, resistance: 3.25 },
-	{ awg: 16, nomDiameter: 0.0508, nomCMA: 2580, resistance: 4.1 },
+	{ awg: 16, nomDiameter: 0.0508, nomCMA: 2580, resistance: 4.099 },
 	{ awg: 17, nomDiameter: 0.0453, nomCMA: 2050, resistance: 5.17 },
-	{ awg: 18, nomDiameter: 0.0403, nomCMA: 1620, resistance: 6.51 },
+	{ awg: 18, nomDiameter: 0.0403, nomCMA: 1620, resistance: 6.514 },
 	{ awg: 19, nomDiameter: 0.0359, nomCMA: 1290, resistance: 8.23 },
 	{ awg: 20, nomDiameter: 0.032, nomCMA: 1020, resistance: 10.32 },
-	{ awg: 21, nomDiameter: 0.0285, nomCMA: 812, resistance: 13.04 },
+	{ awg: 21, nomDiameter: 0.0285, nomCMA: 810, resistance: 13.05 },
 	{ awg: 22, nomDiameter: 0.0253, nomCMA: 640, resistance: 16.59 },
 	{ awg: 23, nomDiameter: 0.0226, nomCMA: 511, resistance: 20.67 },
 	{ awg: 24, nomDiameter: 0.0201, nomCMA: 404, resistance: 26.19 },
 	{ awg: 25, nomDiameter: 0.0179, nomCMA: 320, resistance: 33.1 },
 	{ awg: 26, nomDiameter: 0.0159, nomCMA: 253, resistance: 42.07 },
 	{ awg: 27, nomDiameter: 0.0142, nomCMA: 202, resistance: 52.17 },
-	{ awg: 28, nomDiameter: 0.0126, nomCMA: 159, resistance: 66.37 },
+	{ awg: 28, nomDiameter: 0.0126, nomCMA: 156, resistance: 66.37 },
 	{ awg: 29, nomDiameter: 0.0113, nomCMA: 128, resistance: 82.68 },
 	{ awg: 30, nomDiameter: 0.01, nomCMA: 100, resistance: 105.82 },
 	{ awg: 31, nomDiameter: 0.0089, nomCMA: 79.2, resistance: 133.92 },
-	{ awg: 32, nomDiameter: 0.008, nomCMA: 64.0, resistance: 166.18 },
+	{ awg: 32, nomDiameter: 0.008, nomCMA: 64, resistance: 166.18 },
 	{ awg: 33, nomDiameter: 0.0071, nomCMA: 50.4, resistance: 211.65 },
 	{ awg: 34, nomDiameter: 0.0063, nomCMA: 39.7, resistance: 269.8 },
 	{ awg: 35, nomDiameter: 0.0056, nomCMA: 31.4, resistance: 342.84 },
-	{ awg: 36, nomDiameter: 0.005, nomCMA: 25.0, resistance: 431.95 },
+	{ awg: 36, nomDiameter: 0.005, nomCMA: 25, resistance: 431.95 },
 	{ awg: 37, nomDiameter: 0.0045, nomCMA: 20.2, resistance: 535.69 },
-	{ awg: 38, nomDiameter: 0.004, nomCMA: 16.0, resistance: 681.85 },
+	{ awg: 38, nomDiameter: 0.004, nomCMA: 16, resistance: 681.85 },
 	{ awg: 39, nomDiameter: 0.0035, nomCMA: 12.25, resistance: 897.15 },
 	{ awg: 40, nomDiameter: 0.0031, nomCMA: 9.61, resistance: 1152.33 },
 	{ awg: 41, nomDiameter: 0.0028, nomCMA: 7.84, resistance: 1422.63 },
 	{ awg: 42, nomDiameter: 0.0025, nomCMA: 6.25, resistance: 1800.52 },
 	{ awg: 43, nomDiameter: 0.0022, nomCMA: 4.84, resistance: 2351.7 },
-	{ awg: 44, nomDiameter: 0.002, nomCMA: 4.0, resistance: 2872.85 },
-	{ awg: 45, nomDiameter: 0.00176, nomCMA: 3.1, resistance: 3616.0 },
-	{ awg: 46, nomDiameter: 0.00157, nomCMA: 2.46, resistance: 4544.0 },
-	{ awg: 47, nomDiameter: 0.0014, nomCMA: 1.96, resistance: 5714.0 },
-	{ awg: 48, nomDiameter: 0.00124, nomCMA: 1.54, resistance: 7285.0 },
-	{ awg: 49, nomDiameter: 0.00111, nomCMA: 1.23, resistance: 9090.0 },
-	{ awg: 50, nomDiameter: 0.00099, nomCMA: 0.98, resistance: 11430.0 },
+	{ awg: 44, nomDiameter: 0.002, nomCMA: 4, resistance: 2872.85 },
+	{ awg: 45, nomDiameter: 0.00176, nomCMA: 3.1, resistance: 3616 },
+	{ awg: 46, nomDiameter: 0.00157, nomCMA: 2.46, resistance: 4544 },
+	{ awg: 47, nomDiameter: 0.0014, nomCMA: 1.96, resistance: 5714 },
+	{ awg: 48, nomDiameter: 0.00124, nomCMA: 1.54, resistance: 7285 },
+	{ awg: 49, nomDiameter: 0.00111, nomCMA: 1.23, resistance: 9090 },
+	{ awg: 50, nomDiameter: 0.00099, nomCMA: 0.98, resistance: 11430 },
 ] as const;
 
 // MAXENDS table from actual Excel (Max Ends Single Op.csv)
