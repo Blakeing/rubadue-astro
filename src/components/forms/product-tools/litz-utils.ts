@@ -51,10 +51,18 @@ export function calculateLitzConstruction(
 
 	// Use provided construction type or auto-determine if not provided
 	const maxEnds = getMaxEnds(validAwgSize);
-	const type: LitzType = constructionType || (() => {
-		const isType1 = validAwgSize < 26 || (validAwgSize < 32 && validStrandCount <= maxEnds);
-		return isType1 ? "Type 1" : "Type 2";
-	})();
+	const type: LitzType =
+		constructionType ||
+		(() => {
+			// Excel D6 formula: =IF(H33=1,"Type 1",IF(AND(D4<32,D3>M10),"Type 2","Select Type"))
+			// H33 = operations, D4 = awgSize, D3 = strandCount, M10 = maxEnds
+			// This logic is complex because operations are not yet known.
+			// We simplify based on the most common condition:
+			if (validAwgSize < 32 && validStrandCount > maxEnds) {
+				return "Type 2";
+			}
+			return "Type 1";
+		})();
 
 	console.log("📊 Construction type determination:", {
 		maxEnds,
@@ -86,12 +94,16 @@ export function calculateLitzConstruction(
 
 		console.log(`🎯 Level ${level} candidates:`, candidates);
 
-		// Apply AWG-specific constraints
+		// Apply AWG-specific constraints from Excel rows 18, 22, 26, 30
 		const validCandidates = candidates.filter((candidate) => {
+			// Stop if a candidate results in "N/A" (Excel logic)
+			if (candidate.strands === 0) return false;
+
 			if (validAwgSize < 49) {
+				// Simplified validation based on max ends
 				return candidate.strands <= maxEnds;
 			}
-			// For AWG >= 49, additional constraints apply
+			// For AWG >= 49, additional constraints from Excel apply
 			return (
 				candidate.strands >= constructionLimits.MIN_STRANDS_LARGE_AWG &&
 				candidate.strands / candidate.divisor > 9
@@ -126,7 +138,7 @@ export function calculateLitzConstruction(
 
 	// Validate construction
 	const isValid = validateConstructionLimits(
-		validStrandCount,
+		finalStrands,
 		validAwgSize,
 		operations,
 		type,
@@ -704,6 +716,14 @@ export function validateConstruction(
 		);
 	}
 
+	// Type 1 operations warning
+	const construction = calculateLitzConstruction(strandCount, awgSize);
+	if (construction.type === "Type 1" && construction.operations > 3) {
+		warnings.push(
+			"PLEASE CONSULT RUBADUE ENGINEERING FOR TYPE 1 LITZ CONSTRUCTIONS REQUIRING 4+ OPERATIONS.",
+		);
+	}
+
 	// AWG size warnings (B34 formula)
 	if (awgSize > 49) {
 		warnings.push(
@@ -716,7 +736,6 @@ export function validateConstruction(
 	}
 
 	// Check UL compliance (G67, G68 formulas)
-	const construction = calculateLitzConstruction(strandCount, awgSize);
 	const dimensions = calculateInsulationDimensions(
 		strandCount,
 		awgSize,
@@ -907,14 +926,11 @@ function getPackingFactor(
 	const entry = lookupTable.find((row) => row.operations === operations);
 
 	if (!entry) {
-		console.log("⚠️ No packing factor entry found, using default");
-		// Fallback to simplified calculation if lookup fails
-		if (strandCount <= 7) return 1.0;
-		if (strandCount <= 19) return 1.1;
-		if (strandCount <= 37) return 1.15;
-		if (strandCount <= 61) return 1.2;
-		if (strandCount <= 91) return 1.25;
-		return 1.3;
+		console.log(
+			`⚠️ No packing factor entry found for ${operations} operations in ${litzType} table, using default of 1.155`,
+		);
+		// Fallback to a reasonable default if lookup fails
+		return 1.155;
 	}
 
 	// Excel D7 formula logic: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),IF(AND(D5=4,D6="TYPE 2",D4<44),1.363,VLOOKUP(D5,TYPE2,4,0)))
@@ -946,36 +962,33 @@ function getTakeUpFactor(
 		litzType,
 	});
 
-	// Select the appropriate lookup table based on construction type
-	const lookupTable =
-		litzType === "Type 1" ? type1ConstructionTable : type2ConstructionTable;
-
-	// Find the entry for the number of operations (D5 in Excel)
-	const entry = lookupTable.find((row) => row.operations === operations);
-
-	if (!entry) {
-		console.log("⚠️ No take up factor entry found, using default");
-		return 1.02; // Conservative default
+	// Excel H3 formula: =IF(D5="","",IF(D3<26,K3,IF(D5=1,K4,IF(D5=2,K5,K6))))
+	// D3 = strandCount, D5 = operations
+	// K3=1.02, K4=1.051, K5=1.071, K6=1.092
+	if (strandCount < 26) {
+		return 1.02;
 	}
-
-	// Use the take up factor from the lookup table (column 5 = packingFactor2)
-	const takeUpFactor = entry.packingFactor2;
-	console.log(`✅ Take up factor from ${litzType} table:`, takeUpFactor);
-
-	return takeUpFactor;
+	if (operations === 1) {
+		return 1.051;
+	}
+	if (operations === 2) {
+		return 1.071;
+	}
+	// 3+ operations
+	return 1.092;
 }
 
 /**
  * Validate construction limits based on AWG size and operations
  */
 function validateConstructionLimits(
-	strandCount: number | string,
+	finalBunchedStrands: number | string,
 	awgSize: number | string,
 	operations: number,
 	type: LitzType,
 ): boolean {
 	// Convert and validate inputs
-	const validStrandCount = Number(strandCount);
+	const validStrandCount = Number(finalBunchedStrands);
 	const validAwgSize = Number(awgSize);
 
 	if (Number.isNaN(validStrandCount) || Number.isNaN(validAwgSize)) {
@@ -995,4 +1008,28 @@ function validateConstructionLimits(
 	}
 	// For AWG >= 49
 	return validStrandCount >= 10 && validStrandCount <= 20;
+}
+
+/**
+ * Calculate Litz Type based on Excel formula from cell D6
+ * Formula: =IF(H33=1,"Type 1",IF(AND(D4<32,D3>M10),"Type 2","Select Type"))
+ * Where H33=operations, D4=awgSize, D3=strandCount, M10=maxEnds
+ */
+export function calculateLitzType(
+	operations: number,
+	strandCount: number,
+	awgSize: number,
+): LitzType {
+	// Excel formula logic
+	if (operations === 1) {
+		return "Type 1";
+	}
+	
+	const maxEnds = getMaxEnds(awgSize);
+	if (awgSize < 32 && strandCount > maxEnds) {
+		return "Type 2";
+	}
+	
+	// Default fallback - in Excel this would be "Select Type" but we need to pick one
+	return "Type 1";
 }

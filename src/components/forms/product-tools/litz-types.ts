@@ -82,20 +82,50 @@ export interface DimensionSet {
  * All dimension results
  */
 export interface DimensionResults {
+	// Single Film
 	bare: DimensionSet;
 	singleInsulated: DimensionSet;
 	doubleInsulated: DimensionSet;
+	
+	// Heavy Film
+	heavyBare: DimensionSet;
+	heavyServed: DimensionSet;
+	heavyDoubleServed: DimensionSet;
+	
+	// Triple Film
 	tripleInsulated: DimensionSet;
+	tripleServed: DimensionSet;
+	tripleDoubleServed: DimensionSet;
+	
+	// Quad Film
+	quadBare: DimensionSet;
+	quadServed: DimensionSet;
+	quadDoubleServed: DimensionSet;
 }
 
 /**
  * Part number results
  */
 export interface PartNumberResults {
+	// Single Film
 	bare: string;
 	singleInsulated: string;
 	doubleInsulated: string;
+	
+	// Heavy Film
+	heavyBare: string;
+	heavyServed: string;
+	heavyDoubleServed: string;
+	
+	// Triple Film
 	tripleInsulated: string;
+	tripleServed: string;
+	tripleDoubleServed: string;
+	
+	// Quad Film
+	quadBare: string;
+	quadServed: string;
+	quadDoubleServed: string;
 }
 
 /**
@@ -334,19 +364,17 @@ export const temperatureCoefficients = {
 
 // Type 1 Construction Table (from Excel TYPE1 lookup) - Cover Sheet.csv data
 export const type1ConstructionTable: ConstructionEntry[] = [
-	{ operations: 1, packingFactor1: 1.155, packingFactor2: 1.01 }, // n/## from Cover Sheet
-	{ operations: 2, packingFactor1: 1.155, packingFactor2: 1.01 }, // n/n/## from Cover Sheet
-	{ operations: 3, packingFactor1: 1.155, packingFactor2: 1.01 }, // n/n/n/## from Cover Sheet
+	{ operations: 1, packingFactor1: 1.155, packingFactor2: 1.01 },
+	{ operations: 2, packingFactor1: 1.155, packingFactor2: 1.01 },
+	{ operations: 3, packingFactor1: 1.155, packingFactor2: 1.01 },
 ] as const;
 
 // Type 2 Construction Table (from Excel TYPE2 lookup) - Cover Sheet.csv data
 export const type2ConstructionTable: ConstructionEntry[] = [
-	{ operations: 2, packingFactor1: 1.236, packingFactor2: 1.03 }, // 5xn/## or 3xn/##
-	{ operations: 3, packingFactor1: 1.236, packingFactor2: 1.03 }, // 5xn/n/## or 3xn/n/##
-	{ operations: 4, packingFactor1: 1.271, packingFactor2: 1.051 }, // 5x5xn/## for 50-44 AWG
-	{ operations: 4, packingFactor1: 1.363, packingFactor2: 1.051 }, // 5x5xn/## for 43-33 AWG (special case)
-	{ operations: 5, packingFactor1: 1.271, packingFactor2: 1.082 }, // 5x5x5xn/## for 50-44 AWG
-	{ operations: 5, packingFactor1: 1.363, packingFactor2: 1.082 }, // 5x5x5xn/## for 43-33 AWG
+	{ operations: 2, packingFactor1: 1.236, packingFactor2: 1.03 },
+	{ operations: 3, packingFactor1: 1.236, packingFactor2: 1.03 },
+	{ operations: 4, packingFactor1: 1.271, packingFactor2: 1.051 },
+	{ operations: 5, packingFactor1: 1.363, packingFactor2: 1.082 },
 ] as const;
 
 // Insulation data from actual Excel Magnet Wire table
