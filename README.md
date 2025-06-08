@@ -2,13 +2,6 @@
 
 Welcome to the Rubadue Wire website documentation. This guide will help you understand how to set up the development environment, add content, and make changes to the website.
 
-## 🎉 **Project Status: CLEANUP COMPLETE** 
-
-✅ **Zero Build Errors** - All 481 initial build errors resolved  
-✅ **Component Reorganization Complete** - Business-oriented structure implemented  
-✅ **Code Duplication Eliminated** - 76+ duplicate files removed  
-✅ **Production Ready** - Optimized and maintainable codebase  
-
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
@@ -32,7 +25,7 @@ This website is built using [Astro](https://astro.build/), a modern web framewor
 
 ## Component Architecture
 
-The codebase has been completely reorganized with a **business-oriented structure** that makes it intuitive for non-technical users to find and modify components:
+The website uses a organized component structure:
 
 ```
 src/components/
@@ -43,14 +36,6 @@ src/components/
 ├── ui/            # Base UI components (buttons, cards, inputs, etc.)
 └── layout/        # Layout & container components (header, footer, containers)
 ```
-
-### Key Improvements
-
-- **Single Source of Truth**: Eliminated 76+ duplicate files
-- **Centralized Data Tables**: One `WireDataTable` component handles all product data
-- **Consistent Form Handling**: Unified form schemas and validation
-- **Modular Design**: Each component has a clear, specific purpose
-- **Easy Maintenance**: Business-oriented naming makes components easy to find
 
 ## Development Environment Setup
 
@@ -365,7 +350,10 @@ The website is automatically deployed when changes are pushed to the main branch
 
 ## Documentation
 
-For more detailed information about the project, refer to the [complete documentation](./docs/README.md).
+Additional documentation for content creators:
+
+- **[Content Guidelines](./docs/CONTENT_GUIDELINES.md)** - Detailed writing standards, SEO best practices, and formatting guidelines
+- **[Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Solutions to common issues and errors
 
 ## Troubleshooting
 
