@@ -1,347 +1,206 @@
-# Troubleshooting Guide
+# Troubleshooting Guide for Content Contributors
 
-This guide covers common issues and their solutions when working with the Rubadue Wire website.
+This guide covers common issues that content creators might encounter when working with the Rubadue Wire website.
 
-## Development Environment Issues
+## Getting Started Issues
 
-### Node.js and pnpm Issues
+### "Command not found" Errors
 
-#### "Command not found: node" or "Command not found: pnpm"
+#### Problem: `node`, `npm`, or `pnpm` not found
+**What this means**: Your computer doesn't have the required software installed.
 
-**Problem**: Node.js or pnpm not installed or not in PATH
-
-**Solutions**:
-1. **Reinstall Node.js**:
-   - Download from [nodejs.org](https://nodejs.org/)
-   - Choose LTS version
-   - Follow installer instructions
-   - Restart terminal after installation
-
-2. **Install pnpm**:
+**Solution**:
+1. **Install Node.js** from [nodejs.org](https://nodejs.org/) (choose the LTS version)
+2. **Install pnpm** by opening Terminal/Command Prompt and typing:
    ```bash
    npm install -g pnpm
    ```
-
-3. **Check installations**:
+3. **Restart your terminal** after installation
+4. **Verify installation**:
    ```bash
    node --version    # Should show v18.x.x or higher
-   npm --version     # Should show version number
    pnpm --version    # Should show version number
    ```
 
-#### "Permission denied" errors on macOS/Linux
+### Development Server Won't Start
 
-**Problem**: Permission issues with global package installation
+#### Problem: "Port 4321 is already in use"
+**What this means**: Another program is using the same port.
 
 **Solution**:
-```bash
-# Fix npm permissions
-sudo chown -R $(whoami) ~/.npm
-sudo chown -R $(whoami) /usr/local/lib/node_modules
-
-# Or use a Node version manager like nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-```
-
-### Development Server Issues
-
-#### "Port 4321 is already in use"
-
-**Problem**: Another process is using the development port
-
-**Solutions**:
-1. **Kill existing process**:
-   ```bash
-   # Find process using port 4321
-   lsof -ti:4321
-   # Kill the process (replace PID with actual process ID)
-   kill -9 [PID]
-   ```
-
-2. **Use different port**:
+1. **Close any other development servers** you might have running
+2. **Or use a different port**:
    ```bash
    pnpm dev --port 3000
    ```
 
-#### Development server won't start
-
-**Problem**: Dependencies or cache issues
+#### Problem: "Dependencies missing" or installation errors
+**What this means**: The project files need to be set up.
 
 **Solution**:
 ```bash
-# Clear everything and reinstall
+# Try reinstalling everything
 rm -rf node_modules
-rm pnpm-lock.yaml
-rm -rf .astro
 pnpm install
 pnpm dev
 ```
 
-#### Changes not reflecting in browser
+### Changes Not Appearing
 
-**Problem**: Cache or hot reload issues
+#### Problem: I made changes but don't see them in the browser
+**What this means**: Cache issues or the server needs a refresh.
 
 **Solutions**:
-1. **Hard refresh browser**: Ctrl+Shift+R (PC) or Cmd+Shift+R (Mac)
-2. **Clear browser cache**: Developer Tools > Application > Storage > Clear Site Data
-3. **Restart dev server**:
-   ```bash
-   # Stop server (Ctrl+C) then restart
-   pnpm dev
-   ```
+1. **Hard refresh your browser**: 
+   - PC: Ctrl+Shift+R
+   - Mac: Cmd+Shift+R
+2. **Wait a few seconds** - sometimes changes take a moment to show up
+3. **Restart the development server**:
+   - Press Ctrl+C to stop the server
+   - Type `pnpm dev` to start it again
 
 ## Content Issues
 
-### Markdown/MDX Files Not Displaying
+### Articles Not Showing Up
 
-#### Article or product not showing up
+#### Problem: My new article isn't appearing on the website
+**What this means**: There's likely an issue with the file location or format.
 
-**Problem**: File location, naming, or frontmatter issues
+**Check these things**:
+1. **File location**: 
+   - Knowledge base articles go in `src/content/knowledgeBase/`
+   - Product pages go in `src/content/products/category/`
 
-**Solutions**:
-1. **Check file location**:
-   - Knowledge base: `src/content/knowledgeBase/filename.md`
-   - Products: `src/content/products/category/filename.mdx`
-
-2. **Verify filename format**:
-   - Use kebab-case: `my-article-title.md`
+2. **File naming**:
+   - Use lowercase with hyphens: `my-article-title.md`
    - No spaces or special characters
-   - Correct file extension (`.md` for knowledge base, `.mdx` for products)
+   - Correct extension: `.md` for articles, `.mdx` for products
 
-3. **Check frontmatter syntax**:
+3. **Frontmatter format** (the stuff at the top between `---`):
    ```yaml
    ---
-   title: "Required Title"
-   description: "Required description"
-   pubDate: "2024-01-15"  # Required, YYYY-MM-DD format
-   category: "Single Insulated"  # Required for products
+   title: "Your Article Title"
+   description: "Brief description of the article"
+   pubDate: "2024-01-15"
    ---
    ```
 
-#### "Cannot read properties of undefined" errors
+#### Problem: "Error in frontmatter" or similar
+**What this means**: The information at the top of your file has a formatting issue.
 
-**Problem**: Missing required frontmatter fields
-
-**Solution**: Ensure all required fields are present:
-
-**Knowledge Base Articles**:
-```yaml
----
-title: "Article Title"      # Required
-description: "Description"   # Required
-pubDate: "2024-01-15"       # Required
-tags: ["Tag1", "Tag2"]      # Optional but recommended
----
-```
-
-**Products**:
-```yaml
----
-title: "Product Name"       # Required
-description: "Description"   # Required
-pubDate: "2024-01-15"       # Required
-category: "Category Name"    # Required
----
-```
+**Solution**:
+- Make sure you have `---` at the beginning and end
+- Check that all required fields are filled in
+- Make sure dates are in YYYY-MM-DD format
+- Use quotes around text values
 
 ### Image Issues
 
-#### Images not loading or showing broken links
-
-**Problem**: Incorrect image paths or missing files
+#### Problem: Images not showing up
+**What this means**: The image path is incorrect or the image file is missing.
 
 **Solutions**:
-1. **Check image paths**:
-   - Public images: `/images/filename.webp` (note leading slash)
-   - Asset images: `@/assets/path/filename.webp` (note @ symbol)
+1. **Check image location**: Put images in `src/assets/images/` (Astro will optimize them automatically)
+2. **Check image path in your content**:
+   ```markdown
+   ![Alt text](@/assets/images/your-image.webp)
+   ```
+   Note the `@/assets/` prefix for optimized images
 
-2. **Verify image exists**:
-   - Public images: Check `public/images/` directory
-   - Asset images: Check `src/assets/` directory
-
-3. **Check file extensions**:
-   - Ensure path exactly matches filename including extension
-   - Case-sensitive on some systems
-
-4. **Image optimization**:
-   ```bash
-   # If images are too large, optimize them
-   # Use online tools or image editing software to compress
+3. **Alternative for simple images**: You can also use `public/images/` but these won't be optimized:
+   ```markdown
+   ![Alt text](/images/your-image.webp)
    ```
 
-#### Hero images not displaying
+4. **Check file name**: Make sure the path exactly matches the filename (including capitalization)
 
-**Problem**: Incorrect heroImage path in frontmatter
+### Markdown Formatting Issues
+
+#### Problem: Text formatting not working
+**What this means**: Markdown syntax might be incorrect.
+
+**Common fixes**:
+- **Bold text**: `**bold text**` (two asterisks on each side)
+- **Italic text**: `*italic text*` (one asterisk on each side)
+- **Links**: `[Link text](https://example.com)`
+- **Headings**: `## Heading` (space after the ##)
+
+## Git and Saving Issues
+
+### Can't Save Changes
+
+#### Problem: "Permission denied" when trying to push changes
+**What this means**: Git authentication issue.
+
+**Solutions**:
+1. **Make sure you're logged into GitHub** in your browser
+2. **Try the GitHub Desktop app** instead of command line
+3. **Ask your development team** to help with authentication
+
+#### Problem: "Merge conflicts" or similar Git errors
+**What this means**: Someone else made changes to the same file.
 
 **Solution**:
-```yaml
-# For public images
-heroImage: "/images/hero-image.webp"
+1. **Don't panic** - this is normal
+2. **Ask your development team for help** - they can resolve conflicts safely
+3. **Or use GitHub Desktop** which has visual tools for resolving conflicts
 
-# For asset images
-heroImage: "@/assets/images/hero-image.webp"
+### Saving Your Work
+
+#### How to save changes properly:
+```bash
+# 1. Check what you've changed
+git status
+
+# 2. Add your changes
+git add .
+
+# 3. Save with a description
+git commit -m "Added new article about wire insulation"
+
+# 4. Upload to GitHub
+git push
 ```
 
-## Build and Deployment Issues
+## Common Error Messages
 
-### Build Failures
+| Error Message | What It Means | Quick Fix |
+|---------------|---------------|-----------|
+| "Command not found" | Software not installed | Install Node.js and pnpm |
+| "Port already in use" | Another server running | Close other servers or use different port |
+| "Module not found" | Missing dependencies | Run `pnpm install` |
+| "Frontmatter error" | Bad formatting in article header | Check YAML formatting |
+| "Image not found" | Wrong image path | Check image location and path |
+| "Permission denied" | Git authentication issue | Contact development team |
 
-#### "Build failed" with unclear errors
+## Getting Help
 
-**Problem**: Various build-time issues
+### Before Asking for Help
+1. **Check the error message** - often it tells you exactly what's wrong
+2. **Try the quick fixes** listed above
+3. **Make sure you saved your files** before testing
 
-**Solutions**:
-1. **Check build output**:
-   ```bash
-   pnpm build
-   # Read error messages carefully
-   ```
+### What to Include When Asking for Help
+- **What you were trying to do**
+- **The exact error message** (copy and paste it)
+- **What operating system you're using** (Windows, Mac, Linux)
+- **Screenshots** of the error if possible
 
-2. **Common fixes**:
-   ```bash
-   # Clear cache and rebuild
-   rm -rf .astro
-   rm -rf dist
-   pnpm build
-   ```
+### Quick Self-Help Commands
+```bash
+# Check if everything is installed
+node --version
+pnpm --version
 
-3. **Check for TypeScript errors**:
-   ```bash
-   # Run type checking
-   npx tsc --noEmit
-   ```
+# Restart everything fresh
+rm -rf node_modules
+pnpm install
+pnpm dev
 
-#### Import/component errors
-
-**Problem**: Missing or incorrect component imports
-
-**Solutions**:
-1. **Check import paths**:
-   ```javascript
-   // Correct
-   import { ComponentName } from "@/components/path/to/component";
-   
-   // Incorrect - missing @ symbol
-   import { ComponentName } from "/components/path/to/component";
-   ```
-
-2. **Verify component exists**:
-   - Check file exists at specified path
-   - Ensure component is properly exported
-
-### Deployment Issues
-
-#### Vercel deployment failures
-
-**Problem**: Build failing in production but working locally
-
-**Solutions**:
-1. **Check environment variables**: Ensure all required env vars are set in Vercel
-2. **Node version mismatch**:
-   ```json
-   // Add to package.json
-   "engines": {
-     "node": ">=18.0.0"
-   }
-   ```
-
-3. **Check build logs**: Review Vercel deployment logs for specific errors
-
-## Content Management Issues
-
-### Git and Version Control
-
-#### "Failed to push" or merge conflicts
-
-**Problem**: Git synchronization issues
-
-**Solutions**:
-1. **Pull latest changes first**:
-   ```bash
-   git pull origin main
-   ```
-
-2. **Resolve conflicts**:
-   ```bash
-   # If conflicts exist, edit files to resolve
-   git add .
-   git commit -m "Resolve merge conflicts"
-   git push
-   ```
-
-3. **Reset if needed** (use carefully):
-   ```bash
-   # Reset to remote state (loses local changes)
-   git fetch origin
-   git reset --hard origin/main
-   ```
-
-#### "Permission denied" for Git operations
-
-**Problem**: Git authentication issues
-
-**Solutions**:
-1. **Check Git credentials**: Ensure you're authenticated with GitHub
-2. **Use HTTPS instead of SSH**: Clone with HTTPS URL if SSH issues
-3. **Update credentials**: Re-authenticate with GitHub
-
-### Performance Issues
-
-#### Site loading slowly in development
-
-**Problem**: Large images or too many files
-
-**Solutions**:
-1. **Optimize images**: Compress images before adding
-2. **Use `.webp` format**: Better compression than PNG/JPG
-3. **Limit concurrent files**: Don't edit too many files simultaneously
-
-#### Build taking too long
-
-**Problem**: Processing many images or files
-
-**Solutions**:
-1. **Optimize images before adding them**
-2. **Remove unused files** from `public/` and `src/assets/`
-3. **Clear cache periodically**:
-   ```bash
-   rm -rf .astro
-   rm -rf node_modules/.cache
-   ```
-
-## Getting Additional Help
-
-### Self-Diagnosis Steps
-
-Before asking for help:
-
-1. **Check terminal output**: Look for specific error messages
-2. **Try in incognito/private browsing**: Rules out browser cache issues
-3. **Test on different browser**: Ensures it's not browser-specific
-4. **Check recent changes**: What did you change that might have caused the issue?
-
-### Information to Provide When Asking for Help
-
-Include the following information:
-
-1. **Operating System**: Windows, macOS, or Linux
-2. **Node.js version**: `node --version`
-3. **Error message**: Copy the exact error from terminal
-4. **Steps to reproduce**: What you were doing when the error occurred
-5. **Recent changes**: What files you've modified recently
-6. **Browser console errors**: Open Developer Tools > Console
-
-### Common Error Messages and Solutions
-
-| Error Message | Most Likely Cause | Quick Fix |
-|---------------|-------------------|-----------|
-| "Cannot find module" | Missing dependency or wrong import path | Check import paths, run `pnpm install` |
-| "Port already in use" | Another dev server running | Kill process or use different port |
-| "Permission denied" | File/folder permissions | Check file permissions, run as admin if needed |
-| "Syntax error in frontmatter" | YAML formatting error | Check indentation and quotes in frontmatter |
-| "Image not found" | Wrong image path | Verify image exists and path is correct |
-| "Build failed" | Various build issues | Clear cache, check for TypeScript errors |
+# Check what files you've changed
+git status
+```
 
 ---
 
-**Still having issues?** Contact your development team with the specific error message and steps you've tried. Screenshots of error messages can be very helpful for diagnosis. 
+**Remember**: Don't worry about breaking anything! The website code is safely stored in Git, so you can always go back to a previous version if something goes wrong. When in doubt, ask your development team for help. 

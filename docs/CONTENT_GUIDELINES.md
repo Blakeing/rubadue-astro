@@ -98,11 +98,15 @@ Use tables for technical specifications and comparisons:
 - Use numbered lists for procedures and steps
 - Keep list items parallel in structure
 
-#### Links
+#### Links and Images
 - Link to relevant products when mentioned
 - Link to related knowledge base articles
 - Use descriptive link text (avoid "click here")
 - Example: `[PFA insulated wire products](/catalog/single-insulated/pfa/)`
+
+**Image References**:
+- **Optimized images** (recommended): `![Alt text](@/assets/images/filename.webp)`
+- **Direct images**: `![Alt text](/images/filename.webp)` (for public folder)
 
 #### Code Blocks
 Use code blocks for:
@@ -157,14 +161,28 @@ Ensure products are correctly categorized:
 - **Litz Wire**: Multi-strand constructions
 
 #### Tags Structure
+Use a simplified, clean tag structure:
+
 ```yaml
 tags:
-  type: ["Product Category"]
-  material: ["Insulation Material"]
-  applications: ["Primary Use Cases"]
-  specs: ["Key Specifications"]
-  certifications: ["Standards/Approvals"]
+  type: ["Product Category"]      # Required: Primary categorization
+  material: ["Insulation Material"] # Required: Material type
 ```
+
+**Important Notes:**
+- **First element in `type` becomes the primary category** (shown in page headers)
+- For **Litz Wire products**: Put "Litz Wire" first, then insulation type
+  - Example: `type: ["Litz Wire", "Triple Insulated"]`
+- For **regular wire**: Use only the insulation type
+  - Example: `type: ["Single Insulated"]`
+- **Category field is no longer used** - it's automatically derived from `tags.type[0]`
+
+**Available Types:**
+- `"Single Insulated"`, `"Double Insulated"`, `"Triple Insulated"`
+- `"Litz Wire"`, `"Bare"`
+
+**Available Materials:**
+- `"ETFE"`, `"FEP"`, `"PFA"`, `"TCA1"`, `"TCA2"`, `"TCA3"`
 
 ## Image Guidelines
 
@@ -186,13 +204,24 @@ tags:
 - Include legends and labels
 - Export in appropriate formats (.webp preferred)
 
-### File Naming
+### File Naming and Location
+- **Preferred location**: `src/assets/images/` (Astro optimizes these automatically)
+- **Alternative location**: `public/images/` (served as-is, no optimization)
 - Use descriptive, SEO-friendly names
-- Include product/article identifiers
+- Include product/article identifiers  
 - Use hyphens, not spaces
 - Examples:
-  - `fep-002-layer-construction-diagram.webp`
-  - `temperature-rating-comparison-chart.webp`
+  - `src/assets/images/fep-002-layer-construction-diagram.webp`
+  - `src/assets/images/temperature-rating-comparison-chart.webp`
+
+**Referencing in Content**:
+```markdown
+<!-- Optimized images (recommended) -->
+![FEP Construction Diagram](@/assets/images/fep-002-layer-construction-diagram.webp)
+
+<!-- Direct images (no optimization) -->
+![Temperature Chart](/images/temperature-rating-comparison-chart.webp)
+```
 
 ## Quality Assurance
 

@@ -10,6 +10,7 @@ import type {
   Product,
   ProductData,
 } from "@/components/pages/product-catalog/ProductListingPage";
+import { getProductCategory } from "@/utils/category";
 import { getResolvedImageSource } from "@/utils/images";
 
 // Get all products from both directory structures
@@ -27,7 +28,7 @@ const mappedProducts = await Promise.all(
       title: product.data.title,
       description: product.data.description,
       heroImage: resolvedImageSrc,
-      category: product.data.category,
+      category: getProductCategory(product.data),
       pubDate: product.data.pubDate.toISOString(),
       tableType: product.data.tableType,
       construction: product.data.construction
@@ -66,7 +67,7 @@ const sortedProducts = mappedProducts.sort(
 
 // Get unique categories
 const categories = [
-  ...new Set(mappedProducts.map((post) => post.data.category)),
+  ...new Set(mappedProducts.map((post) => getProductCategory(post.data))),
 ];
 
 // Get URL parameters for filters

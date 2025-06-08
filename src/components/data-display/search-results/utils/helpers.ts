@@ -32,8 +32,7 @@ export const searchInputStyles = `
 /**
  * Default search placeholder text
  */
-const DEFAULT_SEARCH_PLACEHOLDER =
-	"Search by title, description, or tags...";
+const DEFAULT_SEARCH_PLACEHOLDER = "Search by title, description, or tags...";
 
 /**
  * Default minimum height for search container

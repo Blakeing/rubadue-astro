@@ -1,87 +1,91 @@
-# Rubadue Astro Documentation
+# Rubadue Wire Website - Content Contributor Guide
 
-This directory contains comprehensive documentation for the Rubadue Astro website project.
+Welcome! This guide is designed for **content creators, marketers, and subject matter experts** who want to contribute to the Rubadue Wire website without needing extensive coding knowledge.
 
-## 🎉 **PROJECT STATUS: CLEANUP COMPLETE**
+## 🚀 Getting Started
 
-✅ **Zero Build Errors** - All 481 initial build errors resolved  
-✅ **Component Reorganization Complete** - Business-oriented structure implemented  
-✅ **Code Duplication Eliminated** - 76+ duplicate files removed  
-✅ **Production Ready** - Optimized and maintainable codebase  
+### New to Contributing Content?
+1. **[Setup Guide](./QUICK_START_GUIDE.md)** - Step-by-step instructions to get your development environment running (15 minutes)
+2. **[Content Guidelines](./CONTENT_GUIDELINES.md)** - How to write and format content for the website
+3. **[Troubleshooting](./TROUBLESHOOTING.md)** - Solutions to common issues
 
-**📋 [View Complete Cleanup Report](./CLEANUP_COMPLETE.md)**
+### What You Can Do
+- ✅ **Add Knowledge Base Articles** - Technical guides, application notes, educational content
+- ✅ **Add New Products** - Product descriptions, specifications, applications
+- ✅ **Edit Existing Content** - Update information, fix typos, improve descriptions
+- ✅ **Add Images** - Product photos, diagrams, charts
 
----
+### What This Site Uses
+The website is built with **Astro** and uses **Markdown** files for content. Don't worry if you're not familiar with these - the guides will walk you through everything step by step.
 
-## Documentation Index
+## 📝 Content Types
 
-### **Project Status & Cleanup**
-- **[Cleanup Complete Report](./CLEANUP_COMPLETE.md)** - Comprehensive final project status and achievements
-- **[Cleanup Progress](./CLEANUP_PROGRESS.md)** - Historical progress tracking
-- **[Cleanup Plan](./CLEANUP_PLAN.md)** - Original cleanup strategy and goals
+### Knowledge Base Articles
+Located in: `src/content/knowledgeBase/your-article.md`
 
-### **Development Guides**
-- **[Quick Start Guide](./QUICK_START_GUIDE.md)** - Fast setup for new developers
-- **[Data Tables Documentation](./DATA_TABLES.md)** - Complete guide to product tables
-- **[Component Usage](./COMPONENT_USAGE.md)** - How to use components effectively
-- **[Component Reorganization Plan](./COMPONENT_REORGANIZATION_PLAN.md)** - Architecture decisions
+**Best for:**
+- Technical guides and tutorials
+- Application notes and case studies  
+- Educational content about wire and cable
+- Industry insights and best practices
 
-### **Content Management**
-- **[Content Guidelines](./CONTENT_GUIDELINES.md)** - Writing and formatting standards
-- **[Troubleshooting](./TROUBLESHOOTING.md)** - Common issues and solutions
+### Product Pages
+Located in: `src/content/products/category/your-product.mdx`
 
----
+**Best for:**
+- Individual product descriptions
+- Technical specifications
+- Application examples
+- Construction details
 
-## Key Changes Summary
+## 🔧 Quick Commands
 
-### **Component Architecture**
-The project now uses a **business-oriented structure** that makes it intuitive for non-technical users:
+Once you have everything set up (see Setup Guide):
 
+```bash
+# Start the development server (lets you see changes in real-time)
+pnpm dev
+
+# Save your changes to Git
+git add .
+git commit -m "Describe what you changed"
+git push
 ```
-src/components/
-├── pages/          # Complete page components
-├── forms/          # All form components  
-├── sections/       # Content sections & blocks
-├── data-display/   # Tables, search, interactive tools
-├── ui/            # Base UI components
-└── layout/        # Layout & container components
+
+## 📋 Typical Workflow
+
+1. **Start Development Server**: `pnpm dev`
+2. **Create or Edit Content**: Add/modify `.md` or `.mdx` files
+3. **Preview Changes**: Check `http://localhost:4321` in your browser
+4. **Save Changes**: Use Git commands to save your work
+5. **Push Changes**: Upload your changes to the repository
+
+## 🆘 Need Help?
+
+- **Setup Issues**: Check the [Troubleshooting Guide](./TROUBLESHOOTING.md)
+- **Content Questions**: Review the [Content Guidelines](./CONTENT_GUIDELINES.md)
+- **Technical Problems**: Contact your development team with specific error messages
+
+## 📚 File Structure (For Reference)
+
+You'll mainly be working in these folders:
+```
+src/content/
+├── knowledgeBase/     # Articles and guides (.md files)
+└── products/          # Product information (.mdx files)
+    ├── single-insulated/
+    ├── double-insulated/
+    ├── triple-insulated/
+    └── litz-wire/
+
+src/assets/images/     # Add new images here (Astro optimizes these)
+├── categories/        # Category-related images
+├── markets/          # Market/industry images  
+└── team/             # Team photos
+
+public/images/         # Alternative for unoptimized images
 ```
 
-### **Major Improvements**
-- **Single Source of Truth**: Eliminated 76+ duplicate files
-- **Centralized Data Tables**: One `WireDataTable` component handles all product data
-- **Consistent Form Handling**: Unified form schemas and validation
-- **Zero Build Errors**: Production-ready codebase
-- **Improved Performance**: Reduced bundle size from eliminated duplicates
-
 ---
 
-## Getting Started
-
-1. **New to the project?** Start with the [Quick Start Guide](./QUICK_START_GUIDE.md)
-2. **Need to add content?** Check the [Content Guidelines](./CONTENT_GUIDELINES.md)
-3. **Working with data tables?** See [Data Tables Documentation](./DATA_TABLES.md)
-4. **Encountering issues?** Visit [Troubleshooting](./TROUBLESHOOTING.md)
-
----
-
-## For Different User Types
-
-### **Content Creators & Marketers**
-- Use the business-oriented component structure to easily find what you need
-- All forms are in `/forms/`, all page components in `/pages/`
-- Product tables are in `/data-display/product-tables/`
-
-### **Developers**
-- Zero build errors mean fast development cycles
-- Centralized components eliminate maintenance overhead
-- Clear architecture supports future growth
-
-### **Technical Writers**
-- Content guidelines ensure consistency
-- All documentation is centralized in this directory
-- Markdown formatting is standardized
-
----
-
-*For the main project README, see [../README.md](../README.md)* 
+**Ready to start?** Begin with the [Setup Guide](./QUICK_START_GUIDE.md) to get your development environment running in 15 minutes. 

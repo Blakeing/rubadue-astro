@@ -26,6 +26,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { getProductCategory } from "@/utils/category";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -39,7 +40,7 @@ export interface ProductData {
 	title: string;
 	description: string;
 	heroImage?: string;
-	category: string;
+	category?: string;
 	pubDate: string;
 	tableType?: "litzWire" | "magnet" | "doubleInsulated" | "custom";
 	construction?: {
@@ -519,9 +520,7 @@ export default function ProductListingPage({
 													{product.data.title}
 												</h3>
 												<p className="mt-1 text-xs sm:text-sm text-muted-foreground">
-													{product.data.category === "Wire"
-														? getCategoryFromCollection(product.collection)
-														: product.data.category}
+													{getProductCategory(product.data)}
 												</p>
 											</div>
 										</div>

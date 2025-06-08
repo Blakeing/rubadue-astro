@@ -191,14 +191,10 @@ title: "Product Name"
 description: "Product description for SEO and previews"
 pubDate: "2024-01-15"
 heroImage: "@/assets/products/category/product-image.webp"
-category: "Single Insulated"
 
 tags:
-  type: ["Single Insulated"]
-  material: ["FEP"]
-  applications: ["Telecom", "Electronic"]
-  specs: ["155°C", "600V"]
-  certifications: ["UL", "RoHS"]
+  type: ["Single Insulated"]    # First element becomes primary category
+  material: ["FEP"]             # Material classification
 
 construction:
   sizeRange: "22 AWG - 40 AWG"
@@ -230,11 +226,17 @@ import { YourProductTable } from "@/components/react/data-table/path/to/table";
 
 #### Important Product Fields
 
-- **Required**: `title`, `description`, `pubDate`, `category`
+- **Required**: `title`, `description`, `pubDate`, `tags.type`, `tags.material`
 - **Construction**: Detailed specifications
 - **Applications**: Use cases for the product
 - **Compliances**: Certifications and standards
 - **Table Component**: Import the appropriate data table component
+
+**Tags Notes:**
+- The first element in `tags.type` becomes the primary category (shown in page headers)
+- For Litz Wire products: `type: ["Litz Wire", "Triple Insulated"]`  
+- For regular wire: `type: ["Single Insulated"]`
+- Available materials: `"ETFE"`, `"FEP"`, `"PFA"`, `"TCA1"`, `"TCA2"`, `"TCA3"`
 
 ### Managing Images
 

@@ -1,6 +1,6 @@
+import { motion } from "framer-motion";
 // Import type for TS
 import { Loader2 } from "lucide-react"; // Import Loader icon
-import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 interface LocationDetails {

@@ -1,4 +1,5 @@
 import { Badge, Card, CardContent } from "@/components/ui";
+import { getProductCategory } from "@/utils/category";
 
 interface Product {
 	slug: string;
@@ -6,7 +7,8 @@ interface Product {
 		title: string;
 		description: string;
 		heroImage?: string;
-		category: string;
+		category?: string;
+		tags?: { type?: string[]; material?: string[] };
 		specifications?: {
 			conductor?: string;
 			insulation?: string;
@@ -69,7 +71,7 @@ export default function ProductList({
 											</a>
 										</h3>
 										<p className="mt-1 text-sm text-muted-foreground">
-											{product.data.category}
+											{getProductCategory(product.data)}
 										</p>
 									</div>
 									<div className="mt-4">
