@@ -1,0 +1,3 @@
+# Don't ignore Sharp binaries
+!node_modules/sharp/**
+!node_modules/@img/** 

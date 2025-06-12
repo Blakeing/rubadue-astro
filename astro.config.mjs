@@ -31,5 +31,9 @@ export default defineConfig({
 		domains: ["picsum.photos"],
 	},
 	output: "server",
-	adapter: vercel(),
+	adapter: vercel({
+		imageService: true,
+		devImageService: "sharp",
+		maxDuration: 30,
+	}),
 });

@@ -1,7 +1,4 @@
 {
-	"env": {
-		"NEXT_SHARP": "0"
-	},
 	"functions": {
 		"dist/server/entry.mjs": {
 			"maxDuration": 30,

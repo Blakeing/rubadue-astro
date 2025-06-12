@@ -78,9 +78,11 @@
 		"typescript": "^5.8.2"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["sharp"],
 		"overrides": {
 			"sharp": "^0.34.2"
 		}
+	},
+	"engines": {
+		"node": ">=18.20.7"
 	}
 }
