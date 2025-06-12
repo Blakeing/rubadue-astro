@@ -53,6 +53,37 @@ Welcome to the Rubadue Wire website documentation. This guide will help you unde
 
 🎉 **You're ready!** Jump to [Content Management](#content-management) to start adding content.
 
+### 🖥️ Never Used a Terminal Before?
+
+**Don't panic!** Here are the only commands you need to know:
+
+```bash
+# See where you are
+pwd
+
+# See what files are here  
+ls          # Mac/Linux
+dir         # Windows
+
+# Go into a folder
+cd foldername
+
+# Go back up one level
+cd ..
+
+# Project commands (the important ones!)
+pnpm install    # Set up the project (run once)
+pnpm dev        # Start working (run every time)
+Ctrl+C          # Stop the server when done
+```
+
+**💡 Pro Tips:**
+- Press `Tab` while typing folder names - it will complete them for you!
+- Press the up arrow to see previous commands
+- If you get lost, type `pwd` to see where you are
+
+For complete terminal guidance, see [Basic Terminal Commands](./docs/TROUBLESHOOTING.md#basic-terminal-commands-for-beginners).
+
 ---
 
 ## Getting Started
@@ -106,34 +137,60 @@ If you're new to GitHub, follow these steps first:
 
 #### Required Software
 
-1. **Node.js** (version 18 or higher)
-   - Download from [nodejs.org](https://nodejs.org/)
-   - Choose the LTS (Long Term Support) version
-   - This includes npm (Node Package Manager)
+**📝 Start Here for Beginners**: Install these in order for the smoothest experience.
 
-2. **pnpm** (Package Manager)
-   - After installing Node.js, open your terminal/command prompt
-   - Run: `npm install -g pnpm`
-
-3. **GitHub Account** (Version Control)
-   - Create a free account at [github.com](https://github.com/)
-   - This is needed to access the repository and manage code changes
-
-4. **GitHub Desktop** (Recommended - Easy Git Management)
-   - Download from [desktop.github.com](https://desktop.github.com/)
-   - This provides a user-friendly interface for managing code changes
-   - **Alternative**: You can use command-line Git if you prefer (download from [git-scm.com](https://git-scm.com/))
-
-5. **Visual Studio Code** (Recommended Code Editor)
+1. **Visual Studio Code** (Code Editor with Built-in Terminal)
    - Download from [code.visualstudio.com](https://code.visualstudio.com/)
-   - Install the following extensions (or use the recommended extensions):
+   - **Why first?** VS Code has a user-friendly built-in terminal, so you won't need to find your system's terminal
+   - Install the following extensions (VS Code will suggest these automatically):
      - Astro (astro-build.astro-vscode)
      - MDX (unifiedjs.vscode-mdx)
      - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
      - Biome (biomejs.biome) - for formatting and linting
-     - Code Spell Checker (streetsidesoftware.code-spell-checker)
-     - Path Intellisense (christian-kohler.path-intellisense)
-     - Auto Rename Tag (formulahendry.auto-rename-tag)
+
+2. **Node.js** (version 18.x - REQUIRED)
+   - **Important**: This project requires Node.js 18. Using other versions may cause deployment failures.
+   
+   **Installation Options** (choose the one that fits your comfort level):
+   
+   - **🔰 For Beginners**: 
+     - Download Node.js 18 LTS from [nodejs.org](https://nodejs.org/)
+     - Run the installer (you may need administrator/admin privileges)
+     - **Windows users**: Right-click the installer and "Run as administrator"
+     - **Mac users**: You may be prompted for your password during installation
+   
+   - **📦 For Developers (using package managers)**:
+     - **macOS**: Open Terminal and run: `brew install node@18`
+     - **Windows**: Open PowerShell as Administrator and run: `scoop install nodejs18`
+     - **Linux**: `curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs`
+   
+   - **🔄 For Multiple Projects (Node Version Manager)**:
+     ```bash
+     # Install nvm first, then in your terminal:
+     nvm install 18
+     nvm use 18
+     # Or use the project's .nvmrc file:
+     nvm use  # This reads the .nvmrc file in the project root
+     ```
+   
+   - This includes npm (Node Package Manager)
+
+3. **pnpm** (Package Manager)
+   - **After installing Node.js**, open VS Code
+   - Open the built-in terminal: `Terminal` menu → `New Terminal` (or `Ctrl+`` ` on Windows/Linux, `Cmd+`` ` on Mac)
+   - Type: `npm install -g pnpm` and press Enter
+   - **If you get permission errors**:
+     - **Windows**: Close VS Code, right-click VS Code icon, "Run as administrator", then try again
+     - **Mac/Linux**: Try `sudo npm install -g pnpm` (you'll be asked for your password)
+
+4. **GitHub Account** (Version Control)
+   - Create a free account at [github.com](https://github.com/)
+   - This is needed to access the repository and manage code changes
+
+5. **GitHub Desktop** (Recommended - Easy Git Management)
+   - Download from [desktop.github.com](https://desktop.github.com/)
+   - This provides a user-friendly interface for managing code changes
+   - **Alternative**: You can use command-line Git if you prefer (download from [git-scm.com](https://git-scm.com/))
 
 ### Setting Up the Project
 
@@ -572,56 +629,63 @@ The Vercel dashboard is your best tool for ensuring content changes deploy succe
 
 ## Additional Documentation
 
-Additional resources for content creators:
+For comprehensive guides and detailed information:
 
+- 📁 **[Documentation Index](./docs/README.md)** - Navigate all project documentation
+- 🆘 **[Complete Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Solutions to all common issues 
 - 📝 **[Content Guidelines](./docs/CONTENT_GUIDELINES.md)** - Writing standards, SEO best practices, formatting
 - 🔧 **[Data Tables Guide](./docs/DATA_TABLES.md)** - Complete data table documentation  
-- 🆘 **[Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Solutions to common issues
+
+> 💡 **Pro tip**: Start with the [docs index](./docs/README.md) to quickly find what you need!
 
 ## Troubleshooting
 
-> 🚨 **Need Help Fast?** Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) for detailed solutions.
+> 🚨 **Need Help Fast?** Check the [Complete Troubleshooting Guide](./docs/TROUBLESHOOTING.md) for detailed solutions to all common issues.
 
-### Common Issues
-
-#### Development Server Won't Start
+### Quick Emergency Commands
 ```bash
-# Clear cache and reinstall dependencies
-rm -rf node_modules
-rm pnpm-lock.yaml
-pnpm install
-pnpm dev
+# If everything breaks, try this:
+rm -rf node_modules && pnpm install && pnpm dev
+
+# Fix code formatting:
+pnpm format && pnpm lint
 ```
 
-#### Images Not Loading
-- Check file paths are correct
-- Ensure images are in the right directory
-- Verify image file extensions match references
+### Most Common Issues
 
-#### Content Not Appearing
-- Check frontmatter syntax (YAML formatting)
-- Ensure required fields are present
-- Verify file is in correct directory
+**"Command not found: node" or "pnpm"**
+- Install Node.js 18 from [nodejs.org](https://nodejs.org/)
+- Run `npm install -g pnpm`
+- Restart VS Code
 
-#### Build Errors
-- Check console for specific error messages
-- Ensure all imports are correct
-- Verify all referenced components exist
+**"Port 4321 already in use"**
+- Press `Ctrl+C` to stop the current server
+- Or try: `pnpm dev --port 3000`
+
+**Changes not showing in browser**
+- Hard refresh: `Ctrl+F5` (Windows) or `Cmd+Shift+R` (Mac)
+- Make sure you saved the file
+- Check if the dev server is still running
+
+**Images not loading**
+- Check image paths: use `@/assets/images/filename.webp`
+- Make sure images are in `src/assets/` directory
+- Verify filename matches exactly (case-sensitive)
 
 ### Getting Help
 
-If you encounter issues:
+**Before asking for help:**
+1. Check the [Complete Troubleshooting Guide](./docs/TROUBLESHOOTING.md)
+2. Try the emergency commands above
+3. Copy the exact error message
 
-1. Check the error message in your terminal
-2. Verify your file structure matches the examples
-3. Ensure all required fields are present in frontmatter
-4. Check that image paths are correct
-
-For additional support, contact your development team with:
-- Description of the issue
-- Error messages (if any)
-- Steps you were taking when the issue occurred
+**When asking for help, include:**
+- What you were trying to do
+- The exact error message (copy and paste)
 - Screenshots if helpful
+- What you already tried
+
+For comprehensive troubleshooting covering setup issues, content problems, deployment failures, and more, see the **[Complete Troubleshooting Guide](./docs/TROUBLESHOOTING.md)**.
 
 ## Next Steps
 
@@ -675,4 +739,4 @@ pnpm lint
 
 ---
 
-**Need Help?** Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) or contact your development team with screenshots and error messages.# Fixed file count limit issue
+**Need Help?** Check the [Complete Troubleshooting Guide](./docs/TROUBLESHOOTING.md) or contact your development team with screenshots and error messages.
