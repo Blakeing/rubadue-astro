@@ -2,7 +2,7 @@
 
 > 🚀 **Quick Start**: New to this project? Jump to [Setup for Beginners](#setup-for-beginners) to get started in minutes!
 
-Welcome to the Rubadue Wire website documentation. This guide will help you understand how to set up the development environment, add content, and make changes to the website.
+Welcome to the Rubadue Wire website documentation. This guide will help you understand how to set up the development environment, add content, and make changes to the website..
 
 ## 📋 Table of Contents
 
