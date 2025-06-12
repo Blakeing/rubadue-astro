@@ -1,0 +1,9 @@
+{
+	"functions": {
+		"dist/server/entry.mjs": {
+			"maxDuration": 30,
+			"memory": 1769
+		}
+	},
+	"crons": []
+}

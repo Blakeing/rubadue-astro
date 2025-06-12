@@ -1,12 +1,8 @@
-import { getImage } from "astro:assets"; // Import getImage
-import defaultHeroImageMetadata from "@/assets/backgrounds/rubadue-hero.webp"; // Keep fallback metadata import
-import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+import defaultHeroImageMetadata from "@/assets/backgrounds/rubadue-hero.webp";
 
 // We still need the glob to check if an asset path exists
-const images = import.meta.glob<{ default: ImageMetadata }>(
-	"/src/assets/products/**/*.{jpeg,jpg,png,gif,webp}",
-);
-// Log discovered images ONCE at startup
+const images = import.meta.glob("/src/assets/**/*.{jpeg,jpg,png,gif,webp}");
 
 /**
  * Resolves an image path to an optimized image URL string.
@@ -20,85 +16,49 @@ export async function getResolvedImageSource(
 ): Promise<string> {
 	const { width = 800, height, quality = 80 } = options;
 
-	let imgSrcToProcess: string | ImageMetadata = defaultHeroImageMetadata;
-	let isPublicPath = false;
+	// Handle public paths directly
+	if (imagePath?.startsWith("/")) {
+		return imagePath;
+	}
 
-	if (imagePath) {
-		if (imagePath.startsWith("/")) {
-			imgSrcToProcess = imagePath;
-			isPublicPath = true;
-		} else if (imagePath.startsWith("@/assets/")) {
-			const normalizedPath = imagePath.replace("@/assets/", "/src/assets/");
-			const imageModuleEntry = images[normalizedPath]; // Get the function to import
-			if (imageModuleEntry) {
-				try {
-					const importedModule = await imageModuleEntry(); // Dynamically import
-					imgSrcToProcess = importedModule.default; // Use the imported metadata
-				} catch (importError) {
-					console.error(
-						`[getResolvedImageSource] Error importing asset ${normalizedPath}:`,
-						importError,
-					);
-					imgSrcToProcess = defaultHeroImageMetadata; // Use fallback if import fails
-				}
-			} else {
-				console.warn(
-					`[getResolvedImageSource] Asset NOT found in glob: ${normalizedPath}. Will use fallback.`,
+	// Default to fallback image
+	let imageToProcess = defaultHeroImageMetadata;
+
+	// Try to resolve asset paths
+	if (imagePath?.startsWith("@/assets/")) {
+		const normalizedPath = imagePath.replace("@/assets/", "/src/assets/");
+		const imageModuleEntry = images[normalizedPath];
+		if (imageModuleEntry) {
+			try {
+				const importedModule = (await imageModuleEntry()) as {
+					default: typeof defaultHeroImageMetadata;
+				};
+				imageToProcess = importedModule.default;
+			} catch (importError) {
+				console.error(
+					`[getResolvedImageSource] Error importing asset ${normalizedPath}:`,
+					importError,
 				);
-				imgSrcToProcess = defaultHeroImageMetadata; // Ensure fallback is set
 			}
 		} else {
 			console.warn(
-				`[getResolvedImageSource] Unrecognized path format: ${imagePath}. Will use fallback.`,
+				`[getResolvedImageSource] Asset NOT found in glob: ${normalizedPath}. Using fallback.`,
 			);
-			imgSrcToProcess = defaultHeroImageMetadata; // Ensure fallback is set
 		}
-	} else {
-		imgSrcToProcess = defaultHeroImageMetadata; // Ensure fallback is set
 	}
 
-	if (isPublicPath && typeof imgSrcToProcess === "string") {
-		return imgSrcToProcess;
-	}
-
+	// Optimize the image
 	try {
-		const srcDesc =
-			typeof imgSrcToProcess === "string"
-				? imgSrcToProcess
-				: imgSrcToProcess.src;
 		const optimizedImage = await getImage({
-			src: imgSrcToProcess,
-			width: width,
-			height: height,
+			src: imageToProcess,
+			width,
+			height,
 			format: "webp",
-			quality: quality,
+			quality,
 		});
 		return optimizedImage.src;
 	} catch (error) {
-		const errorSrc =
-			typeof imgSrcToProcess === "string"
-				? imgSrcToProcess
-				: imgSrcToProcess.src;
-		console.error(
-			`[getResolvedImageSource] Error calling getImage() for ${errorSrc}:`,
-			error,
-		);
-		// If optimization fails, try optimizing the fallback image
-		try {
-			const fallbackOptimized = await getImage({
-				src: defaultHeroImageMetadata,
-				width,
-				height,
-				format: "webp",
-				quality,
-			});
-			return fallbackOptimized.src;
-		} catch (fallbackError) {
-			console.error(
-				"[getResolvedImageSource] Error optimizing fallback image! Returning raw fallback src.",
-				fallbackError,
-			);
-			return defaultHeroImageMetadata.src;
-		}
+		console.error("[getResolvedImageSource] Error optimizing image:", error);
+		return defaultHeroImageMetadata.src;
 	}
 }

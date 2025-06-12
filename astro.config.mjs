@@ -29,9 +29,6 @@ export default defineConfig({
 	image: {
 		remotePatterns: [{ protocol: "https" }],
 		domains: ["picsum.photos"],
-		service: {
-			entrypoint: "astro/assets/services/sharp",
-		},
 	},
 	output: "server",
 	adapter: vercel(),
