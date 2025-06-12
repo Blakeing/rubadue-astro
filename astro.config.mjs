@@ -27,13 +27,15 @@ export default defineConfig({
 		}),
 	],
 	image: {
+		service: {
+			entrypoint: "astro/assets/services/sharp",
+		},
 		remotePatterns: [{ protocol: "https" }],
 		domains: ["picsum.photos"],
 	},
 	output: "server",
 	adapter: vercel({
-		imageService: true,
-		devImageService: "sharp",
 		maxDuration: 30,
+		includeFiles: ["./node_modules/sharp/**/*"],
 	}),
 });

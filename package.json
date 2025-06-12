@@ -8,6 +8,7 @@
 		"build": "astro check && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
+		"vercel-build": "chmod +x ./vercel-build.sh && ./vercel-build.sh && pnpm build",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",
@@ -80,6 +81,10 @@
 	"pnpm": {
 		"overrides": {
 			"sharp": "^0.34.2"
+		},
+		"supportedArchitectures": {
+			"os": ["current", "linux"],
+			"cpu": ["current", "x64"]
 		}
 	},
 	"engines": {
