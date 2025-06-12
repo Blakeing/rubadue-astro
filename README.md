@@ -65,6 +65,12 @@ This website is built using [Astro](https://astro.build/), a modern web framewor
 - 🔧 **Interactive Components** - Forms, product builders, and data tables
 - 📁 **Static Assets** - Images, certificates, and downloadable content
 
+### Code Quality Tools
+The project uses modern development tools for consistent code quality:
+- **[Biome](https://biomejs.dev/)** - Fast formatter and linter (replaces Prettier + ESLint)
+- **[Knip](https://knip.dev/)** - Finds unused dependencies and exports
+- **TypeScript** - Type checking for better code reliability
+
 ## Component Architecture
 
 The website uses a organized component structure:
@@ -120,11 +126,14 @@ If you're new to GitHub, follow these steps first:
 
 5. **Visual Studio Code** (Recommended Code Editor)
    - Download from [code.visualstudio.com](https://code.visualstudio.com/)
-   - Install the following extensions:
-     - Astro
-     - Tailwind CSS IntelliSense
-     - Auto Rename Tag
-     - Prettier - Code formatter
+   - Install the following extensions (or use the recommended extensions):
+     - Astro (astro-build.astro-vscode)
+     - MDX (unifiedjs.vscode-mdx)
+     - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
+     - Biome (biomejs.biome) - for formatting and linting
+     - Code Spell Checker (streetsidesoftware.code-spell-checker)
+     - Path Intellisense (christian-kohler.path-intellisense)
+     - Auto Rename Tag (formulahendry.auto-rename-tag)
 
 ### Setting Up the Project
 
@@ -395,7 +404,14 @@ For comprehensive guidance on data tables, refer to the [complete documentation]
    - Navigate to your new/edited content
    - Verify everything looks correct
 
-4. **Build for Production** (Optional - test before deployment)
+4. **Code Quality Checks** (Optional but recommended)
+   ```bash
+   pnpm lint        # Check for code issues
+   pnpm format      # Format code with Biome
+   pnpm unused      # Check for unused dependencies
+   ```
+
+5. **Build for Production** (Optional - test before deployment)
    ```bash
    pnpm build
    pnpm preview
@@ -649,6 +665,12 @@ rm -rf node_modules && pnpm install
 
 # Need to restart?
 Ctrl+C then pnpm dev
+
+# Code formatting issues?
+pnpm format
+
+# Check for errors?
+pnpm lint
 ```
 
 ---
