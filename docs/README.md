@@ -36,7 +36,14 @@ Detailed standards for creating high-quality content.
 - Tag structure and organization
 
 ### 📊 [Data Tables Guide](./DATA_TABLES.md)
-*(If it exists)* Complete guide to creating and managing product data tables.
+Complete guide to creating and managing product data tables.
+
+**Includes:**
+- Table types and components
+- Creating new data tables
+- Data structure requirements
+- Customization options
+- Best practices and troubleshooting
 
 ## 🎯 Quick Navigation
 
