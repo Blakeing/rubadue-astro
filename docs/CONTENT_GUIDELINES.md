@@ -106,7 +106,9 @@ Use tables for technical specifications and comparisons:
 
 **Image References**:
 - **Optimized images** (recommended): `![Alt text](@/assets/images/filename.webp)`
-- **Direct images**: `![Alt text](/images/filename.webp)` (for public folder)
+- **Background/Hero images**: `@/assets/backgrounds/filename.webp`
+- **Product images**: `@/assets/products/category/filename.webp`
+- **Static images** (avoid unless necessary): `![Alt text](/images/filename.webp)` (public folder)
 
 #### Code Blocks
 Use code blocks for:
@@ -205,8 +207,11 @@ tags:
 - Export in appropriate formats (.webp preferred)
 
 ### File Naming and Location
-- **Preferred location**: `src/assets/images/` (Astro optimizes these automatically)
-- **Alternative location**: `public/images/` (served as-is, no optimization)
+- **Preferred locations** (Astro optimizes these automatically):
+  - Hero/background images: `src/assets/backgrounds/`
+  - Product images: `src/assets/products/category/`
+  - General content images: `src/assets/images/`
+- **Alternative location**: `public/images/` (served as-is, no optimization, use sparingly)
 - Use descriptive, SEO-friendly names
 - Include product/article identifiers  
 - Use hyphens, not spaces

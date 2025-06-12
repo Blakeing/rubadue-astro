@@ -2,7 +2,7 @@
 title: "Tips on How to Avoid Damaging Insulated Winding Wires in your Process"
 description: "Learn best practices for handling and processing insulated winding wires to prevent damage."
 pubDate: "2023-12-21"
-heroImage: "/images/knowledge-base-hero-placeholder.webp"
+heroImage: "@/assets/backgrounds/knowledge-base-hero-placeholder.webp"
 tags: ["Winding processes", "Tips & Recommendations", "Insulated Winding Wire"]
 ---
 

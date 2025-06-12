@@ -100,7 +100,10 @@ pnpm dev
 **What this means**: The image path is incorrect or the image file is missing.
 
 **Solutions**:
-1. **Check image location**: Put images in `src/assets/images/` (Astro will optimize them automatically)
+1. **Check image location**: Put images in the appropriate `src/assets/` directory (Astro will optimize them automatically):
+   - Hero images: `src/assets/backgrounds/`
+   - Product images: `src/assets/products/category/`
+   - General images: `src/assets/images/`
 2. **Check image path in your content**:
    ```markdown
    ![Alt text](@/assets/images/your-image.webp)

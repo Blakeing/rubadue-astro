@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import heroImage from "@/assets/backgrounds/rubadue-hero.webp";
+import ironGripPattern from "@/assets/backgrounds/iron-grip.png";
 ---
 
 <div
@@ -16,7 +17,7 @@ import heroImage from "@/assets/backgrounds/rubadue-hero.webp";
 
   <div
     class="absolute inset-0 -z-10 opacity-10"
-    style="background-image: url('/src/assets/backgrounds/iron-grip.png');"
+    style={`background-image: url('${ironGripPattern.src}');`}
   >
   </div>
 

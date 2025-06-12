@@ -2,7 +2,7 @@
 title: "A Brief Explanation of Litz Diameters and Tolerances"
 description: "Understand the key factors affecting Litz wire diameters and tolerances, and how to specify them correctly."
 pubDate: "2023-12-21"
-heroImage: "/images/knowledge-base-hero-placeholder.webp"
+heroImage: "@/assets/backgrounds/knowledge-base-hero-placeholder.webp"
 tags: ["Litz Wire", "Tolerances", "Diameters", "Measurements"]
 ---
 

@@ -2,7 +2,7 @@
 title: "Insulated Winding Wire 101: Selecting an Insulated Winding Wire Part I: Temperature Ratings"
 description: "Learn about temperature ratings and thermal life considerations when selecting insulated winding wires."
 pubDate: "2023-12-21"
-heroImage: "/images/knowledge-base-hero-placeholder.webp"
+heroImage: "@/assets/backgrounds/knowledge-base-hero-placeholder.webp"
 tags: ["Technical Guide", "Insulated Winding Wire", "Temperature Ratings", "Thermal Life", "Reflow Soldering", "Insulation", "OBJT2"]
 ---
 

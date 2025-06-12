@@ -18,7 +18,7 @@ Welcome to the Rubadue Wire website documentation. This guide will help you unde
 
 ---
 
-## 🚀 Setup for Beginners
+## Setup for Beginners
 
 **New to GitHub and web development?** Follow this simplified guide:
 
@@ -55,7 +55,7 @@ Welcome to the Rubadue Wire website documentation. This guide will help you unde
 
 ---
 
-## 📖 Getting Started
+## Getting Started
 
 This website is built using [Astro](https://astro.build/), a modern web framework that allows for fast, content-focused websites. 
 
@@ -65,7 +65,7 @@ This website is built using [Astro](https://astro.build/), a modern web framewor
 - 🔧 **Interactive Components** - Forms, product builders, and data tables
 - 📁 **Static Assets** - Images, certificates, and downloadable content
 
-## 📁 Component Architecture
+## Component Architecture
 
 The website uses a organized component structure:
 
@@ -79,7 +79,7 @@ src/components/
 └── layout/        # Layout & container components (header, footer, containers)
 ```
 
-## ⚙️ Development Environment Setup
+## Development Environment Setup
 
 ### Prerequisites
 
@@ -172,7 +172,7 @@ If you're new to GitHub, follow these steps first:
 - Open your browser and go to `http://localhost:4321`
 - You should see the Rubadue Wire website
 
-## 📝 Content Management
+## Content Management
 
 > 💡 **Most Common Tasks**: Adding articles and updating product info. Start here if you're ready to add content!
 
@@ -191,7 +191,7 @@ Knowledge base articles are located in `src/content/knowledgeBase/` and use Mark
 title: "Your Article Title"
 description: "Brief description of the article content"
 pubDate: "2024-01-15"
-heroImage: "/images/knowledge-base-hero-placeholder.webp"
+heroImage: "@/assets/backgrounds/knowledge-base-hero-placeholder.webp"
 tags: ["Technical Guide", "Wire Types", "Applications"]
 ---
 
@@ -229,7 +229,7 @@ Use ## for main sections and ### for subsections.
 
 #### Optional Fields
 
-- `heroImage`: Path to header image (use `/images/` for public images)
+- `heroImage`: Path to header image (use `@/assets/backgrounds/` for optimized images)
 - `updatedDate`: If you update an existing article
 
 ### Adding Products
@@ -313,9 +313,10 @@ import { YourProductTable } from "@/components/react/data-table/path/to/table";
 
 #### Adding Images
 
-1. **Knowledge Base Images**: Place in `public/images/`
-2. **Product Images**: Place in `src/assets/products/[category]/`
-3. **General Images**: Place in `public/` or `src/assets/`
+1. **Hero Images**: Place in `src/assets/backgrounds/` (optimized by Astro)
+2. **Product Images**: Place in `src/assets/products/[category]/` (optimized by Astro)
+3. **General Content Images**: Place in `src/assets/images/` (optimized by Astro)
+4. **Static Assets**: Only use `public/` for files that shouldn't be processed
 
 #### Image Guidelines
 
@@ -326,10 +327,12 @@ import { YourProductTable } from "@/components/react/data-table/path/to/table";
 
 #### Referencing Images
 
-- Public images: `/images/filename.webp`
-- Asset images: `@/assets/path/filename.webp`
+- **Optimized images (recommended)**: `@/assets/path/filename.webp`
+- **Hero images**: `@/assets/backgrounds/filename.webp`
+- **Product images**: `@/assets/products/category/filename.webp`
+- **Static files (avoid unless necessary)**: `/filename.webp` (public folder)
 
-## 📊 Data Tables
+## Data Tables
 
 Product pages include interactive data tables that display technical specifications. These tables are searchable, sortable, and paginated for easy navigation.
 
@@ -371,7 +374,7 @@ For detailed information about creating and managing data tables, see the [Data 
 
 For comprehensive guidance on data tables, refer to the [complete documentation](./docs/DATA_TABLES.md).
 
-## 🔄 Making Changes
+## Making Changes
 
 > ⚡ **Quick Workflow**: Edit files → Save → Check GitHub Desktop → Commit → Push → Check Vercel
 
@@ -445,7 +448,7 @@ For comprehensive guidance on data tables, refer to the [complete documentation]
 - **Regular Backups**: Commit and push changes regularly
 - **Image Optimization**: Compress images before adding them
 
-## 🚀 Deployment & Monitoring
+## Deployment & Monitoring
 
 The website is automatically deployed when changes are pushed to the main branch. The deployment process:
 
@@ -551,7 +554,7 @@ If you encounter persistent deployment issues:
 
 The Vercel dashboard is your best tool for ensuring content changes deploy successfully and monitoring the overall health of the website.
 
-## 📖 Additional Documentation
+## Additional Documentation
 
 Additional resources for content creators:
 
@@ -559,7 +562,7 @@ Additional resources for content creators:
 - 🔧 **[Data Tables Guide](./docs/DATA_TABLES.md)** - Complete data table documentation  
 - 🆘 **[Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Solutions to common issues
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 > 🚨 **Need Help Fast?** Check the [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) for detailed solutions.
 
@@ -632,7 +635,7 @@ pnpm dev
 ### 📝 Content Files Locations
 - **Articles**: `src/content/knowledgeBase/filename.md`
 - **Products**: `src/content/products/category/filename.mdx`
-- **Images**: `public/images/` or `src/assets/`
+- **Images**: `src/assets/` (optimized) or `public/` (static)
 
 ### 🔗 Important Links
 - **Local Site**: `http://localhost:4321`

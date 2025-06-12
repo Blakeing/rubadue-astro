@@ -2,7 +2,7 @@
 title: "Skin Effect and Proximity Effect Losses in Litz Wires"
 description: "Understand the impact of skin effect and proximity effect on Litz wire performance and how to minimize these losses."
 pubDate: "2023-12-21"
-heroImage: "/images/knowledge-base-hero-placeholder.webp"
+heroImage: "@/assets/backgrounds/knowledge-base-hero-placeholder.webp"
 tags: ["Litz Wire", "Skin Effect", "Proximity Effect", "AC Losses", "Litz Design"]
 ---
 

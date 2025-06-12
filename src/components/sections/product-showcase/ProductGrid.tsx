@@ -1,5 +1,6 @@
 import { Badge, Card, CardContent } from "@/components/ui";
 import { getProductCategory } from "@/utils/category";
+import heroFallback from "@/assets/backgrounds/rubadue-hero.webp";
 
 interface Product {
 	slug: string;
@@ -54,10 +55,7 @@ export default function ProductList({
 							<CardContent className="p-0">
 								<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-muted lg:aspect-none lg:h-80">
 									<img
-										src={
-											product.data.heroImage ||
-											"/src/assets/backgrounds/rubadue-hero.webp"
-										}
+										src={product.data.heroImage || heroFallback.src}
 										alt={product.data.title}
 										className="h-full w-full object-cover object-center lg:h-full lg:w-full"
 									/>
