@@ -39,15 +39,19 @@ export async function getResolvedImageSource(
 					`[getResolvedImageSource] Error importing asset ${normalizedPath}:`,
 					importError,
 				);
+				// Fallback to default image instead of breaking
+				imageToProcess = defaultHeroImageMetadata;
 			}
 		} else {
 			console.warn(
 				`[getResolvedImageSource] Asset NOT found in glob: ${normalizedPath}. Using fallback.`,
 			);
+			// Use fallback image
+			imageToProcess = defaultHeroImageMetadata;
 		}
 	}
 
-	// Optimize the image
+	// Optimize the image with better error handling
 	try {
 		const optimizedImage = await getImage({
 			src: imageToProcess,
@@ -59,6 +63,7 @@ export async function getResolvedImageSource(
 		return optimizedImage.src;
 	} catch (error) {
 		console.error("[getResolvedImageSource] Error optimizing image:", error);
-		return defaultHeroImageMetadata.src;
+		// Return the source directly as a last resort
+		return imageToProcess.src || defaultHeroImageMetadata.src;
 	}
 }
