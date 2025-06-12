@@ -1,6 +1,6 @@
+import heroFallback from "@/assets/backgrounds/rubadue-hero.webp";
 import { Badge, Card, CardContent } from "@/components/ui";
 import { getProductCategory } from "@/utils/category";
-import heroFallback from "@/assets/backgrounds/rubadue-hero.webp";
 
 interface Product {
 	slug: string;
