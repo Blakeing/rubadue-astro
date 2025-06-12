@@ -36,6 +36,5 @@ export default defineConfig({
 	output: "server",
 	adapter: vercel({
 		maxDuration: 30,
-		includeFiles: ["./node_modules/sharp/**/*"],
 	}),
 });

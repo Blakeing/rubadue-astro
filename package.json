@@ -8,7 +8,6 @@
 		"build": "astro check && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"vercel-build": "chmod +x ./vercel-build.sh && ./vercel-build.sh && pnpm build",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",
@@ -83,9 +82,21 @@
 			"sharp": "^0.34.2"
 		},
 		"supportedArchitectures": {
-			"os": ["current", "linux"],
-			"cpu": ["current", "x64"]
-		}
+			"os": [
+				"current",
+				"linux"
+			],
+			"cpu": [
+				"current",
+				"x64"
+			]
+		},
+		"onlyBuiltDependencies": [
+			"@biomejs/biome",
+			"@vercel/speed-insights",
+			"esbuild",
+			"sharp"
+		]
 	},
 	"engines": {
 		"node": ">=18.20.7"
