@@ -1,21 +1,6 @@
 import type { ToastProps } from "@radix-ui/react-toast";
-import type { FieldValues } from "react-hook-form";
 
 import type { ReactNode } from "react";
-
-/**
- * Props for usePartNumber hook
- */
-export interface UsePartNumberProps<T extends FieldValues> {
-	/** Form values to generate part number from */
-	formValues: T;
-	/** Function to generate part number from form values */
-	generatePartNumber: (values: T) => string;
-	/** Callback when part number is successfully generated */
-	onSuccess?: (partNumber: string) => void;
-	/** Callback when part number generation fails */
-	onError?: (error: unknown) => void;
-}
 
 /**
  * Toast configuration

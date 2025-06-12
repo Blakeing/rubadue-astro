@@ -19,7 +19,7 @@ export interface Post {
 }
 
 /**
- * Props for the Search component
+ * Props for search components
  */
 export interface SearchProps {
 	/** Array of posts to search through */
@@ -32,6 +32,16 @@ export interface SearchProps {
 	postsPerPage?: number;
 	/** Debounce delay for search in milliseconds */
 	debounceDelay?: number;
+	/** Optional pagination props */
+	currentPage?: number;
+	totalPages?: number;
+	onPageChange?: (page: number) => void;
+	searchQuery?: string;
+	onSearchQueryChange?: (query: string) => void;
+	loading?: boolean;
+	categories?: string[];
+	selectedCategory?: string;
+	onCategoryChange?: (category: string) => void;
 }
 
 /** Default number of posts to display per page */
@@ -39,3 +49,20 @@ export const DEFAULT_POSTS_PER_PAGE = 4;
 
 /** Default debounce delay for search in milliseconds */
 export const DEFAULT_DEBOUNCE_DELAY = 300;
+
+/**
+ * Interface for individual search result post
+ */
+export interface Post {
+	id: string;
+	title: string;
+	description: string;
+	slug: string;
+	publishDate: Date;
+	updatedDate?: Date;
+	image?: string;
+	category?: string;
+	tags?: string[];
+	readingTime?: string;
+	author?: string;
+}

@@ -1,13 +1,10 @@
 ---
 title: "ETFE .001\"/Layer"
 description: "Chemours TEFZEL® ETFE .001″/LAYER"
-category: "Double Insulated"
 pubDate: "2024-02-21"
-heroImage: "@/assets/products/new/double-etfe-001-red.webp"
+heroImage: "@/assets/products/catalog/double-etfe-001-red.webp"
 tableType: "doubleInsulated"
-tags:
-  type: ["Double Insulated"]
-  material: ["ETFE"]
+
 construction:
   sizeRange: ["30 AWG - 40 AWG"]
   conductor: "Tin plated copper, solid or stranded (ASTM B-33/ASTM B-286). Bare copper and other conductors available., Bare copper and other conductors available"
@@ -29,9 +26,13 @@ systemApprovals:
   - "Other systems available upon request"
 tensileStrength: "6500 psi"
 breakdown: "Approx. 3000 V"
+tags:
+  type: ["Double Insulated"]
+  material: ["ETFE"]
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/etfe/001-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/double-insulated/etfe/001-layer/data";
 
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

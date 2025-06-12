@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const NEW_DIR = "src/assets/products/new";
+const NEW_DIR = "src/assets/products/catalog";
 
 // Mapping of old names to new names
 const nameMapping = {

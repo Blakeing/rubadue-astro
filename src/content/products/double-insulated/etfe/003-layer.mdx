@@ -1,13 +1,10 @@
 ---
 title: "ETFE .003\"/Layer"
 description: "Chemours TEFZEL® ETFE .003″/LAYER Double Insulated Wire"
-category: "Double Insulated"
 pubDate: "2024-02-21"
-heroImage: "@/assets/products/new/double-etfe-003-red.webp"
+heroImage: "@/assets/products/catalog/double-etfe-003-red.webp"
 tableType: "doubleInsulated"
-tags:
-  type: ["Double Insulated"]
-  material: ["ETFE"]
+
 construction:
   sizeRange: [
     "UL: 10 AWG - 40 AWG",
@@ -33,8 +30,12 @@ systemApprovals:
   - "Other systems available upon request"
 tensileStrength: "6500 psi"
 breakdown: "Approx. 9000 V"
+tags:
+  type: ["Double Insulated"]
+  material: ["ETFE"]
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/etfe/003-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/double-insulated/etfe/003-layer/data";
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

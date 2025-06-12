@@ -2,15 +2,8 @@
 title: "TCA3"
 description: "High-performance TCA3 triple insulated wire designed for demanding transformer and power supply applications requiring superior insulation properties."
 pubDate: "2024-03-24"
-categories: ["Wire", "Triple Insulated", "TCA3"]
-category: "Triple Insulated" # Legacy support
 tableType: "litzWire"
-heroImage: "@/assets/products/new/triple-tca3-003-gray.webp"
-
-# Organized Tags
-tags:
-  type: ["Triple Insulated"]
-  material: ["TCA"]
+heroImage: "@/assets/products/catalog/triple-tca3-003-gray.webp"
 
 # Detailed Specifications
 construction:
@@ -54,11 +47,15 @@ license:
   href: "/terms/wire-products"
   summary: "Standard commercial license with 1-year warranty"
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
+tags:
+  type: ["Triple Insulated"]
+  material: ["TCA3"]
 ---
 
-import { TripleInsulatedTable } from "@/components/react/data-table/triple-insulated/tca3/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/triple-insulated/tca3/table/data";
 
-<TripleInsulatedTable client:load />
+<WireDataTable data={wireData} client:load />
 
 **Please Note:** For detailed specifications including breakdown voltage and other technical parameters, please request a specification sheet. Contact our Sales Department for additional constructions and custom requirements.
 

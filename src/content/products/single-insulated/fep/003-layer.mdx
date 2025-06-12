@@ -2,16 +2,7 @@
 title: "FEP .003\"/Layer"
 description: "FEP .003\"/Layer single insulated wire for telecom and electronic applications"
 pubDate: "2024-03-19"
-heroImage: "@/assets/products/new/single-fep-003-black.webp"
-category: "Single Insulated"
-
-# Organized Tags
-tags:
-  type: ["Single Insulated"]
-  material: ["FEP"]
-  applications: ["Consumer Electronics"]
-  specs: ["155°C", "600V"]
-  certifications: ["UL", "RoHS"]
+heroImage: "@/assets/products/catalog/single-fep-003-black.webp"
 
 # Product Construction
 construction:
@@ -44,8 +35,12 @@ systemApprovals:
 # Technical Specifications
 tensileStrength: "3000 psi"
 breakdown: "Approx. 3000 V"
+tags:
+  type: ["Single Insulated"]
+  material: ["FEP"]
 ---
 
-import { SingleInsulatedTable } from "@/components/react/data-table/single-insulated/fep/003-layer/table"
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/single-insulated/fep/003-layer/data";
 
-<SingleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load /> 

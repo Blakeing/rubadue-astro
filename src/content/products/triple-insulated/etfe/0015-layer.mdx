@@ -2,15 +2,8 @@
 title: "ETFE .0015\"/Layer"
 description: "High-performance ETFE insulated wire with Chemours Tefzel® ETFE insulation, engineered for high-frequency applications requiring superior insulation properties."
 pubDate: "2024-03-14"
-categories: ["Wire", "Triple Insulated", "ETFE"]
-category: "Triple Insulated" # Legacy support
 tableType: "litzWire"
-heroImage: "@/assets/products/new/triple-etfe-003-red.webp"
-
-# Organized Tags
-tags:
-  type: ["Triple Insulated"]
-  material: ["ETFE"]
+heroImage: "@/assets/products/catalog/triple-etfe-003-red.webp"
 
 # Detailed Specifications (for product page)
 construction:
@@ -46,10 +39,14 @@ license:
   href: "/terms/wire-products"
   summary: "Standard commercial license with 1-year warranty"
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
+tags:
+  type: ["Triple Insulated"]
+  material: ["ETFE"]
 ---
 
-import { TripleInsulatedTable } from "@/components/react/data-table/triple-insulated/etfe/0015-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/triple-insulated/etfe/0015-layer/data";
 
-<TripleInsulatedTable client:load />
+<WireDataTable data={wireData} client:load  />
 
 **Please Note:** For detailed specifications including breakdown voltage and other technical parameters, please request a specification sheet. Contact our Sales Department for additional constructions and custom requirements. RoHS Compliant. 

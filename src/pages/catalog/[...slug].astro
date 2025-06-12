@@ -1,11 +1,12 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import BaseHeader from "@/components/astro/layout/BaseHeader.astro";
-import ProductBreadcrumbs from "@/components/astro/layout/ProductBreadcrumbs.astro";
-import Footer from "@/components/astro/layout/Footer.astro";
-import { Header } from "@/components/react/layout";
-import { ProductPage } from "@/components/react/pages";
+import { Header } from "@/components/layout";
+import BaseHead from "@/components/layout/BaseHead.astro";
+import BaseHeader from "@/components/layout/BaseHeader.astro";
+import Footer from "@/components/layout/Footer.astro";
+import ProductBreadcrumbs from "@/components/layout/ProductBreadcrumbs.astro";
+import { ProductDetailPage } from "@/components/pages";
+import { getProductCategory } from "@/utils/category";
 import { getResolvedImageSource } from "@/utils/images";
 
 // Add prerender export to ensure static generation
@@ -62,7 +63,7 @@ const buildFilterUrl = (segments: string[]) => {
 
     // Check if segment is a material (case insensitive)
     const matchedMaterial = knownMaterials.find(
-      (m) => m.toUpperCase() === normalizedSegment,
+      (m) => m.toUpperCase() === normalizedSegment
     );
     if (matchedMaterial) {
       materialFilters.push(matchedMaterial);
@@ -101,7 +102,7 @@ for (let i = 1; i < pathSegments.length - 1; i++) {
   // Check if this segment is a material (case insensitive)
   const normalizedSegment = segment.toUpperCase();
   const matchedMaterial = knownMaterials.find(
-    (m) => m.toUpperCase() === normalizedSegment,
+    (m) => m.toUpperCase() === normalizedSegment
   );
 
   // If it's a material, use the uppercase version, otherwise capitalize words
@@ -127,13 +128,13 @@ segments.push({
   href: "", // No link for current page
 });
 
-// Map product data to match ProductPage interface
+// Map product data to match ProductDetailPage interface
 const mappedProduct = {
   name: product.data.title,
   description: product.data.description,
   imageSrc: resolvedImageSrc,
   imageAlt: product.data.title,
-  category: product.data.category,
+  category: getProductCategory(product.data),
   overview: product.data.overview,
   applications: product.data.applications,
   construction: product.data.construction,
@@ -146,7 +147,7 @@ const mappedProduct = {
 
 const title = product.data.title;
 const description = product.data.description;
-const category = product.data.category;
+const category = getProductCategory(product.data);
 ---
 
 <!doctype html>
@@ -160,7 +161,7 @@ const category = product.data.category;
     <ProductBreadcrumbs segments={segments} />
     <main>
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16">
-        <ProductPage
+        <ProductDetailPage
           client:load
           product={mappedProduct}
           filterContext={filterContext}

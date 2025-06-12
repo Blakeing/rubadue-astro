@@ -1,13 +1,10 @@
 ---
 title: "FEP .002\"/Layer"
 description: "FEP .002″/LAYER Double Insulated Wire"
-category: "Double Insulated"
 pubDate: "2024-02-21"
-heroImage: "@/assets/products/new/double-fep-002-black.webp"
+heroImage: "@/assets/products/catalog/double-fep-002-black.webp"
 tableType: "doubleInsulated"
-tags:
-  type: ["Double Insulated"]
-  material: ["FEP"]
+
 construction:
   sizeRange: "10 AWG - 38 AWG"
   conductor: "Tin plated copper, solid or stranded (ASTM B-33/ASTM B-286). Bare copper and other conductors available., Bare copper and other conductors available"
@@ -29,8 +26,12 @@ systemApprovals:
   - "Other systems available upon request"
 tensileStrength: "3000 psi"
 breakdown: "Approx. 6000 V"
+tags:
+  type: ["Double Insulated"]
+  material: ["FEP"]
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/fep/002-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/double-insulated/fep/002-layer/data";
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

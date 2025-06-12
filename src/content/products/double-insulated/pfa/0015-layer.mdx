@@ -1,13 +1,10 @@
 ---
 title: "PFA .0015\"/Layer"
 description: "PFA .0015″/LAYER Double Insulated Wire"
-category: "Double Insulated"
 pubDate: "2024-02-21"
-heroImage: "@/assets/products/new/double-pfa-0015-yellow.webp"
+heroImage: "@/assets/products/catalog/double-pfa-0015-yellow.webp"
 tableType: "doubleInsulated"
-tags:
-  type: ["Double Insulated"]
-  material: ["PFA"]
+
 construction:
   sizeRange: ["18 AWG - 40 AWG"]
   conductor: "Tin plated copper, solid or stranded (ASTM B-33/ASTM B-286). Bare copper and other conductors available., Bare copper and other conductors available"
@@ -31,8 +28,12 @@ systemApprovals:
 tensileStrength: "3500 psi"
 breakdown: "Approx. 6000 V"
 insulationTemperatureCapacity: "260°C"
+tags:
+  type: ["Double Insulated"]
+  material: ["PFA"]
 ---
 
-import { DoubleInsulatedTable } from "@/components/react/data-table/double-insulated/pfa/0015-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/double-insulated/pfa/0015-layer/data";
 
-<DoubleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

@@ -2,15 +2,8 @@
 title: "FEP .002\"/Layer"
 description: "High-performance FEP insulated wire with .002\"/layer construction, engineered for AC/DC adapters and medical/dental applications requiring superior insulation properties."
 pubDate: "2024-03-14"
-categories: ["Wire", "Triple Insulated", "FEP"]
-category: "Triple Insulated" # Legacy support
 tableType: "litzWire"
-heroImage: "@/assets/products/new/triple-fep-002-black.webp"
-
-# Organized Tags
-tags:
-  type: ["Triple Insulated"]
-  material: ["FEP"]
+heroImage: "@/assets/products/catalog/triple-fep-002-black.webp"
 
 # Detailed Specifications (for product page)
 construction:
@@ -48,10 +41,14 @@ license:
   href: "/terms/wire-products"
   summary: "Standard commercial license with 1-year warranty"
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
+tags:
+  type: ["Triple Insulated"]
+  material: ["FEP"]
 ---
 
-import { TripleInsulatedTable } from "@/components/react/data-table/triple-insulated/fep/002-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/triple-insulated/fep/002-layer/data";
 
-<TripleInsulatedTable client:load />
+<WireDataTable data={wireData} client:load  />
 
 **Please Note:** RoHS Compliant. For detailed specifications including breakdown voltage and other technical parameters, please request a specification sheet. Contact our Sales Department for additional constructions and custom requirements. 

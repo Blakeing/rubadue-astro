@@ -2,16 +2,7 @@
 title: "ETFE .003\"/Layer"
 description: "Chemours TEFZEL® ETFE .003\"/ Layer single insulated wire for electronic and basic isolation applications"
 pubDate: "2024-03-19"
-heroImage: "@/assets/products/new/single-etfe-003-red.webp"
-category: "Single Insulated"
-
-# Organized Tags
-tags:
-  type: ["Single Insulated"]
-  material: ["ETFE"]
-  applications: ["Consumer Electronics"]
-  specs: ["155°C", "600V"]
-  certifications: ["UL", "VDE", "RoHS"]
+heroImage: "@/assets/products/catalog/single-etfe-003-red.webp"
 
 # Product Construction
 construction:
@@ -44,8 +35,12 @@ systemApprovals:
 # Technical Specifications
 tensileStrength: "6500 psi"
 breakdown: "Approx. 4500 V"
+tags:
+  type: ["Single Insulated"]
+  material: ["ETFE"]
 ---
 
-import { SingleInsulatedTable } from "@/components/react/data-table/single-insulated/etfe/003-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/single-insulated/etfe/003-layer/data";
 
-<SingleInsulatedTable client:load /> 
+<WireDataTable data={wireData} client:load  /> 

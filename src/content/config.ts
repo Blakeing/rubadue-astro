@@ -20,7 +20,7 @@ const products = defineCollection({
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
-		category: z.string(),
+		category: z.string().optional(),
 		overview: z.string().optional(),
 		applications: z.array(z.string()).optional(),
 		construction: z

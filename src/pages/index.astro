@@ -1,9 +1,9 @@
 ---
-import BaseHead from "@/components/astro/layout/BaseHead.astro";
-import Footer from "@/components/astro/layout/Footer.astro";
-import Hero from "@/components/astro/layout/Hero.astro";
-import { Header } from "@/components/react/layout";
-import { CableSection } from "@/components/react/products";
+import { Header } from "@/components/layout";
+import BaseHead from "@/components/layout/BaseHead.astro";
+import Footer from "@/components/layout/Footer.astro";
+import Hero from "@/components/layout/Hero.astro";
+import { ProductShowcase } from "@/components/sections/product-showcase";
 import "@/styles/global.css";
 
 const title = "Rubadue Wire - Advanced Wire Solutions";
@@ -20,8 +20,7 @@ const description =
     <Header client:load />
     <main class="">
       <Hero />
-      <!-- <TestHero /> -->
-      <CableSection client:load />
+      <ProductShowcase client:load />
     </main>
     <Footer />
   </body>

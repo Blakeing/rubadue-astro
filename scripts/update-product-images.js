@@ -3,106 +3,106 @@ import path from "node:path";
 import { glob } from "glob";
 
 const PRODUCTS_DIR = "src/content/products";
-const IMAGES_DIR = "src/assets/products/new";
+const IMAGES_DIR = "src/assets/products/catalog";
 
 // Map of old image paths to new image paths
 const imagePathMapping = {
 	// Triple Insulated
-	"@/assets/products/new/Triple TCA3 - gray.webp":
-		"@/assets/products/new/triple-tca3-003-gray.webp",
-	"@/assets/products/new/Triple PFA .003 - yellow.webp":
-		"@/assets/products/new/triple-pfa-003-yellow.webp",
-	"@/assets/products/new/Triple PFA .002 - yellow.webp":
-		"@/assets/products/new/triple-pfa-003-yellow.webp",
-	"@/assets/products/new/Triple PFA .0015 - yellow.webp":
-		"@/assets/products/new/triple-pfa-0015-yellow.webp",
-	"@/assets/products/new/Triple FEP .005 - black.webp":
-		"@/assets/products/new/triple-fep-003-black.webp",
-	"@/assets/products/new/Triple FEP .003 - black.webp":
-		"@/assets/products/new/triple-fep-003-black.webp",
-	"@/assets/products/new/Triple FEP .002 - black.webp":
-		"@/assets/products/new/triple-fep-002-black.webp",
-	"@/assets/products/new/Triple Chemours TEFZEL ETFE .003 - red.webp":
-		"@/assets/products/new/triple-etfe-003-red.webp",
-	"@/assets/products/new/Triple Chemours TEFZEL ETFE .002 - red.webp":
-		"@/assets/products/new/triple-etfe-003-red.webp",
-	"@/assets/products/new/Triple Chemours TEFZEL ETFE .0015 - red.webp":
-		"@/assets/products/new/triple-etfe-003-red.webp",
-	"@/assets/products/new/Triple Chemours TEFZEL ETFE .001 - red.webp":
-		"@/assets/products/new/triple-etfe-001-red.webp",
+	"@/assets/products/catalog/Triple TCA3 - gray.webp":
+		"@/assets/products/catalog/triple-tca3-003-gray.webp",
+	"@/assets/products/catalog/Triple PFA .003 - yellow.webp":
+		"@/assets/products/catalog/triple-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Triple PFA .002 - yellow.webp":
+		"@/assets/products/catalog/triple-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Triple PFA .0015 - yellow.webp":
+		"@/assets/products/catalog/triple-pfa-0015-yellow.webp",
+	"@/assets/products/catalog/Triple FEP .005 - black.webp":
+		"@/assets/products/catalog/triple-fep-003-black.webp",
+	"@/assets/products/catalog/Triple FEP .003 - black.webp":
+		"@/assets/products/catalog/triple-fep-003-black.webp",
+	"@/assets/products/catalog/Triple FEP .002 - black.webp":
+		"@/assets/products/catalog/triple-fep-002-black.webp",
+	"@/assets/products/catalog/Triple Chemours TEFZEL ETFE .003 - red.webp":
+		"@/assets/products/catalog/triple-etfe-003-red.webp",
+	"@/assets/products/catalog/Triple Chemours TEFZEL ETFE .002 - red.webp":
+		"@/assets/products/catalog/triple-etfe-003-red.webp",
+	"@/assets/products/catalog/Triple Chemours TEFZEL ETFE .0015 - red.webp":
+		"@/assets/products/catalog/triple-etfe-003-red.webp",
+	"@/assets/products/catalog/Triple Chemours TEFZEL ETFE .001 - red.webp":
+		"@/assets/products/catalog/triple-etfe-001-red.webp",
 	// Direct .002 references
-	"@/assets/products/new/triple-pfa-002-yellow.webp":
-		"@/assets/products/new/triple-pfa-003-yellow.webp",
-	"@/assets/products/new/triple-etfe-002-red.webp":
-		"@/assets/products/new/triple-etfe-003-red.webp",
+	"@/assets/products/catalog/triple-pfa-002-yellow.webp":
+		"@/assets/products/catalog/triple-pfa-003-yellow.webp",
+	"@/assets/products/catalog/triple-etfe-002-red.webp":
+		"@/assets/products/catalog/triple-etfe-003-red.webp",
 
 	// Single Insulated
-	"@/assets/products/new/Single TCA1 - orange.webp":
-		"@/assets/products/new/single-tca1-003-orange.webp",
-	"@/assets/products/new/Single PFA .003 - yellow.webp":
-		"@/assets/products/new/single-pfa-003-yellow.webp",
-	"@/assets/products/new/Single PFA .002 - yellow.webp":
-		"@/assets/products/new/single-pfa-003-yellow.webp",
-	"@/assets/products/new/Single PFA -0015 - yellow.webp":
-		"@/assets/products/new/single-pfa-0015-yellow.webp",
-	"@/assets/products/new/Single FEP .003 - black.webp":
-		"@/assets/products/new/single-fep-003-black.webp",
-	"@/assets/products/new/Single FEP .002 - black.webp":
-		"@/assets/products/new/single-fep-002-black.webp",
-	"@/assets/products/new/Single Chemours TEFZEL ETFE .003 - red.webp":
-		"@/assets/products/new/single-etfe-003-red.webp",
-	"@/assets/products/new/Single Chemours TEFZEL ETFE .002 - red.webp":
-		"@/assets/products/new/single-etfe-003-red.webp",
-	"@/assets/products/new/Single Chemours TEFZEL ETFE .0015 - red.webp":
-		"@/assets/products/new/single-etfe-0015-red.webp",
+	"@/assets/products/catalog/Single TCA1 - orange.webp":
+		"@/assets/products/catalog/single-tca1-003-orange.webp",
+	"@/assets/products/catalog/Single PFA .003 - yellow.webp":
+		"@/assets/products/catalog/single-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Single PFA .002 - yellow.webp":
+		"@/assets/products/catalog/single-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Single PFA -0015 - yellow.webp":
+		"@/assets/products/catalog/single-pfa-0015-yellow.webp",
+	"@/assets/products/catalog/Single FEP .003 - black.webp":
+		"@/assets/products/catalog/single-fep-003-black.webp",
+	"@/assets/products/catalog/Single FEP .002 - black.webp":
+		"@/assets/products/catalog/single-fep-002-black.webp",
+	"@/assets/products/catalog/Single Chemours TEFZEL ETFE .003 - red.webp":
+		"@/assets/products/catalog/single-etfe-003-red.webp",
+	"@/assets/products/catalog/Single Chemours TEFZEL ETFE .002 - red.webp":
+		"@/assets/products/catalog/single-etfe-003-red.webp",
+	"@/assets/products/catalog/Single Chemours TEFZEL ETFE .0015 - red.webp":
+		"@/assets/products/catalog/single-etfe-0015-red.webp",
 	// Direct .002 references
-	"@/assets/products/new/single-pfa-002-yellow.webp":
-		"@/assets/products/new/single-pfa-003-yellow.webp",
-	"@/assets/products/new/single-etfe-002-red.webp":
-		"@/assets/products/new/single-etfe-003-red.webp",
+	"@/assets/products/catalog/single-pfa-002-yellow.webp":
+		"@/assets/products/catalog/single-pfa-003-yellow.webp",
+	"@/assets/products/catalog/single-etfe-002-red.webp":
+		"@/assets/products/catalog/single-etfe-003-red.webp",
 
 	// Double Insulated
-	"@/assets/products/new/Double TCA2 - blue.webp":
-		"@/assets/products/new/double-tca2-003-blue.webp",
-	"@/assets/products/new/Double PFA .003 - yellow.webp":
-		"@/assets/products/new/double-pfa-003-yellow.webp",
-	"@/assets/products/new/Double PFA .002 - yellow.webp":
-		"@/assets/products/new/double-pfa-003-yellow.webp",
-	"@/assets/products/new/Double PFA .0015 - yellow.webp":
-		"@/assets/products/new/double-pfa-0015-yellow.webp",
-	"@/assets/products/new/Double FEP .003 - black.webp":
-		"@/assets/products/new/double-fep-003-black.webp",
-	"@/assets/products/new/Double FEP .002 - black.webp":
-		"@/assets/products/new/double-fep-002-black.webp",
-	"@/assets/products/new/Double Insulated Chemours TEFZEL ETFE .003.webp":
-		"@/assets/products/new/double-etfe-003-red.webp",
-	"@/assets/products/new/Double Chemours TEFZEL ETFE .002 - red.webp":
-		"@/assets/products/new/double-etfe-003-red.webp",
-	"@/assets/products/new/Double Chemours TEFZEL ETFE .0015 - red.webp":
-		"@/assets/products/new/double-etfe-003-red.webp",
-	"@/assets/products/new/Double Chemours TEFZEL ETFE .001 - Red.webp":
-		"@/assets/products/new/double-etfe-001-red.webp",
+	"@/assets/products/catalog/Double TCA2 - blue.webp":
+		"@/assets/products/catalog/double-tca2-003-blue.webp",
+	"@/assets/products/catalog/Double PFA .003 - yellow.webp":
+		"@/assets/products/catalog/double-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Double PFA .002 - yellow.webp":
+		"@/assets/products/catalog/double-pfa-003-yellow.webp",
+	"@/assets/products/catalog/Double PFA .0015 - yellow.webp":
+		"@/assets/products/catalog/double-pfa-0015-yellow.webp",
+	"@/assets/products/catalog/Double FEP .003 - black.webp":
+		"@/assets/products/catalog/double-fep-003-black.webp",
+	"@/assets/products/catalog/Double FEP .002 - black.webp":
+		"@/assets/products/catalog/double-fep-002-black.webp",
+	"@/assets/products/catalog/Double Insulated Chemours TEFZEL ETFE .003.webp":
+		"@/assets/products/catalog/double-etfe-003-red.webp",
+	"@/assets/products/catalog/Double Chemours TEFZEL ETFE .002 - red.webp":
+		"@/assets/products/catalog/double-etfe-003-red.webp",
+	"@/assets/products/catalog/Double Chemours TEFZEL ETFE .0015 - red.webp":
+		"@/assets/products/catalog/double-etfe-003-red.webp",
+	"@/assets/products/catalog/Double Chemours TEFZEL ETFE .001 - Red.webp":
+		"@/assets/products/catalog/double-etfe-001-red.webp",
 	// Direct .002 references
-	"@/assets/products/new/double-pfa-002-yellow.webp":
-		"@/assets/products/new/double-pfa-003-yellow.webp",
-	"@/assets/products/new/double-etfe-002-red.webp":
-		"@/assets/products/new/double-etfe-003-red.webp",
+	"@/assets/products/catalog/double-pfa-002-yellow.webp":
+		"@/assets/products/catalog/double-pfa-003-yellow.webp",
+	"@/assets/products/catalog/double-etfe-002-red.webp":
+		"@/assets/products/catalog/double-etfe-003-red.webp",
 
 	// Litz Wire
-	"@/assets/products/new/Triple Litz TCA3 - gray.webp":
-		"@/assets/products/new/litz-tca3-003-gray.webp",
-	"@/assets/products/new/Triple Litz FEP Insulation - black.webp":
-		"@/assets/products/new/litz-fep-003-black.webp",
-	"@/assets/products/new/Triple LITZ EFTE Wire - red.webp":
-		"@/assets/products/new/litz-etfe-003-red.webp",
-	"@/assets/products/new/Single Litz FEP Insulation - black.webp":
-		"@/assets/products/new/litz-fep-003-black.webp",
-	"@/assets/products/new/Double Litz FEP Insulation - black.webp":
-		"@/assets/products/new/litz-fep-003-black.webp",
-	"@/assets/products/new/Double Litz ETFE Insulation - red.webp":
-		"@/assets/products/new/litz-etfe-003-red.webp",
-	"@/assets/products/new/Litz Wire Bare.webp":
-		"@/assets/products/new/litz-fep-003-black.webp", // Using FEP as placeholder
+	"@/assets/products/catalog/Triple Litz TCA3 - gray.webp":
+		"@/assets/products/catalog/litz-tca3-003-gray.webp",
+	"@/assets/products/catalog/Triple Litz FEP Insulation - black.webp":
+		"@/assets/products/catalog/litz-fep-003-black.webp",
+	"@/assets/products/catalog/Triple LITZ EFTE Wire - red.webp":
+		"@/assets/products/catalog/litz-etfe-003-red.webp",
+	"@/assets/products/catalog/Single Litz FEP Insulation - black.webp":
+		"@/assets/products/catalog/litz-fep-003-black.webp",
+	"@/assets/products/catalog/Double Litz FEP Insulation - black.webp":
+		"@/assets/products/catalog/litz-fep-003-black.webp",
+	"@/assets/products/catalog/Double Litz ETFE Insulation - red.webp":
+		"@/assets/products/catalog/litz-etfe-003-red.webp",
+	"@/assets/products/catalog/Litz Wire Bare.webp":
+		"@/assets/products/catalog/litz-fep-003-black.webp", // Using FEP as placeholder
 };
 
 async function updateMdxFiles() {

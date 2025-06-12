@@ -1,5 +1,5 @@
 ---
-import { Card } from "@/components/react/ui";
+import { Button, Card } from "@/components/ui";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Props {
@@ -215,13 +215,20 @@ interface Props {
               We're always looking for talented individuals to join our team.
               Get in touch to learn more about our current opportunities.
             </p>
-            <div class="mt-6 sm:mt-10">
+            <div
+              class="mt-6 sm:mt-10 flex justify-center flex-col sm:flex-row gap-4"
+            >
+              <a
+                href="https://pelicanwire.com/our-company/careers/"
+                target="_blank"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                >View Current Opportunities</a
+              >
               <a
                 href="/contact"
-                class="inline-flex items-center justify-center rounded-md bg-primary px-4 sm:px-6 py-2 sm:py-3 text-base font-medium text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                >Contact Us</a
               >
-                Contact Us About Opportunities
-              </a>
             </div>
           </div>
         </Card>

@@ -1,11 +1,11 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { MarketCard } from "@/components/react/MarketCard";
-import type { IconName } from "@/components/react/icons";
-import automotiveImage from "@/assets/images/markets/automotive.webp";
-import medicalMriImage from "@/assets/images/markets/medical-mri.webp";
 import aerospaceImage from "@/assets/images/markets/aerospace.webp";
+import automotiveImage from "@/assets/images/markets/automotive.webp";
 import industrialImage from "@/assets/images/markets/industrial.webp";
+import medicalMriImage from "@/assets/images/markets/medical-mri.webp";
+import { MarketCard } from "@/components/sections/content-blocks/MarketCard";
+import type { IconName } from "@/components/ui/icons";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 interface Market {
   name: string;

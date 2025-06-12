@@ -1,0 +1,30 @@
+{
+	"$schema": "https://unpkg.com/knip@latest/schema.json",
+	"entry": [
+		"src/pages/**/*.{astro,ts,tsx}",
+		"src/content/**/*.{ts,tsx}",
+		"astro.config.mjs",
+		"tailwind.config.mjs"
+	],
+	"project": [
+		"src/**/*.{astro,ts,tsx,js,jsx,md,mdx}",
+		"!src/**/*.test.{ts,tsx,js,jsx}",
+		"!src/**/*.spec.{ts,tsx,js,jsx}",
+		"!**/*.d.ts"
+	],
+	"ignore": [
+		"scripts/**/*",
+		".vercel/**/*",
+		".astro/**/*",
+		"dist/**/*",
+		"node_modules/**/*"
+	],
+	"ignoreDependencies": [
+		"@astrojs/check",
+		"astro",
+		"typescript",
+		"@biomejs/biome"
+	],
+	"ignoreExportsUsedInFile": true,
+	"includeEntryExports": false
+}

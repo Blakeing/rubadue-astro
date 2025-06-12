@@ -2,17 +2,8 @@
 title: "PFA .0015\"/Layer"
 description: "High-performance PFA insulated wire with .0015\"/layer construction, offering excellent electrical properties and chemical resistance for demanding applications."
 pubDate: "2024-03-14"
-categories: ["Wire", "Triple Insulated", "PFA"]
-category: "Triple Insulated" # Legacy support
 tableType: "litzWire"
-heroImage: "@/assets/products/new/triple-pfa-0015-yellow.webp"
-
-# Organized Tags
-tags:
-  type: ["Triple Insulated"]
-  material: ["PFA"]
-  application: ["Transformer", "Power Supply"]
-  certification: ["UL", "VDE"]
+heroImage: "@/assets/products/catalog/triple-pfa-0015-yellow.webp"
 
 # Detailed Specifications (for product page)
 construction:
@@ -56,9 +47,13 @@ license:
   href: "/terms/wire-products"
   summary: "Standard commercial license with 1-year warranty"
   content: "This product is covered by our standard commercial warranty for a period of one year from the date of purchase. The warranty covers manufacturing defects and material failures under normal use conditions. Custom modifications or applications outside the specified parameters may void the warranty."
+tags:
+  type: ["Triple Insulated"]
+  material: ["PFA"]
 ---
 
-import { TripleInsulatedTable } from "@/components/react/data-table/triple-insulated/pfa/0015-layer/table";
+import { WireDataTable } from "@/components/data-display/product-tables";
+import { wireData } from "@/components/data-display/product-tables/triple-insulated/pfa/0015-layer/data";
 
-<TripleInsulatedTable client:load />
+<WireDataTable data={wireData} client:load  />
 
