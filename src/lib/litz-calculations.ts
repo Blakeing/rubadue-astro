@@ -1,0 +1,1019 @@
+// Litz Wire Calculation Utilities
+// Extracted from Excel formulas in Cover Sheet_formulas.csv and related files
+
+export interface LitzConstruction {
+	totalStrands: number;
+	wireAWG: number;
+	litzType: "Type 1" | "Type 2";
+	numberOfOperations: number;
+	packingFactor: number;
+	takeUpFactor: number;
+	totalCopperAreaCMA: number;
+	totalCopperAreaMM2: number;
+	equivalentAWG: string;
+	isValid: boolean;
+	validationMessage: string;
+}
+
+export interface StrandValidationResult {
+	isValid: boolean;
+	breakdown: number[];
+	nearbyValid: number[];
+	message: string;
+}
+
+export interface DiameterResult {
+	min: number;
+	nom: number;
+	max: number;
+	partNumber: string;
+}
+
+export interface BareLitzResult {
+	singleFilm: DiameterResult;
+	heavyFilm: DiameterResult;
+	tripleFilm: DiameterResult;
+	quadrupleFilm: DiameterResult;
+}
+
+export interface InsulatedLitzResult {
+	singleInsulated: DiameterResult;
+	doubleInsulated: DiameterResult;
+	tripleInsulated: DiameterResult;
+}
+
+// AWG Reference Data (from AWG Reference_values.csv)
+const AWG_REFERENCE: Record<
+	number,
+	{ diameter: number; cma: number; strandedCMA: number }
+> = {
+	12: { diameter: 0.0808, cma: 6530, strandedCMA: 6399 },
+	13: { diameter: 0.072, cma: 5180, strandedCMA: 5076 },
+	14: { diameter: 0.0641, cma: 4110, strandedCMA: 4028 },
+	15: { diameter: 0.0571, cma: 3260, strandedCMA: 3195 },
+	16: { diameter: 0.0508, cma: 2580, strandedCMA: 2528 },
+	17: { diameter: 0.0453, cma: 2050, strandedCMA: 2009 },
+	18: { diameter: 0.0403, cma: 1620, strandedCMA: 1588 },
+	19: { diameter: 0.0359, cma: 1290, strandedCMA: 1264 },
+	20: { diameter: 0.032, cma: 1020, strandedCMA: 1000 },
+	21: { diameter: 0.0285, cma: 812, strandedCMA: 796 },
+	22: { diameter: 0.0253, cma: 640, strandedCMA: 627 },
+	23: { diameter: 0.0226, cma: 511, strandedCMA: 501 },
+	24: { diameter: 0.0201, cma: 404, strandedCMA: 396 },
+	25: { diameter: 0.0179, cma: 320, strandedCMA: 314 },
+	26: { diameter: 0.0159, cma: 253, strandedCMA: 248 },
+	27: { diameter: 0.0142, cma: 202, strandedCMA: 198 },
+	28: { diameter: 0.0126, cma: 159, strandedCMA: 156 },
+	29: { diameter: 0.0113, cma: 128, strandedCMA: 125 },
+	30: { diameter: 0.01, cma: 100, strandedCMA: 98 },
+	31: { diameter: 0.0089, cma: 79.2, strandedCMA: 77.6 },
+	32: { diameter: 0.008, cma: 64, strandedCMA: 62.7 },
+	33: { diameter: 0.0071, cma: 50.4, strandedCMA: 49.4 },
+	34: { diameter: 0.0063, cma: 39.7, strandedCMA: 38.9 },
+	35: { diameter: 0.0056, cma: 31.4, strandedCMA: 30.8 },
+	36: { diameter: 0.005, cma: 25, strandedCMA: 24.5 },
+	37: { diameter: 0.0045, cma: 20.2, strandedCMA: 19.8 },
+	38: { diameter: 0.004, cma: 16, strandedCMA: 15.7 },
+	39: { diameter: 0.0035, cma: 12.2, strandedCMA: 11.9 },
+	40: { diameter: 0.0031, cma: 9.61, strandedCMA: 9.42 },
+	41: { diameter: 0.0028, cma: 7.84, strandedCMA: 7.68 },
+	42: { diameter: 0.0025, cma: 6.25, strandedCMA: 6.13 },
+	43: { diameter: 0.0022, cma: 4.84, strandedCMA: 4.74 },
+	44: { diameter: 0.002, cma: 4, strandedCMA: 3.92 },
+	45: { diameter: 0.00176, cma: 3.1, strandedCMA: 3.04 },
+	46: { diameter: 0.00157, cma: 2.46, strandedCMA: 2.41 },
+	47: { diameter: 0.0014, cma: 1.96, strandedCMA: 1.92 },
+	48: { diameter: 0.00124, cma: 1.54, strandedCMA: 1.51 },
+	49: { diameter: 0.00111, cma: 1.23, strandedCMA: 1.21 },
+	50: { diameter: 0.00099, cma: 0.98, strandedCMA: 0.96 },
+};
+
+// Max strands per single operation (from Max Ends Single Op_values.csv)
+const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
+	10: 0,
+	11: 0,
+	12: 0,
+	13: 0,
+	14: 1,
+	15: 1,
+	16: 1,
+	17: 2,
+	18: 2,
+	19: 3,
+	20: 4,
+	21: 5,
+	22: 7,
+	23: 9,
+	24: 11,
+	25: 15,
+	26: 19,
+	27: 23,
+	28: 29,
+	29: 37,
+	30: 47,
+	31: 60,
+	32: 66,
+	33: 66,
+	34: 66,
+	35: 66,
+	36: 66,
+	37: 66,
+	38: 66,
+	39: 66,
+	40: 66,
+	41: 66,
+	42: 66,
+	43: 66,
+	44: 66,
+	45: 66,
+	46: 66,
+	47: 21,
+	48: 21,
+	49: 21,
+	50: 21,
+};
+
+// Magnet Wire Film Thicknesses (from Magnet Wire_values.csv)
+const MAGNET_WIRE_FILM_THICKNESSES: Record<
+	number,
+	{
+		single: { min: number; nom: number; max: number };
+		heavy: { min: number; nom: number; max: number };
+		triple: { min: number; nom: number; max: number };
+		quadruple: { min: number; nom: number; max: number };
+	}
+> = {
+	12: {
+		single: { min: 0.0814, nom: 0.0827, max: 0.084 },
+		heavy: { min: 0.0829, nom: 0.0837, max: 0.0847 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	13: {
+		single: { min: 0.0727, nom: 0.0739, max: 0.075 },
+		heavy: { min: 0.0741, nom: 0.0749, max: 0.0757 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	14: {
+		single: { min: 0.0651, nom: 0.0658, max: 0.0666 },
+		heavy: { min: 0.0667, nom: 0.0675, max: 0.0682 },
+		triple: { min: 0.0683, nom: 0.0692, max: 0.07 },
+		quadruple: { min: 0.0684, nom: 0.07, max: 0.0715 },
+	},
+	15: {
+		single: { min: 0.058, nom: 0.0587, max: 0.0594 },
+		heavy: { min: 0.0595, nom: 0.0602, max: 0.0609 },
+		triple: { min: 0.061, nom: 0.0619, max: 0.0627 },
+		quadruple: { min: 0.0613, nom: 0.0628, max: 0.0644 },
+	},
+	16: {
+		single: { min: 0.0517, nom: 0.0524, max: 0.0531 },
+		heavy: { min: 0.0532, nom: 0.0539, max: 0.0545 },
+		triple: { min: 0.0546, nom: 0.0554, max: 0.0562 },
+		quadruple: { min: 0.0549, nom: 0.0563, max: 0.0577 },
+	},
+	17: {
+		single: { min: 0.0462, nom: 0.0468, max: 0.0475 },
+		heavy: { min: 0.0476, nom: 0.0482, max: 0.0488 },
+		triple: { min: 0.0489, nom: 0.0497, max: 0.0504 },
+		quadruple: { min: 0.0493, nom: 0.0506, max: 0.052 },
+	},
+	18: {
+		single: { min: 0.0412, nom: 0.0418, max: 0.0424 },
+		heavy: { min: 0.0425, nom: 0.0431, max: 0.0437 },
+		triple: { min: 0.0438, nom: 0.0445, max: 0.0452 },
+		quadruple: { min: 0.0443, nom: 0.0456, max: 0.0468 },
+	},
+	19: {
+		single: { min: 0.0367, nom: 0.0373, max: 0.0379 },
+		heavy: { min: 0.038, nom: 0.0386, max: 0.0391 },
+		triple: { min: 0.0392, nom: 0.0399, max: 0.0406 },
+		quadruple: { min: 0.0397, nom: 0.041, max: 0.0422 },
+	},
+	20: {
+		single: { min: 0.0329, nom: 0.0334, max: 0.0339 },
+		heavy: { min: 0.034, nom: 0.0346, max: 0.0351 },
+		triple: { min: 0.0352, nom: 0.0358, max: 0.0364 },
+		quadruple: { min: 0.0357, nom: 0.0368, max: 0.0379 },
+	},
+	21: {
+		single: { min: 0.0293, nom: 0.0298, max: 0.0303 },
+		heavy: { min: 0.0304, nom: 0.0309, max: 0.0314 },
+		triple: { min: 0.0315, nom: 0.0321, max: 0.0326 },
+		quadruple: { min: 0.0321, nom: 0.0332, max: 0.0342 },
+	},
+	22: {
+		single: { min: 0.0261, nom: 0.0266, max: 0.027 },
+		heavy: { min: 0.0271, nom: 0.0276, max: 0.0281 },
+		triple: { min: 0.0282, nom: 0.0288, max: 0.0293 },
+		quadruple: { min: 0.0287, nom: 0.0298, max: 0.0308 },
+	},
+	23: {
+		single: { min: 0.0234, nom: 0.0238, max: 0.0243 },
+		heavy: { min: 0.0244, nom: 0.0249, max: 0.0253 },
+		triple: { min: 0.0254, nom: 0.0259, max: 0.0264 },
+		quadruple: { min: 0.026, nom: 0.027, max: 0.0279 },
+	},
+	24: {
+		single: { min: 0.0209, nom: 0.0213, max: 0.0217 },
+		heavy: { min: 0.0218, nom: 0.0223, max: 0.0227 },
+		triple: { min: 0.0228, nom: 0.0233, max: 0.0238 },
+		quadruple: { min: 0.0234, nom: 0.0243, max: 0.0252 },
+	},
+	25: {
+		single: { min: 0.0186, nom: 0.019, max: 0.0194 },
+		heavy: { min: 0.0195, nom: 0.0199, max: 0.0203 },
+		triple: { min: 0.0204, nom: 0.0209, max: 0.0214 },
+		quadruple: { min: 0.0211, nom: 0.022, max: 0.0228 },
+	},
+	26: {
+		single: { min: 0.0166, nom: 0.017, max: 0.0173 },
+		heavy: { min: 0.0174, nom: 0.0178, max: 0.0182 },
+		triple: { min: 0.0183, nom: 0.0188, max: 0.0193 },
+		quadruple: { min: 0.0189, nom: 0.0198, max: 0.0206 },
+	},
+	27: {
+		single: { min: 0.0149, nom: 0.0153, max: 0.0156 },
+		heavy: { min: 0.0157, nom: 0.0161, max: 0.0164 },
+		triple: { min: 0.0165, nom: 0.0169, max: 0.0173 },
+		quadruple: { min: 0.0171, nom: 0.0178, max: 0.0185 },
+	},
+	28: {
+		single: { min: 0.0133, nom: 0.0137, max: 0.014 },
+		heavy: { min: 0.0141, nom: 0.0144, max: 0.0147 },
+		triple: { min: 0.0148, nom: 0.0152, max: 0.0156 },
+		quadruple: { min: 0.0154, nom: 0.016, max: 0.0166 },
+	},
+	29: {
+		single: { min: 0.0119, nom: 0.0123, max: 0.0126 },
+		heavy: { min: 0.0127, nom: 0.013, max: 0.0133 },
+		triple: { min: 0.0134, nom: 0.0138, max: 0.0142 },
+		quadruple: { min: 0.014, nom: 0.0146, max: 0.0152 },
+	},
+	30: {
+		single: { min: 0.0106, nom: 0.0109, max: 0.0112 },
+		heavy: { min: 0.0113, nom: 0.0116, max: 0.0119 },
+		triple: { min: 0.012, nom: 0.0124, max: 0.0128 },
+		quadruple: { min: 0.0126, nom: 0.0132, max: 0.0137 },
+	},
+	31: {
+		single: { min: 0.0094, nom: 0.0097, max: 0.01 },
+		heavy: { min: 0.0101, nom: 0.0105, max: 0.0108 },
+		triple: { min: 0.0105, nom: 0.011, max: 0.0114 },
+		quadruple: { min: 0.0114, nom: 0.0118, max: 0.0121 },
+	},
+	32: {
+		single: { min: 0.0085, nom: 0.0088, max: 0.0091 },
+		heavy: { min: 0.0091, nom: 0.0095, max: 0.0098 },
+		triple: { min: 0.0095, nom: 0.0099, max: 0.0103 },
+		quadruple: { min: 0.0103, nom: 0.0107, max: 0.011 },
+	},
+	33: {
+		single: { min: 0.0075, nom: 0.0078, max: 0.0081 },
+		heavy: { min: 0.0081, nom: 0.0085, max: 0.0088 },
+		triple: { min: 0.0084, nom: 0.0088, max: 0.0092 },
+		quadruple: { min: 0.0092, nom: 0.0096, max: 0.0099 },
+	},
+	34: {
+		single: { min: 0.0067, nom: 0.007, max: 0.0072 },
+		heavy: { min: 0.0072, nom: 0.0075, max: 0.0078 },
+		triple: { min: 0.0075, nom: 0.0079, max: 0.0082 },
+		quadruple: { min: 0.0082, nom: 0.0085, max: 0.0088 },
+	},
+	35: {
+		single: { min: 0.0059, nom: 0.0062, max: 0.0064 },
+		heavy: { min: 0.0064, nom: 0.0067, max: 0.007 },
+		triple: { min: 0.0067, nom: 0.0071, max: 0.0074 },
+		quadruple: { min: 0.0073, nom: 0.0076, max: 0.0079 },
+	},
+	36: {
+		single: { min: 0.0053, nom: 0.0056, max: 0.0058 },
+		heavy: { min: 0.0057, nom: 0.006, max: 0.0063 },
+		triple: { min: 0.006, nom: 0.0064, max: 0.0067 },
+		quadruple: { min: 0.0065, nom: 0.0068, max: 0.0071 },
+	},
+	37: {
+		single: { min: 0.0047, nom: 0.005, max: 0.0052 },
+		heavy: { min: 0.0052, nom: 0.0055, max: 0.0057 },
+		triple: { min: 0.0054, nom: 0.0057, max: 0.006 },
+		quadruple: { min: 0.006, nom: 0.0063, max: 0.0065 },
+	},
+	38: {
+		single: { min: 0.0042, nom: 0.0045, max: 0.0047 },
+		heavy: { min: 0.0046, nom: 0.0049, max: 0.0051 },
+		triple: { min: 0.0048, nom: 0.0051, max: 0.0054 },
+		quadruple: { min: 0.0053, nom: 0.0056, max: 0.0058 },
+	},
+	39: {
+		single: { min: 0.0036, nom: 0.0039, max: 0.0041 },
+		heavy: { min: 0.004, nom: 0.0043, max: 0.0045 },
+		triple: { min: 0.0042, nom: 0.0045, max: 0.0048 },
+		quadruple: { min: 0.0046, nom: 0.0049, max: 0.0051 },
+	},
+	40: {
+		single: { min: 0.0032, nom: 0.0035, max: 0.0037 },
+		heavy: { min: 0.0036, nom: 0.0038, max: 0.004 },
+		triple: { min: 0.0038, nom: 0.0041, max: 0.0043 },
+		quadruple: { min: 0.0042, nom: 0.0044, max: 0.0046 },
+	},
+	41: {
+		single: { min: 0.0029, nom: 0.0031, max: 0.0033 },
+		heavy: { min: 0.0032, nom: 0.0034, max: 0.0036 },
+		triple: { min: 0.0034, nom: 0.0037, max: 0.0039 },
+		quadruple: { min: 0.0037, nom: 0.0039, max: 0.0041 },
+	},
+	42: {
+		single: { min: 0.0026, nom: 0.0028, max: 0.003 },
+		heavy: { min: 0.0028, nom: 0.003, max: 0.0032 },
+		triple: { min: 0.0031, nom: 0.0033, max: 0.0035 },
+		quadruple: { min: 0.0032, nom: 0.0034, max: 0.0036 },
+	},
+	43: {
+		single: { min: 0.0023, nom: 0.0025, max: 0.0026 },
+		heavy: { min: 0.0025, nom: 0.0027, max: 0.0029 },
+		triple: { min: 0.0027, nom: 0.003, max: 0.0032 },
+		quadruple: { min: 0.0029, nom: 0.0031, max: 0.0033 },
+	},
+	44: {
+		single: { min: 0.0021, nom: 0.0023, max: 0.0024 },
+		heavy: { min: 0.0023, nom: 0.0025, max: 0.0027 },
+		triple: { min: 0.0025, nom: 0.0027, max: 0.0029 },
+		quadruple: { min: 0.0027, nom: 0.0029, max: 0.0031 },
+	},
+	45: {
+		single: { min: 0.00179, nom: 0.00192, max: 0.00205 },
+		heavy: { min: 0.00199, nom: 0.00215, max: 0.0023 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	46: {
+		single: { min: 0.00161, nom: 0.00173, max: 0.00185 },
+		heavy: { min: 0.00181, nom: 0.00196, max: 0.0021 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	47: {
+		single: { min: 0.00145, nom: 0.00157, max: 0.0017 },
+		heavy: { min: 0.00165, nom: 0.00178, max: 0.0019 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	48: {
+		single: { min: 0.00129, nom: 0.0014, max: 0.0015 },
+		heavy: { min: 0.00139, nom: 0.00155, max: 0.0017 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	49: {
+		single: { min: 0.00117, nom: 0.00124, max: 0.0013 },
+		heavy: { min: 0.00127, nom: 0.00139, max: 0.0015 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+	50: {
+		single: { min: 0.00105, nom: 0.00113, max: 0.0012 },
+		heavy: { min: 0.00115, nom: 0.00128, max: 0.0014 },
+		triple: { min: 0, nom: 0, max: 0 },
+		quadruple: { min: 0, nom: 0, max: 0 },
+	},
+};
+
+// Packing factors by Litz type and operations
+const PACKING_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
+	"Type 1": {
+		1: 1.155,
+		2: 1.155,
+		3: 1.155,
+		4: 1.155,
+		5: 1.155,
+	},
+	"Type 2": {
+		1: 1.155,
+		2: 1.236,
+		3: 1.271,
+		4: 1.271,
+		5: 1.271,
+	},
+};
+
+// Take up factors by operations
+const TAKE_UP_FACTORS: Record<number, number> = {
+	1: 1.01,
+	2: 1.01,
+	3: 1.03,
+	4: 1.051,
+	5: 1.051,
+};
+
+// Insulation wall thicknesses (from Cover Sheet_values.csv)
+const INSULATION_WALL_THICKNESSES: Record<string, Record<number, number>> = {
+	ETFE: {
+		12: 0.002,
+		13: 0.002,
+		14: 0.002,
+		15: 0.002,
+		16: 0.002,
+		17: 0.002,
+		18: 0.002,
+		19: 0.002,
+		20: 0.002,
+		21: 0.002,
+		22: 0.002,
+		23: 0.002,
+		24: 0.002,
+		25: 0.002,
+		26: 0.002,
+		27: 0.002,
+		28: 0.002,
+		29: 0.002,
+		30: 0.002,
+		31: 0.002,
+		32: 0.002,
+		33: 0.002,
+		34: 0.002,
+		35: 0.002,
+		36: 0.002,
+		37: 0.002,
+		38: 0.002,
+		39: 0.002,
+		40: 0.002,
+		41: 0.002,
+		42: 0.002,
+		43: 0.002,
+		44: 0.002,
+		45: 0.002,
+		46: 0.002,
+		47: 0.002,
+		48: 0.002,
+		49: 0.002,
+		50: 0.002,
+	},
+	FEP: {
+		12: 0.002,
+		13: 0.002,
+		14: 0.002,
+		15: 0.002,
+		16: 0.002,
+		17: 0.002,
+		18: 0.002,
+		19: 0.002,
+		20: 0.002,
+		21: 0.002,
+		22: 0.002,
+		23: 0.002,
+		24: 0.002,
+		25: 0.002,
+		26: 0.002,
+		27: 0.002,
+		28: 0.002,
+		29: 0.002,
+		30: 0.002,
+		31: 0.002,
+		32: 0.002,
+		33: 0.002,
+		34: 0.002,
+		35: 0.002,
+		36: 0.002,
+		37: 0.002,
+		38: 0.002,
+		39: 0.002,
+		40: 0.002,
+		41: 0.002,
+		42: 0.002,
+		43: 0.002,
+		44: 0.002,
+		45: 0.002,
+		46: 0.002,
+		47: 0.002,
+		48: 0.002,
+		49: 0.002,
+		50: 0.002,
+	},
+	PFA: {
+		12: 0.002,
+		13: 0.002,
+		14: 0.002,
+		15: 0.002,
+		16: 0.002,
+		17: 0.002,
+		18: 0.002,
+		19: 0.002,
+		20: 0.002,
+		21: 0.002,
+		22: 0.002,
+		23: 0.002,
+		24: 0.002,
+		25: 0.002,
+		26: 0.002,
+		27: 0.002,
+		28: 0.002,
+		29: 0.002,
+		30: 0.002,
+		31: 0.002,
+		32: 0.002,
+		33: 0.002,
+		34: 0.002,
+		35: 0.002,
+		36: 0.002,
+		37: 0.002,
+		38: 0.002,
+		39: 0.002,
+		40: 0.002,
+		41: 0.002,
+		42: 0.002,
+		43: 0.002,
+		44: 0.002,
+		45: 0.002,
+		46: 0.002,
+		47: 0.002,
+		48: 0.002,
+		49: 0.002,
+		50: 0.002,
+	},
+};
+
+// Part number prefixes
+const PART_NUMBER_PREFIXES: Record<string, string> = {
+	"MW 79-C": "L79",
+	"MW 80-C": "L80",
+	"MW 77-C": "L77",
+	"MW 35-C": "L35",
+	"MW 16-C": "L16",
+};
+
+// AWG to diameter lookup (simplified - you may want to expand this)
+const AWG_TO_DIAMETER: Record<
+	number,
+	{ min: number; nom: number; max: number }
+> = {
+	36: { min: 0.005, nom: 0.005, max: 0.0056 },
+	35: { min: 0.0056, nom: 0.0056, max: 0.0063 },
+	34: { min: 0.0063, nom: 0.0063, max: 0.0071 },
+	33: { min: 0.0071, nom: 0.0071, max: 0.008 },
+	32: { min: 0.008, nom: 0.008, max: 0.009 },
+	31: { min: 0.009, nom: 0.009, max: 0.01 },
+	30: { min: 0.01, nom: 0.01, max: 0.0113 },
+	29: { min: 0.0113, nom: 0.0113, max: 0.0126 },
+	28: { min: 0.0126, nom: 0.0126, max: 0.0142 },
+	27: { min: 0.0142, nom: 0.0142, max: 0.0159 },
+	26: { min: 0.0159, nom: 0.0159, max: 0.0179 },
+	25: { min: 0.0179, nom: 0.0179, max: 0.0201 },
+	24: { min: 0.0201, nom: 0.0201, max: 0.0226 },
+	23: { min: 0.0226, nom: 0.0226, max: 0.0254 },
+	22: { min: 0.0254, nom: 0.0254, max: 0.0285 },
+	21: { min: 0.0285, nom: 0.0285, max: 0.032 },
+	20: { min: 0.032, nom: 0.032, max: 0.036 },
+	19: { min: 0.036, nom: 0.036, max: 0.0403 },
+	18: { min: 0.0403, nom: 0.0403, max: 0.0453 },
+	17: { min: 0.0453, nom: 0.0453, max: 0.0508 },
+	16: { min: 0.0508, nom: 0.0508, max: 0.0571 },
+	15: { min: 0.0571, nom: 0.0571, max: 0.0641 },
+	14: { min: 0.0641, nom: 0.0641, max: 0.072 },
+	13: { min: 0.072, nom: 0.072, max: 0.0808 },
+	12: { min: 0.0808, nom: 0.0808, max: 0.0907 },
+	11: { min: 0.0907, nom: 0.0907, max: 0.1019 },
+	10: { min: 0.1019, nom: 0.1019, max: 0.1144 },
+	9: { min: 0.1144, nom: 0.1144, max: 0.1285 },
+	8: { min: 0.1285, nom: 0.1285, max: 0.1443 },
+};
+
+// AWG to CMA lookup
+const AWG_TO_CMA: Record<number, number> = {
+	36: 25.0,
+	35: 31.2,
+	34: 39.7,
+	33: 50.4,
+	32: 64.0,
+	31: 79.6,
+	30: 100.5,
+	29: 127.0,
+	28: 159.8,
+	27: 201.5,
+	26: 254.1,
+	25: 320.4,
+	24: 404.0,
+	23: 509.5,
+	22: 642.4,
+	21: 810.1,
+	20: 1022.0,
+	19: 1288.0,
+	18: 1624.0,
+	17: 2048.0,
+	16: 2583.0,
+	15: 3257.0,
+	14: 4107.0,
+	13: 5178.0,
+	12: 6530.0,
+	11: 8234.0,
+	10: 10383.0,
+	9: 13087.0,
+	8: 16509.0,
+};
+
+/**
+ * Validates strand count by recursively dividing by 5, 3, or 4
+ * Based on Excel formula: IF($D4<49,IF(B14>NOOFENDSMAX,IF(B15=TRUE,B14/5,IF(B16=TRUE,B14/3,IF(B17=TRUE,B14/4,"N/A"))),""N/A""),...)
+ */
+export function validateStrandCount(
+	strandCount: number,
+	wireAWG: number,
+): StrandValidationResult {
+	const breakdown: number[] = [];
+	let currentCount = strandCount;
+
+	// Special rule: For AWG 12-22, 8 or fewer strands are always valid
+	if (wireAWG >= 12 && wireAWG <= 22 && strandCount <= 8) {
+		return {
+			isValid: true,
+			breakdown: [strandCount],
+			nearbyValid: [strandCount],
+			message: `Valid: ${strandCount} strands for AWG ${wireAWG} (special rule for 8 or fewer strands)`,
+		};
+	}
+
+	// Get max strands for this AWG
+	const maxStrands = getMaxStrandsForAWG(wireAWG);
+
+	while (currentCount > maxStrands) {
+		let divided = false;
+
+		// Try dividing by 5, 3, or 4 in that order
+		if (currentCount % 5 === 0) {
+			currentCount = currentCount / 5;
+			breakdown.push(5);
+			divided = true;
+		} else if (currentCount % 3 === 0) {
+			currentCount = currentCount / 3;
+			breakdown.push(3);
+			divided = true;
+		} else if (currentCount % 4 === 0) {
+			currentCount = currentCount / 4;
+			breakdown.push(4);
+			divided = true;
+		}
+
+		if (!divided) {
+			break;
+		}
+	}
+
+	const isValid = currentCount <= maxStrands;
+	const nearbyValid = findNearbyValidCounts(strandCount, wireAWG);
+
+	return {
+		isValid,
+		breakdown: [strandCount, ...breakdown],
+		nearbyValid,
+		message: isValid
+			? `Valid: ${strandCount} strands breaks down to ${currentCount} strands in first operation`
+			: `Invalid: ${strandCount} strands cannot be reduced to ${maxStrands} or fewer strands`,
+	};
+}
+
+/**
+ * Get maximum strands allowed for a given AWG
+ * Based on Excel validation logic
+ */
+function getMaxStrandsForAWG(awg: number): number {
+	// Use exact data from Max Ends Single Op_values.csv
+	return MAX_STRANDS_SINGLE_OP[awg] || 0;
+}
+
+/**
+ * Find nearby valid strand counts
+ */
+function findNearbyValidCounts(target: number, awg: number): number[] {
+	const valid: number[] = [];
+	const maxStrands = getMaxStrandsForAWG(awg);
+
+	// Check counts around the target
+	for (let i = Math.max(1, target - 10); i <= target + 10; i++) {
+		// Use simplified validation to avoid recursion
+		const isValid = validateStrandCountSimple(i, awg, maxStrands);
+		if (isValid) {
+			valid.push(i);
+		}
+	}
+
+	return valid.slice(0, 5); // Return up to 5 nearby valid counts
+}
+
+/**
+ * Simplified strand validation without recursion
+ */
+function validateStrandCountSimple(
+	strandCount: number,
+	wireAWG: number,
+	maxStrands: number,
+): boolean {
+	// Special rule: For AWG 12-22, 8 or fewer strands are always valid
+	if (wireAWG >= 12 && wireAWG <= 22 && strandCount <= 8) {
+		return true;
+	}
+
+	let currentCount = strandCount;
+
+	while (currentCount > maxStrands) {
+		let divided = false;
+
+		// Try dividing by 5, 3, or 4 in that order
+		if (currentCount % 5 === 0) {
+			currentCount = currentCount / 5;
+			divided = true;
+		} else if (currentCount % 3 === 0) {
+			currentCount = currentCount / 3;
+			divided = true;
+		} else if (currentCount % 4 === 0) {
+			currentCount = currentCount / 4;
+			divided = true;
+		}
+
+		if (!divided) {
+			break;
+		}
+	}
+
+	return currentCount <= maxStrands;
+}
+
+/**
+ * Calculate packing factor based on Litz type and operations
+ * Based on Excel formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),VLOOKUP(D5,TYPE2,4,0))
+ */
+export function calculatePackingFactor(
+	litzType: "Type 1" | "Type 2",
+	operations: number,
+): number {
+	if (operations > 5) {
+		throw new Error("Maximum 5 operations supported");
+	}
+
+	return PACKING_FACTORS[litzType][operations] || 1.155;
+}
+
+/**
+ * Calculate take up factor based on operations
+ * Based on Excel formula: IF(D3<26,K3,IF(D5=1,K4,IF(D5=2,K5,K6)))
+ */
+export function calculateTakeUpFactor(operations: number): number {
+	return TAKE_UP_FACTORS[operations] || 1.01;
+}
+
+/**
+ * Calculate total copper area in CMA
+ * Based on Excel formula: INDEX('Magnet Wire'!$A$3:$E$41,MATCH(D4,'Magnet Wire'!$A$3:$A$41,0),MATCH("CMA SOLID",'Magnet Wire'!$A$2:$E$2,0))*$D$3
+ */
+export function calculateTotalCopperAreaCMA(
+	strandCount: number,
+	wireAWG: number,
+): number {
+	const awgData = AWG_REFERENCE[wireAWG];
+	if (!awgData) {
+		throw new Error(`No CMA data available for AWG ${wireAWG}`);
+	}
+
+	return strandCount * awgData.cma;
+}
+
+/**
+ * Calculate total copper area in mm²
+ * Based on Excel formula: $D$9*0.000506707
+ */
+export function calculateTotalCopperAreaMM2(cma: number): number {
+	return cma * 0.000506707;
+}
+
+/**
+ * Calculate equivalent AWG from total copper area
+ * Based on Excel formula: IFERROR(IF((INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)>50,"",(INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)&" AWG"),"")
+ */
+export function calculateEquivalentAWG(cma: number): string {
+	const awgEntries = Object.entries(AWG_REFERENCE)
+		.map(([awg, data]) => ({ awg: Number(awg), cma: data.cma }))
+		.sort((a, b) => b.cma - a.cma); // Descending order
+
+	// If above largest, return ""
+	if (cma > awgEntries[0].cma) return "";
+	// If below smallest, return "50 AWG"
+	if (cma < awgEntries[awgEntries.length - 1].cma) return "50 AWG";
+
+	let foundIndex = -1;
+	for (let i = 0; i < awgEntries.length; i++) {
+		if (cma >= awgEntries[i].cma) {
+			foundIndex = i;
+			break;
+		}
+	}
+	if (foundIndex === -1) return "";
+	const foundAWG = awgEntries[foundIndex].awg;
+	if (foundAWG > 50) return "";
+	return `${foundAWG} AWG`;
+}
+
+/**
+ * Calculate bare Litz diameters
+ * Based on Excel formula: ROUND(SQRT($D$3)*E39*$D$7,3)
+ */
+export function calculateBareLitzDiameters(
+	strandCount: number,
+	wireAWG: number,
+	packingFactor: number,
+	magnetWireGrade: string,
+	filmType: "Single" | "Heavy" | "Triple" | "Quadruple",
+): DiameterResult {
+	const filmData = MAGNET_WIRE_FILM_THICKNESSES[wireAWG];
+	if (!filmData) {
+		throw new Error(`No film thickness data available for AWG ${wireAWG}`);
+	}
+
+	let filmThickness: { min: number; nom: number; max: number };
+	switch (filmType) {
+		case "Single":
+			filmThickness = filmData.single;
+			break;
+		case "Heavy":
+			filmThickness = filmData.heavy;
+			break;
+		case "Triple":
+			filmThickness = filmData.triple;
+			break;
+		case "Quadruple":
+			filmThickness = filmData.quadruple;
+			break;
+		default:
+			throw new Error(`Unknown film type: ${filmType}`);
+	}
+
+	if (filmThickness.nom === 0) {
+		throw new Error(`${filmType} film not available for AWG ${wireAWG}`);
+	}
+
+	const sqrtStrands = Math.sqrt(strandCount);
+	const min = Number(
+		(
+			Math.round(sqrtStrands * filmThickness.min * packingFactor * 1000) / 1000
+		).toFixed(3),
+	);
+	const nom = Number(
+		(
+			Math.round(sqrtStrands * filmThickness.nom * packingFactor * 1000) / 1000
+		).toFixed(3),
+	);
+	const max = Number(
+		(
+			Math.round(sqrtStrands * filmThickness.max * packingFactor * 1000) / 1000
+		).toFixed(3),
+	);
+
+	const prefix = PART_NUMBER_PREFIXES[magnetWireGrade] || "L79";
+	const partNumber = `${prefix}-${strandCount}-${wireAWG}-${filmType.toLowerCase()}`;
+
+	return {
+		min,
+		nom,
+		max,
+		partNumber,
+	};
+}
+
+/**
+ * Calculate insulated Litz diameters
+ * Based on Excel formulas for single, double, triple insulation
+ */
+export function calculateInsulatedLitzDiameters(
+	bareDiameter: number,
+	wireAWG: number,
+	insulationType: string,
+	wallThickness: number,
+	layers: 1 | 2 | 3,
+	magnetWireGrade: string,
+): DiameterResult {
+	const insulationCode = INSULATION_WALL_THICKNESSES[insulationType]?.[wireAWG]
+		? "T"
+		: "_";
+	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
+
+	// Calculate nominal diameter with insulation
+	const nominalDiameter = bareDiameter + 2 * layers * wallThickness;
+
+	// Calculate min/max with tolerance
+	const tolerance = 0.001; // Simplified tolerance
+	const minDiameter = nominalDiameter - tolerance;
+	const maxDiameter = nominalDiameter + tolerance;
+
+	// Generate part number
+	const layerCode = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
+	const layerSuffix = layers === 1 ? "X" : layers === 2 ? "XX" : "XXX";
+	const wallThicknessCode = Math.round(wallThickness * 1000);
+
+	const partNumber = `${layerCode}${wireAWG}/${wireAWG}${insulationCode}${layerSuffix}-${wallThicknessCode}(MW${gradeCode})`;
+
+	return {
+		min: Math.round(minDiameter * 1000) / 1000,
+		nom: Math.round(nominalDiameter * 1000) / 1000,
+		max: Math.round(maxDiameter * 1000) / 1000,
+		partNumber,
+	};
+}
+
+/**
+ * Check UL approval requirements
+ * Based on Excel validation formulas
+ */
+export function checkULApproval(
+	conductorDiameter: number,
+	insulationType: string,
+	wallThickness: number,
+	copperArea: number,
+): string[] {
+	const warnings: string[] = [];
+
+	// Check conductor diameter limit
+	if (conductorDiameter > 0.2) {
+		warnings.push(
+			"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
+		);
+	}
+
+	// Check wall thickness minimums
+	if (insulationType === "ETFE" && wallThickness < 0.0015) {
+		warnings.push("ETFE INSULATION WALL THICKNESS BELOW UL MINIMUM");
+	}
+
+	if (insulationType === "FEP" && wallThickness < 0.002) {
+		warnings.push("FEP INSULATION WALL THICKNESS BELOW UL MINIMUM");
+	}
+
+	if (insulationType === "PFA" && wallThickness < 0.0015) {
+		warnings.push("PFA INSULATION WALL THICKNESS BELOW UL MINIMUM");
+	}
+
+	// Check copper area thresholds
+	if (insulationType === "PFA" && copperArea > 12404) {
+		warnings.push(
+			"SELECT FEP INSULATION IF UL APPROVALS ARE DESIRED/NECESSARY",
+		);
+	}
+
+	return warnings;
+}
+
+/**
+ * Main function to calculate complete Litz construction
+ */
+export function calculateLitzConstruction(
+	totalStrands: number,
+	wireAWG: number,
+	litzType: "Type 1" | "Type 2",
+	magnetWireGrade = "MW 79-C",
+): LitzConstruction {
+	// Validate strand count
+	const validation = validateStrandCount(totalStrands, wireAWG);
+
+	if (!validation.isValid) {
+		return {
+			totalStrands,
+			wireAWG,
+			litzType,
+			numberOfOperations: 0,
+			packingFactor: 0,
+			takeUpFactor: 0,
+			totalCopperAreaCMA: 0,
+			totalCopperAreaMM2: 0,
+			equivalentAWG: "",
+			isValid: false,
+			validationMessage: validation.message,
+		};
+	}
+
+	// Excel logic: number of operations = number of steps in breakdown
+	const numberOfOperations = validation.breakdown.length;
+
+	// Calculate packing factor
+	const packingFactor = calculatePackingFactor(litzType, numberOfOperations);
+
+	// Calculate take up factor
+	const takeUpFactor = calculateTakeUpFactor(numberOfOperations);
+
+	// Calculate copper areas
+	const totalCopperAreaCMA = calculateTotalCopperAreaCMA(totalStrands, wireAWG);
+	const totalCopperAreaMM2 = calculateTotalCopperAreaMM2(totalCopperAreaCMA);
+
+	// Calculate equivalent AWG
+	const equivalentAWG = calculateEquivalentAWG(totalCopperAreaCMA);
+
+	return {
+		totalStrands,
+		wireAWG,
+		litzType,
+		numberOfOperations,
+		packingFactor,
+		takeUpFactor,
+		totalCopperAreaCMA,
+		totalCopperAreaMM2,
+		equivalentAWG,
+		isValid: true,
+		validationMessage: validation.message,
+	};
+}

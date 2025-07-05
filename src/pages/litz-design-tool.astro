@@ -1,0 +1,13 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { LitzDesignToolV2 } from "@/components/forms/product-tools/LitzDesignTool";
+---
+
+<BaseLayout
+  title="Litz Design Tool - Rubadue"
+  description="Design and validate Litz wire constructions with our comprehensive tool"
+>
+  <main>
+    <LitzDesignToolV2 client:load />
+  </main>
+</BaseLayout>
