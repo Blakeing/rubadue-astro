@@ -623,7 +623,6 @@ export function validateStrandCount(
 
 	const isValid = currentCount <= maxStrands;
 	const nearbyValid = findNearbyValidCounts(strandCount, wireAWG);
-
 	return {
 		isValid,
 		breakdown: [strandCount, ...breakdown],
@@ -830,7 +829,7 @@ export function calculateBareLitzDiameters(
 	);
 
 	// Generate part number based on Excel formula: ="Rubadue Part Number:"&" RL-"&$D$3&"-"&$D$4&"Q"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
-	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
+	const gradeCode = (magnetWireGrade.match(/\d+/) || ["XX"])[0];
 	const filmCode =
 		filmType === "Single"
 			? "S"

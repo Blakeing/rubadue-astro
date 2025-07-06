@@ -521,6 +521,9 @@ export function LitzDesignToolV2() {
 														<SelectItem value="MW 77-C">MW 77-C</SelectItem>
 														<SelectItem value="MW 35-C">MW 35-C</SelectItem>
 														<SelectItem value="MW 16-C">MW 16-C</SelectItem>
+														<SelectItem value="MW 82-C">MW 82-C</SelectItem>
+														<SelectItem value="MW 83-C">MW 83-C</SelectItem>
+														<SelectItem value="Other">Other</SelectItem>
 													</SelectContent>
 												</Select>
 												<FormMessage />
@@ -797,7 +800,7 @@ export function LitzDesignToolV2() {
 											</CardDescription>
 										</div>
 										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
-											Part Number
+											<span>Part Number</span>
 											<div className="text-base font-semibold tracking-wider text-foreground">
 												{(() => {
 													let partNumber = "N/A";
@@ -818,24 +821,7 @@ export function LitzDesignToolV2() {
 														partNumber = servedResult.partNumber;
 													}
 
-													return partNumber !== "N/A"
-														? partNumber.split(/(\d+)/).map((part) =>
-																/\d+/.test(part) ? (
-																	<span
-																		key={generatePartNumberKey(part, "num")}
-																		className="font-mono"
-																	>
-																		{part}
-																	</span>
-																) : (
-																	<span
-																		key={generatePartNumberKey(part, "text")}
-																	>
-																		{part}
-																	</span>
-																),
-															)
-														: "N/A";
+													return partNumber;
 												})()}
 											</div>
 										</div>
@@ -1191,31 +1177,14 @@ export function LitzDesignToolV2() {
 											</CardDescription>
 										</div>
 										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
-											Part Number
+											<span className="font-mono">Part Number</span>
 											<div className="text-base font-semibold tracking-wider text-foreground">
 												{(() => {
 													const result =
 														diameterResults.insulated?.[selectedInsulationType];
 													const partNumber = result?.partNumber || "N/A";
 
-													return partNumber !== "N/A"
-														? partNumber.split(/(\d+)/).map((part) =>
-																/\d+/.test(part) ? (
-																	<span
-																		key={generatePartNumberKey(part, "num")}
-																		className="font-mono"
-																	>
-																		{part}
-																	</span>
-																) : (
-																	<span
-																		key={generatePartNumberKey(part, "text")}
-																	>
-																		{part}
-																	</span>
-																),
-															)
-														: "N/A";
+													return partNumber;
 												})()}
 											</div>
 										</div>
