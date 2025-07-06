@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -9,8 +8,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Form,
 	FormControl,
@@ -19,6 +16,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -26,9 +24,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
 import {
 	Tooltip,
 	TooltipContent,
@@ -36,22 +40,30 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-	calculateLitzConstruction,
-	validateStrandCount,
+	AWG_REFERENCE,
+	AWG_TO_DIAMETER,
+	type DiameterResult,
+	type LitzConstruction,
+	STRAND_OD_REFERENCE,
+	type StrandValidationResult,
 	calculateBareLitzDiameters,
 	calculateInsulatedLitzDiameters,
+	calculateLitzConstruction,
 	checkULApproval,
-	type LitzConstruction,
-	type StrandValidationResult,
-	type DiameterResult,
+	validateStrandCount,
 } from "@/lib/litz-calculations";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	CheckCircle,
-	XCircle,
 	AlertTriangle,
-	Info,
+	CheckCircle,
 	HelpCircle,
+	Info,
+	XCircle,
 } from "lucide-react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { InsulationSummaryTable } from "./InsulationSummaryTable";
 
 const formSchema = z
 	.object({
@@ -64,25 +76,16 @@ const formSchema = z
 		wireType: z.enum(["Bare & Served", "Insulated"]),
 		magnetWireGrade: z.string().min(1, "Magnet wire grade is required"),
 		insulationType: z.string().optional(),
-		wallThickness: z
-			.number()
-			.min(0, "Wall thickness must be non-negative")
-			.optional(),
 	})
 	.refine(
 		(data) => {
 			if (data.wireType === "Insulated") {
-				return (
-					data.insulationType &&
-					data.insulationType.length > 0 &&
-					data.wallThickness !== undefined
-				);
+				return data.insulationType && data.insulationType.length > 0;
 			}
 			return true;
 		},
 		{
-			message:
-				"Insulation material and wall thickness are required for insulated wire type",
+			message: "Insulation material is required for insulated wire type",
 			path: ["insulationType"],
 		},
 	);
@@ -102,7 +105,6 @@ export function LitzDesignToolV2() {
 			wireType: "Bare & Served",
 			magnetWireGrade: "MW 79-C",
 			insulationType: "",
-			wallThickness: 0,
 		},
 	});
 
@@ -186,8 +188,7 @@ export function LitzDesignToolV2() {
 						results.bare = bareResults;
 					} else if (
 						formData.wireType === "Insulated" &&
-						formData.insulationType &&
-						formData.wallThickness
+						formData.insulationType
 					) {
 						// Calculate insulated Litz diameters
 						const insulatedResults: Record<string, DiameterResult> = {};
@@ -210,7 +211,6 @@ export function LitzDesignToolV2() {
 									bareDiameter,
 									formData.wireAWG,
 									formData.insulationType || "",
-									formData.wallThickness || 0,
 									layer,
 									formData.magnetWireGrade,
 								);
@@ -222,15 +222,13 @@ export function LitzDesignToolV2() {
 							}
 						}
 
-						results.insulated = insulatedResults;
-
 						// Check UL approval requirements
 						const ulWarnings = checkULApproval(
 							bareDiameter,
 							formData.insulationType,
-							formData.wallThickness,
 							constructionResult.totalCopperAreaCMA,
 						);
+						results.insulated = insulatedResults;
 						results.ulWarnings = ulWarnings;
 					}
 
@@ -257,7 +255,6 @@ export function LitzDesignToolV2() {
 		formData.wireType,
 		formData.magnetWireGrade,
 		formData.insulationType,
-		formData.wallThickness,
 	]);
 
 	useEffect(() => {
@@ -442,59 +439,32 @@ export function LitzDesignToolV2() {
 									/>
 
 									{formData.wireType === "Insulated" && (
-										<>
-											<FormField
-												control={form.control}
-												name="insulationType"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Insulation Material</FormLabel>
-														<Select
-															onValueChange={field.onChange}
-															value={field.value}
-															disabled={isCalculating}
-														>
-															<FormControl>
-																<SelectTrigger>
-																	<SelectValue placeholder="Select insulation" />
-																</SelectTrigger>
-															</FormControl>
-															<SelectContent>
-																<SelectItem value="ETFE">ETFE</SelectItem>
-																<SelectItem value="FEP">FEP</SelectItem>
-																<SelectItem value="PFA">PFA</SelectItem>
-															</SelectContent>
-														</Select>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-
-											<FormField
-												control={form.control}
-												name="wallThickness"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Wall Thickness (inches)</FormLabel>
+										<FormField
+											control={form.control}
+											name="insulationType"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Insulation Material</FormLabel>
+													<Select
+														onValueChange={field.onChange}
+														value={field.value}
+														disabled={isCalculating}
+													>
 														<FormControl>
-															<Input
-																type="number"
-																step="0.0001"
-																placeholder="e.g., 0.002"
-																{...field}
-																onChange={(e) =>
-																	field.onChange(
-																		Number.parseFloat(e.target.value) || 0,
-																	)
-																}
-																disabled={isCalculating}
-															/>
+															<SelectTrigger>
+																<SelectValue placeholder="Select insulation" />
+															</SelectTrigger>
 														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-										</>
+														<SelectContent>
+															<SelectItem value="ETFE">ETFE</SelectItem>
+															<SelectItem value="FEP">FEP</SelectItem>
+															<SelectItem value="PFA">PFA</SelectItem>
+														</SelectContent>
+													</Select>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
 									)}
 								</form>
 							</Form>
@@ -651,48 +621,134 @@ export function LitzDesignToolV2() {
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div className="grid grid-cols-1 gap-4">
 										{(["Single", "Heavy", "Triple", "Quadruple"] as const).map(
 											(filmType) => {
 												const result = diameterResults.bare?.[filmType];
+												const toMm = (inches: number | undefined) =>
+													typeof inches === "number" ? inches * 25.4 : null;
+												const displayValue = (
+													val: number | null | undefined,
+												) =>
+													val === null ||
+													val === undefined ||
+													Number.isNaN(val) ? (
+														<span className="text-muted-foreground font-semibold">
+															N/A
+														</span>
+													) : (
+														val.toFixed(4)
+													);
+												// Get strand OD min/nom/max for this AWG and film type
+												let strandOD: {
+													min: number | undefined;
+													nom: number | undefined;
+													max: number | undefined;
+												} = { min: undefined, nom: undefined, max: undefined };
+												const strandRef =
+													STRAND_OD_REFERENCE?.[formData.wireAWG];
+												if (strandRef) {
+													strandOD = strandRef;
+												}
 												return (
-													<div key={filmType} className="border rounded-lg p-4">
-														<h4 className="font-semibold mb-3">
+													<div key={filmType} className="p-2">
+														<div className="font-bold text-lg mb-2">
 															{filmType} Film
-														</h4>
-														<div className="grid grid-cols-3 gap-2 text-sm mb-3">
-															<div>
-																<span className="text-muted-foreground">
-																	Min:
-																</span>
-																<div className="font-medium">
-																	{result ? `${result.min.toFixed(3)}"` : "N/A"}
-																</div>
-															</div>
-															<div>
-																<span className="text-muted-foreground">
-																	Nom:
-																</span>
-																<div className="font-medium">
-																	{result ? `${result.nom.toFixed(3)}"` : "N/A"}
-																</div>
-															</div>
-															<div>
-																<span className="text-muted-foreground">
-																	Max:
-																</span>
-																<div className="font-medium">
-																	{result ? `${result.max.toFixed(3)}"` : "N/A"}
-																</div>
-															</div>
 														</div>
-														<div className="pt-2 border-t">
-															<div className="text-xs text-muted-foreground">
+														<Table>
+															<TableHeader>
+																<TableRow>
+																	<TableHead
+																		rowSpan={2}
+																		className="text-center align-middle w-20"
+																	/>
+																	<TableHead
+																		colSpan={2}
+																		className="text-center align-middle w-32"
+																	>
+																		Bare Litz
+																	</TableHead>
+																	<TableHead
+																		colSpan={2}
+																		className="text-center align-middle w-32"
+																	>
+																		Strand OD's
+																	</TableHead>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center w-16">
+																		Inches
+																	</TableHead>
+																	<TableHead className="text-center w-16">
+																		mm
+																	</TableHead>
+																	<TableHead className="text-center w-16">
+																		Inches
+																	</TableHead>
+																	<TableHead className="text-center w-16">
+																		mm
+																	</TableHead>
+																</TableRow>
+															</TableHeader>
+															<TableBody>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Min
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.min)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(result?.min))}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(strandOD.min)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(strandOD.min))}
+																	</TableCell>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Nom
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.nom)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(result?.nom))}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(strandOD.nom)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(strandOD.nom))}
+																	</TableCell>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Max
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.max)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(result?.max))}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(strandOD.max)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(toMm(strandOD.max))}
+																	</TableCell>
+																</TableRow>
+															</TableBody>
+														</Table>
+														<div className="mt-2 font-mono text-xs">
+															<span className="font-semibold">
 																Part Number:
-															</div>
-															<div className="font-mono text-sm">
-																{result ? result.partNumber : "N/A"}
-															</div>
+															</span>{" "}
+															{result?.partNumber ?? "N/A"}
 														</div>
 													</div>
 												);
@@ -713,56 +769,46 @@ export function LitzDesignToolV2() {
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-										{(
-											[
-												"Single Insulated",
-												"Double Insulated",
-												"Triple Insulated",
-											] as const
-										).map((insType) => {
-											const result = diameterResults.insulated?.[insType];
-											return (
-												<div key={insType} className="border rounded-lg p-4">
-													<h4 className="font-semibold mb-3">{insType}</h4>
-													<div className="grid grid-cols-3 gap-2 text-sm mb-3">
-														<div>
-															<span className="text-muted-foreground">
-																Min:
-															</span>
-															<div className="font-medium">
-																{result ? `${result.min.toFixed(3)}"` : "N/A"}
-															</div>
-														</div>
-														<div>
-															<span className="text-muted-foreground">
-																Nom:
-															</span>
-															<div className="font-medium">
-																{result ? `${result.nom.toFixed(3)}"` : "N/A"}
-															</div>
-														</div>
-														<div>
-															<span className="text-muted-foreground">
-																Max:
-															</span>
-															<div className="font-medium">
-																{result ? `${result.max.toFixed(3)}"` : "N/A"}
-															</div>
-														</div>
-													</div>
-													<div className="pt-2 border-t">
-														<div className="text-xs text-muted-foreground">
-															Part Number:
-														</div>
-														<div className="font-mono text-sm">
-															{result ? result.partNumber : "N/A"}
-														</div>
-													</div>
-												</div>
-											);
-										})}
-									</div>
+									{(
+										[
+											"Single Insulated",
+											"Double Insulated",
+											"Triple Insulated",
+										] as const
+									).map((insType, idx) => {
+										const result = diameterResults.insulated?.[insType];
+										const toMm = (inches: number | undefined) =>
+											typeof inches === "number" ? inches * 25.4 : null;
+										return (
+											<InsulationSummaryTable
+												key={insType}
+												title={
+													idx === 0
+														? "Single Insulated Wire"
+														: idx === 1
+															? "Double Insulated Wire"
+															: "Triple Insulated Wire"
+												}
+												min={{
+													inches: result?.min ?? null,
+													mm: toMm(result?.min) ?? null,
+												}}
+												nom={{
+													inches: result?.nom ?? null,
+													mm: toMm(result?.nom) ?? null,
+												}}
+												max={{
+													inches: result?.max ?? null,
+													mm: toMm(result?.max) ?? null,
+												}}
+												wallInches={result?.wallThicknessInches ?? null}
+												wallMm={result?.wallThicknessMm ?? null}
+												partNumber={result?.partNumber ?? "N/A"}
+												nomWallInches={result?.wallThicknessInches ?? null}
+												nomWallMm={result?.wallThicknessMm ?? null}
+											/>
+										);
+									})}
 								</CardContent>
 							</Card>
 						)}

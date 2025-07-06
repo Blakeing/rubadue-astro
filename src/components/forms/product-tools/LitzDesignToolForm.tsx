@@ -1,8 +1,10 @@
+import * as bareLitzData from "@/components/data-display/product-tables/bare-litz/data";
+import type { BareLitzWireSpec } from "@/components/data-display/product-tables/bare-litz/data";
+import { InputField, SelectField } from "@/components/ui/FormFields";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { InputField, SelectField } from "@/components/ui/FormFields";
-import { useForm } from "react-hook-form";
-import { useState, useMemo, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -10,10 +12,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import * as bareLitzData from "@/components/data-display/product-tables/bare-litz/data";
-import type { BareLitzWireSpec } from "@/components/data-display/product-tables/bare-litz/data";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const awgOptions = Array.from({ length: 40 - 12 + 1 }, (_, i) => {
 	const awg = (i + 12).toString();

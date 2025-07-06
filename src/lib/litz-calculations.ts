@@ -27,6 +27,8 @@ export interface DiameterResult {
 	nom: number;
 	max: number;
 	partNumber: string;
+	wallThicknessInches: number | null;
+	wallThicknessMm: number | null;
 }
 
 export interface BareLitzResult {
@@ -43,7 +45,7 @@ export interface InsulatedLitzResult {
 }
 
 // AWG Reference Data (from AWG Reference_values.csv)
-const AWG_REFERENCE: Record<
+export const AWG_REFERENCE: Record<
 	number,
 	{ diameter: number; cma: number; strandedCMA: number }
 > = {
@@ -406,132 +408,39 @@ const TAKE_UP_FACTORS: Record<number, number> = {
 	5: 1.051,
 };
 
-// Insulation wall thicknesses (from Cover Sheet_values.csv)
-const INSULATION_WALL_THICKNESSES: Record<string, Record<number, number>> = {
-	ETFE: {
-		12: 0.002,
-		13: 0.002,
-		14: 0.002,
-		15: 0.002,
-		16: 0.002,
-		17: 0.002,
-		18: 0.002,
-		19: 0.002,
-		20: 0.002,
-		21: 0.002,
-		22: 0.002,
-		23: 0.002,
-		24: 0.002,
-		25: 0.002,
-		26: 0.002,
-		27: 0.002,
-		28: 0.002,
-		29: 0.002,
-		30: 0.002,
-		31: 0.002,
-		32: 0.002,
-		33: 0.002,
-		34: 0.002,
-		35: 0.002,
-		36: 0.002,
-		37: 0.002,
-		38: 0.002,
-		39: 0.002,
-		40: 0.002,
-		41: 0.002,
-		42: 0.002,
-		43: 0.002,
-		44: 0.002,
-		45: 0.002,
-		46: 0.002,
-		47: 0.002,
-		48: 0.002,
-		49: 0.002,
-		50: 0.002,
-	},
-	FEP: {
-		12: 0.002,
-		13: 0.002,
-		14: 0.002,
-		15: 0.002,
-		16: 0.002,
-		17: 0.002,
-		18: 0.002,
-		19: 0.002,
-		20: 0.002,
-		21: 0.002,
-		22: 0.002,
-		23: 0.002,
-		24: 0.002,
-		25: 0.002,
-		26: 0.002,
-		27: 0.002,
-		28: 0.002,
-		29: 0.002,
-		30: 0.002,
-		31: 0.002,
-		32: 0.002,
-		33: 0.002,
-		34: 0.002,
-		35: 0.002,
-		36: 0.002,
-		37: 0.002,
-		38: 0.002,
-		39: 0.002,
-		40: 0.002,
-		41: 0.002,
-		42: 0.002,
-		43: 0.002,
-		44: 0.002,
-		45: 0.002,
-		46: 0.002,
-		47: 0.002,
-		48: 0.002,
-		49: 0.002,
-		50: 0.002,
-	},
-	PFA: {
-		12: 0.002,
-		13: 0.002,
-		14: 0.002,
-		15: 0.002,
-		16: 0.002,
-		17: 0.002,
-		18: 0.002,
-		19: 0.002,
-		20: 0.002,
-		21: 0.002,
-		22: 0.002,
-		23: 0.002,
-		24: 0.002,
-		25: 0.002,
-		26: 0.002,
-		27: 0.002,
-		28: 0.002,
-		29: 0.002,
-		30: 0.002,
-		31: 0.002,
-		32: 0.002,
-		33: 0.002,
-		34: 0.002,
-		35: 0.002,
-		36: 0.002,
-		37: 0.002,
-		38: 0.002,
-		39: 0.002,
-		40: 0.002,
-		41: 0.002,
-		42: 0.002,
-		43: 0.002,
-		44: 0.002,
-		45: 0.002,
-		46: 0.002,
-		47: 0.002,
-		48: 0.002,
-		49: 0.002,
-		50: 0.002,
-	},
-};
+/**
+ * Calculate required wall thickness based on insulation type and copper area
+ * Based on Excel formula: =IF(OR(D68="ETFE",D68="PFA"),IF(H73<0.0015,0.0015,H73),IF(AND(D68="FEP",D9<1939,H73<0.002),0.002,IF(AND(D68="FEP",D9>1938,D9<12405,H73<0.003),0.003,IF(AND(D68="FEP",D9>12404,D9<24978,H73<0.01),0.01,IF(AND(D68="FEP",D9>24977,H73<0.012),0.012,H73)))))
+ */
+export function calculateRequiredWallThickness(
+	insulationType: string,
+	copperAreaCMA: number,
+	inputWallThickness: number,
+): number {
+	// ETFE and PFA: minimum 0.0015"
+	if (insulationType === "ETFE" || insulationType === "PFA") {
+		return Math.max(0.0015, inputWallThickness);
+	}
+
+	// FEP: complex logic based on copper area
+	if (insulationType === "FEP") {
+		if (copperAreaCMA < 1939) {
+			return Math.max(0.002, inputWallThickness);
+		}
+		if (copperAreaCMA >= 1939 && copperAreaCMA < 12405) {
+			return Math.max(0.003, inputWallThickness);
+		}
+		if (copperAreaCMA >= 12405 && copperAreaCMA < 24978) {
+			return Math.max(0.01, inputWallThickness);
+		}
+		if (copperAreaCMA >= 24978) {
+			return Math.max(0.012, inputWallThickness);
+		}
+	}
+
+	// Default: return input value
+	return inputWallThickness;
+}
 
 // Part number prefixes
 const PART_NUMBER_PREFIXES: Record<string, string> = {
@@ -543,7 +452,7 @@ const PART_NUMBER_PREFIXES: Record<string, string> = {
 };
 
 // AWG to diameter lookup (simplified - you may want to expand this)
-const AWG_TO_DIAMETER: Record<
+export const AWG_TO_DIAMETER: Record<
 	number,
 	{ min: number; nom: number; max: number }
 > = {
@@ -866,14 +775,25 @@ export function calculateBareLitzDiameters(
 		).toFixed(3),
 	);
 
-	const prefix = PART_NUMBER_PREFIXES[magnetWireGrade] || "L79";
-	const partNumber = `${prefix}-${strandCount}-${wireAWG}-${filmType.toLowerCase()}`;
+	// Generate part number based on Excel formula: ="Rubadue Part Number:"&" RL-"&$D$3&"-"&$D$4&"Q"&VLOOKUP($D$36,MagGrade,2,0)&"-XX"
+	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
+	const filmCode =
+		filmType === "Single"
+			? "S"
+			: filmType === "Heavy"
+				? "H"
+				: filmType === "Triple"
+					? "T"
+					: "Q";
+	const partNumber = `RL-${strandCount}-${wireAWG}${filmCode}${gradeCode}-XX`;
 
 	return {
 		min,
 		nom,
 		max,
 		partNumber,
+		wallThicknessInches: null,
+		wallThicknessMm: null,
 	};
 }
 
@@ -885,35 +805,56 @@ export function calculateInsulatedLitzDiameters(
 	bareDiameter: number,
 	wireAWG: number,
 	insulationType: string,
-	wallThickness: number,
 	layers: 1 | 2 | 3,
 	magnetWireGrade: string,
-): DiameterResult {
-	const insulationCode = INSULATION_WALL_THICKNESSES[insulationType]?.[wireAWG]
-		? "T"
-		: "_";
+): DiameterResult & {
+	wallThicknessInches: number | null;
+	wallThicknessMm: number | null;
+} {
+	// Calculate wall thickness as 6% of bare OD, rounded up to next 0.0005
+	function roundUpTo0005(val: number) {
+		return Math.ceil(val / 0.0005) * 0.0005;
+	}
+	const rawWall = bareDiameter * 0.06;
+	const roundedWall = roundUpTo0005(rawWall);
+	// Calculate required wall thickness based on insulation type and copper area
+	const requiredWallThickness = calculateRequiredWallThickness(
+		insulationType,
+		calculateTotalCopperAreaCMA(Math.round(bareDiameter * 1000), wireAWG),
+		roundedWall,
+	);
+	const wallThicknessInches =
+		requiredWallThickness && requiredWallThickness >= 0.001
+			? requiredWallThickness
+			: null;
+	const wallThicknessMm = wallThicknessInches
+		? wallThicknessInches * 25.4
+		: null;
 	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
 
-	// Calculate nominal diameter with insulation
-	const nominalDiameter = bareDiameter + 2 * layers * wallThickness;
+	// Calculate nominal diameter with insulation using required wall thickness
+	const nominalDiameter = bareDiameter + 2 * layers * requiredWallThickness;
 
 	// Calculate min/max with tolerance
 	const tolerance = 0.001; // Simplified tolerance
 	const minDiameter = nominalDiameter - tolerance;
 	const maxDiameter = nominalDiameter + tolerance;
 
-	// Generate part number
-	const layerCode = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
-	const layerSuffix = layers === 1 ? "X" : layers === 2 ? "XX" : "XXX";
-	const wallThicknessCode = Math.round(wallThickness * 1000);
-
-	const partNumber = `${layerCode}${wireAWG}/${wireAWG}${insulationCode}${layerSuffix}-${wallThicknessCode}(MW${gradeCode})`;
+	// Generate part number for insulated Litz per Excel formula
+	const prefix = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
+	const insulationCode =
+		insulationType === "ETFE" ? "E" : insulationType === "FEP" ? "F" : "P";
+	const xSuffix = layers === 1 ? "X" : layers === 2 ? "XX" : "XXX";
+	const wallThicknessMils = Math.round(requiredWallThickness * 1000);
+	const partNumber = `${prefix}${Math.round(bareDiameter * 1000)}/${wireAWG}${insulationCode}${xSuffix}-${wallThicknessMils}(MW${gradeCode})`;
 
 	return {
 		min: Math.round(minDiameter * 1000) / 1000,
 		nom: Math.round(nominalDiameter * 1000) / 1000,
 		max: Math.round(maxDiameter * 1000) / 1000,
 		partNumber,
+		wallThicknessInches,
+		wallThicknessMm,
 	};
 }
 
@@ -924,7 +865,6 @@ export function calculateInsulatedLitzDiameters(
 export function checkULApproval(
 	conductorDiameter: number,
 	insulationType: string,
-	wallThickness: number,
 	copperArea: number,
 ): string[] {
 	const warnings: string[] = [];
@@ -934,19 +874,6 @@ export function checkULApproval(
 		warnings.push(
 			"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
 		);
-	}
-
-	// Check wall thickness minimums
-	if (insulationType === "ETFE" && wallThickness < 0.0015) {
-		warnings.push("ETFE INSULATION WALL THICKNESS BELOW UL MINIMUM");
-	}
-
-	if (insulationType === "FEP" && wallThickness < 0.002) {
-		warnings.push("FEP INSULATION WALL THICKNESS BELOW UL MINIMUM");
-	}
-
-	if (insulationType === "PFA" && wallThickness < 0.0015) {
-		warnings.push("PFA INSULATION WALL THICKNESS BELOW UL MINIMUM");
 	}
 
 	// Check copper area thresholds
@@ -1017,3 +944,48 @@ export function calculateLitzConstruction(
 		validationMessage: validation.message,
 	};
 }
+
+export const STRAND_OD_REFERENCE: Record<
+	number,
+	{ min: number; nom: number; max: number }
+> = {
+	12: { min: 0.0814, nom: 0.0827, max: 0.084 },
+	13: { min: 0.0727, nom: 0.0739, max: 0.075 },
+	14: { min: 0.0651, nom: 0.0658, max: 0.0666 },
+	15: { min: 0.058, nom: 0.0587, max: 0.0594 },
+	16: { min: 0.0517, nom: 0.0524, max: 0.0531 },
+	17: { min: 0.0462, nom: 0.0468, max: 0.0475 },
+	18: { min: 0.0412, nom: 0.0418, max: 0.0424 },
+	19: { min: 0.0367, nom: 0.0373, max: 0.0379 },
+	20: { min: 0.0329, nom: 0.0334, max: 0.0339 },
+	21: { min: 0.0293, nom: 0.0298, max: 0.0303 },
+	22: { min: 0.0261, nom: 0.0266, max: 0.027 },
+	23: { min: 0.0234, nom: 0.0238, max: 0.0243 },
+	24: { min: 0.0209, nom: 0.0213, max: 0.0217 },
+	25: { min: 0.0186, nom: 0.019, max: 0.0194 },
+	26: { min: 0.0166, nom: 0.017, max: 0.0173 },
+	27: { min: 0.0149, nom: 0.0153, max: 0.0156 },
+	28: { min: 0.0133, nom: 0.0137, max: 0.014 },
+	29: { min: 0.0119, nom: 0.0123, max: 0.0126 },
+	30: { min: 0.0106, nom: 0.0109, max: 0.0112 },
+	31: { min: 0.0094, nom: 0.0097, max: 0.01 },
+	32: { min: 0.0085, nom: 0.0088, max: 0.0091 },
+	33: { min: 0.0075, nom: 0.0078, max: 0.0081 },
+	34: { min: 0.0067, nom: 0.007, max: 0.0072 },
+	35: { min: 0.0059, nom: 0.0062, max: 0.0064 },
+	36: { min: 0.0053, nom: 0.0056, max: 0.0058 },
+	37: { min: 0.0047, nom: 0.005, max: 0.0052 },
+	38: { min: 0.0042, nom: 0.0045, max: 0.0047 },
+	39: { min: 0.0036, nom: 0.0039, max: 0.0041 },
+	40: { min: 0.0032, nom: 0.0035, max: 0.0037 },
+	41: { min: 0.0029, nom: 0.0031, max: 0.0033 },
+	42: { min: 0.0026, nom: 0.0028, max: 0.003 },
+	43: { min: 0.0023, nom: 0.0025, max: 0.0026 },
+	44: { min: 0.0021, nom: 0.0023, max: 0.0024 },
+	45: { min: 0.00179, nom: 0.00192, max: 0.00205 },
+	46: { min: 0.00161, nom: 0.00173, max: 0.00185 },
+	47: { min: 0.00145, nom: 0.00157, max: 0.0017 },
+	48: { min: 0.00129, nom: 0.0014, max: 0.0015 },
+	49: { min: 0.00117, nom: 0.00124, max: 0.0013 },
+	50: { min: 0.00105, nom: 0.00113, max: 0.0012 },
+};

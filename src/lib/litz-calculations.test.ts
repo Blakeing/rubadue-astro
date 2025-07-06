@@ -1,12 +1,14 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-	validateStrandCount,
-	calculateLitzConstruction,
 	calculateBareLitzDiameters,
-	calculateTotalCopperAreaCMA,
-	calculatePackingFactor,
-	calculateTakeUpFactor,
 	calculateEquivalentAWG,
+	calculateInsulatedLitzDiameters,
+	calculateLitzConstruction,
+	calculatePackingFactor,
+	calculateRequiredWallThickness,
+	calculateTakeUpFactor,
+	calculateTotalCopperAreaCMA,
+	validateStrandCount,
 } from "./litz-calculations";
 
 describe("Litz Wire Calculations", () => {
@@ -90,7 +92,7 @@ describe("Litz Wire Calculations", () => {
 			expect(result.nom).toBeCloseTo(0.091, 3);
 			expect(result.min).toBeCloseTo(0.087, 3);
 			expect(result.max).toBeCloseTo(0.095, 3);
-			expect(result.partNumber).toContain("L79-200-36-single");
+			expect(result.partNumber).toBe("RL-200-36SL79-XX");
 		});
 
 		it("should calculate heavy film diameters for 100 strands of AWG 30", () => {
@@ -105,7 +107,7 @@ describe("Litz Wire Calculations", () => {
 			expect(result.nom).toBeCloseTo(0.134, 3);
 			expect(result.min).toBeCloseTo(0.131, 3); // 10 * 0.0113 * 1.155
 			expect(result.max).toBeCloseTo(0.137, 3); // 10 * 0.0119 * 1.155
-			expect(result.partNumber).toContain("L80-100-30-heavy");
+			expect(result.partNumber).toBe("RL-100-30HL80-XX");
 		});
 
 		it("should throw error for unavailable film types", () => {
@@ -180,6 +182,64 @@ describe("Litz Wire Calculations", () => {
 		});
 		it("should return 50 AWG for very small CMA", () => {
 			expect(calculateEquivalentAWG(0.5)).toBe("50 AWG");
+		});
+	});
+
+	describe("Wall Thickness & Insulated Diameter (Excel Logic)", () => {
+		it("ETFE: wall thickness should be at least 0.0015", () => {
+			expect(calculateRequiredWallThickness("ETFE", 1000, 0.001)).toBe(0.0015);
+			expect(calculateRequiredWallThickness("ETFE", 1000, 0.002)).toBe(0.002);
+		});
+
+		it("PFA: wall thickness should be at least 0.0015", () => {
+			expect(calculateRequiredWallThickness("PFA", 5000, 0.001)).toBe(0.0015);
+			expect(calculateRequiredWallThickness("PFA", 5000, 0.002)).toBe(0.002);
+		});
+
+		it("FEP: copper area < 1939, min wall 0.002", () => {
+			expect(calculateRequiredWallThickness("FEP", 1000, 0.001)).toBe(0.002);
+			expect(calculateRequiredWallThickness("FEP", 1000, 0.003)).toBe(0.003);
+		});
+
+		it("FEP: 1939 <= copper area < 12405, min wall 0.003", () => {
+			expect(calculateRequiredWallThickness("FEP", 5000, 0.002)).toBe(0.003);
+			expect(calculateRequiredWallThickness("FEP", 5000, 0.004)).toBe(0.004);
+		});
+
+		it("FEP: 12405 <= copper area < 24978, min wall 0.01", () => {
+			expect(calculateRequiredWallThickness("FEP", 20000, 0.005)).toBe(0.01);
+			expect(calculateRequiredWallThickness("FEP", 20000, 0.02)).toBe(0.02);
+		});
+
+		it("FEP: copper area >= 24978, min wall 0.012", () => {
+			expect(calculateRequiredWallThickness("FEP", 30000, 0.01)).toBe(0.012);
+			expect(calculateRequiredWallThickness("FEP", 30000, 0.02)).toBe(0.02);
+		});
+
+		it("Insulated diameter calculation matches expected for ETFE, 1 layer", () => {
+			// bareDiameter = 0.1, wireAWG = 36, ETFE, 1 layer, MW 79-C
+			const result = calculateInsulatedLitzDiameters(
+				0.1,
+				36,
+				"ETFE",
+				1,
+				"MW 79-C",
+			);
+			// Wall should be 0.006 (6% of 0.1) rounded up to 0.006, but min is 0.0015, so 0.006
+			expect(result.nom).toBeCloseTo(0.112, 3); // 0.1 + 2*1*0.006 = 0.112
+		});
+
+		it("Insulated diameter calculation matches expected for FEP, 2 layers, copper area < 1939", () => {
+			// bareDiameter = 0.1, wireAWG = 36, FEP, 2 layers, MW 79-C, copper area < 1939
+			const result = calculateInsulatedLitzDiameters(
+				0.1,
+				36,
+				"FEP",
+				2,
+				"MW 79-C",
+			);
+			// Wall should be 0.006 (6% of 0.1) rounded up to 0.006, but min is 0.002, so 0.006
+			expect(result.nom).toBeCloseTo(0.124, 3); // 0.1 + 2*2*0.006 = 0.124
 		});
 	});
 });
