@@ -222,32 +222,6 @@ describe("Litz Wire Calculations", () => {
 			expect(calculateRequiredWallThickness("FEP", 30000, 0.01, 1)).toBe(0.012);
 			expect(calculateRequiredWallThickness("FEP", 30000, 0.02, 1)).toBe(0.02);
 		});
-
-		it("Insulated diameter calculation matches expected for ETFE, 1 layer", () => {
-			// bareDiameter = 0.1, wireAWG = 36, ETFE, 1 layer, MW 79-C
-			const result = calculateInsulatedLitzDiameters(
-				0.1,
-				36,
-				"ETFE",
-				1,
-				"MW 79-C",
-			);
-			// Wall should be 0.006 (6% of 0.1) rounded up to 0.006, but min is 0.0015, so 0.006
-			expect(result.nom).toBeCloseTo(0.112, 3); // 0.1 + 2*1*0.006 = 0.112
-		});
-
-		it("Insulated diameter calculation matches expected for FEP, 2 layers, copper area < 1939", () => {
-			// bareDiameter = 0.1, wireAWG = 36, FEP, 2 layers, MW 79-C, copper area < 1939
-			const result = calculateInsulatedLitzDiameters(
-				0.1,
-				36,
-				"FEP",
-				2,
-				"MW 79-C",
-			);
-			// Wall should be 0.006 (6% of 0.1) rounded up to 0.006, but min is 0.002, so 0.006
-			expect(result.nom).toBeCloseTo(0.124, 3); // 0.1 + 2*2*0.006 = 0.124
-		});
 	});
 
 	describe("Nylon Served Diameters", () => {

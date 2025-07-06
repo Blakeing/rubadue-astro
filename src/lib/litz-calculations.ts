@@ -32,19 +32,6 @@ export interface DiameterResult {
 	wallThicknessMm: number | null;
 }
 
-export interface BareLitzResult {
-	singleFilm: DiameterResult;
-	heavyFilm: DiameterResult;
-	tripleFilm: DiameterResult;
-	quadrupleFilm: DiameterResult;
-}
-
-export interface InsulatedLitzResult {
-	singleInsulated: DiameterResult;
-	doubleInsulated: DiameterResult;
-	tripleInsulated: DiameterResult;
-}
-
 // AWG Reference Data (from AWG Reference_values.csv)
 export const AWG_REFERENCE: Record<
 	number,
@@ -631,8 +618,8 @@ export function validateStrandCount(
 		breakdown: [strandCount, ...breakdown],
 		nearbyValid,
 		message: isValid
-			? `Valid: ${strandCount} strands breaks down to ${currentCount} strands in first operation`
-			: `Invalid: ${strandCount} strands cannot be reduced to ${maxStrands} or fewer strands`,
+			? `${strandCount} strands breaks down to ${currentCount} strands in first operation`
+			: `${strandCount} strands cannot be reduced to ${maxStrands} or fewer strands`,
 	};
 }
 
@@ -962,7 +949,6 @@ export function calculateInsulatedLitzDiameters(
 
 	if (layers === 3) {
 		// Excel logic for triple insulation - uses triple film nominal OD for delta (C54)
-		// Note: For delta calculation, use standard packing factor (1.155) to match Excel
 		const tripleFilmForDelta = calculateBareLitzDiameters(
 			strandCount ?? 1,
 			wireAWG,
@@ -1010,7 +996,7 @@ export function calculateInsulatedLitzDiameters(
 		);
 	}
 
-	// 7. Generate part number (unchanged)
+	// 7. Generate part number
 	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
 	const prefix = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
 	const insulationCode =
@@ -1030,27 +1016,379 @@ export function calculateInsulatedLitzDiameters(
 }
 
 /**
- * Check UL approval requirements
- * Based on Excel validation formulas
+ * Validation rule interface for wall thickness checks
  */
-export function checkULApproval(
-	conductorDiameter: number,
+interface WallThicknessRule {
+	insulationType: string;
+	copperAreaMin?: number;
+	copperAreaMax?: number;
+	minWallThickness: number;
+	messageKey: string; // Use message key instead of full message
+}
+
+/**
+ * Validation rule interface for copper area checks
+ */
+interface CopperAreaRule {
+	insulationType: string;
+	copperAreaMin?: number;
+	copperAreaMax?: number;
+	messageKey: string; // Use message key instead of full message
+}
+
+/**
+ * Message constants to eliminate repetition
+ */
+const VALIDATION_MESSAGES = {
+	// Wall thickness messages
+	INCREASE_WALL_THICKNESS_SINGLE:
+		"INCREASE WALL THICKNESSES IF UL APPROVALS ARE REQUIRED. IF UL APPROVALS ARE NOT REQUIRED, CONSULT THE FACTORY TO CONFIRM MANUFACTURABILITY.",
+	INCREASE_WALL_THICKNESS_DOUBLE:
+		"INCREASE WALL THICKNESS IF UL APPROVAL IS REQUIRED.",
+
+	// UL approval messages
+	NO_UL_APPROVAL_ETFE_FEP:
+		"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",
+	NO_UL_APPROVAL_ETFE:
+		"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",
+	NO_UL_APPROVAL_PFA_FEP:
+		"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",
+	NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL:
+		"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR SUPPLEMENTAL/REINFORCED INSULATION.",
+	SELECT_FEP_FOR_UL:
+		"SELECT FEP INSULATION IF UL APPROVALS ARE DESIRED/NECESSARY",
+
+	// Manufacturing messages
+	CONSULT_PLANT_MANUFACTURING:
+		"CONSULT PLANT TO CONFIRM MANUFACTURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",
+	CONDUCTOR_DIAMETER_EXCEEDS:
+		"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
+} as const;
+
+/**
+ * Wall thickness validation rules based on Excel formulas
+ * Organized by insulation type and layer count
+ */
+const WALL_THICKNESS_RULES: Record<1 | 2 | 3, WallThicknessRule[]> = {
+	1: [
+		// Single insulation (E73 logic)
+		{
+			insulationType: "FEP",
+			copperAreaMax: 1938,
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 1939,
+			copperAreaMax: 12404,
+			minWallThickness: 0.003,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 12405,
+			copperAreaMax: 24977,
+			minWallThickness: 0.01,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 24978,
+			copperAreaMax: 39999,
+			minWallThickness: 0.012,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "ETFE",
+			minWallThickness: 0.0015,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "PFA",
+			copperAreaMax: 186,
+			minWallThickness: 0.0015,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "PFA",
+			copperAreaMin: 187,
+			copperAreaMax: 769,
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+	],
+	2: [
+		// Double insulation (E81 logic)
+		{
+			insulationType: "ETFE",
+			copperAreaMax: 121,
+			minWallThickness: 0.001,
+			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
+		},
+		{
+			insulationType: "ETFE",
+			copperAreaMin: 122,
+			copperAreaMax: 2885,
+			minWallThickness: 0.0015,
+			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
+		},
+		{
+			insulationType: "ETFE",
+			copperAreaMin: 2886,
+			copperAreaMax: 12404,
+			minWallThickness: 0.003,
+			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMax: 12404,
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 12405,
+			copperAreaMax: 24977,
+			minWallThickness: 0.005,
+			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 24978,
+			copperAreaMax: 39999,
+			minWallThickness: 0.006,
+			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
+		},
+	],
+	3: [
+		// Triple insulation (E89 logic) - same as single for now
+		{
+			insulationType: "FEP",
+			copperAreaMax: 1938,
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 1939,
+			copperAreaMax: 12404,
+			minWallThickness: 0.003,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 12405,
+			copperAreaMax: 24977,
+			minWallThickness: 0.01,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			copperAreaMin: 24978,
+			copperAreaMax: 39999,
+			minWallThickness: 0.012,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "FEP",
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "ETFE",
+			minWallThickness: 0.0015,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "PFA",
+			copperAreaMax: 186,
+			minWallThickness: 0.0015,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+		{
+			insulationType: "PFA",
+			copperAreaMin: 187,
+			copperAreaMax: 769,
+			minWallThickness: 0.002,
+			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+		},
+	],
+};
+
+/**
+ * Copper area validation rules
+ */
+const COPPER_AREA_RULES: CopperAreaRule[] = [
+	{
+		insulationType: "ETFE",
+		copperAreaMin: 12405,
+		messageKey: "NO_UL_APPROVAL_ETFE",
+	},
+	{
+		insulationType: "PFA",
+		copperAreaMin: 1939,
+		messageKey: "NO_UL_APPROVAL_PFA_FEP",
+	},
+	{
+		insulationType: "ETFE",
+		copperAreaMin: 770,
+		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
+	},
+	{
+		insulationType: "PFA",
+		copperAreaMin: 770,
+		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
+	},
+	{
+		insulationType: "PFA",
+		copperAreaMin: 12405,
+		messageKey: "SELECT_FEP_FOR_UL",
+	},
+];
+
+/**
+ * Check if a value falls within a range
+ */
+function isInRange(value: number, min?: number, max?: number): boolean {
+	if (min !== undefined && value < min) return false;
+	if (max !== undefined && value > max) return false;
+	return true;
+}
+
+/**
+ * Check wall thickness validation rules for specific insulation type
+ */
+function checkWallThicknessRules(
+	insulationType: string,
+	copperArea: number,
+	wallThickness: number,
+	layers: 1 | 2 | 3,
+): string[] {
+	const warnings: string[] = [];
+	const rules = WALL_THICKNESS_RULES[layers];
+
+	// Only check rules for the current insulation type
+	const relevantRules = rules.filter(
+		(rule) => rule.insulationType === insulationType,
+	);
+
+	for (const rule of relevantRules) {
+		if (isInRange(copperArea, rule.copperAreaMin, rule.copperAreaMax)) {
+			if (wallThickness < rule.minWallThickness) {
+				warnings.push(
+					VALIDATION_MESSAGES[
+						rule.messageKey as keyof typeof VALIDATION_MESSAGES
+					],
+				);
+				break; // Only show first matching rule
+			}
+		}
+	}
+
+	return warnings;
+}
+
+/**
+ * Check copper area validation rules for specific insulation type
+ */
+function checkCopperAreaRules(
 	insulationType: string,
 	copperArea: number,
 ): string[] {
 	const warnings: string[] = [];
 
+	// Only check rules for the current insulation type
+	const relevantRules = COPPER_AREA_RULES.filter(
+		(rule) => rule.insulationType === insulationType,
+	);
+
+	for (const rule of relevantRules) {
+		if (isInRange(copperArea, rule.copperAreaMin)) {
+			warnings.push(
+				VALIDATION_MESSAGES[
+					rule.messageKey as keyof typeof VALIDATION_MESSAGES
+				],
+			);
+		}
+	}
+
+	return warnings;
+}
+
+/**
+ * Check UL approval requirements and manufacturing capability
+ * Based on Excel validation formulas for both single/double/triple insulation
+ */
+export function checkULApproval(
+	conductorDiameter: number,
+	insulationType: string,
+	copperArea: number,
+	wallThickness?: number,
+	layers: 1 | 2 | 3 = 1,
+): string[] {
+	const warnings: string[] = [];
+
 	// Check conductor diameter limit
 	if (conductorDiameter > 0.2) {
+		warnings.push(VALIDATION_MESSAGES.CONDUCTOR_DIAMETER_EXCEEDS);
+	}
+
+	// Check very small copper area (D9 < 9.61)
+	if (copperArea < 9.61) {
+		warnings.push(VALIDATION_MESSAGES.CONSULT_PLANT_MANUFACTURING);
+		return warnings; // Return early as this is a critical manufacturing issue
+	}
+
+	// Check wall thickness scenarios if wall thickness is provided
+	if (wallThickness !== undefined) {
 		warnings.push(
-			"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
+			...checkWallThicknessRules(
+				insulationType,
+				copperArea,
+				wallThickness,
+				layers,
+			),
 		);
 	}
 
-	// Check copper area thresholds
-	if (insulationType === "PFA" && copperArea > 12404) {
+	// Check copper area rules
+	warnings.push(...checkCopperAreaRules(insulationType, copperArea));
+
+	return warnings;
+}
+
+/**
+ * Check manufacturing capability warnings
+ * Based on Excel validation formulas for manufacturing constraints
+ */
+export function checkManufacturingCapability(
+	copperArea: number,
+	insulationType: string,
+	wallThickness?: number,
+	layers: 1 | 2 | 3 = 1,
+): string[] {
+	const warnings: string[] = [];
+
+	// Check very small copper area (D9 < 9.61)
+	if (copperArea < 9.61) {
+		warnings.push(VALIDATION_MESSAGES.CONSULT_PLANT_MANUFACTURING);
+	}
+
+	// Check wall thickness scenarios if wall thickness is provided
+	if (wallThickness !== undefined) {
 		warnings.push(
-			"SELECT FEP INSULATION IF UL APPROVALS ARE DESIRED/NECESSARY",
+			...checkWallThicknessRules(
+				insulationType,
+				copperArea,
+				wallThickness,
+				layers,
+			),
 		);
 	}
 
@@ -1165,11 +1503,6 @@ export function calculateNylonServedDiameters(
 	bareResult: DiameterResult,
 	serveType: "Single Nylon Serve" | "Double Nylon Serve",
 ): DiameterResult {
-	// Helper function to round to 3 decimal places
-	function round3(val: number): number {
-		return Math.round(val * 1000) / 1000;
-	}
-
 	// Calculate served diameters based on serve type
 	if (serveType === "Single Nylon Serve") {
 		return {

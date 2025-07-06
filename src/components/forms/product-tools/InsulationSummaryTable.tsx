@@ -12,7 +12,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, ArrowUpRight } from "lucide-react";
 import type React from "react";
 
 interface InsulationSummaryTableProps {
@@ -48,9 +48,20 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 			if (isNom) {
 				return <span className="text-muted-foreground font-semibold">N/A</span>;
 			}
-			return <span className="text-orange-600 font-bold">CONSULT FACTORY</span>;
+			return (
+				<a
+					href="/contact"
+					className="inline-flex items-center gap-1  hover:text-primary transition"
+					aria-label="Consult factory (contact us)"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Consult Factory
+					<ArrowUpRight className="w-3 h-3 ml-0.5" />
+				</a>
+			);
 		}
-		return <span className="text-green-700 font-semibold">{val}</span>;
+		return <span>{val}</span>;
 	};
 
 	const displayValue = (val: number | null | undefined) =>
@@ -62,13 +73,19 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 
 	return (
 		<div className="mb-6">
-			<div className="font-bold text-lg mb-2">{title}</div>
+			<div className="flex items-center justify-between mb-2 relative">
+				<div className="font-bold text-lg">{title}</div>
+			</div>
 			<Table>
 				<TableHeader>
 					<TableRow className="hover:bg-transparent">
 						<TableHead rowSpan={2} className="align-middle text-center w-20" />
 						<TableHead colSpan={2} className="text-center align-middle w-48">
-							Basic Insulation OD's
+							{title.toLowerCase().includes("triple")
+								? "Reinforced Insulation OD's"
+								: title.toLowerCase().includes("double")
+									? "Supplemental Insulation OD's"
+									: "Basic Insulation OD's"}
 						</TableHead>
 						<TableHead colSpan={2} className="text-center align-middle w-48">
 							Insulation Wall/Layer
@@ -123,9 +140,6 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 					</TableRow>
 				</TableBody>
 			</Table>
-			<div className="mt-2 font-mono text-sm">
-				<span className="font-semibold">Rubadue Part Number:</span> {partNumber}
-			</div>
 			{note && (
 				<div className="mt-1 text-xs text-muted-foreground italic">{note}</div>
 			)}

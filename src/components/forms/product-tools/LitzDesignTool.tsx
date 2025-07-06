@@ -51,6 +51,7 @@ import {
 	calculateLitzConstruction,
 	calculateNylonServedDiameters,
 	checkULApproval,
+	checkManufacturingCapability,
 	validateStrandCount,
 } from "@/lib/litz-calculations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -98,6 +99,11 @@ export function LitzDesignToolV2() {
 	const [isCalculating, setIsCalculating] = useState(false);
 	const [calculationError, setCalculationError] = useState<string | null>(null);
 
+	// Helper function to generate stable keys for part number segments
+	const generatePartNumberKey = (part: string, type: "num" | "text") => {
+		return `${type}-${part}-${Math.random().toString(36).substr(2, 9)}`;
+	};
+
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -122,7 +128,8 @@ export function LitzDesignToolV2() {
 		bare?: Record<string, DiameterResult>;
 		insulated?: Record<string, DiameterResult>;
 		ulWarnings: string[];
-	}>({ ulWarnings: [] });
+		manufacturingWarnings: string[];
+	}>({ ulWarnings: [], manufacturingWarnings: [] });
 
 	// Memoize validation result to avoid unnecessary recalculations
 	const validationResult = useMemo(() => {
@@ -161,7 +168,8 @@ export function LitzDesignToolV2() {
 						bare?: Record<string, DiameterResult>;
 						insulated?: Record<string, DiameterResult>;
 						ulWarnings: string[];
-					} = { ulWarnings: [] };
+						manufacturingWarnings: string[];
+					} = { ulWarnings: [], manufacturingWarnings: [] };
 
 					if (formData.wireType === "Bare & Served") {
 						// Calculate bare Litz diameters for all film types
@@ -188,6 +196,14 @@ export function LitzDesignToolV2() {
 						}
 
 						results.bare = bareResults;
+
+						// Check manufacturing capability warnings for bare & served
+						const manufacturingWarnings = checkManufacturingCapability(
+							constructionResult.totalCopperAreaCMA,
+							"", // No insulation type for bare wire
+							undefined, // No wall thickness for bare wire
+						);
+						results.manufacturingWarnings = manufacturingWarnings;
 					} else if (formData.wireType === "Insulated") {
 						// Calculate insulated Litz diameters
 						const insulatedResults: Record<string, DiameterResult> = {};
@@ -226,20 +242,58 @@ export function LitzDesignToolV2() {
 							}
 						}
 
-						// Check UL approval requirements
-						const ulWarnings = checkULApproval(
-							bareDiameter,
-							insulationType,
-							constructionResult.totalCopperAreaCMA,
-						);
+						// Check UL approval requirements for each insulation type
+						const allUlWarnings: string[] = [];
+						const allManufacturingWarnings: string[] = [];
+
+						// Check each insulation type with its specific layer count
+						for (const [insulationTypeName, result] of Object.entries(
+							insulatedResults,
+						)) {
+							const layerCount = insulationTypeName.includes("Single")
+								? 1
+								: insulationTypeName.includes("Double")
+									? 2
+									: 3;
+
+							const ulWarnings = checkULApproval(
+								bareDiameter,
+								insulationType,
+								constructionResult.totalCopperAreaCMA,
+								result.wallThicknessInches || undefined,
+								layerCount,
+							);
+							// Only add the first warning for this insulation type/layer
+							if (ulWarnings.length > 0) {
+								allUlWarnings.push(ulWarnings[0]);
+							}
+
+							const manufacturingWarnings = checkManufacturingCapability(
+								constructionResult.totalCopperAreaCMA,
+								insulationType,
+								result.wallThicknessInches || undefined,
+								layerCount,
+							);
+							if (manufacturingWarnings.length > 0) {
+								allManufacturingWarnings.push(manufacturingWarnings[0]);
+							}
+						}
+
+						// Remove duplicates
+						const uniqueUlWarnings = [...new Set(allUlWarnings)];
+						const uniqueManufacturingWarnings = [
+							...new Set(allManufacturingWarnings),
+						];
+
 						results.insulated = insulatedResults;
-						results.ulWarnings = ulWarnings;
+						results.ulWarnings = uniqueUlWarnings;
+						results.manufacturingWarnings = uniqueManufacturingWarnings;
 					}
 
 					setDiameterResults(results);
 				} else {
 					setConstruction(null);
-					setDiameterResults({ ulWarnings: [] });
+					setDiameterResults({ ulWarnings: [], manufacturingWarnings: [] });
 				}
 			} catch (error) {
 				console.error("Calculation error:", error);
@@ -247,7 +301,7 @@ export function LitzDesignToolV2() {
 					"An error occurred during calculation. Please check your inputs and try again.",
 				);
 				setConstruction(null);
-				setDiameterResults({ ulWarnings: [] });
+				setDiameterResults({ ulWarnings: [], manufacturingWarnings: [] });
 			} finally {
 				setIsCalculating(false);
 			}
@@ -282,6 +336,20 @@ export function LitzDesignToolV2() {
 	] as const;
 	const [selectedInsulationType, setSelectedInsulationType] =
 		useState<(typeof insulationTypes)[number]>("Single Insulated");
+
+	function sentenceCaseWithAcronyms(str: string) {
+		if (!str) return str;
+		// List of acronyms to preserve
+		const acronyms = ["UL", "FEP", "ETFE", "PFA", "CMA", "AWG"];
+		// Sentence case
+		let result = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+		// Restore acronyms (whole word only)
+		for (const acronym of acronyms) {
+			const regex = new RegExp(`\\b${acronym}\\b`, "ig");
+			result = result.replace(regex, acronym);
+		}
+		return result;
+	}
 
 	return (
 		<TooltipProvider>
@@ -506,7 +574,9 @@ export function LitzDesignToolV2() {
 							{validation && (
 								<Alert
 									className={
-										validation.isValid ? "border-green-500" : "border-red-500"
+										validation.isValid
+											? "border-green-500 bg-green-50/60 rounded-lg"
+											: "border-red-500 bg-red-50/60 rounded-lg"
 									}
 								>
 									{validation.isValid ? (
@@ -515,39 +585,120 @@ export function LitzDesignToolV2() {
 										<XCircle className="h-4 w-4 text-red-500" />
 									)}
 									<AlertDescription>
-										<div className="font-medium">{validation.message}</div>
+										<div className="text-sm font-medium mb-1 flex items-center gap-2 text-foreground">
+											{validation.isValid
+												? "Valid Strand Count"
+												: "Invalid Strand Count"}
+										</div>
+										<div className="text-sm text-muted-foreground mb-2">
+											{validation.message.charAt(0).toUpperCase() +
+												validation.message.slice(1)}
+										</div>
 										{validation.breakdown.length > 1 && (
-											<div className="mt-2">
-												<span className="text-sm">Breakdown: </span>
-												{validation.breakdown.join(" → ")}
+											<div className="mt-2 flex items-center gap-2">
+												<span className="text-xs text-muted-foreground">
+													Breakdown:
+												</span>
+												<Badge
+													variant="secondary"
+													className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
+												>
+													{validation.breakdown.join(" → ")}
+												</Badge>
 											</div>
 										)}
 										{validation.nearbyValid.length > 0 && (
-											<div className="mt-2">
-												<span className="text-sm">Nearby valid counts: </span>
-												{validation.nearbyValid.join(", ")}
+											<div className="mt-2 flex items-center gap-2 flex-wrap">
+												<span className="text-xs text-muted-foreground">
+													Nearby valid counts:
+												</span>
+												{validation.nearbyValid.map((count) => (
+													<button
+														key={count}
+														type="button"
+														className="focus:outline-none"
+														onClick={() =>
+															form.setValue("numberOfStrands", count)
+														}
+													>
+														<Badge
+															variant="secondary"
+															className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
+														>
+															{count}
+														</Badge>
+													</button>
+												))}
 											</div>
 										)}
 									</AlertDescription>
 								</Alert>
 							)}
 
-							{/* UL Warnings - moved here from right column */}
-							{diameterResults.ulWarnings.length > 0 && (
-								<Alert className="border-yellow-500">
-									<AlertTriangle className="h-4 w-4 text-yellow-500" />
+							{/* Manufacturing Capability Warnings */}
+							{diameterResults.manufacturingWarnings.length > 0 && (
+								<Alert className="border-orange-500 bg-orange-50/60 rounded-lg">
+									<AlertTriangle className="h-4 w-4 text-orange-500" />
 									<AlertDescription>
-										<div className="font-medium">UL Approval Warnings:</div>
-										<ul className="mt-2 space-y-1">
-											{diameterResults.ulWarnings.map((warning) => (
-												<li key={warning} className="text-sm">
-													• {warning}
-												</li>
-											))}
-										</ul>
+										<div className="text-sm font-medium mb-1 flex items-center gap-2 text-foreground">
+											Manufacturing Capability Warnings
+										</div>
+										{diameterResults.manufacturingWarnings.length === 1 ? (
+											<div className="text-sm text-muted-foreground font-normal">
+												{sentenceCaseWithAcronyms(
+													diameterResults.manufacturingWarnings[0],
+												)}
+											</div>
+										) : (
+											<ul className="mt-2 space-y-2">
+												{diameterResults.manufacturingWarnings.map(
+													(warning) => (
+														<li
+															key={warning}
+															className="flex items-start gap-2 text-sm text-muted-foreground font-normal"
+														>
+															<span className="mt-0.5">•</span>
+															<span>{sentenceCaseWithAcronyms(warning)}</span>
+														</li>
+													),
+												)}
+											</ul>
+										)}
 									</AlertDescription>
 								</Alert>
 							)}
+
+							{/* UL Warnings - moved here from right column */}
+							{formData.insulationType &&
+								diameterResults.ulWarnings.length > 0 && (
+									<Alert className="border-yellow-500 bg-yellow-50/60 rounded-lg">
+										<AlertTriangle className="h-4 w-4 text-yellow-500" />
+										<AlertDescription>
+											<div className="text-sm font-medium mb-1 flex items-center gap-2 text-foreground">
+												UL Approval Warnings
+											</div>
+											{diameterResults.ulWarnings.length === 1 ? (
+												<div className="text-sm text-muted-foreground font-normal">
+													{sentenceCaseWithAcronyms(
+														diameterResults.ulWarnings[0],
+													)}
+												</div>
+											) : (
+												<ul className="mt-2 space-y-2">
+													{diameterResults.ulWarnings.map((warning) => (
+														<li
+															key={warning}
+															className="flex items-start gap-2 text-sm text-muted-foreground font-normal"
+														>
+															<span className="mt-0.5">•</span>
+															<span>{sentenceCaseWithAcronyms(warning)}</span>
+														</li>
+													))}
+												</ul>
+											)}
+										</AlertDescription>
+									</Alert>
+								)}
 
 							{/* Loading Indicator */}
 							{isCalculating && (
@@ -637,10 +788,58 @@ export function LitzDesignToolV2() {
 						{formData.wireType === "Bare & Served" && (
 							<Card className={!construction ? "border-red-500" : ""}>
 								<CardHeader>
-									<CardTitle>Bare & Served Litz Diameters</CardTitle>
-									<CardDescription>
-										Diameter specifications for different film and serve types
-									</CardDescription>
+									<div className="flex items-center justify-between pb-4 border-b border-muted-foreground/20">
+										<div className="space-y-1">
+											<CardTitle>Bare & Served Litz Diameters</CardTitle>
+											<CardDescription>
+												Diameter specifications for different film and serve
+												types
+											</CardDescription>
+										</div>
+										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
+											Part Number
+											<div className="text-base font-semibold tracking-wider text-foreground">
+												{(() => {
+													let partNumber = "N/A";
+													if (
+														bareServedTab === "bare" &&
+														diameterResults.bare?.[bareFilmType]?.partNumber
+													) {
+														partNumber =
+															diameterResults.bare[bareFilmType].partNumber;
+													} else if (
+														bareServedTab === "served" &&
+														diameterResults.bare?.[servedFilmType]
+													) {
+														const servedResult = calculateNylonServedDiameters(
+															diameterResults.bare[servedFilmType],
+															nylonServeType,
+														);
+														partNumber = servedResult.partNumber;
+													}
+
+													return partNumber !== "N/A"
+														? partNumber.split(/(\d+)/).map((part) =>
+																/\d+/.test(part) ? (
+																	<span
+																		key={generatePartNumberKey(part, "num")}
+																		className="font-mono"
+																	>
+																		{part}
+																	</span>
+																) : (
+																	<span
+																		key={generatePartNumberKey(part, "text")}
+																	>
+																		{part}
+																	</span>
+																),
+															)
+														: "N/A";
+												})()}
+											</div>
+										</div>
+									</div>
 								</CardHeader>
 								<CardContent>
 									<div className="flex gap-8 mb-4 items-end">
@@ -727,7 +926,7 @@ export function LitzDesignToolV2() {
 															N/A
 														</span>
 													) : (
-														val.toFixed(4)
+														val.toFixed(3)
 													);
 												let strandOD: {
 													min: number | undefined;
@@ -737,10 +936,14 @@ export function LitzDesignToolV2() {
 												const strandRef =
 													STRAND_OD_REFERENCE?.[formData.wireAWG];
 												if (strandRef) strandOD = strandRef;
+												// Check if construction is valid
+												const isValid = construction?.isValid;
 												return (
 													<div className="p-2">
-														<div className="font-bold text-lg mb-2">
-															{bareFilmType} Film - Bare Litz
+														<div className="flex items-center justify-between mb-2 relative">
+															<div className="font-bold text-lg">
+																{bareFilmType} Film - Bare Litz
+															</div>
 														</div>
 														<Table>
 															<TableHeader>
@@ -789,10 +992,22 @@ export function LitzDesignToolV2() {
 																		{displayValue(toMm(result?.min))}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(strandOD.min)}
+																		{isValid ? (
+																			displayValue(strandOD.min)
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(strandOD.min))}
+																		{isValid ? (
+																			displayValue(toMm(strandOD.min))
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																</TableRow>
 																<TableRow>
@@ -806,10 +1021,22 @@ export function LitzDesignToolV2() {
 																		{displayValue(toMm(result?.nom))}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(strandOD.nom)}
+																		{isValid ? (
+																			displayValue(strandOD.nom)
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(strandOD.nom))}
+																		{isValid ? (
+																			displayValue(toMm(strandOD.nom))
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																</TableRow>
 																<TableRow>
@@ -823,20 +1050,26 @@ export function LitzDesignToolV2() {
 																		{displayValue(toMm(result?.max))}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(strandOD.max)}
+																		{isValid ? (
+																			displayValue(strandOD.max)
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(strandOD.max))}
+																		{isValid ? (
+																			displayValue(toMm(strandOD.max))
+																		) : (
+																			<span className="text-muted-foreground font-semibold">
+																				N/A
+																			</span>
+																		)}
 																	</TableCell>
 																</TableRow>
 															</TableBody>
 														</Table>
-														<div className="mt-2 font-mono text-xs">
-															<span className="font-semibold">
-																Part Number:
-															</span>{" "}
-															{result?.partNumber ?? "N/A"}
-														</div>
 													</div>
 												);
 											})()
@@ -863,12 +1096,14 @@ export function LitzDesignToolV2() {
 															N/A
 														</span>
 													) : (
-														val.toFixed(4)
+														val.toFixed(3)
 													);
 												return (
 													<div className="p-2">
-														<div className="font-bold text-lg mb-2">
-															{servedFilmType} Film - {nylonServeType}
+														<div className="flex items-center justify-between mb-2 relative">
+															<div className="font-bold text-lg">
+																{servedFilmType} Film - {nylonServeType}
+															</div>
 														</div>
 														<Table>
 															<TableHeader>
@@ -935,12 +1170,6 @@ export function LitzDesignToolV2() {
 																</TableRow>
 															</TableBody>
 														</Table>
-														<div className="mt-2 font-mono text-xs">
-															<span className="font-semibold">
-																Part Number:
-															</span>{" "}
-															{result?.partNumber ?? "N/A"}
-														</div>
 													</div>
 												);
 											})()}
@@ -952,10 +1181,43 @@ export function LitzDesignToolV2() {
 						{formData.wireType === "Insulated" && (
 							<Card className={!construction ? "border-red-500" : ""}>
 								<CardHeader>
-									<CardTitle>Insulated Litz Diameters</CardTitle>
-									<CardDescription>
-										Diameter specifications for different insulation layers
-									</CardDescription>
+									<div className="flex items-center justify-between pb-4 border-b border-muted-foreground/20">
+										<div className="space-y-1">
+											<CardTitle>Insulated Litz Diameters</CardTitle>
+											<CardDescription>
+												Diameter specifications for different insulation layers
+											</CardDescription>
+										</div>
+										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
+											Part Number
+											<div className="text-base font-semibold tracking-wider text-foreground">
+												{(() => {
+													const result =
+														diameterResults.insulated?.[selectedInsulationType];
+													const partNumber = result?.partNumber || "N/A";
+
+													return partNumber !== "N/A"
+														? partNumber.split(/(\d+)/).map((part) =>
+																/\d+/.test(part) ? (
+																	<span
+																		key={generatePartNumberKey(part, "num")}
+																		className="font-mono"
+																	>
+																		{part}
+																	</span>
+																) : (
+																	<span
+																		key={generatePartNumberKey(part, "text")}
+																	>
+																		{part}
+																	</span>
+																),
+															)
+														: "N/A";
+												})()}
+											</div>
+										</div>
+									</div>
 								</CardHeader>
 								<CardContent>
 									<div className="flex gap-8 mb-4 items-end">
