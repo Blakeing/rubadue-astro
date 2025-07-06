@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 // Litz Wire Calculation Utilities
 // Extracted from Excel formulas in Cover Sheet_formulas.csv and related files
 
@@ -416,25 +417,80 @@ export function calculateRequiredWallThickness(
 	insulationType: string,
 	copperAreaCMA: number,
 	inputWallThickness: number,
+	layers: 1 | 2 | 3, // Add layers parameter to distinguish between E73, E81, E89 logic
 ): number {
-	// ETFE and PFA: minimum 0.0015"
-	if (insulationType === "ETFE" || insulationType === "PFA") {
-		return Math.max(0.0015, inputWallThickness);
+	// E73 (Single Insulation) logic
+	if (layers === 1) {
+		if (insulationType === "ETFE" || insulationType === "PFA") {
+			return Math.max(0.0015, inputWallThickness);
+		}
+		if (insulationType === "FEP") {
+			if (copperAreaCMA < 1939 && inputWallThickness < 0.002) {
+				return 0.002;
+			}
+			if (
+				copperAreaCMA >= 1939 &&
+				copperAreaCMA < 12405 &&
+				inputWallThickness < 0.003
+			) {
+				return 0.003;
+			}
+			if (
+				copperAreaCMA >= 12405 &&
+				copperAreaCMA < 24978 &&
+				inputWallThickness < 0.01
+			) {
+				return 0.01;
+			}
+			if (copperAreaCMA >= 24978 && inputWallThickness < 0.012) {
+				return 0.012;
+			}
+			return inputWallThickness;
+		}
 	}
 
-	// FEP: complex logic based on copper area
-	if (insulationType === "FEP") {
-		if (copperAreaCMA < 1939) {
-			return Math.max(0.002, inputWallThickness);
+	// E81 (Double Insulation) logic
+	if (layers === 2) {
+		if (insulationType === "ETFE") {
+			return Math.max(0.001, inputWallThickness);
 		}
-		if (copperAreaCMA >= 1939 && copperAreaCMA < 12405) {
-			return Math.max(0.003, inputWallThickness);
+		if (insulationType === "PFA") {
+			return Math.max(0.0015, inputWallThickness);
 		}
-		if (copperAreaCMA >= 12405 && copperAreaCMA < 24978) {
-			return Math.max(0.01, inputWallThickness);
+		if (insulationType === "FEP") {
+			if (copperAreaCMA < 12405 && inputWallThickness < 0.002) {
+				return 0.002;
+			}
+			if (
+				copperAreaCMA >= 12405 &&
+				copperAreaCMA < 24978 &&
+				inputWallThickness < 0.005
+			) {
+				return 0.005;
+			}
+			if (copperAreaCMA >= 24978 && inputWallThickness < 0.006) {
+				return 0.006;
+			}
+			return inputWallThickness;
 		}
-		if (copperAreaCMA >= 24978) {
-			return Math.max(0.012, inputWallThickness);
+	}
+
+	// E89 (Triple Insulation) logic
+	if (layers === 3) {
+		if (insulationType === "ETFE") {
+			return Math.max(0.001, inputWallThickness);
+		}
+		if (insulationType === "PFA") {
+			return Math.max(0.0015, inputWallThickness);
+		}
+		if (insulationType === "FEP") {
+			if (copperAreaCMA < 12405 && inputWallThickness < 0.002) {
+				return 0.002;
+			}
+			if (inputWallThickness < 0.004) {
+				return 0.004;
+			}
+			return inputWallThickness;
 		}
 	}
 
@@ -797,61 +853,173 @@ export function calculateBareLitzDiameters(
 	};
 }
 
-/**
- * Calculate insulated Litz diameters
- * Based on Excel formulas for single, double, triple insulation
- */
+function round3(val: number): number {
+	return Math.round(val * 1000) / 1000;
+}
+
+// Excel MROUND equivalent - rounds to nearest multiple
+function mround(val: number, multiple: number): number {
+	return Math.round(val / multiple) * multiple;
+}
+
+// Excel wall thickness logic for single insulation (G73)
+function calculateWallThicknessSingle(rawWall: number): number {
+	const rounded3 = Math.round(rawWall * 1000) / 1000;
+	if (rounded3 < rawWall) {
+		return rounded3 + 0.0005;
+	}
+	return mround(rawWall, 0.0005);
+}
+
+// Excel wall thickness logic for double insulation (G81)
+function calculateWallThicknessDouble(rawWall: number): number {
+	const halfWall = rawWall / 2;
+	const rounded3 = Math.round(halfWall * 1000) / 1000;
+	if (rounded3 < halfWall) {
+		return rounded3 + 0.0005;
+	}
+	const mrounded = mround(halfWall, 0.0005);
+	if (mrounded < halfWall) {
+		return Math.round(halfWall * 1000) / 1000;
+	}
+	return mrounded;
+}
+
+// Excel wall thickness logic for triple insulation (G89)
+function calculateWallThicknessTriple(rawWall: number): number {
+	const thirdWall = rawWall / 3;
+	const rounded3 = Math.round(thirdWall * 1000) / 1000;
+	if (rounded3 < thirdWall) {
+		return rounded3 + 0.0005;
+	}
+	const mrounded = mround(thirdWall, 0.0005);
+	if (mrounded < thirdWall) {
+		return Math.round(thirdWall * 1000) / 1000;
+	}
+	return mrounded;
+}
+
 export function calculateInsulatedLitzDiameters(
-	bareDiameter: number,
+	bareDiameter: number, // ignored for min/nom/max
 	wireAWG: number,
 	insulationType: string,
 	layers: 1 | 2 | 3,
 	magnetWireGrade: string,
+	strandCount?: number,
+	packingFactor?: number,
 ): DiameterResult & {
 	wallThicknessInches: number | null;
 	wallThicknessMm: number | null;
 } {
-	// Calculate wall thickness as 6% of bare OD, rounded up to next 0.0005
-	function roundUpTo0005(val: number) {
-		return Math.ceil(val / 0.0005) * 0.0005;
+	// 1. Get strand OD reference (from Magnet Wire reference)
+	const strandOD = STRAND_OD_REFERENCE[wireAWG];
+	if (!strandOD) throw new Error(`No strand OD reference for AWG ${wireAWG}`);
+
+	// 2. Use correct packing factor
+	const pf = packingFactor ?? 1.155;
+	const sqrtStrands = strandCount
+		? new Decimal(strandCount).sqrt()
+		: new Decimal(1);
+
+	// 3. Calculate bare Litz ODs (NO rounding here, use Decimal)
+	const bareOD_min_raw = sqrtStrands.mul(strandOD.min).mul(pf);
+	const bareOD_nom_raw = sqrtStrands.mul(strandOD.nom).mul(pf);
+	const bareOD_max_raw = sqrtStrands.mul(strandOD.max).mul(pf);
+
+	// 4. Calculate wall thickness from nominal bare OD (always 6% like Excel)
+	const rawWall = bareOD_nom_raw.mul(0.06);
+
+	// 5. Apply Excel wall thickness logic (E73/E81/E89)
+	const copperAreaCMA = calculateTotalCopperAreaCMA(strandCount ?? 1, wireAWG);
+
+	// Calculate wall thickness using Excel logic
+	let calculatedWall: number;
+	if (layers === 1) {
+		calculatedWall = calculateWallThicknessSingle(rawWall.toNumber());
+	} else if (layers === 2) {
+		calculatedWall = calculateWallThicknessDouble(rawWall.toNumber());
+	} else {
+		calculatedWall = calculateWallThicknessTriple(rawWall.toNumber());
 	}
-	const rawWall = bareDiameter * 0.06;
-	const roundedWall = roundUpTo0005(rawWall);
-	// Calculate required wall thickness based on insulation type and copper area
+
 	const requiredWallThickness = calculateRequiredWallThickness(
 		insulationType,
-		calculateTotalCopperAreaCMA(Math.round(bareDiameter * 1000), wireAWG),
-		roundedWall,
+		copperAreaCMA,
+		calculatedWall,
+		layers,
 	);
 	const wallThicknessInches =
-		requiredWallThickness && requiredWallThickness >= 0.001
-			? requiredWallThickness
-			: null;
+		requiredWallThickness >= 0.001 ? requiredWallThickness : null;
 	const wallThicknessMm = wallThicknessInches
-		? wallThicknessInches * 25.4
+		? Math.round(wallThicknessInches * 25.4 * 1000) / 1000
 		: null;
+
+	// 6. Calculate min/nom/max OD using Excel logic with final rounding only
+	let minDiameter: number;
+	let nominalDiameter: number;
+	let maxDiameter: number;
+
+	if (layers === 3) {
+		// Excel logic for triple insulation - uses heavy film nominal OD for delta
+		const heavyFilm = calculateBareLitzDiameters(
+			strandCount ?? 1,
+			wireAWG,
+			packingFactor ?? 1.155,
+			magnetWireGrade,
+			"Heavy",
+		);
+		const heavyFilmNom = new Decimal(heavyFilm.nom);
+		const delta = heavyFilmNom.gt(0.1) ? 0.002 : 0.001;
+		const wall6 = new Decimal(2 * 3 * requiredWallThickness); // 6 * wall
+		minDiameter = Number(
+			bareOD_min_raw
+				.plus(wall6)
+				.minus(delta)
+				.toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+		nominalDiameter = Number(
+			bareOD_nom_raw.plus(wall6).toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+		maxDiameter = Number(
+			bareOD_max_raw
+				.plus(wall6)
+				.plus(delta)
+				.toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+	} else {
+		// Single/double insulation logic - uses nominal bare OD for delta (Excel C40)
+		const delta = bareOD_nom_raw.gt(0.1) ? 0.002 : 0.001;
+		const wall = new Decimal(2 * layers * requiredWallThickness);
+		minDiameter = Number(
+			bareOD_min_raw
+				.plus(wall)
+				.minus(delta)
+				.toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+		nominalDiameter = Number(
+			bareOD_nom_raw.plus(wall).toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+		maxDiameter = Number(
+			bareOD_max_raw
+				.plus(wall)
+				.plus(delta)
+				.toDecimalPlaces(3, Decimal.ROUND_HALF_UP),
+		);
+	}
+
+	// 7. Generate part number (unchanged)
 	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
-
-	// Calculate nominal diameter with insulation using required wall thickness
-	const nominalDiameter = bareDiameter + 2 * layers * requiredWallThickness;
-
-	// Calculate min/max with tolerance
-	const tolerance = 0.001; // Simplified tolerance
-	const minDiameter = nominalDiameter - tolerance;
-	const maxDiameter = nominalDiameter + tolerance;
-
-	// Generate part number for insulated Litz per Excel formula
 	const prefix = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
 	const insulationCode =
 		insulationType === "ETFE" ? "E" : insulationType === "FEP" ? "F" : "P";
 	const xSuffix = layers === 1 ? "X" : layers === 2 ? "XX" : "XXX";
 	const wallThicknessMils = Math.round(requiredWallThickness * 1000);
-	const partNumber = `${prefix}${Math.round(bareDiameter * 1000)}/${wireAWG}${insulationCode}${xSuffix}-${wallThicknessMils}(MW${gradeCode})`;
+	const partNumber = `${prefix}${Math.round(bareOD_nom_raw.toNumber() * 1000)}/${wireAWG}${insulationCode}${xSuffix}-${wallThicknessMils}(MW${gradeCode})`;
 
 	return {
-		min: Math.round(minDiameter * 1000) / 1000,
-		nom: Math.round(nominalDiameter * 1000) / 1000,
-		max: Math.round(maxDiameter * 1000) / 1000,
+		min: minDiameter,
+		nom: nominalDiameter,
+		max: maxDiameter,
 		partNumber,
 		wallThicknessInches,
 		wallThicknessMm,

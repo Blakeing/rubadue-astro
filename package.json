@@ -57,6 +57,7 @@
 		"astro": "^5.3.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"decimal.js": "^10.5.0",
 		"dotted-map": "^2.2.3",
 		"framer-motion": "^12.4.7",
 		"lucide-react": "^0.477.0",
@@ -92,8 +93,14 @@
 			"sharp": "^0.34.2"
 		},
 		"supportedArchitectures": {
-			"os": ["current", "linux"],
-			"cpu": ["current", "x64"]
+			"os": [
+				"current",
+				"linux"
+			],
+			"cpu": [
+				"current",
+				"x64"
+			]
 		},
 		"onlyBuiltDependencies": [
 			"@biomejs/biome",

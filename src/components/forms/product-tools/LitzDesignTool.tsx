@@ -215,6 +215,8 @@ export function LitzDesignToolV2() {
 									insulationType,
 									layer,
 									formData.magnetWireGrade,
+									formData.numberOfStrands,
+									constructionResult.packingFactor,
 								);
 							} catch (error) {
 								console.error(
