@@ -49,6 +49,7 @@ import {
 	calculateBareLitzDiameters,
 	calculateInsulatedLitzDiameters,
 	calculateLitzConstruction,
+	calculateNylonServedDiameters,
 	checkULApproval,
 	validateStrandCount,
 } from "@/lib/litz-calculations";
@@ -64,6 +65,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { InsulationSummaryTable } from "./InsulationSummaryTable";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const formSchema = z
 	.object({
@@ -186,10 +188,7 @@ export function LitzDesignToolV2() {
 						}
 
 						results.bare = bareResults;
-					} else if (
-						formData.wireType === "Insulated" &&
-						formData.insulationType
-					) {
+					} else if (formData.wireType === "Insulated") {
 						// Calculate insulated Litz diameters
 						const insulatedResults: Record<string, DiameterResult> = {};
 						const layers = [1, 2, 3] as const;
@@ -203,6 +202,9 @@ export function LitzDesignToolV2() {
 							"Single",
 						).nom;
 
+						// Use ETFE as default insulation type if none selected
+						const insulationType = formData.insulationType || "ETFE";
+
 						for (const layer of layers) {
 							try {
 								insulatedResults[
@@ -210,7 +212,7 @@ export function LitzDesignToolV2() {
 								] = calculateInsulatedLitzDiameters(
 									bareDiameter,
 									formData.wireAWG,
-									formData.insulationType || "",
+									insulationType,
 									layer,
 									formData.magnetWireGrade,
 								);
@@ -225,7 +227,7 @@ export function LitzDesignToolV2() {
 						// Check UL approval requirements
 						const ulWarnings = checkULApproval(
 							bareDiameter,
-							formData.insulationType,
+							insulationType,
 							constructionResult.totalCopperAreaCMA,
 						);
 						results.insulated = insulatedResults;
@@ -260,6 +262,17 @@ export function LitzDesignToolV2() {
 	useEffect(() => {
 		calculateResults();
 	}, [calculateResults]);
+
+	// New state for tabs and dropdowns
+	const [bareServedTab, setBareServedTab] = useState<"bare" | "served">("bare");
+	const filmTypes = ["Single", "Heavy", "Triple", "Quadruple"] as const;
+	const [bareFilmType, setBareFilmType] =
+		useState<(typeof filmTypes)[number]>("Single");
+	const [servedFilmType, setServedFilmType] =
+		useState<(typeof filmTypes)[number]>("Single");
+	const serveTypes = ["Single Nylon Serve", "Double Nylon Serve"] as const;
+	const [nylonServeType, setNylonServeType] =
+		useState<(typeof serveTypes)[number]>("Single Nylon Serve");
 
 	return (
 		<TooltipProvider>
@@ -611,24 +624,92 @@ export function LitzDesignToolV2() {
 							</CardContent>
 						</Card>
 
-						{/* Bare & Served Results */}
+						{/* Bare & Served Results with Tabs and Dropdowns */}
 						{formData.wireType === "Bare & Served" && (
 							<Card className={!construction ? "border-red-500" : ""}>
 								<CardHeader>
 									<CardTitle>Bare & Served Litz Diameters</CardTitle>
 									<CardDescription>
-										Diameter specifications for different film types
+										Diameter specifications for different film and serve types
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									<div className="grid grid-cols-1 gap-4">
-										{(["Single", "Heavy", "Triple", "Quadruple"] as const).map(
-											(filmType) => {
-												const result = diameterResults.bare?.[filmType];
+									<div className="flex gap-8 mb-4 items-end">
+										<div className="flex flex-col">
+											<span className="mb-1">Litz Type</span>
+											<Select
+												value={bareServedTab}
+												onValueChange={(v) =>
+													setBareServedTab(v as "bare" | "served")
+												}
+											>
+												<SelectTrigger className="w-40">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="bare">Bare Litz</SelectItem>
+													<SelectItem value="served">Nylon Served</SelectItem>
+												</SelectContent>
+											</Select>
+										</div>
+										<div className="flex flex-col">
+											<span className="mb-1">Film Type</span>
+											<Select
+												value={
+													bareServedTab === "bare"
+														? bareFilmType
+														: servedFilmType
+												}
+												onValueChange={(v) =>
+													bareServedTab === "bare"
+														? setBareFilmType(v as (typeof filmTypes)[number])
+														: setServedFilmType(v as (typeof filmTypes)[number])
+												}
+											>
+												<SelectTrigger className="w-40">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													{filmTypes.map((type) => (
+														<SelectItem key={type} value={type}>
+															{type} Film
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</div>
+										{bareServedTab === "served" && (
+											<div className="flex flex-col">
+												<span className="mb-1">Serve Type</span>
+												<Select
+													value={nylonServeType}
+													onValueChange={(v) =>
+														setNylonServeType(v as (typeof serveTypes)[number])
+													}
+												>
+													<SelectTrigger className="w-48">
+														<SelectValue />
+													</SelectTrigger>
+													<SelectContent>
+														{serveTypes.map((type) => (
+															<SelectItem key={type} value={type}>
+																{type}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+											</div>
+										)}
+									</div>
+									{bareServedTab === "bare"
+										? (() => {
+												const result = diameterResults.bare?.[bareFilmType];
 												const toMm = (inches: number | undefined) =>
-													typeof inches === "number" ? inches * 25.4 : null;
+													typeof inches === "number"
+														? inches * 25.4
+														: undefined;
 												const displayValue = (
-													val: number | null | undefined,
+													val: number | undefined | null,
 												) =>
 													val === null ||
 													val === undefined ||
@@ -639,7 +720,6 @@ export function LitzDesignToolV2() {
 													) : (
 														val.toFixed(4)
 													);
-												// Get strand OD min/nom/max for this AWG and film type
 												let strandOD: {
 													min: number | undefined;
 													nom: number | undefined;
@@ -647,13 +727,11 @@ export function LitzDesignToolV2() {
 												} = { min: undefined, nom: undefined, max: undefined };
 												const strandRef =
 													STRAND_OD_REFERENCE?.[formData.wireAWG];
-												if (strandRef) {
-													strandOD = strandRef;
-												}
+												if (strandRef) strandOD = strandRef;
 												return (
-													<div key={filmType} className="p-2">
+													<div className="p-2">
 														<div className="font-bold text-lg mb-2">
-															{filmType} Film
+															{bareFilmType} Film - Bare Litz
 														</div>
 														<Table>
 															<TableHeader>
@@ -752,9 +830,111 @@ export function LitzDesignToolV2() {
 														</div>
 													</div>
 												);
-											},
-										)}
-									</div>
+											})()
+										: (() => {
+												const bareResult =
+													diameterResults.bare?.[servedFilmType];
+												const result = bareResult
+													? calculateNylonServedDiameters(
+															bareResult,
+															nylonServeType,
+														)
+													: null;
+												const toMm = (inches: number | undefined) =>
+													typeof inches === "number"
+														? inches * 25.4
+														: undefined;
+												const displayValue = (
+													val: number | undefined | null,
+												) =>
+													val === null ||
+													val === undefined ||
+													Number.isNaN(val) ? (
+														<span className="text-muted-foreground font-semibold">
+															N/A
+														</span>
+													) : (
+														val.toFixed(4)
+													);
+												return (
+													<div className="p-2">
+														<div className="font-bold text-lg mb-2">
+															{servedFilmType} Film - {nylonServeType}
+														</div>
+														<Table>
+															<TableHeader>
+																<TableRow>
+																	<TableHead
+																		rowSpan={2}
+																		className="text-center align-middle w-20"
+																	/>
+																	<TableHead
+																		colSpan={2}
+																		className="text-center align-middle w-32"
+																	>
+																		Nylon Served
+																	</TableHead>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center w-16">
+																		Inches
+																	</TableHead>
+																	<TableHead className="text-center w-16">
+																		mm
+																	</TableHead>
+																</TableRow>
+															</TableHeader>
+															<TableBody>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Min
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.min)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(
+																			toMm(result?.min ?? undefined),
+																		)}
+																	</TableCell>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Nom
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.nom)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(
+																			toMm(result?.nom ?? undefined),
+																		)}
+																	</TableCell>
+																</TableRow>
+																<TableRow>
+																	<TableHead className="text-center align-middle">
+																		Max
+																	</TableHead>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(result?.max)}
+																	</TableCell>
+																	<TableCell className="text-center align-middle">
+																		{displayValue(
+																			toMm(result?.max ?? undefined),
+																		)}
+																	</TableCell>
+																</TableRow>
+															</TableBody>
+														</Table>
+														<div className="mt-2 font-mono text-xs">
+															<span className="font-semibold">
+																Part Number:
+															</span>{" "}
+															{result?.partNumber ?? "N/A"}
+														</div>
+													</div>
+												);
+											})()}
 								</CardContent>
 							</Card>
 						)}

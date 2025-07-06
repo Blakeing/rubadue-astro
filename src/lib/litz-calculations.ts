@@ -989,3 +989,35 @@ export const STRAND_OD_REFERENCE: Record<
 	49: { min: 0.00117, nom: 0.00124, max: 0.0013 },
 	50: { min: 0.00105, nom: 0.00113, max: 0.0012 },
 };
+
+export function calculateNylonServedDiameters(
+	bareResult: DiameterResult,
+	serveType: "Single Nylon Serve" | "Double Nylon Serve",
+): DiameterResult {
+	// Helper function to round to 3 decimal places
+	function round3(val: number): number {
+		return Math.round(val * 1000) / 1000;
+	}
+
+	// Calculate served diameters based on serve type
+	if (serveType === "Single Nylon Serve") {
+		return {
+			min: round3(bareResult.min + 0.002),
+			nom: round3(bareResult.nom + 0.002),
+			max: round3(bareResult.max + 0.003),
+			partNumber: bareResult.partNumber.replace(/-XX$/, "-SN-XX"),
+			wallThicknessInches: null,
+			wallThicknessMm: null,
+		};
+	}
+
+	// Double Nylon Serve
+	return {
+		min: round3(bareResult.min + 0.004),
+		nom: round3(bareResult.nom + 0.004),
+		max: round3(bareResult.max + 0.006),
+		partNumber: bareResult.partNumber.replace(/-XX$/, "-DN-XX"),
+		wallThicknessInches: null,
+		wallThicknessMm: null,
+	};
+}

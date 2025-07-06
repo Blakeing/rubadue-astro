@@ -4,6 +4,7 @@ import {
 	calculateEquivalentAWG,
 	calculateInsulatedLitzDiameters,
 	calculateLitzConstruction,
+	calculateNylonServedDiameters,
 	calculatePackingFactor,
 	calculateRequiredWallThickness,
 	calculateTakeUpFactor,
@@ -240,6 +241,46 @@ describe("Litz Wire Calculations", () => {
 			);
 			// Wall should be 0.006 (6% of 0.1) rounded up to 0.006, but min is 0.002, so 0.006
 			expect(result.nom).toBeCloseTo(0.124, 3); // 0.1 + 2*2*0.006 = 0.124
+		});
+	});
+
+	describe("Nylon Served Diameters", () => {
+		it("should calculate single nylon served diameter", () => {
+			const bareResult = {
+				min: 0.087,
+				nom: 0.091,
+				max: 0.095,
+				partNumber: "RL-200-36SL79-XX",
+				wallThicknessInches: null,
+				wallThicknessMm: null,
+			};
+			const result = calculateNylonServedDiameters(
+				bareResult,
+				"Single Nylon Serve",
+			);
+			expect(result.nom).toBeCloseTo(0.093, 3); // 0.091 + 0.002
+			expect(result.min).toBeCloseTo(0.089, 3); // 0.087 + 0.002
+			expect(result.max).toBeCloseTo(0.098, 3); // 0.095 + 0.003
+			expect(result.partNumber).toBe("RL-200-36SL79-SN-XX");
+		});
+
+		it("should calculate double nylon served diameter", () => {
+			const bareResult = {
+				min: 0.087,
+				nom: 0.091,
+				max: 0.095,
+				partNumber: "RL-200-36SL79-XX",
+				wallThicknessInches: null,
+				wallThicknessMm: null,
+			};
+			const result = calculateNylonServedDiameters(
+				bareResult,
+				"Double Nylon Serve",
+			);
+			expect(result.nom).toBeCloseTo(0.095, 3); // 0.091 + 0.004
+			expect(result.min).toBeCloseTo(0.091, 3); // 0.087 + 0.004
+			expect(result.max).toBeCloseTo(0.101, 3); // 0.095 + 0.006
+			expect(result.partNumber).toBe("RL-200-36SL79-DN-XX");
 		});
 	});
 });
