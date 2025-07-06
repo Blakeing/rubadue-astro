@@ -273,6 +273,13 @@ export function LitzDesignToolV2() {
 	const serveTypes = ["Single Nylon Serve", "Double Nylon Serve"] as const;
 	const [nylonServeType, setNylonServeType] =
 		useState<(typeof serveTypes)[number]>("Single Nylon Serve");
+	const insulationTypes = [
+		"Single Insulated",
+		"Double Insulated",
+		"Triple Insulated",
+	] as const;
+	const [selectedInsulationType, setSelectedInsulationType] =
+		useState<(typeof insulationTypes)[number]>("Single Insulated");
 
 	return (
 		<TooltipProvider>
@@ -735,7 +742,7 @@ export function LitzDesignToolV2() {
 														</div>
 														<Table>
 															<TableHeader>
-																<TableRow>
+																<TableRow className="hover:bg-transparent">
 																	<TableHead
 																		rowSpan={2}
 																		className="text-center align-middle w-20"
@@ -753,7 +760,7 @@ export function LitzDesignToolV2() {
 																		Strand OD's
 																	</TableHead>
 																</TableRow>
-																<TableRow>
+																<TableRow className="hover:bg-transparent">
 																	<TableHead className="text-center w-16">
 																		Inches
 																	</TableHead>
@@ -863,7 +870,7 @@ export function LitzDesignToolV2() {
 														</div>
 														<Table>
 															<TableHeader>
-																<TableRow>
+																<TableRow className="hover:bg-transparent">
 																	<TableHead
 																		rowSpan={2}
 																		className="text-center align-middle w-20"
@@ -875,7 +882,7 @@ export function LitzDesignToolV2() {
 																		Nylon Served
 																	</TableHead>
 																</TableRow>
-																<TableRow>
+																<TableRow className="hover:bg-transparent">
 																	<TableHead className="text-center w-16">
 																		Inches
 																	</TableHead>
@@ -949,26 +956,49 @@ export function LitzDesignToolV2() {
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
-									{(
-										[
-											"Single Insulated",
-											"Double Insulated",
-											"Triple Insulated",
-										] as const
-									).map((insType, idx) => {
-										const result = diameterResults.insulated?.[insType];
+									<div className="flex gap-8 mb-4 items-end">
+										<div className="flex flex-col">
+											<span className="mb-1">Insulation Type</span>
+											<Select
+												value={selectedInsulationType}
+												onValueChange={(v) =>
+													setSelectedInsulationType(
+														v as (typeof insulationTypes)[number],
+													)
+												}
+											>
+												<SelectTrigger className="w-48">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													{insulationTypes.map((type) => (
+														<SelectItem key={type} value={type}>
+															{type === "Single Insulated"
+																? "Single Insulated Wire"
+																: type === "Double Insulated"
+																	? "Double Insulated Wire"
+																	: "Triple Insulated Wire"}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</div>
+									</div>
+									{(() => {
+										const result =
+											diameterResults.insulated?.[selectedInsulationType];
 										const toMm = (inches: number | undefined) =>
 											typeof inches === "number" ? inches * 25.4 : null;
+										const title =
+											selectedInsulationType === "Single Insulated"
+												? "Single Insulated Wire"
+												: selectedInsulationType === "Double Insulated"
+													? "Double Insulated Wire"
+													: "Triple Insulated Wire";
 										return (
 											<InsulationSummaryTable
-												key={insType}
-												title={
-													idx === 0
-														? "Single Insulated Wire"
-														: idx === 1
-															? "Double Insulated Wire"
-															: "Triple Insulated Wire"
-												}
+												key={selectedInsulationType}
+												title={title}
 												min={{
 													inches: result?.min ?? null,
 													mm: toMm(result?.min) ?? null,
@@ -988,7 +1018,7 @@ export function LitzDesignToolV2() {
 												nomWallMm={result?.wallThicknessMm ?? null}
 											/>
 										);
-									})}
+									})()}
 								</CardContent>
 							</Card>
 						)}

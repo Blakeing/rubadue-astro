@@ -65,7 +65,7 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 			<div className="font-bold text-lg mb-2">{title}</div>
 			<Table>
 				<TableHeader>
-					<TableRow>
+					<TableRow className="hover:bg-transparent">
 						<TableHead rowSpan={2} className="align-middle text-center w-20" />
 						<TableHead colSpan={2} className="text-center align-middle w-48">
 							Basic Insulation OD's
@@ -74,7 +74,7 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 							Insulation Wall/Layer
 						</TableHead>
 					</TableRow>
-					<TableRow>
+					<TableRow className="hover:bg-transparent">
 						<TableHead className="text-center w-24">Inches</TableHead>
 						<TableHead className="text-center w-24">mm</TableHead>
 						<TableHead className="text-center w-24">Inches</TableHead>
