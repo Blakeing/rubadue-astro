@@ -37,6 +37,17 @@ export const AWG_REFERENCE: Record<
 	number,
 	{ diameter: number; cma: number; strandedCMA: number }
 > = {
+	1: { diameter: 0.2893, cma: 83690, strandedCMA: 82016 },
+	2: { diameter: 0.2576, cma: 66390, strandedCMA: 65033 },
+	3: { diameter: 0.2294, cma: 52620, strandedCMA: 51568 },
+	4: { diameter: 0.2043, cma: 41740, strandedCMA: 40905 },
+	5: { diameter: 0.1819, cma: 33090, strandedCMA: 32428 },
+	6: { diameter: 0.162, cma: 26240, strandedCMA: 25715 },
+	7: { diameter: 0.1443, cma: 20820, strandedCMA: 20404 },
+	8: { diameter: 0.1285, cma: 16510, strandedCMA: 16180 },
+	9: { diameter: 0.1144, cma: 13090, strandedCMA: 12828 },
+	10: { diameter: 0.1019, cma: 10380, strandedCMA: 10172 },
+	11: { diameter: 0.0907, cma: 8230, strandedCMA: 8065 },
 	12: { diameter: 0.0808, cma: 6530, strandedCMA: 6399 },
 	13: { diameter: 0.072, cma: 5180, strandedCMA: 5076 },
 	14: { diameter: 0.0641, cma: 4110, strandedCMA: 4028 },
@@ -747,7 +758,7 @@ export function calculateEquivalentAWG(cma: number): string {
 
 	// If above largest, return ""
 	if (cma > awgEntries[0].cma) return "";
-	// If below smallest, return "50 AWG"
+	// If below smallest, return "50 AWG";
 	if (cma < awgEntries[awgEntries.length - 1].cma) return "50 AWG";
 
 	let foundIndex = -1;

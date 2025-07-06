@@ -748,7 +748,7 @@ export function LitzDesignToolV2() {
 										</div>
 										<div className="font-medium">
 											{construction
-												? construction.takeUpFactor.toFixed(3)
+												? construction.takeUpFactor.toFixed(2)
 												: "N/A"}
 										</div>
 									</div>
@@ -768,7 +768,7 @@ export function LitzDesignToolV2() {
 										</div>
 										<div className="font-medium">
 											{construction
-												? construction.totalCopperAreaMM2.toFixed(3)
+												? construction.totalCopperAreaMM2.toFixed(2)
 												: "N/A"}
 										</div>
 									</div>
@@ -918,6 +918,7 @@ export function LitzDesignToolV2() {
 														: undefined;
 												const displayValue = (
 													val: number | undefined | null,
+													decimals = 3,
 												) =>
 													val === null ||
 													val === undefined ||
@@ -926,7 +927,7 @@ export function LitzDesignToolV2() {
 															N/A
 														</span>
 													) : (
-														val.toFixed(3)
+														val.toFixed(decimals)
 													);
 												let strandOD: {
 													min: number | undefined;
@@ -986,14 +987,14 @@ export function LitzDesignToolV2() {
 																		Min
 																	</TableHead>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.min)}
+																		{displayValue(result?.min, 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.min))}
+																		{displayValue(toMm(result?.min), 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(strandOD.min)
+																			displayValue(strandOD.min, 4)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1002,7 +1003,7 @@ export function LitzDesignToolV2() {
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(toMm(strandOD.min))
+																			displayValue(toMm(strandOD.min), 3)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1015,14 +1016,14 @@ export function LitzDesignToolV2() {
 																		Nom
 																	</TableHead>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.nom)}
+																		{displayValue(result?.nom, 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.nom))}
+																		{displayValue(toMm(result?.nom), 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(strandOD.nom)
+																			displayValue(strandOD.nom, 4)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1031,7 +1032,7 @@ export function LitzDesignToolV2() {
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(toMm(strandOD.nom))
+																			displayValue(toMm(strandOD.nom), 3)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1044,14 +1045,14 @@ export function LitzDesignToolV2() {
 																		Max
 																	</TableHead>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.max)}
+																		{displayValue(result?.max, 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.max))}
+																		{displayValue(toMm(result?.max), 3)}
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(strandOD.max)
+																			displayValue(strandOD.max, 4)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1060,7 +1061,7 @@ export function LitzDesignToolV2() {
 																	</TableCell>
 																	<TableCell className="text-center align-middle">
 																		{isValid ? (
-																			displayValue(toMm(strandOD.max))
+																			displayValue(toMm(strandOD.max), 3)
 																		) : (
 																			<span className="text-muted-foreground font-semibold">
 																				N/A
@@ -1088,6 +1089,7 @@ export function LitzDesignToolV2() {
 														: undefined;
 												const displayValue = (
 													val: number | undefined | null,
+													decimals = 3,
 												) =>
 													val === null ||
 													val === undefined ||
@@ -1096,7 +1098,7 @@ export function LitzDesignToolV2() {
 															N/A
 														</span>
 													) : (
-														val.toFixed(3)
+														val.toFixed(decimals)
 													);
 												return (
 													<div className="p-2">

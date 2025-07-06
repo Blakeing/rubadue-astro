@@ -178,11 +178,14 @@ describe("Litz Wire Calculations", () => {
 		it("should match Excel lookup for 5000 CMA (200 strands AWG 36)", () => {
 			expect(calculateEquivalentAWG(5000)).toBe("14 AWG");
 		});
-		it("should return empty string for CMA above range", () => {
-			expect(calculateEquivalentAWG(7000)).toBe("");
+		it("should return equivalent AWG for CMA within range", () => {
+			expect(calculateEquivalentAWG(7000)).toBe("12 AWG");
 		});
 		it("should return 50 AWG for very small CMA", () => {
 			expect(calculateEquivalentAWG(0.5)).toBe("50 AWG");
+		});
+		it("should match Excel lookup for 7940 CMA (200 strands AWG 34)", () => {
+			expect(calculateEquivalentAWG(7940)).toBe("12 AWG");
 		});
 	});
 
