@@ -917,6 +917,7 @@ export function calculateInsulatedLitzDiameters(
 
 	// 2. Use correct packing factor
 	const pf = packingFactor ?? 1.155;
+
 	const sqrtStrands = strandCount
 		? new Decimal(strandCount).sqrt()
 		: new Decimal(1);
@@ -960,17 +961,19 @@ export function calculateInsulatedLitzDiameters(
 	let maxDiameter: number;
 
 	if (layers === 3) {
-		// Excel logic for triple insulation - uses heavy film nominal OD for delta
-		const heavyFilm = calculateBareLitzDiameters(
+		// Excel logic for triple insulation - uses triple film nominal OD for delta (C54)
+		// Note: For delta calculation, use standard packing factor (1.155) to match Excel
+		const tripleFilmForDelta = calculateBareLitzDiameters(
 			strandCount ?? 1,
 			wireAWG,
-			packingFactor ?? 1.155,
+			1.155, // Use standard packing factor for delta determination
 			magnetWireGrade,
-			"Heavy",
+			"Triple",
 		);
-		const heavyFilmNom = new Decimal(heavyFilm.nom);
-		const delta = heavyFilmNom.gt(0.1) ? 0.002 : 0.001;
+		const tripleFilmNom = new Decimal(tripleFilmForDelta.nom);
+		const delta = tripleFilmNom.gt(0.1) ? 0.002 : 0.001;
 		const wall6 = new Decimal(2 * 3 * requiredWallThickness); // 6 * wall
+
 		minDiameter = Number(
 			bareOD_min_raw
 				.plus(wall6)

@@ -188,33 +188,39 @@ describe("Litz Wire Calculations", () => {
 
 	describe("Wall Thickness & Insulated Diameter (Excel Logic)", () => {
 		it("ETFE: wall thickness should be at least 0.0015", () => {
-			expect(calculateRequiredWallThickness("ETFE", 1000, 0.001)).toBe(0.0015);
-			expect(calculateRequiredWallThickness("ETFE", 1000, 0.002)).toBe(0.002);
+			expect(calculateRequiredWallThickness("ETFE", 1000, 0.001, 1)).toBe(
+				0.0015,
+			);
+			expect(calculateRequiredWallThickness("ETFE", 1000, 0.002, 1)).toBe(
+				0.002,
+			);
 		});
 
 		it("PFA: wall thickness should be at least 0.0015", () => {
-			expect(calculateRequiredWallThickness("PFA", 5000, 0.001)).toBe(0.0015);
-			expect(calculateRequiredWallThickness("PFA", 5000, 0.002)).toBe(0.002);
+			expect(calculateRequiredWallThickness("PFA", 5000, 0.001, 1)).toBe(
+				0.0015,
+			);
+			expect(calculateRequiredWallThickness("PFA", 5000, 0.002, 1)).toBe(0.002);
 		});
 
 		it("FEP: copper area < 1939, min wall 0.002", () => {
-			expect(calculateRequiredWallThickness("FEP", 1000, 0.001)).toBe(0.002);
-			expect(calculateRequiredWallThickness("FEP", 1000, 0.003)).toBe(0.003);
+			expect(calculateRequiredWallThickness("FEP", 1000, 0.001, 1)).toBe(0.002);
+			expect(calculateRequiredWallThickness("FEP", 1000, 0.003, 1)).toBe(0.003);
 		});
 
 		it("FEP: 1939 <= copper area < 12405, min wall 0.003", () => {
-			expect(calculateRequiredWallThickness("FEP", 5000, 0.002)).toBe(0.003);
-			expect(calculateRequiredWallThickness("FEP", 5000, 0.004)).toBe(0.004);
+			expect(calculateRequiredWallThickness("FEP", 5000, 0.002, 1)).toBe(0.003);
+			expect(calculateRequiredWallThickness("FEP", 5000, 0.004, 1)).toBe(0.004);
 		});
 
 		it("FEP: 12405 <= copper area < 24978, min wall 0.01", () => {
-			expect(calculateRequiredWallThickness("FEP", 20000, 0.005)).toBe(0.01);
-			expect(calculateRequiredWallThickness("FEP", 20000, 0.02)).toBe(0.02);
+			expect(calculateRequiredWallThickness("FEP", 20000, 0.005, 1)).toBe(0.01);
+			expect(calculateRequiredWallThickness("FEP", 20000, 0.02, 1)).toBe(0.02);
 		});
 
 		it("FEP: copper area >= 24978, min wall 0.012", () => {
-			expect(calculateRequiredWallThickness("FEP", 30000, 0.01)).toBe(0.012);
-			expect(calculateRequiredWallThickness("FEP", 30000, 0.02)).toBe(0.02);
+			expect(calculateRequiredWallThickness("FEP", 30000, 0.01, 1)).toBe(0.012);
+			expect(calculateRequiredWallThickness("FEP", 30000, 0.02, 1)).toBe(0.02);
 		});
 
 		it("Insulated diameter calculation matches expected for ETFE, 1 layer", () => {
@@ -281,6 +287,107 @@ describe("Litz Wire Calculations", () => {
 			expect(result.min).toBeCloseTo(0.091, 3); // 0.087 + 0.004
 			expect(result.max).toBeCloseTo(0.101, 3); // 0.095 + 0.006
 			expect(result.partNumber).toBe("RL-200-36SL79-DN-XX");
+		});
+	});
+
+	describe("Triple Insulated Wire Calculations", () => {
+		it("should match Excel values for 200 strands AWG 36 triple insulated", () => {
+			// This is the specific case we were debugging
+			const result = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				36,
+				"PFA",
+				3,
+				"MW 79-C",
+				200,
+				1.155, // Standard packing factor
+			);
+
+			// Expected Excel values: Min: 0.097, Nom: 0.103, Max: 0.109
+			expect(result.min).toBeCloseTo(0.097, 3);
+			expect(result.nom).toBeCloseTo(0.103, 3);
+			expect(result.max).toBeCloseTo(0.109, 3);
+			expect(result.wallThicknessInches).toBeCloseTo(0.002, 3);
+		});
+
+		it("should work for different strand counts and AWG sizes", () => {
+			// Test with 100 strands AWG 30
+			const result = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				30,
+				"ETFE",
+				3,
+				"MW 79-C",
+				100,
+				1.155,
+			);
+
+			// Should calculate properly without errors
+			expect(result.min).toBeGreaterThan(0);
+			expect(result.nom).toBeGreaterThan(result.min);
+			expect(result.max).toBeGreaterThan(result.nom);
+			expect(result.wallThicknessInches).toBeGreaterThan(0);
+		});
+
+		it("should handle different insulation types correctly", () => {
+			// Test with FEP insulation
+			const fepResult = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				36,
+				"FEP",
+				3,
+				"MW 79-C",
+				200,
+				1.155,
+			);
+
+			// Test with ETFE insulation
+			const etfeResult = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				36,
+				"ETFE",
+				3,
+				"MW 79-C",
+				200,
+				1.155,
+			);
+
+			// Both should work and have different wall thicknesses based on material
+			expect(fepResult.wallThicknessInches).toBeGreaterThan(0);
+			expect(etfeResult.wallThicknessInches).toBeGreaterThan(0);
+			expect(fepResult.min).toBeGreaterThan(0);
+			expect(etfeResult.min).toBeGreaterThan(0);
+		});
+
+		it("should use correct delta based on triple film nominal OD", () => {
+			// For smaller wire sizes, triple film nominal should be < 0.1, so delta = 0.001
+			const smallResult = calculateInsulatedLitzDiameters(
+				0.05, // ignored
+				40,
+				"PFA",
+				3,
+				"MW 79-C",
+				50,
+				1.155,
+			);
+
+			// For larger wire sizes, triple film nominal should be > 0.1, so delta = 0.002
+			const largeResult = calculateInsulatedLitzDiameters(
+				0.15, // ignored
+				20,
+				"PFA",
+				3,
+				"MW 79-C",
+				100,
+				1.155,
+			);
+
+			// Both should calculate without errors
+			expect(smallResult.min).toBeGreaterThan(0);
+			expect(largeResult.min).toBeGreaterThan(0);
+			expect(smallResult.max - smallResult.min).toBeLessThan(
+				largeResult.max - largeResult.min,
+			);
 		});
 	});
 });
