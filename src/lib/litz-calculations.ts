@@ -56,7 +56,7 @@ export const AWG_REFERENCE: Record<
 	17: { diameter: 0.0453, cma: 2050, strandedCMA: 2009 },
 	18: { diameter: 0.0403, cma: 1620, strandedCMA: 1588 },
 	19: { diameter: 0.0359, cma: 1290, strandedCMA: 1264 },
-	20: { diameter: 0.032, cma: 1020, strandedCMA: 1000 },
+	20: { diameter: 0.032, cma: 1024, strandedCMA: 1000 },
 	21: { diameter: 0.0285, cma: 812, strandedCMA: 796 },
 	22: { diameter: 0.0253, cma: 640, strandedCMA: 627 },
 	23: { diameter: 0.0226, cma: 511, strandedCMA: 501 },
@@ -748,6 +748,7 @@ export function calculateTakeUpFactor(
 /**
  * Calculate total copper area in CMA
  * Based on Excel formula: INDEX('Magnet Wire'!$A$3:$E$41,MATCH(D4,'Magnet Wire'!$A$3:$A$41,0),MATCH("CMA SOLID",'Magnet Wire'!$A$2:$E$2,0))*$D$3
+ * Uses the CMA SOLID value from Magnet Wire sheet
  */
 export function calculateTotalCopperAreaCMA(
 	strandCount: number,
