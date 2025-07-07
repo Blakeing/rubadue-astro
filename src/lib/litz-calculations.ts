@@ -49,7 +49,7 @@ export const AWG_REFERENCE: Record<
 	10: { diameter: 0.1019, cma: 10380, strandedCMA: 10172 },
 	11: { diameter: 0.0907, cma: 8230, strandedCMA: 8065 },
 	12: { diameter: 0.0808, cma: 6530, strandedCMA: 6399 },
-	13: { diameter: 0.072, cma: 5180, strandedCMA: 5076 },
+	13: { diameter: 0.072, cma: 5184, strandedCMA: 5076 }, // Fixed: was 5180, should be 5184 per CSV formula
 	14: { diameter: 0.0641, cma: 4110, strandedCMA: 4028 },
 	15: { diameter: 0.0571, cma: 3260, strandedCMA: 3195 },
 	16: { diameter: 0.0508, cma: 2580, strandedCMA: 2528 },
@@ -512,75 +512,6 @@ const PART_NUMBER_PREFIXES: Record<string, string> = {
 	"MW 77-C": "L77",
 	"MW 35-C": "L35",
 	"MW 16-C": "L16",
-};
-
-// AWG to diameter lookup (simplified - you may want to expand this)
-export const AWG_TO_DIAMETER: Record<
-	number,
-	{ min: number; nom: number; max: number }
-> = {
-	36: { min: 0.005, nom: 0.005, max: 0.0056 },
-	35: { min: 0.0056, nom: 0.0056, max: 0.0063 },
-	34: { min: 0.0063, nom: 0.0063, max: 0.0071 },
-	33: { min: 0.0071, nom: 0.0071, max: 0.008 },
-	32: { min: 0.008, nom: 0.008, max: 0.009 },
-	31: { min: 0.009, nom: 0.009, max: 0.01 },
-	30: { min: 0.01, nom: 0.01, max: 0.0113 },
-	29: { min: 0.0113, nom: 0.0113, max: 0.0126 },
-	28: { min: 0.0126, nom: 0.0126, max: 0.0142 },
-	27: { min: 0.0142, nom: 0.0142, max: 0.0159 },
-	26: { min: 0.0159, nom: 0.0159, max: 0.0179 },
-	25: { min: 0.0179, nom: 0.0179, max: 0.0201 },
-	24: { min: 0.0201, nom: 0.0201, max: 0.0226 },
-	23: { min: 0.0226, nom: 0.0226, max: 0.0254 },
-	22: { min: 0.0254, nom: 0.0254, max: 0.0285 },
-	21: { min: 0.0285, nom: 0.0285, max: 0.032 },
-	20: { min: 0.032, nom: 0.032, max: 0.036 },
-	19: { min: 0.036, nom: 0.036, max: 0.0403 },
-	18: { min: 0.0403, nom: 0.0403, max: 0.0453 },
-	17: { min: 0.0453, nom: 0.0453, max: 0.0508 },
-	16: { min: 0.0508, nom: 0.0508, max: 0.0571 },
-	15: { min: 0.0571, nom: 0.0571, max: 0.0641 },
-	14: { min: 0.0641, nom: 0.0641, max: 0.072 },
-	13: { min: 0.072, nom: 0.072, max: 0.0808 },
-	12: { min: 0.0808, nom: 0.0808, max: 0.0907 },
-	11: { min: 0.0907, nom: 0.0907, max: 0.1019 },
-	10: { min: 0.1019, nom: 0.1019, max: 0.1144 },
-	9: { min: 0.1144, nom: 0.1144, max: 0.1285 },
-	8: { min: 0.1285, nom: 0.1285, max: 0.1443 },
-};
-
-// AWG to CMA lookup
-const AWG_TO_CMA: Record<number, number> = {
-	36: 25.0,
-	35: 31.2,
-	34: 39.7,
-	33: 50.4,
-	32: 64.0,
-	31: 79.6,
-	30: 100.5,
-	29: 127.0,
-	28: 159.8,
-	27: 201.5,
-	26: 254.1,
-	25: 320.4,
-	24: 404.0,
-	23: 509.5,
-	22: 642.4,
-	21: 810.1,
-	20: 1022.0,
-	19: 1288.0,
-	18: 1624.0,
-	17: 2048.0,
-	16: 2583.0,
-	15: 3257.0,
-	14: 4107.0,
-	13: 5178.0,
-	12: 6530.0,
-	11: 8234.0,
-	10: 10383.0,
-	9: 13087.0,
-	8: 16509.0,
 };
 
 /**
@@ -1099,64 +1030,66 @@ const VALIDATION_MESSAGES = {
 		"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
 } as const;
 
+// Single/Triple insulation rules (E73/E89 logic - same rules)
+const SINGLE_TRIPLE_WALL_RULES: WallThicknessRule[] = [
+	{
+		insulationType: "FEP",
+		copperAreaMax: 1938,
+		minWallThickness: 0.002,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "FEP",
+		copperAreaMin: 1939,
+		copperAreaMax: 12404,
+		minWallThickness: 0.003,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "FEP",
+		copperAreaMin: 12405,
+		copperAreaMax: 24977,
+		minWallThickness: 0.01,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "FEP",
+		copperAreaMin: 24978,
+		copperAreaMax: 39999,
+		minWallThickness: 0.012,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "FEP",
+		minWallThickness: 0.002,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "ETFE",
+		minWallThickness: 0.0015,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "PFA",
+		copperAreaMax: 186,
+		minWallThickness: 0.0015,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+	{
+		insulationType: "PFA",
+		copperAreaMin: 187,
+		copperAreaMax: 769,
+		minWallThickness: 0.002,
+		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
+	},
+];
+
 /**
  * Wall thickness validation rules based on Excel formulas
  * Organized by insulation type and layer count
  */
 const WALL_THICKNESS_RULES: Record<1 | 2 | 3, WallThicknessRule[]> = {
-	1: [
-		// Single insulation (E73 logic)
-		{
-			insulationType: "FEP",
-			copperAreaMax: 1938,
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 1939,
-			copperAreaMax: 12404,
-			minWallThickness: 0.003,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 12405,
-			copperAreaMax: 24977,
-			minWallThickness: 0.01,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 24978,
-			copperAreaMax: 39999,
-			minWallThickness: 0.012,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "ETFE",
-			minWallThickness: 0.0015,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "PFA",
-			copperAreaMax: 186,
-			minWallThickness: 0.0015,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "PFA",
-			copperAreaMin: 187,
-			copperAreaMax: 769,
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-	],
+	1: SINGLE_TRIPLE_WALL_RULES, // Single insulation (E73 logic)
 	2: [
 		// Double insulation (E81 logic)
 		{
@@ -1200,59 +1133,7 @@ const WALL_THICKNESS_RULES: Record<1 | 2 | 3, WallThicknessRule[]> = {
 			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
 		},
 	],
-	3: [
-		// Triple insulation (E89 logic) - same as single for now
-		{
-			insulationType: "FEP",
-			copperAreaMax: 1938,
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 1939,
-			copperAreaMax: 12404,
-			minWallThickness: 0.003,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 12405,
-			copperAreaMax: 24977,
-			minWallThickness: 0.01,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 24978,
-			copperAreaMax: 39999,
-			minWallThickness: 0.012,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "FEP",
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "ETFE",
-			minWallThickness: 0.0015,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "PFA",
-			copperAreaMax: 186,
-			minWallThickness: 0.0015,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-		{
-			insulationType: "PFA",
-			copperAreaMin: 187,
-			copperAreaMax: 769,
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-		},
-	],
+	3: SINGLE_TRIPLE_WALL_RULES, // Triple insulation (E89 logic) - same as single
 };
 
 /**
@@ -1269,6 +1150,7 @@ const COPPER_AREA_RULES: CopperAreaRule[] = [
 		copperAreaMin: 1939,
 		messageKey: "NO_UL_APPROVAL_PFA_FEP",
 	},
+	// Both ETFE and PFA have same rule for copper area >= 770
 	{
 		insulationType: "ETFE",
 		copperAreaMin: 770,
