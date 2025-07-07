@@ -76,70 +76,75 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 			<div className="flex items-center justify-between mb-2 relative">
 				<div className="font-bold text-lg">{title}</div>
 			</div>
-			<Table>
-				<TableHeader>
-					<TableRow className="hover:bg-transparent">
-						<TableHead rowSpan={2} className="align-middle text-center w-20" />
-						<TableHead colSpan={2} className="text-center align-middle w-48">
-							{title.toLowerCase().includes("triple")
-								? "Reinforced Insulation OD's"
-								: title.toLowerCase().includes("double")
-									? "Supplemental Insulation OD's"
-									: "Basic Insulation OD's"}
-						</TableHead>
-						<TableHead colSpan={2} className="text-center align-middle w-48">
-							Insulation Wall/Layer
-						</TableHead>
-					</TableRow>
-					<TableRow className="hover:bg-transparent">
-						<TableHead className="text-center w-24">Inches</TableHead>
-						<TableHead className="text-center w-24">mm</TableHead>
-						<TableHead className="text-center w-24">Inches</TableHead>
-						<TableHead className="text-center w-24">mm</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					<TableRow>
-						<TableHead className="text-center align-middle">Min</TableHead>
-						<TableCell className="text-center align-middle">
-							{displayValue(min.inches)}
-						</TableCell>
-						<TableCell className="text-center align-middle">
-							{displayValue(min.mm)}
-						</TableCell>
-						<TableCell colSpan={2} className="text-center align-middle">
-							{wallDisplay(null)}
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableHead className="text-center align-middle">Nom</TableHead>
-						<TableCell className="text-center align-middle">
-							{displayValue(nom.inches)}
-						</TableCell>
-						<TableCell className="text-center align-middle">
-							{displayValue(nom.mm)}
-						</TableCell>
-						<TableCell className="text-center align-middle">
-							{wallDisplay(nomWallInches, true)}
-						</TableCell>
-						<TableCell className="text-center align-middle">
-							{wallDisplay(nomWallMm, true)}
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableHead className="text-center align-middle">Max</TableHead>
-						<TableCell className="text-center align-middle">
-							{displayValue(max.inches)}
-						</TableCell>
-						<TableCell className="text-center align-middle">
-							{displayValue(max.mm)}
-						</TableCell>
-						<TableCell colSpan={2} className="text-center align-middle">
-							{wallDisplay(null)}
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
+			<div className="overflow-x-auto">
+				<Table>
+					<TableHeader>
+						<TableRow className="hover:bg-transparent">
+							<TableHead
+								rowSpan={2}
+								className="align-middle text-center w-20"
+							/>
+							<TableHead colSpan={2} className="text-center align-middle w-48">
+								{title.toLowerCase().includes("triple")
+									? "Reinforced Insulation OD's"
+									: title.toLowerCase().includes("double")
+										? "Supplemental Insulation OD's"
+										: "Basic Insulation OD's"}
+							</TableHead>
+							<TableHead colSpan={2} className="text-center align-middle w-48">
+								Insulation Wall/Layer
+							</TableHead>
+						</TableRow>
+						<TableRow className="hover:bg-transparent">
+							<TableHead className="text-center w-24">Inches</TableHead>
+							<TableHead className="text-center w-24">mm</TableHead>
+							<TableHead className="text-center w-24">Inches</TableHead>
+							<TableHead className="text-center w-24">mm</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						<TableRow>
+							<TableHead className="text-center align-middle">Min</TableHead>
+							<TableCell className="text-center align-middle">
+								{displayValue(min.inches)}
+							</TableCell>
+							<TableCell className="text-center align-middle">
+								{displayValue(min.mm)}
+							</TableCell>
+							<TableCell colSpan={2} className="text-center align-middle">
+								{wallDisplay(null)}
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center align-middle">Nom</TableHead>
+							<TableCell className="text-center align-middle">
+								{displayValue(nom.inches)}
+							</TableCell>
+							<TableCell className="text-center align-middle">
+								{displayValue(nom.mm)}
+							</TableCell>
+							<TableCell className="text-center align-middle">
+								{wallDisplay(nomWallInches, true)}
+							</TableCell>
+							<TableCell className="text-center align-middle">
+								{wallDisplay(nomWallMm, true)}
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableHead className="text-center align-middle">Max</TableHead>
+							<TableCell className="text-center align-middle">
+								{displayValue(max.inches)}
+							</TableCell>
+							<TableCell className="text-center align-middle">
+								{displayValue(max.mm)}
+							</TableCell>
+							<TableCell colSpan={2} className="text-center align-middle">
+								{wallDisplay(null)}
+							</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+			</div>
 			{note && (
 				<div className="mt-1 text-xs text-muted-foreground italic">{note}</div>
 			)}

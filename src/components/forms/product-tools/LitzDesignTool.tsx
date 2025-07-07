@@ -1,6 +1,5 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -24,7 +23,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import {
 	Table,
 	TableBody,
@@ -40,8 +38,6 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-	AWG_REFERENCE,
-	AWG_TO_DIAMETER,
 	type DiameterResult,
 	type LitzConstruction,
 	STRAND_OD_REFERENCE,
@@ -62,18 +58,17 @@ import {
 	Info,
 	XCircle,
 } from "lucide-react";
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { InsulationSummaryTable } from "./InsulationSummaryTable";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const formSchema = z
 	.object({
 		numberOfStrands: z.number().min(1, "Number of strands must be at least 1"),
 		wireAWG: z
 			.number()
-			.min(8, "Wire AWG must be at least 8")
+			.min(12, "Wire AWG must be at least 12")
 			.max(50, "Wire AWG must be at most 50"),
 		litzType: z.enum(["Type 1", "Type 2"]),
 		wireType: z.enum(["Bare & Served", "Insulated"]),
@@ -99,16 +94,12 @@ export function LitzDesignToolV2() {
 	const [isCalculating, setIsCalculating] = useState(false);
 	const [calculationError, setCalculationError] = useState<string | null>(null);
 
-	// Helper function to generate stable keys for part number segments
-	const generatePartNumberKey = (part: string, type: "num" | "text") => {
-		return `${type}-${part}-${Math.random().toString(36).substr(2, 9)}`;
-	};
-
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
+		mode: "onTouched",
 		defaultValues: {
-			numberOfStrands: 200,
-			wireAWG: 36,
+			numberOfStrands: 0,
+			wireAWG: 0,
 			litzType: "Type 1",
 			wireType: "Bare & Served",
 			magnetWireGrade: "MW 79-C",
@@ -131,13 +122,16 @@ export function LitzDesignToolV2() {
 		manufacturingWarnings: string[];
 	}>({ ulWarnings: [], manufacturingWarnings: [] });
 
-	// Memoize validation result to avoid unnecessary recalculations
-	const validationResult = useMemo(() => {
-		if (formData.numberOfStrands > 0 && formData.wireAWG > 0) {
-			return validateStrandCount(formData.numberOfStrands, formData.wireAWG);
-		}
-		return null;
-	}, [formData.numberOfStrands, formData.wireAWG]);
+	// Helper functions
+	const toMm = (inches: number | undefined) =>
+		typeof inches === "number" ? inches * 25.4 : null;
+
+	const displayValue = (val: number | undefined | null, decimals = 3) =>
+		val === null || val === undefined || Number.isNaN(val) ? (
+			<span className="text-muted-foreground font-semibold">N/A</span>
+		) : (
+			val.toFixed(decimals)
+		);
 
 	// Calculate results whenever form data changes
 	const calculateResults = useCallback(async () => {
@@ -353,10 +347,10 @@ export function LitzDesignToolV2() {
 
 	return (
 		<TooltipProvider>
-			<div className="max-w-7xl mx-auto p-6 space-y-8">
-				<div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+			<div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+				<div className="grid grid-cols-1 xl:grid-cols-5 gap-6 sm:gap-8">
 					{/* Input Form */}
-					<Card className="lg:col-span-2">
+					<Card className="xl:col-span-2">
 						<CardHeader>
 							<CardTitle>Construction Parameters</CardTitle>
 							<CardDescription>
@@ -390,8 +384,9 @@ export function LitzDesignToolV2() {
 													<Input
 														type="number"
 														min="1"
-														placeholder="e.g., 200"
+														placeholder="Enter strand count"
 														{...field}
+														value={field.value || ""}
 														onChange={(e) =>
 															field.onChange(
 																Number.parseInt(e.target.value) || 0,
@@ -408,7 +403,7 @@ export function LitzDesignToolV2() {
 									<FormField
 										control={form.control}
 										name="wireAWG"
-										render={({ field }) => (
+										render={({ field, fieldState }) => (
 											<FormItem>
 												<FormLabel className="flex items-center gap-2">
 													Wire AWG
@@ -418,7 +413,8 @@ export function LitzDesignToolV2() {
 														</TooltipTrigger>
 														<TooltipContent>
 															<p>
-																American Wire Gauge of individual strands (8-50)
+																American Wire Gauge of individual strands
+																(12-50)
 															</p>
 														</TooltipContent>
 													</Tooltip>
@@ -426,16 +422,23 @@ export function LitzDesignToolV2() {
 												<FormControl>
 													<Input
 														type="number"
-														min="8"
+														min="12"
 														max="50"
-														placeholder="e.g., 36"
+														placeholder="Enter AWG"
 														{...field}
+														value={field.value || ""}
 														onChange={(e) =>
 															field.onChange(
 																Number.parseInt(e.target.value) || 0,
 															)
 														}
+														onBlur={field.onBlur}
 														disabled={isCalculating}
+														className={
+															fieldState.error && fieldState.isTouched
+																? "border-red-500 focus-visible:ring-red-500"
+																: ""
+														}
 													/>
 												</FormControl>
 												<FormMessage />
@@ -574,69 +577,71 @@ export function LitzDesignToolV2() {
 							)}
 
 							{/* Validation Alert */}
-							{validation && (
-								<Alert
-									className={
-										validation.isValid
-											? "border-green-500 bg-green-50/60 rounded-lg"
-											: "border-red-500 bg-red-50/60 rounded-lg"
-									}
-								>
-									{validation.isValid ? (
-										<CheckCircle className="h-4 w-4 text-green-500" />
-									) : (
-										<XCircle className="h-4 w-4 text-red-500" />
-									)}
-									<AlertDescription>
-										<div className="text-sm font-medium mb-1 flex items-center gap-2 text-foreground">
-											{validation.isValid
-												? "Valid Strand Count"
-												: "Invalid Strand Count"}
-										</div>
-										<div className="text-sm text-muted-foreground mb-2">
-											{validation.message.charAt(0).toUpperCase() +
-												validation.message.slice(1)}
-										</div>
-										{validation.breakdown.length > 1 && (
-											<div className="mt-2 flex items-center gap-2">
-												<span className="text-xs text-muted-foreground">
-													Breakdown:
-												</span>
-												<Badge
-													variant="secondary"
-													className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
-												>
-													{validation.breakdown.join(" → ")}
-												</Badge>
-											</div>
+							{validation &&
+								formData.numberOfStrands > 0 &&
+								formData.wireAWG > 0 && (
+									<Alert
+										className={
+											validation.isValid
+												? "border-green-500 bg-green-50/60 rounded-lg"
+												: "border-red-500 bg-red-50/60 rounded-lg"
+										}
+									>
+										{validation.isValid ? (
+											<CheckCircle className="h-4 w-4 text-green-500" />
+										) : (
+											<XCircle className="h-4 w-4 text-red-500" />
 										)}
-										{validation.nearbyValid.length > 0 && (
-											<div className="mt-2 flex items-center gap-2 flex-wrap">
-												<span className="text-xs text-muted-foreground">
-													Nearby valid counts:
-												</span>
-												{validation.nearbyValid.map((count) => (
-													<button
-														key={count}
-														type="button"
-														className="focus:outline-none"
-														onClick={() =>
-															form.setValue("numberOfStrands", count)
-														}
+										<AlertDescription>
+											<div className="text-sm font-medium mb-1 flex items-center gap-2 text-foreground">
+												{validation.isValid
+													? "Valid Strand Count"
+													: "Invalid Strand Count"}
+											</div>
+											<div className="text-sm text-muted-foreground mb-2">
+												{validation.message.charAt(0).toUpperCase() +
+													validation.message.slice(1)}
+											</div>
+											{validation.breakdown.length > 1 && (
+												<div className="mt-2 flex items-center gap-2">
+													<span className="text-xs text-muted-foreground">
+														Breakdown:
+													</span>
+													<Badge
+														variant="secondary"
+														className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
 													>
-														<Badge
-															variant="secondary"
-															className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
+														{validation.breakdown.join(" → ")}
+													</Badge>
+												</div>
+											)}
+											{validation.nearbyValid.length > 0 && (
+												<div className="mt-2 flex items-center gap-2 flex-wrap">
+													<span className="text-xs text-muted-foreground">
+														Nearby valid counts:
+													</span>
+													{validation.nearbyValid.map((count) => (
+														<button
+															key={count}
+															type="button"
+															className="focus:outline-none"
+															onClick={() =>
+																form.setValue("numberOfStrands", count)
+															}
 														>
-															{count}
-														</Badge>
-													</button>
-												))}
-											</div>
-										)}
-									</AlertDescription>
-								</Alert>
-							)}
+															<Badge
+																variant="secondary"
+																className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
+															>
+																{count}
+															</Badge>
+														</button>
+													))}
+												</div>
+											)}
+										</AlertDescription>
+									</Alert>
+								)}
 
 							{/* Manufacturing Capability Warnings */}
 							{diameterResults.manufacturingWarnings.length > 0 && (
@@ -719,14 +724,22 @@ export function LitzDesignToolV2() {
 					</Card>
 
 					{/* Results Display */}
-					<div className="space-y-6 lg:col-span-3">
+					<div className="space-y-6 xl:col-span-3">
 						{/* Construction Details */}
-						<Card className={!construction ? "border-red-500" : ""}>
+						<Card
+							className={
+								!construction &&
+								formData.numberOfStrands > 0 &&
+								formData.wireAWG > 0
+									? "border-red-500"
+									: ""
+							}
+						>
 							<CardHeader>
 								<CardTitle>Construction Details</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="grid grid-cols-2 gap-4">
+								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 									<div>
 										<div className="text-sm text-muted-foreground">
 											Operations
@@ -789,9 +802,17 @@ export function LitzDesignToolV2() {
 
 						{/* Bare & Served Results with Tabs and Dropdowns */}
 						{formData.wireType === "Bare & Served" && (
-							<Card className={!construction ? "border-red-500" : ""}>
+							<Card
+								className={
+									!construction &&
+									formData.numberOfStrands > 0 &&
+									formData.wireAWG > 0
+										? "border-red-500"
+										: ""
+								}
+							>
 								<CardHeader>
-									<div className="flex items-center justify-between pb-4 border-b border-muted-foreground/20">
+									<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-muted-foreground/20">
 										<div className="space-y-1">
 											<CardTitle>Bare & Served Litz Diameters</CardTitle>
 											<CardDescription>
@@ -799,9 +820,9 @@ export function LitzDesignToolV2() {
 												types
 											</CardDescription>
 										</div>
-										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
+										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-left sm:text-right">
 											<span>Part Number</span>
-											<div className="text-base font-semibold tracking-wider text-foreground">
+											<div className="text-base font-semibold tracking-wider text-foreground break-all">
 												{(() => {
 													let partNumber = "N/A";
 													if (
@@ -828,7 +849,7 @@ export function LitzDesignToolV2() {
 									</div>
 								</CardHeader>
 								<CardContent>
-									<div className="flex gap-8 mb-4 items-end">
+									<div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mb-4 sm:items-end">
 										<div className="flex flex-col">
 											<span className="mb-1">Litz Type</span>
 											<Select
@@ -837,7 +858,7 @@ export function LitzDesignToolV2() {
 													setBareServedTab(v as "bare" | "served")
 												}
 											>
-												<SelectTrigger className="w-40">
+												<SelectTrigger className="w-full sm:w-40">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
@@ -860,7 +881,7 @@ export function LitzDesignToolV2() {
 														: setServedFilmType(v as (typeof filmTypes)[number])
 												}
 											>
-												<SelectTrigger className="w-40">
+												<SelectTrigger className="w-full sm:w-40">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
@@ -881,7 +902,7 @@ export function LitzDesignToolV2() {
 														setNylonServeType(v as (typeof serveTypes)[number])
 													}
 												>
-													<SelectTrigger className="w-48">
+													<SelectTrigger className="w-full sm:w-48">
 														<SelectValue />
 													</SelectTrigger>
 													<SelectContent>
@@ -898,23 +919,6 @@ export function LitzDesignToolV2() {
 									{bareServedTab === "bare"
 										? (() => {
 												const result = diameterResults.bare?.[bareFilmType];
-												const toMm = (inches: number | undefined) =>
-													typeof inches === "number"
-														? inches * 25.4
-														: undefined;
-												const displayValue = (
-													val: number | undefined | null,
-													decimals = 3,
-												) =>
-													val === null ||
-													val === undefined ||
-													Number.isNaN(val) ? (
-														<span className="text-muted-foreground font-semibold">
-															N/A
-														</span>
-													) : (
-														val.toFixed(decimals)
-													);
 												let strandOD: {
 													min: number | undefined;
 													nom: number | undefined;
@@ -932,131 +936,133 @@ export function LitzDesignToolV2() {
 																{bareFilmType} Film - Bare Litz
 															</div>
 														</div>
-														<Table>
-															<TableHeader>
-																<TableRow className="hover:bg-transparent">
-																	<TableHead
-																		rowSpan={2}
-																		className="text-center align-middle w-20"
-																	/>
-																	<TableHead
-																		colSpan={2}
-																		className="text-center align-middle w-32"
-																	>
-																		Bare Litz
-																	</TableHead>
-																	<TableHead
-																		colSpan={2}
-																		className="text-center align-middle w-32"
-																	>
-																		Strand OD's
-																	</TableHead>
-																</TableRow>
-																<TableRow className="hover:bg-transparent">
-																	<TableHead className="text-center w-16">
-																		Inches
-																	</TableHead>
-																	<TableHead className="text-center w-16">
-																		mm
-																	</TableHead>
-																	<TableHead className="text-center w-16">
-																		Inches
-																	</TableHead>
-																	<TableHead className="text-center w-16">
-																		mm
-																	</TableHead>
-																</TableRow>
-															</TableHeader>
-															<TableBody>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Min
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.min, 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.min), 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(strandOD.min, 4)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(toMm(strandOD.min), 3)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																</TableRow>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Nom
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.nom, 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.nom), 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(strandOD.nom, 4)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(toMm(strandOD.nom), 3)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																</TableRow>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Max
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.max, 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(toMm(result?.max), 3)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(strandOD.max, 4)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{isValid ? (
-																			displayValue(toMm(strandOD.max), 3)
-																		) : (
-																			<span className="text-muted-foreground font-semibold">
-																				N/A
-																			</span>
-																		)}
-																	</TableCell>
-																</TableRow>
-															</TableBody>
-														</Table>
+														<div className="overflow-x-auto">
+															<Table>
+																<TableHeader>
+																	<TableRow className="hover:bg-transparent">
+																		<TableHead
+																			rowSpan={2}
+																			className="text-center align-middle w-20"
+																		/>
+																		<TableHead
+																			colSpan={2}
+																			className="text-center align-middle w-32"
+																		>
+																			Bare Litz
+																		</TableHead>
+																		<TableHead
+																			colSpan={2}
+																			className="text-center align-middle w-32"
+																		>
+																			Strand OD's
+																		</TableHead>
+																	</TableRow>
+																	<TableRow className="hover:bg-transparent">
+																		<TableHead className="text-center w-16">
+																			Inches
+																		</TableHead>
+																		<TableHead className="text-center w-16">
+																			mm
+																		</TableHead>
+																		<TableHead className="text-center w-16">
+																			Inches
+																		</TableHead>
+																		<TableHead className="text-center w-16">
+																			mm
+																		</TableHead>
+																	</TableRow>
+																</TableHeader>
+																<TableBody>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Min
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.min, 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(toMm(result?.min), 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(strandOD.min, 4)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(toMm(strandOD.min), 3)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																	</TableRow>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Nom
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.nom, 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(toMm(result?.nom), 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(strandOD.nom, 4)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(toMm(strandOD.nom), 3)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																	</TableRow>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Max
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.max, 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(toMm(result?.max), 3)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(strandOD.max, 4)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{isValid ? (
+																				displayValue(toMm(strandOD.max), 3)
+																			) : (
+																				<span className="text-muted-foreground font-semibold">
+																					N/A
+																				</span>
+																			)}
+																		</TableCell>
+																	</TableRow>
+																</TableBody>
+															</Table>
+														</div>
 													</div>
 												);
 											})()
@@ -1069,23 +1075,6 @@ export function LitzDesignToolV2() {
 															nylonServeType,
 														)
 													: null;
-												const toMm = (inches: number | undefined) =>
-													typeof inches === "number"
-														? inches * 25.4
-														: undefined;
-												const displayValue = (
-													val: number | undefined | null,
-													decimals = 3,
-												) =>
-													val === null ||
-													val === undefined ||
-													Number.isNaN(val) ? (
-														<span className="text-muted-foreground font-semibold">
-															N/A
-														</span>
-													) : (
-														val.toFixed(decimals)
-													);
 												return (
 													<div className="p-2">
 														<div className="flex items-center justify-between mb-2 relative">
@@ -1093,71 +1082,73 @@ export function LitzDesignToolV2() {
 																{servedFilmType} Film - {nylonServeType}
 															</div>
 														</div>
-														<Table>
-															<TableHeader>
-																<TableRow className="hover:bg-transparent">
-																	<TableHead
-																		rowSpan={2}
-																		className="text-center align-middle w-20"
-																	/>
-																	<TableHead
-																		colSpan={2}
-																		className="text-center align-middle w-32"
-																	>
-																		Nylon Served
-																	</TableHead>
-																</TableRow>
-																<TableRow className="hover:bg-transparent">
-																	<TableHead className="text-center w-16">
-																		Inches
-																	</TableHead>
-																	<TableHead className="text-center w-16">
-																		mm
-																	</TableHead>
-																</TableRow>
-															</TableHeader>
-															<TableBody>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Min
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.min)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(
-																			toMm(result?.min ?? undefined),
-																		)}
-																	</TableCell>
-																</TableRow>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Nom
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.nom)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(
-																			toMm(result?.nom ?? undefined),
-																		)}
-																	</TableCell>
-																</TableRow>
-																<TableRow>
-																	<TableHead className="text-center align-middle">
-																		Max
-																	</TableHead>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(result?.max)}
-																	</TableCell>
-																	<TableCell className="text-center align-middle">
-																		{displayValue(
-																			toMm(result?.max ?? undefined),
-																		)}
-																	</TableCell>
-																</TableRow>
-															</TableBody>
-														</Table>
+														<div className="overflow-x-auto">
+															<Table>
+																<TableHeader>
+																	<TableRow className="hover:bg-transparent">
+																		<TableHead
+																			rowSpan={2}
+																			className="text-center align-middle w-20"
+																		/>
+																		<TableHead
+																			colSpan={2}
+																			className="text-center align-middle w-32"
+																		>
+																			Nylon Served
+																		</TableHead>
+																	</TableRow>
+																	<TableRow className="hover:bg-transparent">
+																		<TableHead className="text-center w-16">
+																			Inches
+																		</TableHead>
+																		<TableHead className="text-center w-16">
+																			mm
+																		</TableHead>
+																	</TableRow>
+																</TableHeader>
+																<TableBody>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Min
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.min)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(
+																				toMm(result?.min ?? undefined),
+																			)}
+																		</TableCell>
+																	</TableRow>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Nom
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.nom)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(
+																				toMm(result?.nom ?? undefined),
+																			)}
+																		</TableCell>
+																	</TableRow>
+																	<TableRow>
+																		<TableHead className="text-center align-middle">
+																			Max
+																		</TableHead>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(result?.max)}
+																		</TableCell>
+																		<TableCell className="text-center align-middle">
+																			{displayValue(
+																				toMm(result?.max ?? undefined),
+																			)}
+																		</TableCell>
+																	</TableRow>
+																</TableBody>
+															</Table>
+														</div>
 													</div>
 												);
 											})()}
@@ -1167,18 +1158,26 @@ export function LitzDesignToolV2() {
 
 						{/* Insulated Results */}
 						{formData.wireType === "Insulated" && (
-							<Card className={!construction ? "border-red-500" : ""}>
+							<Card
+								className={
+									!construction &&
+									formData.numberOfStrands > 0 &&
+									formData.wireAWG > 0
+										? "border-red-500"
+										: ""
+								}
+							>
 								<CardHeader>
-									<div className="flex items-center justify-between pb-4 border-b border-muted-foreground/20">
+									<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-muted-foreground/20">
 										<div className="space-y-1">
 											<CardTitle>Insulated Litz Diameters</CardTitle>
 											<CardDescription>
 												Diameter specifications for different insulation layers
 											</CardDescription>
 										</div>
-										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
+										<div className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-left sm:text-right">
 											<span className="font-mono">Part Number</span>
-											<div className="text-base font-semibold tracking-wider text-foreground">
+											<div className="text-base font-semibold tracking-wider text-foreground break-all">
 												{(() => {
 													const result =
 														diameterResults.insulated?.[selectedInsulationType];
@@ -1191,7 +1190,7 @@ export function LitzDesignToolV2() {
 									</div>
 								</CardHeader>
 								<CardContent>
-									<div className="flex gap-8 mb-4 items-end">
+									<div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mb-4 sm:items-end">
 										<div className="flex flex-col">
 											<span className="mb-1">Insulation Type</span>
 											<Select
@@ -1202,7 +1201,7 @@ export function LitzDesignToolV2() {
 													)
 												}
 											>
-												<SelectTrigger className="w-48">
+												<SelectTrigger className="w-full sm:w-48">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
@@ -1222,8 +1221,6 @@ export function LitzDesignToolV2() {
 									{(() => {
 										const result =
 											diameterResults.insulated?.[selectedInsulationType];
-										const toMm = (inches: number | undefined) =>
-											typeof inches === "number" ? inches * 25.4 : null;
 										const title =
 											selectedInsulationType === "Single Insulated"
 												? "Single Insulated Wire"
