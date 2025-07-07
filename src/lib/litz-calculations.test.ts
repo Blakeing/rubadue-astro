@@ -70,16 +70,25 @@ describe("Litz Wire Calculations", () => {
 			expect(calculatePackingFactor("Type 2", 1)).toBe(1.155);
 			expect(calculatePackingFactor("Type 2", 2)).toBe(1.236);
 			expect(calculatePackingFactor("Type 2", 3)).toBe(1.271);
+			expect(calculatePackingFactor("Type 2", 4)).toBe(1.271);
+			expect(calculatePackingFactor("Type 2", 5)).toBe(1.363);
 		});
 	});
 
 	describe("Take Up Factor Calculations", () => {
-		it("should return correct take up factors", () => {
-			expect(calculateTakeUpFactor(1)).toBe(1.01);
-			expect(calculateTakeUpFactor(2)).toBe(1.01);
-			expect(calculateTakeUpFactor(3)).toBe(1.03);
-			expect(calculateTakeUpFactor(4)).toBe(1.051);
-			expect(calculateTakeUpFactor(5)).toBe(1.051);
+		it("should return correct take up factors for Type 1", () => {
+			expect(calculateTakeUpFactor("Type 1", 1)).toBe(1.01);
+			expect(calculateTakeUpFactor("Type 1", 2)).toBe(1.01);
+			expect(calculateTakeUpFactor("Type 1", 3)).toBe(1.01);
+			expect(calculateTakeUpFactor("Type 1", 4)).toBe(1.051);
+			expect(calculateTakeUpFactor("Type 1", 5)).toBe(1.082);
+		});
+		it("should return correct take up factors for Type 2", () => {
+			expect(calculateTakeUpFactor("Type 2", 1)).toBe(1.01);
+			expect(calculateTakeUpFactor("Type 2", 2)).toBe(1.03);
+			expect(calculateTakeUpFactor("Type 2", 3)).toBe(1.051);
+			expect(calculateTakeUpFactor("Type 2", 4)).toBe(1.051);
+			expect(calculateTakeUpFactor("Type 2", 5)).toBe(1.082);
 		});
 	});
 

@@ -394,17 +394,26 @@ const PACKING_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 		2: 1.236,
 		3: 1.271,
 		4: 1.271,
-		5: 1.271,
+		5: 1.363, // Updated from 1.271 to 1.363 to match Excel
 	},
 };
 
-// Take up factors by operations
-const TAKE_UP_FACTORS: Record<number, number> = {
-	1: 1.01,
-	2: 1.01,
-	3: 1.03,
-	4: 1.051,
-	5: 1.051,
+// Take up factors by Litz type and operations (from Excel logic)
+const TAKE_UP_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
+	"Type 1": {
+		1: 1.01,
+		2: 1.01,
+		3: 1.01,
+		4: 1.051,
+		5: 1.082,
+	},
+	"Type 2": {
+		1: 1.01,
+		2: 1.03,
+		3: 1.051,
+		4: 1.051,
+		5: 1.082,
+	},
 };
 
 /**
@@ -706,20 +715,34 @@ function validateStrandCountSimple(
 export function calculatePackingFactor(
 	litzType: "Type 1" | "Type 2",
 	operations: number,
+	wireAWG?: number, // add optional wireAWG for special-case logic
 ): number {
 	if (operations > 5) {
 		throw new Error("Maximum 5 operations supported");
+	}
+
+	// Special-case override for Type 2, 4 operations, AWG < 44
+	if (
+		litzType === "Type 2" &&
+		operations === 4 &&
+		wireAWG !== undefined &&
+		wireAWG < 44
+	) {
+		return 1.363;
 	}
 
 	return PACKING_FACTORS[litzType][operations] || 1.155;
 }
 
 /**
- * Calculate take up factor based on operations
- * Based on Excel formula: IF(D3<26,K3,IF(D5=1,K4,IF(D5=2,K5,K6)))
+ * Calculate take up factor based on Litz type and operations
+ * Based on Excel formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,5,0),VLOOKUP(D5,TYPE2,5,0))
  */
-export function calculateTakeUpFactor(operations: number): number {
-	return TAKE_UP_FACTORS[operations] || 1.01;
+export function calculateTakeUpFactor(
+	litzType: "Type 1" | "Type 2",
+	operations: number,
+): number {
+	return TAKE_UP_FACTORS[litzType][operations] || 1.01;
 }
 
 /**
@@ -1436,11 +1459,15 @@ export function calculateLitzConstruction(
 	// Excel logic: number of operations = number of steps in breakdown
 	const numberOfOperations = validation.breakdown.length;
 
-	// Calculate packing factor
-	const packingFactor = calculatePackingFactor(litzType, numberOfOperations);
+	// Calculate packing factor (pass wireAWG for special-case logic)
+	const packingFactor = calculatePackingFactor(
+		litzType,
+		numberOfOperations,
+		wireAWG,
+	);
 
-	// Calculate take up factor
-	const takeUpFactor = calculateTakeUpFactor(numberOfOperations);
+	// Calculate take up factor (pass litzType)
+	const takeUpFactor = calculateTakeUpFactor(litzType, numberOfOperations);
 
 	// Calculate copper areas
 	const totalCopperAreaCMA = calculateTotalCopperAreaCMA(totalStrands, wireAWG);

@@ -345,6 +345,18 @@ export function LitzDesignToolV2() {
 		return result;
 	}
 
+	// Consolidated Rubadue Engineering consult alerts
+	const showType1OpsWarning =
+		construction &&
+		construction.numberOfOperations > 3 &&
+		formData.litzType === "Type 1";
+	const showAwgStrandWarning =
+		formData.wireAWG > 49 ||
+		(formData.wireAWG < 23 && formData.numberOfStrands > 8);
+
+	const awgFieldError = form.formState.errors.wireAWG;
+	const strandFieldError = form.formState.errors.numberOfStrands;
+
 	return (
 		<TooltipProvider>
 			<div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
@@ -579,7 +591,9 @@ export function LitzDesignToolV2() {
 							{/* Validation Alert */}
 							{validation &&
 								formData.numberOfStrands > 0 &&
-								formData.wireAWG > 0 && (
+								formData.wireAWG > 0 &&
+								!awgFieldError &&
+								!strandFieldError && (
 									<Alert
 										className={
 											validation.isValid
@@ -708,6 +722,66 @@ export function LitzDesignToolV2() {
 									</Alert>
 								)}
 
+							{/* Type 1 Litz 4+ Operations Warning - moved to left column */}
+							{formData.numberOfStrands > 0 &&
+								formData.wireAWG > 0 &&
+								!awgFieldError &&
+								!strandFieldError &&
+								(showType1OpsWarning || showAwgStrandWarning) && (
+									<Alert className="border-orange-500 bg-orange-50/60 rounded-lg">
+										<AlertTriangle className="h-4 w-4 text-orange-500" />
+										<AlertDescription>
+											{showType1OpsWarning && showAwgStrandWarning ? (
+												<>
+													<div className="text-sm text-muted-foreground font-normal mb-1">
+														Please consult Rubadue Engineering for the
+														following:
+													</div>
+													<ul className="list-disc pl-5 text-sm text-muted-foreground font-normal mb-2">
+														<li>
+															Type 1 Litz constructions requiring 4+ operations
+														</li>
+														{formData.wireAWG > 49 && (
+															<li>
+																For strand sizes smaller than 48 AWG, please
+																consult Rubadue Engineering to confirm final
+																construction.
+															</li>
+														)}
+														{formData.wireAWG < 23 &&
+															formData.numberOfStrands > 8 && (
+																<li>
+																	For large strand counts (more than 8) with
+																	heavy-gauge wire (AWG less than 23), special
+																	construction may be required. Please consult
+																	Rubadue Engineering to confirm
+																	manufacturability.
+																</li>
+															)}
+													</ul>
+												</>
+											) : showType1OpsWarning ? (
+												<div className="text-sm text-muted-foreground font-normal mb-2">
+													Please consult Rubadue Engineering for Type 1 Litz
+													constructions requiring 4+ operations.
+												</div>
+											) : formData.wireAWG > 49 ? (
+												<div className="text-sm text-muted-foreground font-normal mb-2">
+													For strand sizes smaller than 48 AWG, please consult
+													Rubadue Engineering to confirm final construction.
+												</div>
+											) : (
+												<div className="text-sm text-muted-foreground font-normal mb-2">
+													For large strand counts (more than 8) with heavy-gauge
+													wire (AWG less than 23), special construction may be
+													required. Please consult Rubadue Engineering to
+													confirm manufacturability.
+												</div>
+											)}
+										</AlertDescription>
+									</Alert>
+								)}
+
 							{/* Loading Indicator */}
 							{isCalculating && (
 								<Alert className="border-blue-500">
@@ -753,7 +827,11 @@ export function LitzDesignToolV2() {
 											Packing Factor
 										</div>
 										<div className="font-medium">
-											{construction
+											{construction &&
+											!(
+												construction.numberOfOperations > 3 &&
+												formData.litzType === "Type 1"
+											)
 												? construction.packingFactor.toFixed(3)
 												: "N/A"}
 										</div>
@@ -763,8 +841,12 @@ export function LitzDesignToolV2() {
 											Take Up Factor
 										</div>
 										<div className="font-medium">
-											{construction
-												? construction.takeUpFactor.toFixed(2)
+											{construction &&
+											!(
+												construction.numberOfOperations > 3 &&
+												formData.litzType === "Type 1"
+											)
+												? construction.takeUpFactor.toFixed(3)
 												: "N/A"}
 										</div>
 									</div>
