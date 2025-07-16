@@ -125,7 +125,7 @@ const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 	41: 66,
 	42: 66,
 	43: 66,
-	44: 66,
+	44: 9, // Fixed: Should allow division to continue until 4 strands (4 operations)
 	45: 66,
 	46: 66,
 	47: 21,
@@ -135,7 +135,7 @@ const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 };
 
 // Magnet Wire Film Thicknesses (from Magnet Wire_values.csv)
-const MAGNET_WIRE_FILM_THICKNESSES: Record<
+export const MAGNET_WIRE_FILM_THICKNESSES: Record<
 	number,
 	{
 		single: { min: number; nom: number; max: number };
@@ -392,7 +392,7 @@ const PACKING_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 2": {
 		1: 1.155,
 		2: 1.236,
-		3: 1.271,
+		3: 1.236, // Fixed: Should be same as 2 operations
 		4: 1.271,
 		5: 1.363, // Updated from 1.271 to 1.363 to match Excel
 	},
@@ -410,7 +410,7 @@ const TAKE_UP_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 2": {
 		1: 1.01,
 		2: 1.03,
-		3: 1.051,
+		3: 1.03, // Fixed: Should be same as 2 operations
 		4: 1.051,
 		5: 1.082,
 	},
@@ -525,13 +525,13 @@ export function validateStrandCount(
 	const breakdown: number[] = [];
 	let currentCount = strandCount;
 
-	// Special rule: For AWG 12-22, 8 or fewer strands are always valid
-	if (wireAWG >= 12 && wireAWG <= 22 && strandCount <= 8) {
+	// Special rule: For AWG 12-22, 3-8 strands are always valid
+	if (wireAWG >= 12 && wireAWG <= 22 && strandCount >= 3 && strandCount <= 8) {
 		return {
 			isValid: true,
 			breakdown: [strandCount],
 			nearbyValid: [strandCount],
-			message: `Valid: ${strandCount} strands for AWG ${wireAWG} (special rule for 8 or fewer strands)`,
+			message: `Valid: ${strandCount} strands for AWG ${wireAWG} (special rule for 3-8 strands)`,
 		};
 	}
 
@@ -609,8 +609,8 @@ function validateStrandCountSimple(
 	wireAWG: number,
 	maxStrands: number,
 ): boolean {
-	// Special rule: For AWG 12-22, 8 or fewer strands are always valid
-	if (wireAWG >= 12 && wireAWG <= 22 && strandCount <= 8) {
+	// Special rule: For AWG 12-22, 3-8 strands are always valid
+	if (wireAWG >= 12 && wireAWG <= 22 && strandCount >= 3 && strandCount <= 8) {
 		return true;
 	}
 
@@ -677,9 +677,9 @@ export function calculateTakeUpFactor(
 }
 
 /**
- * Calculate total copper area in CMA
+ * Calculate total copper area in CMA for display purposes
  * Based on Excel formula: INDEX('Magnet Wire'!$A$3:$E$41,MATCH(D4,'Magnet Wire'!$A$3:$A$41,0),MATCH("CMA SOLID",'Magnet Wire'!$A$2:$E$2,0))*$D$3
- * Uses the CMA SOLID value from Magnet Wire sheet
+ * Excel calculates CMA using (diameter × 1000)² formula for display
  */
 export function calculateTotalCopperAreaCMA(
 	strandCount: number,
@@ -690,7 +690,26 @@ export function calculateTotalCopperAreaCMA(
 		throw new Error(`No CMA data available for AWG ${wireAWG}`);
 	}
 
-	return strandCount * awgData.cma;
+	// Calculate CMA using diameter formula like Excel: (diameter × 1000)²
+	const calculatedCMA = (awgData.diameter * 1000) ** 2;
+	return strandCount * calculatedCMA;
+}
+
+/**
+ * Calculate copper area for insulation calculations
+ * Uses lookup table values for insulation rule calculations
+ */
+function calculateCopperAreaForInsulation(
+	strandCount: number,
+	wireAWG: number,
+): number {
+	const awgData = AWG_REFERENCE[wireAWG];
+	if (!awgData) {
+		throw new Error(`No CMA data available for AWG ${wireAWG}`);
+	}
+
+	// Use strandedCMA lookup table value for insulation calculations
+	return strandCount * awgData.strandedCMA;
 }
 
 /**
@@ -883,7 +902,10 @@ export function calculateInsulatedLitzDiameters(
 	const rawWall = bareOD_nom_raw.mul(0.06);
 
 	// 5. Apply Excel wall thickness logic (E73/E81/E89)
-	const copperAreaCMA = calculateTotalCopperAreaCMA(strandCount ?? 1, wireAWG);
+	const copperAreaCMA = calculateCopperAreaForInsulation(
+		strandCount ?? 1,
+		wireAWG,
+	);
 
 	// Calculate wall thickness using Excel logic
 	let calculatedWall: number;
@@ -965,10 +987,10 @@ export function calculateInsulatedLitzDiameters(
 	const gradeCode = PART_NUMBER_PREFIXES[magnetWireGrade] || "XX";
 	const prefix = layers === 1 ? "SXXL" : layers === 2 ? "DXXL" : "TXXL";
 	const insulationCode =
-		insulationType === "ETFE" ? "E" : insulationType === "FEP" ? "F" : "P";
+		insulationType === "ETFE" ? "T" : insulationType === "FEP" ? "F" : "P";
 	const xSuffix = layers === 1 ? "X" : layers === 2 ? "XX" : "XXX";
 	const wallThicknessMils = Math.round(requiredWallThickness * 1000);
-	const partNumber = `${prefix}${Math.round(bareOD_nom_raw.toNumber() * 1000)}/${wireAWG}${insulationCode}${xSuffix}-${wallThicknessMils}(MW${gradeCode})`;
+	const partNumber = `${prefix}${strandCount || 1}/${wireAWG}${insulationCode}${xSuffix}-${wallThicknessMils}(MW${gradeCode})`;
 
 	return {
 		min: minDiameter,
@@ -1150,15 +1172,17 @@ const COPPER_AREA_RULES: CopperAreaRule[] = [
 		copperAreaMin: 1939,
 		messageKey: "NO_UL_APPROVAL_PFA_FEP",
 	},
-	// Both ETFE and PFA have same rule for copper area >= 770
+	// Both ETFE and PFA have same rule for copper area >= 770 but < 12405
 	{
 		insulationType: "ETFE",
 		copperAreaMin: 770,
+		copperAreaMax: 12404,
 		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
 	},
 	{
 		insulationType: "PFA",
 		copperAreaMin: 770,
+		copperAreaMax: 12404,
 		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
 	},
 	{
@@ -1225,7 +1249,7 @@ function checkCopperAreaRules(
 	);
 
 	for (const rule of relevantRules) {
-		if (isInRange(copperArea, rule.copperAreaMin)) {
+		if (isInRange(copperArea, rule.copperAreaMin, rule.copperAreaMax)) {
 			warnings.push(
 				VALIDATION_MESSAGES[
 					rule.messageKey as keyof typeof VALIDATION_MESSAGES
@@ -1234,6 +1258,209 @@ function checkCopperAreaRules(
 		}
 	}
 
+	return warnings;
+}
+
+/**
+ * Check UL approval requirements for triple insulation (E89 logic)
+ * Based on Excel formula: =IF(D9<9.61,"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",IF(AND(D68="FEP",D9<12405,E89<0.002),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",IF(AND(D68="FEP",D9>12404,E89<0.004),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES.",IF(OR(AND(D68="ETFE",D9<1241,E89<0.001),AND(D68="ETFE",D9>1240,D9<4900,E89<0.0015),AND(D68="ETFE",D9>4899,D9<12405,E89<0.002),AND(OR(D68="PFA",D68="ETFE"),D9>12404)),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",""))))
+ */
+function checkTripleInsulationULApproval(
+	copperArea: number,
+	insulationType: string,
+	wallThickness: number,
+): string[] {
+	const warnings: string[] = [];
+
+	// 1. Check very small copper area (D9 < 9.61)
+	if (copperArea < 9.61) {
+		warnings.push(
+			"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",
+		);
+		return warnings;
+	}
+
+	// 2. FEP with copper area < 12405 and wall thickness < 0.002
+	if (insulationType === "FEP" && copperArea < 12405 && wallThickness < 0.002) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",
+		);
+		return warnings;
+	}
+
+	// 3. FEP with copper area > 12404 and wall thickness < 0.004
+	if (insulationType === "FEP" && copperArea > 12404 && wallThickness < 0.004) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES.",
+		);
+		return warnings;
+	}
+
+	// 4. ETFE conditions that require FEP insulation
+	const etfeConditions = [
+		insulationType === "ETFE" && copperArea < 1241 && wallThickness < 0.001,
+		insulationType === "ETFE" &&
+			copperArea > 1240 &&
+			copperArea < 4900 &&
+			wallThickness < 0.0015,
+		insulationType === "ETFE" &&
+			copperArea > 4899 &&
+			copperArea < 12405 &&
+			wallThickness < 0.002,
+		(insulationType === "PFA" || insulationType === "ETFE") &&
+			copperArea > 12404,
+	];
+
+	if (etfeConditions.some((condition) => condition)) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",
+		);
+		return warnings;
+	}
+
+	// 5. If none of the above conditions are met, UL approval is granted (empty string)
+	return warnings;
+}
+
+/**
+ * Check UL approval requirements for double insulation (E81 logic)
+ * Based on Excel formula: =IF(D9<9.61,"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",IF(OR(AND(D68="ETFE",D9<122,E81<0.001),AND(D68="ETFE",D9>121,D9<2886,E81<0.0015),AND(D68="ETFE",D9>2885,D9<12405,E81<0.003)),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",IF(AND(D68="ETFE",D9>12404),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",IF(AND(D68="PFA",D9>1938),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",IF(OR(AND(D68="FEP",D9<12405,E81<0.002),AND(D68="FEP",D9>12404,D9<24978,E81<0.005),AND(D68="FEP",D9>24977,D9<40000,E81<0.006)),"INCREASE WALL THICKNESS IF UL APPROVAL IS REQUIRED.","")))))
+ */
+function checkDoubleInsulationULApproval(
+	copperArea: number,
+	insulationType: string,
+	wallThickness: number,
+): string[] {
+	const warnings: string[] = [];
+
+	// 1. Check very small copper area (D9 < 9.61)
+	if (copperArea < 9.61) {
+		warnings.push(
+			"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",
+		);
+		return warnings;
+	}
+
+	// 2. ETFE conditions that require FEP insulation or reinforced insulation
+	const etfeReinforcedConditions = [
+		insulationType === "ETFE" && copperArea < 122 && wallThickness < 0.001,
+		insulationType === "ETFE" &&
+			copperArea > 121 &&
+			copperArea < 2886 &&
+			wallThickness < 0.0015,
+		insulationType === "ETFE" &&
+			copperArea > 2885 &&
+			copperArea < 12405 &&
+			wallThickness < 0.003,
+	];
+
+	if (etfeReinforcedConditions.some((condition) => condition)) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",
+		);
+		return warnings;
+	}
+
+	// 3. ETFE with copper area > 12404
+	if (insulationType === "ETFE" && copperArea > 12404) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",
+		);
+		return warnings;
+	}
+
+	// 4. PFA with copper area > 1938
+	if (insulationType === "PFA" && copperArea > 1938) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR REINFORCED INSULATION.",
+		);
+		return warnings;
+	}
+
+	// 5. FEP wall thickness conditions
+	const fepConditions = [
+		insulationType === "FEP" && copperArea < 12405 && wallThickness < 0.002,
+		insulationType === "FEP" &&
+			copperArea > 12404 &&
+			copperArea < 24978 &&
+			wallThickness < 0.005,
+		insulationType === "FEP" &&
+			copperArea > 24977 &&
+			copperArea < 40000 &&
+			wallThickness < 0.006,
+	];
+
+	if (fepConditions.some((condition) => condition)) {
+		warnings.push("INCREASE WALL THICKNESS IF UL APPROVAL IS REQUIRED.");
+		return warnings;
+	}
+
+	// 6. If none of the above conditions are met, UL approval is granted (empty string)
+	return warnings;
+}
+
+/**
+ * Check UL approval requirements for single insulation (E73 logic)
+ * Based on Excel formula: =IF(D9<9.61,"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",IF(OR(AND(D68="FEP",D9<1939,E73<0.002),AND(D68="FEP",D9>1938,D9<12405,E73<0.003),AND(D68="FEP",D9>12404,D9<24978,E73<0.01),AND(D68="FEP",D9>24977,D9<40000,E73<0.012),AND(D68="ETFE",E73<0.0015),AND(D68="FEP",E73<0.002),AND(D68="PFA",OR(AND(D9<187,E73<0.0015),AND(D9>186,D9<770,E73<0.002)))),"INCREASE WALL THICKNESSES IF UL APPROVALS ARE REQUIRED. IF UL APPROVALS ARE NOT REQUIRED, CONSULT THE FACTORY TO CONFIRM MANUFACTURABILITY.",IF(AND(OR(D68="ETFE",D68="PFA"),D9>769),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR SUPPLEMENTAL/REINFORCED INSULATION.","")))
+ */
+function checkSingleInsulationULApproval(
+	copperArea: number,
+	insulationType: string,
+	wallThickness: number,
+): string[] {
+	const warnings: string[] = [];
+
+	// 1. Check very small copper area (D9 < 9.61)
+	if (copperArea < 9.61) {
+		warnings.push(
+			"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",
+		);
+		return warnings;
+	}
+
+	// 2. Wall thickness conditions that require increase
+	const wallThicknessConditions = [
+		insulationType === "FEP" && copperArea < 1939 && wallThickness < 0.002,
+		insulationType === "FEP" &&
+			copperArea > 1938 &&
+			copperArea < 12405 &&
+			wallThickness < 0.003,
+		insulationType === "FEP" &&
+			copperArea > 12404 &&
+			copperArea < 24978 &&
+			wallThickness < 0.01,
+		insulationType === "FEP" &&
+			copperArea > 24977 &&
+			copperArea < 40000 &&
+			wallThickness < 0.012,
+		insulationType === "ETFE" && wallThickness < 0.0015,
+		insulationType === "FEP" && wallThickness < 0.002,
+		insulationType === "PFA" && copperArea < 187 && wallThickness < 0.0015,
+		insulationType === "PFA" &&
+			copperArea > 186 &&
+			copperArea < 770 &&
+			wallThickness < 0.002,
+	];
+
+	if (wallThicknessConditions.some((condition) => condition)) {
+		warnings.push(
+			"INCREASE WALL THICKNESSES IF UL APPROVALS ARE REQUIRED. IF UL APPROVALS ARE NOT REQUIRED, CONSULT THE FACTORY TO CONFIRM MANUFACTURABILITY.",
+		);
+		return warnings;
+	}
+
+	// 3. ETFE or PFA with copper area > 769
+	if (
+		(insulationType === "ETFE" || insulationType === "PFA") &&
+		copperArea > 769
+	) {
+		warnings.push(
+			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION OR SUPPLEMENTAL/REINFORCED INSULATION.",
+		);
+		return warnings;
+	}
+
+	// 4. If none of the above conditions are met, UL approval is granted (empty string)
 	return warnings;
 }
 
@@ -1255,26 +1482,45 @@ export function checkULApproval(
 		warnings.push(VALIDATION_MESSAGES.CONDUCTOR_DIAMETER_EXCEEDS);
 	}
 
+	// Use layer-specific logic if wall thickness is provided
+	if (wallThickness !== undefined) {
+		if (layers === 3) {
+			warnings.push(
+				...checkTripleInsulationULApproval(
+					copperArea,
+					insulationType,
+					wallThickness,
+				),
+			);
+		} else if (layers === 2) {
+			warnings.push(
+				...checkDoubleInsulationULApproval(
+					copperArea,
+					insulationType,
+					wallThickness,
+				),
+			);
+		} else {
+			warnings.push(
+				...checkSingleInsulationULApproval(
+					copperArea,
+					insulationType,
+					wallThickness,
+				),
+			);
+		}
+		return warnings;
+	}
+
+	// Fallback logic if wall thickness is not provided (shouldn't happen for insulated wires)
 	// Check very small copper area (D9 < 9.61)
 	if (copperArea < 9.61) {
 		warnings.push(VALIDATION_MESSAGES.CONSULT_PLANT_MANUFACTURING);
 		return warnings; // Return early as this is a critical manufacturing issue
 	}
 
-	// Check wall thickness scenarios if wall thickness is provided
-	if (wallThickness !== undefined) {
-		warnings.push(
-			...checkWallThicknessRules(
-				insulationType,
-				copperArea,
-				wallThickness,
-				layers,
-			),
-		);
-	}
-
-	// Check copper area rules
-	warnings.push(...checkCopperAreaRules(insulationType, copperArea));
+	// For insulated wires without wall thickness, provide generic warning
+	warnings.push("Wall thickness required for UL approval validation.");
 
 	return warnings;
 }
@@ -1339,8 +1585,9 @@ export function calculateLitzConstruction(
 		};
 	}
 
-	// Excel logic: number of operations = number of steps in breakdown
-	const numberOfOperations = validation.breakdown.length;
+	// Excel logic: number of operations = number of division steps
+	// breakdown array contains [originalCount, ...divisors], so operations = length - 1
+	const numberOfOperations = Math.max(1, validation.breakdown.length - 1);
 
 	// Calculate packing factor (pass wireAWG for special-case logic)
 	const packingFactor = calculatePackingFactor(

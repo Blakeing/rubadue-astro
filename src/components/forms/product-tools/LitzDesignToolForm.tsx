@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { calculateTotalCopperAreaCMA } from "@/lib/litz-calculations";
 
 const awgOptions = Array.from({ length: 40 - 12 + 1 }, (_, i) => {
 	const awg = (i + 12).toString();
@@ -312,54 +313,11 @@ export default function LitzDesignToolForm() {
 		setValue("takeUpFactor", litzTypeDefaults[litzType]?.takeup ?? 1.03);
 	}, [litzType, setValue]);
 
-	// Calculate copper area
-	function getAwgAreaCMA(awg: string) {
-		// Standard AWG table (CMA)
-		const awgCmaTable: Record<string, number> = {
-			"12": 6530,
-			"13": 5180,
-			"14": 4107,
-			"15": 3260,
-			"16": 2583,
-			"17": 2048,
-			"18": 1624,
-			"19": 1288,
-			"20": 1022,
-			"21": 810,
-			"22": 642,
-			"23": 509,
-			"24": 404,
-			"25": 320,
-			"26": 254,
-			"27": 202,
-			"28": 160,
-			"29": 127,
-			"30": 101,
-			"31": 80,
-			"32": 64,
-			"33": 51,
-			"34": 40,
-			"35": 32,
-			"36": 25,
-			"37": 20,
-			"38": 16,
-			"39": 13,
-			"40": 10,
-			"41": 8,
-			"42": 6,
-			"43": 5,
-			"44": 4,
-			"45": 3,
-			"46": 2,
-			"47": 2,
-			"48": 1,
-			"49": 1,
-			"50": 1,
-		};
-		return awgCmaTable[awg] || 0;
-	}
+	// Calculate copper area using the centralized calculation function
 	const totalCMA =
-		strandsNum && awgNum ? strandsNum * getAwgAreaCMA(awgNum) : 0;
+		strandsNum && awgNum
+			? calculateTotalCopperAreaCMA(strandsNum, Number(awgNum))
+			: 0;
 	const totalMM2 = totalCMA ? totalCMA * 0.0005067 : 0;
 
 	return (

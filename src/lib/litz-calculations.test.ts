@@ -42,10 +42,10 @@ describe("Litz Wire Calculations", () => {
 			expect(result.message).toContain("cannot be reduced");
 		});
 
-		it("should handle special rule for AWG 12-22 with 8 or fewer strands", () => {
+		it("should handle special rule for AWG 12-22 with 3-8 strands", () => {
 			const result = validateStrandCount(5, 18);
 			expect(result.isValid).toBe(true);
-			expect(result.message).toContain("special rule for 8 or fewer strands");
+			expect(result.message).toContain("special rule for 3-8 strands");
 		});
 	});
 
@@ -69,7 +69,7 @@ describe("Litz Wire Calculations", () => {
 		it("should return correct packing factor for Type 2", () => {
 			expect(calculatePackingFactor("Type 2", 1)).toBe(1.155);
 			expect(calculatePackingFactor("Type 2", 2)).toBe(1.236);
-			expect(calculatePackingFactor("Type 2", 3)).toBe(1.271);
+			expect(calculatePackingFactor("Type 2", 3)).toBe(1.236); // Fixed: Should be same as 2 operations
 			expect(calculatePackingFactor("Type 2", 4)).toBe(1.271);
 			expect(calculatePackingFactor("Type 2", 5)).toBe(1.363);
 		});
@@ -86,7 +86,7 @@ describe("Litz Wire Calculations", () => {
 		it("should return correct take up factors for Type 2", () => {
 			expect(calculateTakeUpFactor("Type 2", 1)).toBe(1.01);
 			expect(calculateTakeUpFactor("Type 2", 2)).toBe(1.03);
-			expect(calculateTakeUpFactor("Type 2", 3)).toBe(1.051);
+			expect(calculateTakeUpFactor("Type 2", 3)).toBe(1.03); // Fixed: Should be same as 2 operations
 			expect(calculateTakeUpFactor("Type 2", 4)).toBe(1.051);
 			expect(calculateTakeUpFactor("Type 2", 5)).toBe(1.082);
 		});
@@ -142,7 +142,7 @@ describe("Litz Wire Calculations", () => {
 			expect(construction.totalStrands).toBe(200);
 			expect(construction.wireAWG).toBe(36);
 			expect(construction.litzType).toBe("Type 1");
-			expect(construction.numberOfOperations).toBe(2);
+			expect(construction.numberOfOperations).toBe(1); // Fixed: 200 → 200÷5 = 40 strands (1 operation)
 			expect(construction.packingFactor).toBe(1.155);
 			expect(construction.takeUpFactor).toBe(1.01);
 			expect(construction.totalCopperAreaCMA).toBe(5000);
@@ -160,7 +160,7 @@ describe("Litz Wire Calculations", () => {
 
 			expect(construction.isValid).toBe(true);
 			expect(construction.totalStrands).toBe(1000);
-			expect(construction.numberOfOperations).toBe(3);
+			expect(construction.numberOfOperations).toBe(2); // Fixed: 1000 → 1000÷5 = 200 → 200÷5 = 40 strands (2 operations)
 			expect(construction.totalCopperAreaCMA).toBe(25000);
 		});
 	});

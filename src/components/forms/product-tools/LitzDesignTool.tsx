@@ -41,6 +41,7 @@ import {
 	type DiameterResult,
 	type LitzConstruction,
 	STRAND_OD_REFERENCE,
+	MAGNET_WIRE_FILM_THICKNESSES,
 	type StrandValidationResult,
 	calculateBareLitzDiameters,
 	calculateInsulatedLitzDiameters,
@@ -73,12 +74,12 @@ const formSchema = z
 		litzType: z.enum(["Type 1", "Type 2"]),
 		wireType: z.enum(["Bare & Served", "Insulated"]),
 		magnetWireGrade: z.string().min(1, "Magnet wire grade is required"),
-		insulationType: z.string().optional(),
+		insulationType: z.enum(["ETFE", "FEP", "PFA"]).optional(),
 	})
 	.refine(
 		(data) => {
 			if (data.wireType === "Insulated") {
-				return data.insulationType && data.insulationType.length > 0;
+				return data.insulationType !== undefined;
 			}
 			return true;
 		},
@@ -96,14 +97,14 @@ export function LitzDesignToolV2() {
 
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
-		mode: "onTouched",
+		mode: "onBlur",
 		defaultValues: {
 			numberOfStrands: 0,
 			wireAWG: 0,
 			litzType: "Type 1",
 			wireType: "Bare & Served",
 			magnetWireGrade: "MW 79-C",
-			insulationType: "",
+			insulationType: undefined,
 		},
 	});
 
@@ -121,6 +122,15 @@ export function LitzDesignToolV2() {
 		ulWarnings: string[];
 		manufacturingWarnings: string[];
 	}>({ ulWarnings: [], manufacturingWarnings: [] });
+
+	// Insulation type selection state (moved here to be available for calculations)
+	const insulationTypes = [
+		"Single Insulated",
+		"Double Insulated",
+		"Triple Insulated",
+	] as const;
+	const [selectedInsulationType, setSelectedInsulationType] =
+		useState<(typeof insulationTypes)[number]>("Single Insulated");
 
 	// Helper functions
 	const toMm = (inches: number | undefined) =>
@@ -213,7 +223,7 @@ export function LitzDesignToolV2() {
 						).nom;
 
 						// Use ETFE as default insulation type if none selected
-						const insulationType = formData.insulationType || "ETFE";
+						const insulationType = formData.insulationType || ("ETFE" as const);
 
 						for (const layer of layers) {
 							try {
@@ -236,52 +246,39 @@ export function LitzDesignToolV2() {
 							}
 						}
 
-						// Check UL approval requirements for each insulation type
-						const allUlWarnings: string[] = [];
-						const allManufacturingWarnings: string[] = [];
+						// Check UL approval requirements for the selected insulation type only
+						const selectedResult = insulatedResults[selectedInsulationType];
+						const selectedUlWarnings: string[] = [];
+						const selectedManufacturingWarnings: string[] = [];
 
-						// Check each insulation type with its specific layer count
-						for (const [insulationTypeName, result] of Object.entries(
-							insulatedResults,
-						)) {
-							const layerCount = insulationTypeName.includes("Single")
+						if (selectedResult) {
+							const layerCount = selectedInsulationType.includes("Single")
 								? 1
-								: insulationTypeName.includes("Double")
+								: selectedInsulationType.includes("Double")
 									? 2
 									: 3;
 
 							const ulWarnings = checkULApproval(
-								bareDiameter,
+								selectedResult.nom, // Fixed: Use insulated diameter, not bare diameter
 								insulationType,
 								constructionResult.totalCopperAreaCMA,
-								result.wallThicknessInches || undefined,
+								selectedResult.wallThicknessInches || undefined,
 								layerCount,
 							);
-							// Only add the first warning for this insulation type/layer
-							if (ulWarnings.length > 0) {
-								allUlWarnings.push(ulWarnings[0]);
-							}
+							selectedUlWarnings.push(...ulWarnings);
 
 							const manufacturingWarnings = checkManufacturingCapability(
 								constructionResult.totalCopperAreaCMA,
 								insulationType,
-								result.wallThicknessInches || undefined,
+								selectedResult.wallThicknessInches || undefined,
 								layerCount,
 							);
-							if (manufacturingWarnings.length > 0) {
-								allManufacturingWarnings.push(manufacturingWarnings[0]);
-							}
+							selectedManufacturingWarnings.push(...manufacturingWarnings);
 						}
 
-						// Remove duplicates
-						const uniqueUlWarnings = [...new Set(allUlWarnings)];
-						const uniqueManufacturingWarnings = [
-							...new Set(allManufacturingWarnings),
-						];
-
 						results.insulated = insulatedResults;
-						results.ulWarnings = uniqueUlWarnings;
-						results.manufacturingWarnings = uniqueManufacturingWarnings;
+						results.ulWarnings = selectedUlWarnings;
+						results.manufacturingWarnings = selectedManufacturingWarnings;
 					}
 
 					setDiameterResults(results);
@@ -307,11 +304,22 @@ export function LitzDesignToolV2() {
 		formData.wireType,
 		formData.magnetWireGrade,
 		formData.insulationType,
+		selectedInsulationType,
 	]);
 
 	useEffect(() => {
 		calculateResults();
 	}, [calculateResults]);
+
+	// Reset insulation type when wire type changes to "Bare & Served"
+	useEffect(() => {
+		if (
+			formData.wireType === "Bare & Served" &&
+			formData.insulationType !== undefined
+		) {
+			form.setValue("insulationType", undefined);
+		}
+	}, [formData.wireType, formData.insulationType, form]);
 
 	// New state for tabs and dropdowns
 	const [bareServedTab, setBareServedTab] = useState<"bare" | "served">("bare");
@@ -323,13 +331,6 @@ export function LitzDesignToolV2() {
 	const serveTypes = ["Single Nylon Serve", "Double Nylon Serve"] as const;
 	const [nylonServeType, setNylonServeType] =
 		useState<(typeof serveTypes)[number]>("Single Nylon Serve");
-	const insulationTypes = [
-		"Single Insulated",
-		"Double Insulated",
-		"Triple Insulated",
-	] as const;
-	const [selectedInsulationType, setSelectedInsulationType] =
-		useState<(typeof insulationTypes)[number]>("Single Insulated");
 
 	function sentenceCaseWithAcronyms(str: string) {
 		if (!str) return str;
@@ -1006,9 +1007,23 @@ export function LitzDesignToolV2() {
 													nom: number | undefined;
 													max: number | undefined;
 												} = { min: undefined, nom: undefined, max: undefined };
-												const strandRef =
-													STRAND_OD_REFERENCE?.[formData.wireAWG];
-												if (strandRef) strandOD = strandRef;
+
+												// Get strand OD from film thickness data based on selected film type
+												const filmData =
+													MAGNET_WIRE_FILM_THICKNESSES?.[formData.wireAWG];
+												if (filmData) {
+													const filmType =
+														bareFilmType.toLowerCase() as keyof typeof filmData;
+													const thickness = filmData[filmType];
+													if (thickness && thickness.nom > 0) {
+														strandOD = {
+															min: thickness.min,
+															nom: thickness.nom,
+															max: thickness.max,
+														};
+													}
+												}
+
 												// Check if construction is valid
 												const isValid = construction?.isValid;
 												return (
