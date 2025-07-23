@@ -125,7 +125,7 @@ const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 	41: 66,
 	42: 66,
 	43: 66,
-	44: 9, // Fixed: Should allow division to continue until 4 strands (4 operations)
+	44: 66, // FIXED: Restored correct value from CSV (was incorrectly set to 9)
 	45: 66,
 	46: 66,
 	47: 21,
@@ -515,15 +515,21 @@ const PART_NUMBER_PREFIXES: Record<string, string> = {
 };
 
 /**
- * Validates strand count by recursively dividing by 5, 3, or 4
- * Based on Excel formula: IF($D4<49,IF(B14>NOOFENDSMAX,IF(B15=TRUE,B14/5,IF(B16=TRUE,B14/3,IF(B17=TRUE,B14/4,"N/A"))),""N/A""),...)
+ * Validate strand count with improved breakdown showing hierarchical levels
  */
 export function validateStrandCount(
 	strandCount: number,
 	wireAWG: number,
 ): StrandValidationResult {
-	const breakdown: number[] = [];
-	let currentCount = strandCount;
+	// Early validation
+	if (strandCount < 3) {
+		return {
+			isValid: false,
+			breakdown: [],
+			nearbyValid: [],
+			message: "Minimum 3 strands required for Litz wire construction",
+		};
+	}
 
 	// Special rule: For AWG 12-22, 3-8 strands are always valid
 	if (wireAWG >= 12 && wireAWG <= 22 && strandCount >= 3 && strandCount <= 8) {
@@ -537,6 +543,12 @@ export function validateStrandCount(
 
 	// Get max strands for this AWG
 	const maxStrands = getMaxStrandsForAWG(wireAWG);
+	const hierarchicalLevels: number[] = [];
+	const divisionFactors: number[] = [];
+	let currentCount = strandCount;
+
+	// Build hierarchical breakdown (like Excel's Row 14 → Row 18 → Row 22 → Row 26 → Row 30)
+	hierarchicalLevels.push(currentCount);
 
 	while (currentCount > maxStrands) {
 		let divided = false;
@@ -544,32 +556,54 @@ export function validateStrandCount(
 		// Try dividing by 5, 3, or 4 in that order
 		if (currentCount % 5 === 0) {
 			currentCount = currentCount / 5;
-			breakdown.push(5);
+			divisionFactors.push(5);
 			divided = true;
 		} else if (currentCount % 3 === 0) {
 			currentCount = currentCount / 3;
-			breakdown.push(3);
+			divisionFactors.push(3);
 			divided = true;
 		} else if (currentCount % 4 === 0) {
 			currentCount = currentCount / 4;
-			breakdown.push(4);
+			divisionFactors.push(4);
 			divided = true;
 		}
 
 		if (!divided) {
-			break;
+			// Cannot divide further - invalid
+			const nearbyValid = findNearbyValidCounts(strandCount, wireAWG);
+			return {
+				isValid: false,
+				breakdown: hierarchicalLevels,
+				nearbyValid,
+				message: `This strand count isn't manufacturable with AWG ${wireAWG} wire.`,
+			};
 		}
+
+		hierarchicalLevels.push(currentCount);
 	}
 
-	const isValid = currentCount <= maxStrands;
+	// Calculate operations count using Excel's hierarchical method
+	const operationsCount = calculateOperationsExcelWay(strandCount, wireAWG);
+
+	// Build improved message
+	const levelProgression = hierarchicalLevels.join("→");
+	const finalStrands = hierarchicalLevels[hierarchicalLevels.length - 1];
+
+	let message: string;
+	if (operationsCount === 1) {
+		message = `Valid: ${strandCount} strands (1 operation, ≤${maxStrands} strands allowed for AWG ${wireAWG})`;
+	} else {
+		message = `Valid: ${strandCount} strands requires ${operationsCount} operations: ${levelProgression} strands (final manufacturing operation uses ${finalStrands} strands)`;
+	}
+
+	// Get nearby valid counts
 	const nearbyValid = findNearbyValidCounts(strandCount, wireAWG);
+
 	return {
-		isValid,
-		breakdown: [strandCount, ...breakdown],
+		isValid: true,
+		breakdown: hierarchicalLevels, // CHANGED: Now shows [2000, 400, 80, 16] instead of [2000, 5, 5, 5]
 		nearbyValid,
-		message: isValid
-			? `${strandCount} strands breaks down to ${currentCount} strands in first operation`
-			: `${strandCount} strands cannot be reduced to ${maxStrands} or fewer strands`,
+		message,
 	};
 }
 
@@ -584,21 +618,49 @@ function getMaxStrandsForAWG(awg: number): number {
 
 /**
  * Find nearby valid strand counts
+ * Improved to better match Excel's logic with wider range and pattern-based search
  */
 function findNearbyValidCounts(target: number, awg: number): number[] {
 	const valid: number[] = [];
 	const maxStrands = getMaxStrandsForAWG(awg);
 
-	// Check counts around the target
-	for (let i = Math.max(1, target - 10); i <= target + 10; i++) {
-		// Use simplified validation to avoid recursion
-		const isValid = validateStrandCountSimple(i, awg, maxStrands);
-		if (isValid) {
-			valid.push(i);
+	// Expand search range significantly to catch values like 1980 and 2025 when target is 2000
+	const searchRange = Math.max(50, Math.floor(target * 0.05)); // At least 50, or 5% of target
+	const minSearch = Math.max(3, target - searchRange);
+	const maxSearch = target + searchRange;
+
+	// First, check multiples of 5 around the target (since division starts with 5)
+	// This helps find the systematic valid values that Excel shows
+	for (let i = Math.floor(minSearch / 5) * 5; i <= maxSearch; i += 5) {
+		if (i >= 3) {
+			// Ensure minimum of 3 strands
+			const isValid = validateStrandCountSimple(i, awg, maxStrands);
+			if (isValid) {
+				valid.push(i);
+			}
 		}
 	}
 
-	return valid.slice(0, 5); // Return up to 5 nearby valid counts
+	// Then check other values to fill gaps, but with a smaller range
+	const smallerRange = Math.min(25, searchRange);
+	for (
+		let i = Math.max(3, target - smallerRange);
+		i <= target + smallerRange;
+		i++
+	) {
+		if (i % 5 !== 0) {
+			// Skip multiples of 5 as we already checked them
+			const isValid = validateStrandCountSimple(i, awg, maxStrands);
+			if (isValid && !valid.includes(i)) {
+				valid.push(i);
+			}
+		}
+	}
+
+	// Sort by distance from target and return closest ones
+	valid.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
+
+	return valid.slice(0, 8); // Return up to 8 nearby valid counts (increased from 5)
 }
 
 /**
@@ -636,7 +698,8 @@ function validateStrandCountSimple(
 		}
 	}
 
-	return currentCount <= maxStrands;
+	// CRITICAL FIX: Enforce both maximum and minimum requirements
+	return currentCount <= maxStrands && currentCount >= 3;
 }
 
 /**
@@ -1558,6 +1621,86 @@ export function checkManufacturingCapability(
 }
 
 /**
+ * Calculate number of operations using Excel's hierarchical method
+ * Based on Excel formula: IF(B30="N/A",IF(B26="N/A",IF(B22="N/A",IF(B18="N/A",1,2),3),4),5)
+ */
+function calculateOperationsExcelWay(
+	strandCount: number,
+	wireAWG: number,
+): number {
+	const maxStrands = getMaxStrandsForAWG(wireAWG);
+	let currentCount = strandCount;
+	let level = 1;
+
+	// Level 1: Total strands (Row 14) - always exists
+	if (currentCount <= maxStrands) {
+		return 1; // Only one level needed
+	}
+
+	// Level 2: 2nd to last operation (Row 18)
+	level = 2;
+	if (currentCount % 5 === 0) {
+		currentCount = currentCount / 5;
+	} else if (currentCount % 3 === 0) {
+		currentCount = currentCount / 3;
+	} else if (currentCount % 4 === 0) {
+		currentCount = currentCount / 4;
+	} else {
+		return 1; // Cannot divide, stay at level 1
+	}
+
+	if (currentCount <= maxStrands) {
+		return 2; // Level 2 is final
+	}
+
+	// Level 3: 3rd to last operation (Row 22)
+	level = 3;
+	if (currentCount % 5 === 0) {
+		currentCount = currentCount / 5;
+	} else if (currentCount % 3 === 0) {
+		currentCount = currentCount / 3;
+	} else if (currentCount % 4 === 0) {
+		currentCount = currentCount / 4;
+	} else {
+		return 2; // Cannot divide, stay at level 2
+	}
+
+	if (currentCount <= maxStrands) {
+		return 3; // Level 3 is final
+	}
+
+	// Level 4: 4th to last operation (Row 26)
+	level = 4;
+	if (currentCount % 5 === 0) {
+		currentCount = currentCount / 5;
+	} else if (currentCount % 3 === 0) {
+		currentCount = currentCount / 3;
+	} else if (currentCount % 4 === 0) {
+		currentCount = currentCount / 4;
+	} else {
+		return 3; // Cannot divide, stay at level 3
+	}
+
+	if (currentCount <= maxStrands) {
+		return 4; // Level 4 is final
+	}
+
+	// Level 5: 5th to last operation (Row 30)
+	level = 5;
+	if (currentCount % 5 === 0) {
+		currentCount = currentCount / 5;
+	} else if (currentCount % 3 === 0) {
+		currentCount = currentCount / 3;
+	} else if (currentCount % 4 === 0) {
+		currentCount = currentCount / 4;
+	} else {
+		return 4; // Cannot divide, stay at level 4
+	}
+
+	return 5; // Reached maximum level
+}
+
+/**
  * Main function to calculate complete Litz construction
  */
 export function calculateLitzConstruction(
@@ -1585,9 +1728,8 @@ export function calculateLitzConstruction(
 		};
 	}
 
-	// Excel logic: number of operations = number of division steps
-	// breakdown array contains [originalCount, ...divisors], so operations = length - 1
-	const numberOfOperations = Math.max(1, validation.breakdown.length - 1);
+	// FIXED: Use Excel's hierarchical method instead of simple division count
+	const numberOfOperations = calculateOperationsExcelWay(totalStrands, wireAWG);
 
 	// Calculate packing factor (pass wireAWG for special-case logic)
 	const packingFactor = calculatePackingFactor(

@@ -613,45 +613,57 @@ export function LitzDesignToolV2() {
 													? "Valid Strand Count"
 													: "Invalid Strand Count"}
 											</div>
-											<div className="text-sm text-muted-foreground mb-2">
-												{validation.message.charAt(0).toUpperCase() +
-													validation.message.slice(1)}
-											</div>
-											{validation.breakdown.length > 1 && (
-												<div className="mt-2 flex items-center gap-2">
-													<span className="text-xs text-muted-foreground">
-														Breakdown:
-													</span>
-													<Badge
-														variant="secondary"
-														className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
-													>
-														{validation.breakdown.join(" → ")}
-													</Badge>
+
+											{validation.isValid ? (
+												<div className="space-y-2">
+													{/* Construction breakdown with explanation - no need to repeat "valid" */}
+													{validation.breakdown.length > 1 && (
+														<div className="text-sm text-muted-foreground space-y-1">
+															<div>
+																<span className="font-medium">
+																	Breakdown process:
+																</span>{" "}
+																{validation.breakdown.join(" → ")} strands
+															</div>
+															<div className="text-sm">
+																Each step represents a manufacturing level where
+																strands are divided by 5, 3, or 4 until reaching
+																the final bundle size.
+															</div>
+														</div>
+													)}
+												</div>
+											) : (
+												<div className="text-sm text-muted-foreground mb-2">
+													{validation.message.charAt(0).toUpperCase() +
+														validation.message.slice(1)}
 												</div>
 											)}
+
 											{validation.nearbyValid.length > 0 && (
-												<div className="mt-2 flex items-center gap-2 flex-wrap">
-													<span className="text-xs text-muted-foreground">
-														Nearby valid counts:
-													</span>
-													{validation.nearbyValid.map((count) => (
-														<button
-															key={count}
-															type="button"
-															className="focus:outline-none"
-															onClick={() =>
-																form.setValue("numberOfStrands", count)
-															}
-														>
-															<Badge
-																variant="secondary"
-																className="cursor-pointer hover:bg-primary/10 transition text-xs text-foreground"
+												<div className="mt-3 pt-2 border-t border-border/50">
+													<div className="text-xs font-medium text-muted-foreground mb-2">
+														Try these alternatives:
+													</div>
+													<div className="flex items-center gap-2 flex-wrap">
+														{validation.nearbyValid.slice(0, 5).map((count) => (
+															<button
+																key={count}
+																type="button"
+																className="focus:outline-none"
+																onClick={() =>
+																	form.setValue("numberOfStrands", count)
+																}
 															>
-																{count}
-															</Badge>
-														</button>
-													))}
+																<Badge
+																	variant="secondary"
+																	className="cursor-pointer hover:bg-primary/10 hover:border-primary/20 transition text-xs text-foreground"
+																>
+																	{count}
+																</Badge>
+															</button>
+														))}
+													</div>
 												</div>
 											)}
 										</AlertDescription>
@@ -762,17 +774,17 @@ export function LitzDesignToolV2() {
 													</ul>
 												</>
 											) : showType1OpsWarning ? (
-												<div className="text-sm text-muted-foreground font-normal mb-2">
+												<div className="text-sm text-muted-foreground font-normal">
 													Please consult Rubadue Engineering for Type 1 Litz
 													constructions requiring 4+ operations.
 												</div>
 											) : formData.wireAWG > 49 ? (
-												<div className="text-sm text-muted-foreground font-normal mb-2">
+												<div className="text-sm text-muted-foreground font-normal">
 													For strand sizes smaller than 48 AWG, please consult
 													Rubadue Engineering to confirm final construction.
 												</div>
 											) : (
-												<div className="text-sm text-muted-foreground font-normal mb-2">
+												<div className="text-sm text-muted-foreground font-normal">
 													For large strand counts (more than 8) with heavy-gauge
 													wire (AWG less than 23), special construction may be
 													required. Please consult Rubadue Engineering to
