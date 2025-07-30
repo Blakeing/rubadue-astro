@@ -1,0 +1,187 @@
+---
+import { Image } from "astro:assets";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Separator,
+} from "@/components/ui";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  Target,
+  Users,
+  Shield,
+  Factory,
+  CheckCircle,
+  Zap,
+  Settings,
+  Globe,
+  Award,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
+
+const challengeSolutions = [
+  "Solve your size, resistance, partial discharge, and extreme environmental challenges",
+];
+
+const partnershipFeatures = ["Gain a partner for the full product lifecycle"];
+
+const qualityFeatures = [
+  "Join the global Fortune 100 companies and Tier 1 OEMs that trust Rubadue",
+];
+
+const manufacturingFeatures = [
+  "Achieve shorter lead times, better traceability, and peace of mind",
+];
+
+const mainFeatures = [
+  {
+    title: "Design",
+    description:
+      "We start with your specifications and help design teams manage difficult wire and cable specs, from rudimentary to incredibly complicated.",
+    icon: "target",
+    features: challengeSolutions,
+  },
+  {
+    title: "Manufacturing",
+    description:
+      "Rubadue products are manufactured using premium materials from vetted suppliers with global reach and international customer service.",
+    icon: "factory",
+    features: manufacturingFeatures,
+  },
+  {
+    title: "Quality Assurance",
+    description:
+      "With high-quality fluoropolymer and customer-specified insulations, our wire is built to meet demanding standards over time.",
+    icon: "shield",
+    features: qualityFeatures,
+  },
+  {
+    title: "Partnership",
+    description:
+      "We don't just ship products, we come alongside your team as a partner from concept to scale. And if we're not the right solution, we'll make sure to point you in the right direction.",
+    icon: "users",
+    features: partnershipFeatures,
+  },
+];
+---
+
+<BaseLayout
+  title="Why Rubadue Wire | Built for Performance, Backed by Partnership"
+  description="Rubadue wire powers the products that push today's technology forward. When engineers face complex wire and cable challenges, they turn to Rubadue for support that goes beyond the spool."
+  category="Why Rubadue"
+  eyebrow="About"
+  headerTitle="Why Rubadue?"
+  headerDescription="Rubadue wire powers the products that push today's technology forward."
+>
+  <div class="py-8 sm:py-12 md:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Description Section */}
+
+      {/* Built for Performance Section */}
+
+      <div class="mx-auto max-w-4xl lg:mx-0 mb-12">
+        <h2
+          class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+        >
+          Built for Performance. Backed by Partnership.
+        </h2>
+        <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
+          Rubadue powers the products that push today's technology forward.
+        </p>
+        <p class="mt-4 text-base text-muted-foreground max-w-4xl">
+          When engineers face complex wire and cable challenges, they turn to
+          Rubadue for support that goes beyond the spool. From initial design to
+          manufacturing at scale, we bring technical design expertise, trusted
+          manufacturing, high quality, and responsive partnership - so you can
+          deliver with confidence.
+        </p>
+      </div>
+
+      {/* Main Features Section */}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {
+          mainFeatures.map((feature, index) => (
+            <Card className="p-6 sm:p-8">
+              <div class="mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    {feature.icon === "target" && (
+                      <Target className="w-6 h-6 text-primary" />
+                    )}
+                    {feature.icon === "users" && (
+                      <Users className="w-6 h-6 text-primary" />
+                    )}
+                    {feature.icon === "shield" && (
+                      <Shield className="w-6 h-6 text-primary" />
+                    )}
+                    {feature.icon === "factory" && (
+                      <Factory className="w-6 h-6 text-primary" />
+                    )}
+                  </div>
+                  <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+                    {feature.title}
+                  </h2>
+                </div>
+                <p class="text-base text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                {feature.features.map((item, itemIndex) => (
+                  <div class="flex items-start gap-3">
+                    <CheckCircle className="size-5 text-primary flex-shrink-0 mt-0.5" />
+                    <span class="text-sm text-foreground leading-relaxed">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+
+      {/* Call to Action Section */}
+      <div class="mt-16">
+        <Card className="p-4 sm:p-12">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-base/7 font-semibold text-primary font-display">
+              Ready to Get Started?
+            </h2>
+            <p
+              class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
+            >
+              Let's Solve Your Wire Challenge Together
+            </p>
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+            >
+              Contact our team to discuss your specific requirements and
+              discover how Rubadue can support your project.
+            </p>
+            <div
+              class="mt-6 sm:mt-10 flex justify-center flex-col sm:flex-row gap-4"
+            >
+              <a
+                href="/request-a-quote"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+              >
+                Request a Quote
+              </a>
+              <a
+                href="/contact"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

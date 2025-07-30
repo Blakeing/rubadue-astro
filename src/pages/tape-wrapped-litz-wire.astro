@@ -1,0 +1,329 @@
+---
+import { Image } from "astro:assets";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Separator from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import {
+  Thermometer,
+  Shield,
+  Zap,
+  Award,
+  Factory,
+  ChevronRight,
+  CheckCircle,
+  Settings,
+  Target,
+  Users,
+  Gauge,
+} from "lucide-react";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const keyFeatures = [
+  {
+    title: "Wire Size Range",
+    description: "16 AWG – 3 AWG",
+    icon: "gauge",
+    detail: "Comprehensive size range for diverse applications",
+  },
+  {
+    title: "Temperature Ratings",
+    description: "155°C (Class F) PET • 180°C (Class H) PI",
+    icon: "thermometer",
+    detail: "Engineered for demanding thermal environments",
+  },
+  {
+    title: "Insulation Options",
+    description: "Adhesive-backed PET • Heat-sealed Polyimide",
+    icon: "shield",
+    detail: "Multiple insulation methods for optimal performance",
+  },
+  {
+    title: "UL Recognized",
+    description: "OBMW2 Components",
+    icon: "award",
+    detail: "Meets stringent industry standards for safety and reliability",
+  },
+  {
+    title: "Higher Temperature Options",
+    description: "PEN • Nomex® • Glass Wraps",
+    icon: "thermometer",
+    detail:
+      "Additional insulation materials for extreme temperature applications",
+  },
+  {
+    title: "Made in USA",
+    description: "Short lead times & low MOQs",
+    icon: "factory",
+    detail: "Domestic manufacturing with responsive service",
+  },
+];
+
+const applications = [
+  "EV Charging & e-Mobility",
+  "Aerospace & Defense",
+  "Medical Imaging & Diagnostics",
+  "Industrial Power Supplies",
+  "High-Frequency Transformers",
+];
+
+const benefits = [
+  {
+    title: "High-Frequency Performance",
+    description:
+      "Optimized for demanding power electronics applications with superior signal integrity",
+    icon: "zap",
+  },
+  {
+    title: "Thermal Endurance",
+    description:
+      "Engineered to withstand extreme temperatures while maintaining electrical performance",
+    icon: "thermometer",
+  },
+  {
+    title: "Dielectric Strength",
+    description:
+      "Superior insulation properties for high-voltage applications and safety compliance",
+    icon: "shield",
+  },
+  {
+    title: "Environmental Compliance",
+    description:
+      "Meets stringent industry standards for reliability in harsh operating conditions",
+    icon: "award",
+  },
+];
+---
+
+<BaseLayout
+  title="Tape-Wrapped Litz Wire | Rubadue Wire"
+  description="Rubadue's Tape-Wrapped Litz Wire combines flexible insulation with high-frequency performance for demanding power electronics applications. Available in multiple temperature ratings and insulation options."
+  headerTitle="Tape-Wrapped Litz Wire"
+  headerDescription="Flexible Insulation Meets High-Frequency Performance"
+  eyebrow="Product Solutions"
+>
+  <div class="py-8 sm:py-12 md:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- Hero Section -->
+      <div class="mb-12">
+        <div class="mx-auto lg:mx-0">
+          <h1
+            class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-6"
+          >
+            Flexible Insulation Meets High-Frequency Performance
+          </h1>
+          <p class="text-base sm:text-lg/8 text-muted-foreground">
+            Rubadue's Tape-Wrapped Litz Wire — Tailored for Power Electronics in
+            Demanding Environments
+          </p>
+        </div>
+
+        <!-- Product Overview Section -->
+        <div class="py-8">
+          <div
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+            >
+            </div>
+            <div class="p-6 sm:p-8">
+              <h2
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight mb-6"
+              >
+                <Target className="w-6 h-6 text-primary" />
+                Product Overview
+              </h2>
+              <p class="text-lg text-muted-foreground">
+                Rubadue now offers tape-wrap insulated Litz wire designed to
+                meet the needs of high-frequency, high-reliability power
+                applications. Engineered with precision, these wires provide a
+                combination of thermal endurance, dielectric strength, and
+                environmental compliance.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Features Section -->
+        <div class="mb-12 sm:mb-16">
+          <div class="mx-auto max-w-2xl lg:mx-0 mb-10 sm:mb-16">
+            <p class="text-base/7 font-semibold text-primary font-display mb-2">
+              Key Features
+            </p>
+            <h2
+              class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+            >
+              Engineered for Excellence
+            </h2>
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+            >
+              Designed to deliver exceptional performance in the most demanding
+              applications.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {
+              keyFeatures.map((feature) => (
+                <div class="flex gap-4">
+                  <div class="flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      {feature.icon === "gauge" && (
+                        <Gauge className="w-6 h-6 text-primary" />
+                      )}
+                      {feature.icon === "thermometer" && (
+                        <Thermometer className="w-6 h-6 text-primary" />
+                      )}
+                      {feature.icon === "shield" && (
+                        <Shield className="w-6 h-6 text-primary" />
+                      )}
+                      {feature.icon === "factory" && (
+                        <Factory className="w-6 h-6 text-primary" />
+                      )}
+                      {feature.icon === "award" && (
+                        <Award className="w-6 h-6 text-primary" />
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-foreground mb-2">
+                      {feature.title}
+                    </h3>
+                    <p class="text-sm text-muted-foreground mb-3 font-medium">
+                      {feature.description}
+                    </p>
+                    <p class="text-sm text-muted-foreground">
+                      {feature.detail}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <hr class="my-12 border-t border-primary/10" />
+
+        <!-- Performance Benefits Section -->
+        <div class="mb-12 sm:mb-16">
+          <div class="mx-auto max-w-3xl lg:mx-0 mb-10 sm:mb-16">
+            <h2
+              class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+            >
+              Performance Benefits
+            </h2>
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+            >
+              Our tape-wrapped Litz wire delivers superior performance across
+              critical parameters.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {
+              benefits.map((benefit) => (
+                <div class="flex gap-4">
+                  <div class="flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      {benefit.icon === "zap" && (
+                        <Zap className="w-6 h-6 text-primary" />
+                      )}
+                      {benefit.icon === "thermometer" && (
+                        <Thermometer className="w-6 h-6 text-primary" />
+                      )}
+                      {benefit.icon === "shield" && (
+                        <Shield className="w-6 h-6 text-primary" />
+                      )}
+                      {benefit.icon === "award" && (
+                        <Award className="w-6 h-6 text-primary" />
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-foreground mb-2">
+                      {benefit.title}
+                    </h3>
+                    <p class="text-sm text-muted-foreground">
+                      {benefit.description}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <hr class="my-12 border-t border-primary/10" />
+
+        <!-- Applications Section -->
+        <div class="mb-12 sm:mb-16">
+          <div class="mx-auto max-w-2xl lg:mx-0 mb-10 sm:mb-16">
+            <h2
+              class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+            >
+              Applications
+            </h2>
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+            >
+              Trusted across industries for critical high-frequency
+              applications.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {
+              applications.map((application) => (
+                <div class="flex items-center gap-3 p-4 bg-card rounded-lg border border-border/40 shadow-sm">
+                  <CheckCircle className="size-5 text-primary flex-shrink-0" />
+                  <span class="text-foreground font-medium">{application}</span>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="mx-auto max-w-7xl">
+          <Card className="p-4 sm:p-12">
+            <div class="mx-auto max-w-2xl text-center">
+              <h2 class="text-base/7 font-semibold text-primary font-display">
+                Ready to Get Started?
+              </h2>
+              <p
+                class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
+              >
+                Discuss Your Application or Request a Sample
+              </p>
+              <p
+                class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
+              >
+                Contact our team to learn more about how tape-wrapped Litz wire
+                can benefit your project.
+              </p>
+              <div
+                class="mt-6 sm:mt-10 flex justify-center flex-col sm:flex-row gap-4"
+              >
+                <a
+                  href="/request-a-quote"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                >
+                  Request a Quote or Sample
+                </a>
+                <a
+                  href="/contact"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                >
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
