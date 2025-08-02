@@ -9,7 +9,7 @@ const { pathname } = Astro.props;
 
 // Page name mapping for better breadcrumb display
 const pageNameMap: Record<string, string> = {
-  about: "About Us",
+  about: "About",
   markets: "Markets",
   careers: "Careers",
   contact: "Contact Us",
@@ -22,6 +22,7 @@ const pageNameMap: Record<string, string> = {
   partnerships: "Partnerships",
   "n1-max-calculator": "N1 Max Calculator",
   "thank-you": "Thank You",
+  "tape-wrapped-litz-wire": "Tape-Wrapped Litz Wire",
 };
 
 // Build breadcrumb segments based on current URL path
@@ -37,6 +38,12 @@ const segments = pathname
         .split("-")
         .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
+
+    // Make "About" non-clickable since it's now a dropdown
+    if (segment === "about") {
+      return { name, href: "" };
+    }
+
     return { name, href };
   });
 

@@ -465,11 +465,11 @@ export function calculateRequiredWallThickness(
 			return Math.max(0.0015, inputWallThickness);
 		}
 		if (insulationType === "FEP") {
-			if (copperAreaCMA < 12405 && inputWallThickness < 0.002) {
+			if (copperAreaCMA < 12828 && inputWallThickness < 0.002) {
 				return 0.002;
 			}
 			if (
-				copperAreaCMA >= 12405 &&
+				copperAreaCMA >= 12828 &&
 				copperAreaCMA < 24978 &&
 				inputWallThickness < 0.005
 			) {
@@ -491,7 +491,7 @@ export function calculateRequiredWallThickness(
 			return Math.max(0.0015, inputWallThickness);
 		}
 		if (insulationType === "FEP") {
-			if (copperAreaCMA < 12405 && inputWallThickness < 0.002) {
+			if (copperAreaCMA < 12828 && inputWallThickness < 0.002) {
 				return 0.002;
 			}
 			if (inputWallThickness < 0.004) {
@@ -998,13 +998,14 @@ export function calculateInsulatedLitzDiameters(
 	let maxDiameter: number;
 
 	if (layers === 3) {
-		// Excel logic for triple insulation - uses triple film nominal OD for delta (C54)
+		// Excel logic for triple insulation - uses single film nominal OD for delta (C54)
+		// Triple-insulated wires still use single-build enameled wires
 		const tripleFilmForDelta = calculateBareLitzDiameters(
 			strandCount ?? 1,
 			wireAWG,
 			1.155, // Use standard packing factor for delta determination
 			magnetWireGrade,
-			"Triple",
+			"Single",
 		);
 		const tripleFilmNom = new Decimal(tripleFilmForDelta.nom);
 		const delta = tripleFilmNom.gt(0.1) ? 0.002 : 0.001;
@@ -1132,7 +1133,7 @@ const SINGLE_TRIPLE_WALL_RULES: WallThicknessRule[] = [
 	},
 	{
 		insulationType: "FEP",
-		copperAreaMin: 12405,
+		copperAreaMin: 12828,
 		copperAreaMax: 24977,
 		minWallThickness: 0.01,
 		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
@@ -1205,7 +1206,7 @@ const WALL_THICKNESS_RULES: Record<1 | 2 | 3, WallThicknessRule[]> = {
 		},
 		{
 			insulationType: "FEP",
-			copperAreaMin: 12405,
+			copperAreaMin: 12828,
 			copperAreaMax: 24977,
 			minWallThickness: 0.005,
 			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
@@ -1343,8 +1344,8 @@ function checkTripleInsulationULApproval(
 		return warnings;
 	}
 
-	// 2. FEP with copper area < 12405 and wall thickness < 0.002
-	if (insulationType === "FEP" && copperArea < 12405 && wallThickness < 0.002) {
+	// 2. FEP with copper area < 12828 and wall thickness < 0.002
+	if (insulationType === "FEP" && copperArea < 12828 && wallThickness < 0.002) {
 		warnings.push(
 			"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",
 		);
@@ -1368,7 +1369,7 @@ function checkTripleInsulationULApproval(
 			wallThickness < 0.0015,
 		insulationType === "ETFE" &&
 			copperArea > 4899 &&
-			copperArea < 12405 &&
+			copperArea < 12828 &&
 			wallThickness < 0.002,
 		(insulationType === "PFA" || insulationType === "ETFE") &&
 			copperArea > 12404,
@@ -1413,7 +1414,7 @@ function checkDoubleInsulationULApproval(
 			wallThickness < 0.0015,
 		insulationType === "ETFE" &&
 			copperArea > 2885 &&
-			copperArea < 12405 &&
+			copperArea < 12828 &&
 			wallThickness < 0.003,
 	];
 
@@ -1424,8 +1425,8 @@ function checkDoubleInsulationULApproval(
 		return warnings;
 	}
 
-	// 3. ETFE with copper area > 12404
-	if (insulationType === "ETFE" && copperArea > 12404) {
+	// 3. ETFE with copper area > 12827
+	if (insulationType === "ETFE" && copperArea > 12827) {
 		warnings.push(
 			"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",
 		);
@@ -1442,9 +1443,9 @@ function checkDoubleInsulationULApproval(
 
 	// 5. FEP wall thickness conditions
 	const fepConditions = [
-		insulationType === "FEP" && copperArea < 12405 && wallThickness < 0.002,
+		insulationType === "FEP" && copperArea < 12828 && wallThickness < 0.002,
 		insulationType === "FEP" &&
-			copperArea > 12404 &&
+			copperArea > 12827 &&
 			copperArea < 24978 &&
 			wallThickness < 0.005,
 		insulationType === "FEP" &&
@@ -1486,10 +1487,10 @@ function checkSingleInsulationULApproval(
 		insulationType === "FEP" && copperArea < 1939 && wallThickness < 0.002,
 		insulationType === "FEP" &&
 			copperArea > 1938 &&
-			copperArea < 12405 &&
+			copperArea < 12828 &&
 			wallThickness < 0.003,
 		insulationType === "FEP" &&
-			copperArea > 12404 &&
+			copperArea > 12827 &&
 			copperArea < 24978 &&
 			wallThickness < 0.01,
 		insulationType === "FEP" &&

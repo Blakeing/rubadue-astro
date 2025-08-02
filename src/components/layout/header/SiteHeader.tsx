@@ -17,16 +17,28 @@ import {
 	navigationMenuTriggerStyle,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { Book, Cable, Menu, Settings, Shield, Wrench } from "lucide-react";
+import {
+	Book,
+	Cable,
+	Menu,
+	Settings,
+	Shield,
+	Wrench,
+	Target,
+} from "lucide-react";
 import * as React from "react";
 
 const mainNavigation = [
 	{ name: "Catalog", href: "/catalog" },
-	{ name: "About", href: "/about" },
 	{ name: "Markets", href: "/markets" },
 	{ name: "Distributors", href: "/distributors" },
 	{ name: "Custom Solutions", href: "/custom-solutions" },
 	{ name: "Careers", href: "/careers" },
+];
+
+const aboutPages = [
+	{ name: "Our Story", href: "/about/our-story", icon: Book },
+	{ name: "Why Rubadue", href: "/about/why-rubadue", icon: Target },
 ];
 
 const resources = [
@@ -90,6 +102,28 @@ export function Header() {
 
 								<NavigationMenuItem>
 									<NavigationMenuTrigger className="font-semibold tracking-wide">
+										About
+									</NavigationMenuTrigger>
+									<NavigationMenuContent>
+										<div className="min-w-60 p-6">
+											<div className="space-y-2">
+												{aboutPages.map((item) => (
+													<a
+														key={item.name}
+														href={item.href}
+														className="flex items-center gap-x-2 text-sm font-semibold text-foreground hover:text-accent-foreground"
+													>
+														<item.icon className="h-5 w-5 flex-none text-muted-foreground" />
+														<span>{item.name}</span>
+													</a>
+												))}
+											</div>
+										</div>
+									</NavigationMenuContent>
+								</NavigationMenuItem>
+
+								<NavigationMenuItem>
+									<NavigationMenuTrigger className="font-semibold tracking-wide">
 										Resources
 									</NavigationMenuTrigger>
 									<NavigationMenuContent>
@@ -149,6 +183,23 @@ export function Header() {
 														</a>
 													</SheetClose>
 												))}
+											</div>
+											<div className="p-4">
+												<h3 className="pl-2 text-xs font-medium text-muted-foreground mb-1">
+													About
+												</h3>
+												<div className="space-y-0.5">
+													{aboutPages.map((item) => (
+														<SheetClose asChild key={item.name}>
+															<a
+																href={item.href}
+																className="flex items-center rounded-lg px-2 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+															>
+																<span>{item.name}</span>
+															</a>
+														</SheetClose>
+													))}
+												</div>
 											</div>
 											<div className="p-4">
 												<h3 className="pl-2 text-xs font-medium text-muted-foreground mb-1">

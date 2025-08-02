@@ -23,80 +23,98 @@ import {
 } from "lucide-react";
 
 const challengeSolutions = [
-  "Solve your size, resistance, partial discharge, and extreme environmental challenges",
+  "Known for solving size, resistance, partial discharge, and extreme environment challenges",
+  "Agile, collaborative in our approach to support early-stage design",
+  "Experts in custom wire with tight tolerances tailored to customer specifications",
+  "Equipped to manage both short-term projects and product life cycles",
+  "Capable of seeing when we're not the right solution, and being sure to point you in the right direction",
 ];
 
-const partnershipFeatures = ["Gain a partner for the full product lifecycle"];
+const partnershipFeatures = [
+  "Thorough collaboration during prototyping and testing",
+  "Design and development guidance to speed time to market",
+  "Scalable production support as you grow",
+  "An engagement approach that is adaptable to fit your design, development, or qualification process",
+];
 
 const qualityFeatures = [
-  "Join the global Fortune 100 companies and Tier 1 OEMs that trust Rubadue",
+  "Application-specific solutions engineered for thermal, voltage, and mechanical performance",
+  "Quality assurance at every stage of production",
+  "A reputation built on long-term reliability across industries",
+  "Support for global Fortune 100 and 500 OEM's with enterprise-level reliability",
 ];
 
 const manufacturingFeatures = [
-  "Achieve shorter lead times, better traceability, and peace of mind",
+  "Domestic manufacturing for tighter quality control and faster turnaround",
+  "Global reach with international customer service and rep coverage",
+  "Optimized operations to minimize supply chain disruption",
+  "Top quality materials sourced from trusted partners",
 ];
 
 const mainFeatures = [
   {
-    title: "Design",
+    title: "Your Challenge is Our Starting Point",
     description:
-      "We start with your specifications and help design teams manage difficult wire and cable specs, from rudimentary to incredibly complicated.",
+      "Every great solution starts with a specific engineering problem. We help design teams manage difficult wire and cable specs, from rudimentary to incredibly complicated.",
     icon: "target",
     features: challengeSolutions,
   },
   {
-    title: "Manufacturing",
+    title: "A Partner Through the Full Lifecycle",
     description:
-      "Rubadue products are manufactured using premium materials from vetted suppliers with global reach and international customer service.",
-    icon: "factory",
-    features: manufacturingFeatures,
+      "We don't just ship products, we show up as your partner from concept to scale. When reliability and responsiveness matter, your project is always a priority.",
+    icon: "users",
+    features: partnershipFeatures,
   },
   {
-    title: "Quality Assurance",
+    title: "Proven Quality You Can Count On",
     description:
-      "With high-quality fluoropolymer and customer-specified insulations, our wire is built to meet demanding standards over time.",
+      "With high-quality fluoropolymer and customer-specified insulations, our wire is built to meet demanding standards over time. Our customers return for decades, and we've earned our spot as a trusted supplier for the world's most exacting OEMs.",
     icon: "shield",
     features: qualityFeatures,
   },
   {
-    title: "Partnership",
+    title: "Trusted Manufacturing with a Controlled Supply Chain",
     description:
-      "We don't just ship products, we come alongside your team as a partner from concept to scale. And if we're not the right solution, we'll make sure to point you in the right direction.",
-    icon: "users",
-    features: partnershipFeatures,
+      "Rubadue products are manufactured using premium materials from vetted suppliers, giving you shorter lead times, better traceability, and peace of mind.",
+    icon: "factory",
+    features: manufacturingFeatures,
   },
 ];
 ---
 
 <BaseLayout
   title="Why Rubadue Wire | Built for Performance, Backed by Partnership"
-  description="Rubadue wire powers the products that push today's technology forward. When engineers face complex wire and cable challenges, they turn to Rubadue for support that goes beyond the spool."
+  description="Rubadue wire powers the products that push today's technology forward. When engineers face complex wire and cable challenges, they turn to Rubadue for support. From initial design to scaled production, we bring technical depth, trusted manufacturing, and responsive partnership – so you can deliver with confidence."
   category="Why Rubadue"
   eyebrow="About"
   headerTitle="Why Rubadue?"
-  headerDescription="Rubadue wire powers the products that push today's technology forward."
+  headerDescription="Built for Performance. Backed by Partnership."
 >
   <div class="py-8 sm:py-12 md:py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      {/* Description Section */}
-
-      {/* Built for Performance Section */}
-
-      <div class="mx-auto max-w-4xl lg:mx-0 mb-12">
+      {/* Main Headline Section */}
+      <div class="mx-auto lg:mx-0">
         <h2
           class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
         >
           Built for Performance. Backed by Partnership.
         </h2>
         <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
-          Rubadue powers the products that push today's technology forward.
-        </p>
-        <p class="mt-4 text-base text-muted-foreground max-w-4xl">
+          Rubadue wire powers the products that push today's technology forward.
           When engineers face complex wire and cable challenges, they turn to
-          Rubadue for support that goes beyond the spool. From initial design to
-          manufacturing at scale, we bring technical design expertise, trusted
-          manufacturing, high quality, and responsive partnership - so you can
-          deliver with confidence.
+          Rubadue for support. From initial design to scaled production, we
+          bring technical depth, trusted manufacturing, and responsive
+          partnership – so you can deliver with confidence.
+        </p>
+      </div>
+
+      {/* Resources CTA Section */}
+      <div class="mb-12">
+        <Separator className="my-6" />
+        <p class="text-base text-muted-foreground mb-4">
+          Check out our Resources section for helpful engineering tools,
+          technical articles, and more.
         </p>
       </div>
 

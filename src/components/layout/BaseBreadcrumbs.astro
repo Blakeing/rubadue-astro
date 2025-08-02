@@ -55,7 +55,7 @@ const { segments, className = "" } = Astro.props;
                 </svg>
                 <span class="sr-only">Home</span>
               </a>
-            ) : (
+            ) : segment.href ? (
               <a
                 href={segment.href}
                 class={`${index > 0 ? "ml-2 sm:ml-4" : ""} text-xs sm:text-sm font-medium truncate ${
@@ -69,6 +69,12 @@ const { segments, className = "" } = Astro.props;
               >
                 {segment.name}
               </a>
+            ) : (
+              <span
+                class={`${index > 0 ? "ml-2 sm:ml-4" : ""} text-xs sm:text-sm font-medium truncate text-muted-foreground`}
+              >
+                {segment.name}
+              </span>
             )}
           </div>
         </li>

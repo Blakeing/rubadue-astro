@@ -232,12 +232,12 @@ describe("Litz Wire Calculations", () => {
 			expect(calculateRequiredWallThickness("FEP", 1000, 0.003, 1)).toBe(0.003);
 		});
 
-		it("FEP: 1939 <= copper area < 12405, min wall 0.003", () => {
+		it("FEP: 1939 <= copper area < 12828, min wall 0.003", () => {
 			expect(calculateRequiredWallThickness("FEP", 5000, 0.002, 1)).toBe(0.003);
 			expect(calculateRequiredWallThickness("FEP", 5000, 0.004, 1)).toBe(0.004);
 		});
 
-		it("FEP: 12405 <= copper area < 24978, min wall 0.01", () => {
+		it("FEP: 12828 <= copper area < 24978, min wall 0.01", () => {
 			expect(calculateRequiredWallThickness("FEP", 20000, 0.005, 1)).toBe(0.01);
 			expect(calculateRequiredWallThickness("FEP", 20000, 0.02, 1)).toBe(0.02);
 		});
@@ -301,10 +301,11 @@ describe("Litz Wire Calculations", () => {
 				1.155, // Standard packing factor
 			);
 
-			// Expected Excel values: Min: 0.097, Nom: 0.103, Max: 0.109
-			expect(result.min).toBeCloseTo(0.097, 3);
+			// Expected values using single film data (updated logic)
+			// These values are now calculated using single film thickness instead of triple film
+			expect(result.min).toBeCloseTo(0.098, 3);
 			expect(result.nom).toBeCloseTo(0.103, 3);
-			expect(result.max).toBeCloseTo(0.109, 3);
+			expect(result.max).toBeCloseTo(0.108, 3);
 			expect(result.wallThicknessInches).toBeCloseTo(0.002, 3);
 		});
 

@@ -1,0 +1,252 @@
+---
+import { Image } from "astro:assets";
+import Timeline from "@/components/pages/company/Timeline";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Separator,
+} from "@/components/ui";
+import type { IconName } from "@/components/ui/icons";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { ImageMetadata } from "astro";
+import { Eye, Target } from "lucide-react";
+import dougIngenthronImage from "../../assets/images/team/doug-ingenthron.webp";
+import kyleJensenImage from "../../assets/images/team/kyle-jensen.webp";
+import mikeSkorupaImage from "../../assets/images/team/mike-skorupa.webp";
+import shawnTolandImage from "../../assets/images/team/shawn-toland.webp";
+
+interface Person {
+  name: string;
+  role: string;
+  image: ImageMetadata;
+  xUrl: string;
+  linkedinUrl: string;
+}
+
+const people: Person[] = [
+  {
+    name: "Shawn Toland",
+    role: "President",
+    image: shawnTolandImage,
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+  {
+    name: "Mike Skorupa",
+    role: "Director of Operations",
+    image: mikeSkorupaImage,
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+  {
+    name: "Doug Ingenthron",
+    role: "Director of Sales",
+    image: dougIngenthronImage,
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+  {
+    name: "Kyle Jensen",
+    role: "Director of Business Development",
+    image: kyleJensenImage,
+    xUrl: "#",
+    linkedinUrl: "https://www.linkedin.com/company/rubadue-wire/",
+  },
+];
+
+const missionIcon: IconName = "target";
+const visionIcon: IconName = "eye";
+
+const timelineEvents = [
+  {
+    year: "1977",
+    description:
+      "Rubadue Wire Company was founded by Edwin Rubadue in Loveland, Colorado.",
+    icon: "building" as IconName,
+  },
+  {
+    year: "1977-1995",
+    description: "First to market extruded triple insulated wire.",
+    icon: "award" as IconName,
+  },
+  {
+    year: "1995",
+    description: "Moved to Greeley, Colorado to accommodate growth.",
+    icon: "move" as IconName,
+  },
+  {
+    year: "2002",
+    description:
+      "Rubadue Wire won the Dupont Plunkett Award for new use of FEP.",
+    icon: "trophy" as IconName,
+  },
+  {
+    year: "2013",
+    description: "Expanded Greeley facility to meet growing demand.",
+    icon: "building2" as IconName,
+  },
+  {
+    year: "2014",
+    description: "Acquired by PHGI and converted to 100% Employee Owned.",
+    icon: "users" as IconName,
+  },
+  {
+    year: "2015",
+    description:
+      "Acquired Kerrigan-Lewis Wire Products, a specialty manufacturer of Litz Wire.",
+    icon: "merge" as IconName,
+  },
+  {
+    year: "2018",
+    description:
+      "Moved to larger facility in Loveland, Colorado to support continued growth.",
+    icon: "move" as IconName,
+  },
+  {
+    year: "2019",
+    description: "PHGI rebrands to Wire Experts Group.",
+    icon: "refresh-cw" as IconName,
+  },
+  {
+    year: "2022-2023",
+    description:
+      "Installed 5 new extrusion lines & increased respool capacity.",
+    icon: "settings" as IconName,
+  },
+  {
+    year: "2024",
+    description:
+      "Active projects to expand Litz capabilities & add new production line for customer specific project.",
+    icon: "rocket" as IconName,
+  },
+];
+
+const values = [
+  {
+    title: "Precision",
+    description:
+      "Maintaining the highest standards in manufacturing and delivering precise solutions.",
+  },
+  {
+    title: "Performance",
+    description:
+      "Delivering high-performance wire and cable solutions that meet critical requirements.",
+  },
+  {
+    title: "Partnership",
+    description:
+      "Building strong relationships with our customers through collaboration and trust.",
+  },
+  {
+    title: "Innovation",
+    description:
+      "Pioneering wire solutions with cutting-edge technology and continuous improvement.",
+  },
+  {
+    title: "Employee Ownership",
+    description:
+      "Fostering a culture of shared responsibility and commitment to excellence.",
+  },
+  {
+    title: "Quality",
+    description:
+      "Maintaining the highest standards in manufacturing and customer service.",
+  },
+];
+
+const stats = [
+  { value: "45+", label: "Years of Excellence" },
+  { value: "100%", label: "Employee Owned" },
+  { value: "Global", label: "Market Presence" },
+];
+---
+
+<BaseLayout
+  title="Our Story | Rubadue Wire"
+  description="Since 1977, Rubadue Wire has been pioneering wire solutions with cutting-edge technology, specializing in triple-insulated wire and Litz wire. As a 100% employee-owned company, we solve wire and cable challenges when high performance and reliability are critical."
+  category="About"
+  eyebrow="About"
+  headerTitle="Our Story"
+>
+  <div class="py-8 sm:py-12 md:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Description Section */}
+      <div class="mx-auto lg:mx-0">
+        <p class="text-base sm:text-lg/8">
+          We solve wire and cable challenges when high performance and
+          reliability are critical. As a 100% employee-owned company, we are
+          committed to innovation, quality, and exceptional customer service.
+        </p>
+      </div>
+
+      {/* Mission & Vision Section */}
+      <div class="mt-12 mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+            >
+            </div>
+            <div class="p-6">
+              <h3
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight mb-6"
+              >
+                <Target className="w-6 h-6 text-primary" />
+                Our Mission
+              </h3>
+              <p class="text-lg text-muted-foreground">
+                We solve wire and cable challenges when high performance and
+                reliability are critical.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40"
+            >
+            </div>
+            <div class="p-6">
+              <h3
+                class="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight mb-6"
+              >
+                <Eye className="w-6 h-6 text-primary" />
+                Our Vision
+              </h3>
+              <p class="text-lg text-muted-foreground">
+                Create the premier brand in developing and manufacturing
+                specialty wire and cable to support tomorrow's innovation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-12 border-t border-primary/10" />
+
+      {/* History Timeline Section */}
+      <div>
+        <div class="mx-auto max-w-2xl lg:mx-0 mb-10 sm:mb-16">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
+          >
+            Our History
+          </h2>
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground">
+            Since 1977, we've been pioneering innovations in wire manufacturing,
+            consistently expanding our capabilities and reach to better serve
+            our customers.
+          </p>
+        </div>
+
+        <Timeline client:visible data={timelineEvents} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
