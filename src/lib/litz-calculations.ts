@@ -1,38 +1,102 @@
 import Decimal from "decimal.js";
-// Litz Wire Calculation Utilities
-// Extracted from Excel formulas in Cover Sheet_formulas.csv and related files
 
+/**
+ * Litz Wire Calculation Engine
+ *
+ * This module implements the mathematical formulas and validation rules for Litz wire design
+ * based on Rubadue's manufacturing specifications and UL approval requirements.
+ *
+ * Key Calculation Areas:
+ * - Strand count validation and hierarchical breakdown
+ * - Copper area calculations (CMA and mm²)
+ * - Packing factors and take-up factors for different Litz types
+ * - Bare wire diameter calculations with film thickness
+ * - Insulated wire diameter calculations with wall thickness
+ * - UL approval validation for different insulation types
+ *
+ * All calculations are derived from Excel formulas in Rubadue's design tools.
+ *
+ * @fileoverview Comprehensive Litz wire calculation engine with UL validation
+ * @author Rubadue Engineering
+ * @version 1.0.0
+ */
+
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
+
+/**
+ * Complete Litz wire construction calculation result
+ */
 export interface LitzConstruction {
+	/** Total number of strands in the construction */
 	totalStrands: number;
+	/** AWG size of individual strands */
 	wireAWG: number;
+	/** Type 1 (uniform) or Type 2 (varying) Litz construction */
 	litzType: "Type 1" | "Type 2";
+	/** Number of manufacturing operations required */
 	numberOfOperations: number;
+	/** Packing factor for diameter calculations */
 	packingFactor: number;
+	/** Take-up factor for manufacturing elongation/compression */
 	takeUpFactor: number;
+	/** Total copper area in circular mils */
 	totalCopperAreaCMA: number;
+	/** Total copper area in square millimeters */
 	totalCopperAreaMM2: number;
+	/** Equivalent AWG size as string (e.g., "14 AWG") */
 	equivalentAWG: string;
+	/** Whether the construction is manufacturable */
 	isValid: boolean;
+	/** Validation message explaining manufacturability */
 	validationMessage: string;
 }
 
+/**
+ * Result of strand count validation
+ */
 export interface StrandValidationResult {
+	/** Whether the strand count is manufacturable */
 	isValid: boolean;
+	/** Hierarchical breakdown of strand counts per operation */
 	breakdown: number[];
+	/** Nearby valid strand counts for alternative suggestions */
 	nearbyValid: number[];
+	/** Human-readable validation message */
 	message: string;
 }
 
+/**
+ * Diameter calculation result with tolerances
+ */
 export interface DiameterResult {
+	/** Minimum diameter in inches */
 	min: number;
+	/** Nominal diameter in inches */
 	nom: number;
+	/** Maximum diameter in inches */
 	max: number;
+	/** Generated part number */
 	partNumber: string;
+	/** Wall thickness in inches (for insulated wire) */
 	wallThicknessInches: number | null;
+	/** Wall thickness in millimeters (for insulated wire) */
 	wallThicknessMm: number | null;
 }
 
-// AWG Reference Data (from AWG Reference_values.csv)
+// =============================================================================
+// REFERENCE DATA CONSTANTS
+// =============================================================================
+
+/**
+ * AWG Reference Data
+ *
+ * Contains diameter, circular mil area (CMA), and stranded CMA values for each AWG size.
+ * Stranded CMA accounts for the space between individual strands in a conductor.
+ *
+ * Source: AWG Reference_values.csv from Rubadue's design tools
+ */
 export const AWG_REFERENCE: Record<
 	number,
 	{ diameter: number; cma: number; strandedCMA: number }
@@ -49,7 +113,7 @@ export const AWG_REFERENCE: Record<
 	10: { diameter: 0.1019, cma: 10380, strandedCMA: 10172 },
 	11: { diameter: 0.0907, cma: 8230, strandedCMA: 8065 },
 	12: { diameter: 0.0808, cma: 6530, strandedCMA: 6399 },
-	13: { diameter: 0.072, cma: 5184, strandedCMA: 5076 }, // Fixed: was 5180, should be 5184 per CSV formula
+	13: { diameter: 0.072, cma: 5184, strandedCMA: 5076 },
 	14: { diameter: 0.0641, cma: 4110, strandedCMA: 4028 },
 	15: { diameter: 0.0571, cma: 3260, strandedCMA: 3195 },
 	16: { diameter: 0.0508, cma: 2580, strandedCMA: 2528 },
@@ -89,7 +153,14 @@ export const AWG_REFERENCE: Record<
 	50: { diameter: 0.00099, cma: 0.98, strandedCMA: 0.96 },
 };
 
-// Max strands per single operation (from Max Ends Single Op_values.csv)
+/**
+ * Manufacturing Constraints: Maximum Strands Per Single Operation
+ *
+ * Defines the maximum number of strands that can be processed in a single manufacturing operation
+ * for each AWG size. These limits are based on Rubadue's manufacturing capabilities.
+ *
+ * Source: Max Ends Single Op_values.csv from Rubadue's design tools
+ */
 const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 	10: 0,
 	11: 0,
@@ -125,7 +196,7 @@ const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 	41: 66,
 	42: 66,
 	43: 66,
-	44: 66, // FIXED: Restored correct value from CSV (was incorrectly set to 9)
+	44: 66,
 	45: 66,
 	46: 66,
 	47: 21,
@@ -134,7 +205,15 @@ const MAX_STRANDS_SINGLE_OP: Record<number, number> = {
 	50: 21,
 };
 
-// Magnet Wire Film Thicknesses (from Magnet Wire_values.csv)
+/**
+ * Magnet Wire Film Thicknesses
+ *
+ * Defines the minimum, nominal, and maximum film thicknesses for different magnet wire grades
+ * (Single, Heavy, Triple, Quadruple) across all AWG sizes. These values are used to calculate
+ * the overall diameter of Litz wire constructions.
+ *
+ * Source: Magnet Wire_values.csv from Rubadue's design tools
+ */
 export const MAGNET_WIRE_FILM_THICKNESSES: Record<
 	number,
 	{
@@ -380,7 +459,15 @@ export const MAGNET_WIRE_FILM_THICKNESSES: Record<
 	},
 };
 
-// Packing factors by Litz type and operations
+/**
+ * Packing Factors by Litz Type and Operations
+ *
+ * Packing factors account for the space efficiency of different Litz wire constructions.
+ * Type 1 uses uniform packing across all operations, while Type 2 has varying factors
+ * based on the number of manufacturing operations.
+ *
+ * Source: Excel formulas in Rubadue's design tools
+ */
 const PACKING_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 1": {
 		1: 1.155,
@@ -392,13 +479,20 @@ const PACKING_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 2": {
 		1: 1.155,
 		2: 1.236,
-		3: 1.236, // Fixed: Should be same as 2 operations
+		3: 1.236,
 		4: 1.271,
-		5: 1.363, // Updated from 1.271 to 1.363 to match Excel
+		5: 1.363,
 	},
 };
 
-// Take up factors by Litz type and operations (from Excel logic)
+/**
+ * Take-Up Factors by Litz Type and Operations
+ *
+ * Take-up factors account for the elongation and compression that occurs during
+ * the manufacturing process. These factors are applied to final diameter calculations.
+ *
+ * Source: Excel formulas in Rubadue's design tools
+ */
 const TAKE_UP_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 1": {
 		1: 1.01,
@@ -410,23 +504,130 @@ const TAKE_UP_FACTORS: Record<"Type 1" | "Type 2", Record<number, number>> = {
 	"Type 2": {
 		1: 1.01,
 		2: 1.03,
-		3: 1.03, // Fixed: Should be same as 2 operations
+		3: 1.03,
 		4: 1.051,
 		5: 1.082,
 	},
 };
 
 /**
- * Calculate required wall thickness based on insulation type and copper area
- * Based on Excel formula: =IF(OR(D68="ETFE",D68="PFA"),IF(H73<0.0015,0.0015,H73),IF(AND(D68="FEP",D9<1939,H73<0.002),0.002,IF(AND(D68="FEP",D9>1938,D9<12405,H73<0.003),0.003,IF(AND(D68="FEP",D9>12404,D9<24978,H73<0.01),0.01,IF(AND(D68="FEP",D9>24977,H73<0.012),0.012,H73)))))
+ * Magnet Wire Grade Mappings for Part Numbers
+ *
+ * Maps magnet wire grades to their corresponding codes used in part number generation.
+ * Matches Excel VLOOKUP functionality.
+ */
+const MAGNET_WIRE_GRADE_MAPPING: Record<string, string> = {
+	"MW 79-C": "79",
+	"MW 80-C": "80",
+	"MW 77-C": "77",
+	"MW 35-C": "35",
+	"MW 16-C": "16",
+};
+
+/**
+ * Strand OD Reference Data
+ *
+ * Contains strand outer diameter reference values for insulated wire calculations.
+ * Used for calculating bare Litz diameters before insulation is applied.
+ */
+export const STRAND_OD_REFERENCE: Record<
+	number,
+	{ min: number; nom: number; max: number }
+> = {
+	12: { min: 0.0814, nom: 0.0827, max: 0.084 },
+	13: { min: 0.0727, nom: 0.0739, max: 0.075 },
+	14: { min: 0.0651, nom: 0.0658, max: 0.0666 },
+	15: { min: 0.058, nom: 0.0587, max: 0.0594 },
+	16: { min: 0.0517, nom: 0.0524, max: 0.0531 },
+	17: { min: 0.0462, nom: 0.0468, max: 0.0475 },
+	18: { min: 0.0412, nom: 0.0418, max: 0.0424 },
+	19: { min: 0.0367, nom: 0.0373, max: 0.0379 },
+	20: { min: 0.0329, nom: 0.0334, max: 0.0339 },
+	21: { min: 0.0293, nom: 0.0298, max: 0.0303 },
+	22: { min: 0.0261, nom: 0.0266, max: 0.027 },
+	23: { min: 0.0234, nom: 0.0238, max: 0.0243 },
+	24: { min: 0.0209, nom: 0.0213, max: 0.0217 },
+	25: { min: 0.0186, nom: 0.019, max: 0.0194 },
+	26: { min: 0.0166, nom: 0.017, max: 0.0173 },
+	27: { min: 0.0149, nom: 0.0153, max: 0.0156 },
+	28: { min: 0.0133, nom: 0.0137, max: 0.014 },
+	29: { min: 0.0119, nom: 0.0123, max: 0.0126 },
+	30: { min: 0.0106, nom: 0.0109, max: 0.0112 },
+	31: { min: 0.0094, nom: 0.0097, max: 0.01 },
+	32: { min: 0.0085, nom: 0.0088, max: 0.0091 },
+	33: { min: 0.0075, nom: 0.0078, max: 0.0081 },
+	34: { min: 0.0067, nom: 0.007, max: 0.0072 },
+	35: { min: 0.0059, nom: 0.0062, max: 0.0064 },
+	36: { min: 0.0053, nom: 0.0056, max: 0.0058 },
+	37: { min: 0.0047, nom: 0.005, max: 0.0052 },
+	38: { min: 0.0042, nom: 0.0045, max: 0.0047 },
+	39: { min: 0.0036, nom: 0.0039, max: 0.0041 },
+	40: { min: 0.0032, nom: 0.0035, max: 0.0037 },
+	41: { min: 0.0029, nom: 0.0031, max: 0.0033 },
+	42: { min: 0.0026, nom: 0.0028, max: 0.003 },
+	43: { min: 0.0023, nom: 0.0025, max: 0.0026 },
+	44: { min: 0.0021, nom: 0.0023, max: 0.0024 },
+	45: { min: 0.00179, nom: 0.00192, max: 0.00205 },
+	46: { min: 0.00161, nom: 0.00173, max: 0.00185 },
+	47: { min: 0.00145, nom: 0.00157, max: 0.0017 },
+	48: { min: 0.00129, nom: 0.0014, max: 0.0015 },
+	49: { min: 0.00117, nom: 0.00124, max: 0.0013 },
+	50: { min: 0.00105, nom: 0.00113, max: 0.0012 },
+};
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
+ * Round to 3 Decimal Places
+ *
+ * Utility function to round numbers to 3 decimal places for diameter calculations.
+ * This matches Excel's precision for diameter values.
+ *
+ * @param val - Value to round
+ * @returns Rounded value to 3 decimal places
+ */
+function round3(val: number): number {
+	return Math.round(val * 1000) / 1000;
+}
+
+/**
+ * Excel MROUND Equivalent
+ *
+ * Rounds a value to the nearest multiple, equivalent to Excel's MROUND function.
+ * Used for wall thickness calculations to match Excel precision.
+ *
+ * @param val - Value to round
+ * @param multiple - Multiple to round to
+ * @returns Rounded value to nearest multiple
+ */
+function mround(val: number, multiple: number): number {
+	return Math.round(val / multiple) * multiple;
+}
+
+/**
+ * Calculate Required Wall Thickness
+ *
+ * Determines the minimum required wall thickness for different insulation types based on
+ * copper area and layer count. This implements UL approval requirements and manufacturing
+ * constraints for each insulation material.
+ *
+ * Formula derived from Excel: =IF(OR(D68="ETFE",D68="PFA"),IF(H73<0.0015,0.0015,H73),...)
+ *
+ * @param insulationType - Type of insulation (ETFE, PFA, FEP)
+ * @param copperAreaCMA - Total copper area in circular mils
+ * @param inputWallThickness - Requested wall thickness in inches
+ * @param layers - Number of insulation layers (1, 2, or 3)
+ * @returns Minimum required wall thickness in inches
  */
 export function calculateRequiredWallThickness(
 	insulationType: string,
 	copperAreaCMA: number,
 	inputWallThickness: number,
-	layers: 1 | 2 | 3, // Add layers parameter to distinguish between E73, E81, E89 logic
+	layers: 1 | 2 | 3,
 ): number {
-	// E73 (Single Insulation) logic
+	// Single insulation logic (E73)
 	if (layers === 1) {
 		if (insulationType === "ETFE" || insulationType === "PFA") {
 			return Math.max(0.0015, inputWallThickness);
@@ -456,7 +657,7 @@ export function calculateRequiredWallThickness(
 		}
 	}
 
-	// E81 (Double Insulation) logic
+	// Double insulation logic (E81)
 	if (layers === 2) {
 		if (insulationType === "ETFE") {
 			return Math.max(0.001, inputWallThickness);
@@ -482,7 +683,7 @@ export function calculateRequiredWallThickness(
 		}
 	}
 
-	// E89 (Triple Insulation) logic
+	// Triple insulation logic (E89)
 	if (layers === 3) {
 		if (insulationType === "ETFE") {
 			return Math.max(0.001, inputWallThickness);
@@ -491,7 +692,6 @@ export function calculateRequiredWallThickness(
 			return Math.max(0.0015, inputWallThickness);
 		}
 		if (insulationType === "FEP") {
-			// New FEP rules from email feedback
 			if (copperAreaCMA < 12828 && inputWallThickness < 0.002) {
 				return 0.002;
 			}
@@ -502,38 +702,72 @@ export function calculateRequiredWallThickness(
 		}
 	}
 
-	// Default: return input value
 	return inputWallThickness;
 }
 
-// Magnet wire grade mappings for part numbers (matches Excel VLOOKUP)
-const MAGNET_WIRE_GRADE_MAPPING: Record<string, string> = {
-	"MW 79-C": "79",
-	"MW 80-C": "80",
-	"MW 77-C": "77",
-	"MW 35-C": "35",
-	"MW 16-C": "16",
-};
+// =============================================================================
+// STRAND VALIDATION AND MANUFACTURING CONSTRAINTS
+// =============================================================================
+
+/** Minimum strands required for Litz wire construction */
+const MIN_STRANDS = 3;
+
+/** Maximum strands for special rule (AWG 12-22) */
+const MAX_STRANDS_SPECIAL_RULE = 8;
+
+/** Maximum operations supported in manufacturing */
+const MAX_OPERATIONS = 5;
+
+/** Division factors for hierarchical breakdown (in order of preference) */
+const DIVISION_FACTORS = [5, 3, 4] as const;
+
+/** Search range multiplier for finding nearby valid counts */
+const NEARBY_SEARCH_MULTIPLIER = 0.05;
+
+/** Minimum search range for nearby valid counts */
+const MIN_SEARCH_RANGE = 50;
+
+/** Maximum nearby valid counts to return */
+const MAX_NEARBY_COUNTS = 8;
 
 /**
- * Validate strand count with improved breakdown showing hierarchical levels
+ * Validate Strand Count with Hierarchical Breakdown
+ *
+ * Validates whether a given strand count can be manufactured for a specific AWG size.
+ * Uses Rubadue's hierarchical manufacturing process where large strand counts are
+ * progressively divided into smaller groups for final assembly.
+ *
+ * The validation checks:
+ * 1. Minimum strand count (3 strands)
+ * 2. Special rules for AWG 12-22 with 3-8 strands
+ * 3. Hierarchical divisibility by 5, 3, or 4
+ * 4. Maximum strands per single operation for the AWG size
+ *
+ * @param strandCount - Total number of strands
+ * @param wireAWG - AWG size of individual strands
+ * @returns Validation result with breakdown and nearby valid counts
  */
 export function validateStrandCount(
 	strandCount: number,
 	wireAWG: number,
 ): StrandValidationResult {
 	// Early validation
-	if (strandCount < 3) {
+	if (strandCount < MIN_STRANDS) {
 		return {
 			isValid: false,
 			breakdown: [],
 			nearbyValid: [],
-			message: "Minimum 3 strands required for Litz wire construction",
+			message: `Minimum ${MIN_STRANDS} strands required for Litz wire construction`,
 		};
 	}
 
 	// Special rule: For AWG 12-22, 3-8 strands are always valid
-	if (wireAWG >= 12 && wireAWG <= 22 && strandCount >= 3 && strandCount <= 8) {
+	if (
+		wireAWG >= 12 &&
+		wireAWG <= 22 &&
+		strandCount >= MIN_STRANDS &&
+		strandCount <= MAX_STRANDS_SPECIAL_RULE
+	) {
 		return {
 			isValid: true,
 			breakdown: [strandCount],
@@ -545,7 +779,6 @@ export function validateStrandCount(
 	// Get max strands for this AWG
 	const maxStrands = getMaxStrandsForAWG(wireAWG);
 	const hierarchicalLevels: number[] = [];
-	const divisionFactors: number[] = [];
 	let currentCount = strandCount;
 
 	// Build hierarchical breakdown (like Excel's Row 14 → Row 18 → Row 22 → Row 26 → Row 30)
@@ -555,18 +788,12 @@ export function validateStrandCount(
 		let divided = false;
 
 		// Try dividing by 5, 3, or 4 in that order
-		if (currentCount % 5 === 0) {
-			currentCount = currentCount / 5;
-			divisionFactors.push(5);
-			divided = true;
-		} else if (currentCount % 3 === 0) {
-			currentCount = currentCount / 3;
-			divisionFactors.push(3);
-			divided = true;
-		} else if (currentCount % 4 === 0) {
-			currentCount = currentCount / 4;
-			divisionFactors.push(4);
-			divided = true;
+		for (const factor of DIVISION_FACTORS) {
+			if (currentCount % factor === 0) {
+				currentCount = currentCount / factor;
+				divided = true;
+				break;
+			}
 		}
 
 		if (!divided) {
@@ -602,38 +829,51 @@ export function validateStrandCount(
 
 	return {
 		isValid: true,
-		breakdown: hierarchicalLevels, // CHANGED: Now shows [2000, 400, 80, 16] instead of [2000, 5, 5, 5]
+		breakdown: hierarchicalLevels,
 		nearbyValid,
 		message,
 	};
 }
 
 /**
- * Get maximum strands allowed for a given AWG
- * Based on Excel validation logic
+ * Get Maximum Strands Allowed for AWG Size
+ *
+ * Returns the maximum number of strands that can be processed in a single
+ * manufacturing operation for a given AWG size.
+ *
+ * @param awg - AWG size
+ * @returns Maximum strands per single operation
  */
 function getMaxStrandsForAWG(awg: number): number {
-	// Use exact data from Max Ends Single Op_values.csv
 	return MAX_STRANDS_SINGLE_OP[awg] || 0;
 }
 
 /**
- * Find nearby valid strand counts
- * Improved to better match Excel's logic with wider range and pattern-based search
+ * Find Nearby Valid Strand Counts
+ *
+ * Searches for valid strand counts near the target value that can be manufactured
+ * for the given AWG size. This helps users find alternative valid configurations.
+ *
+ * @param target - Target strand count
+ * @param awg - AWG size
+ * @returns Array of nearby valid strand counts
  */
 function findNearbyValidCounts(target: number, awg: number): number[] {
 	const valid: number[] = [];
 	const maxStrands = getMaxStrandsForAWG(awg);
 
 	// Expand search range significantly to catch values like 1980 and 2025 when target is 2000
-	const searchRange = Math.max(50, Math.floor(target * 0.05)); // At least 50, or 5% of target
-	const minSearch = Math.max(3, target - searchRange);
+	const searchRange = Math.max(
+		MIN_SEARCH_RANGE,
+		Math.floor(target * NEARBY_SEARCH_MULTIPLIER),
+	);
+	const minSearch = Math.max(MIN_STRANDS, target - searchRange);
 	const maxSearch = target + searchRange;
 
 	// First, check multiples of 5 around the target (since division starts with 5)
 	// This helps find the systematic valid values that Excel shows
 	for (let i = Math.floor(minSearch / 5) * 5; i <= maxSearch; i += 5) {
-		if (i >= 3) {
+		if (i >= MIN_STRANDS) {
 			// Ensure minimum of 3 strands
 			const isValid = validateStrandCountSimple(i, awg, maxStrands);
 			if (isValid) {
@@ -645,7 +885,7 @@ function findNearbyValidCounts(target: number, awg: number): number[] {
 	// Then check other values to fill gaps, but with a smaller range
 	const smallerRange = Math.min(25, searchRange);
 	for (
-		let i = Math.max(3, target - smallerRange);
+		let i = Math.max(MIN_STRANDS, target - smallerRange);
 		i <= target + smallerRange;
 		i++
 	) {
@@ -661,11 +901,19 @@ function findNearbyValidCounts(target: number, awg: number): number[] {
 	// Sort by distance from target and return closest ones
 	valid.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
 
-	return valid.slice(0, 8); // Return up to 8 nearby valid counts (increased from 5)
+	return valid.slice(0, MAX_NEARBY_COUNTS);
 }
 
 /**
- * Simplified strand validation without recursion
+ * Simplified Strand Validation Without Recursion
+ *
+ * Performs basic strand validation without building the full hierarchical breakdown.
+ * Used for finding nearby valid counts efficiently.
+ *
+ * @param strandCount - Number of strands to validate
+ * @param wireAWG - AWG size
+ * @param maxStrands - Maximum strands allowed for this AWG
+ * @returns Whether the strand count is valid
  */
 function validateStrandCountSimple(
 	strandCount: number,
@@ -673,7 +921,12 @@ function validateStrandCountSimple(
 	maxStrands: number,
 ): boolean {
 	// Special rule: For AWG 12-22, 3-8 strands are always valid
-	if (wireAWG >= 12 && wireAWG <= 22 && strandCount >= 3 && strandCount <= 8) {
+	if (
+		wireAWG >= 12 &&
+		wireAWG <= 22 &&
+		strandCount >= MIN_STRANDS &&
+		strandCount <= MAX_STRANDS_SPECIAL_RULE
+	) {
 		return true;
 	}
 
@@ -683,15 +936,12 @@ function validateStrandCountSimple(
 		let divided = false;
 
 		// Try dividing by 5, 3, or 4 in that order
-		if (currentCount % 5 === 0) {
-			currentCount = currentCount / 5;
-			divided = true;
-		} else if (currentCount % 3 === 0) {
-			currentCount = currentCount / 3;
-			divided = true;
-		} else if (currentCount % 4 === 0) {
-			currentCount = currentCount / 4;
-			divided = true;
+		for (const factor of DIVISION_FACTORS) {
+			if (currentCount % factor === 0) {
+				currentCount = currentCount / factor;
+				divided = true;
+				break;
+			}
 		}
 
 		if (!divided) {
@@ -699,21 +949,34 @@ function validateStrandCountSimple(
 		}
 	}
 
-	// CRITICAL FIX: Enforce both maximum and minimum requirements
-	return currentCount <= maxStrands && currentCount >= 3;
+	// Enforce both maximum and minimum requirements
+	return currentCount <= maxStrands && currentCount >= MIN_STRANDS;
 }
 
+// =============================================================================
+// PACKING FACTORS AND TAKE-UP FACTORS
+// =============================================================================
+
 /**
- * Calculate packing factor based on Litz type and operations
- * Based on Excel formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),VLOOKUP(D5,TYPE2,4,0))
+ * Calculate Packing Factor
+ *
+ * Determines the packing factor based on Litz type and number of operations.
+ * Packing factors account for the space efficiency of different Litz wire constructions.
+ *
+ * Formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,4,0),VLOOKUP(D5,TYPE2,4,0))
+ *
+ * @param litzType - Type 1 or Type 2 Litz construction
+ * @param operations - Number of manufacturing operations
+ * @param wireAWG - AWG size (optional, used for special-case logic)
+ * @returns Packing factor for diameter calculations
  */
 export function calculatePackingFactor(
 	litzType: "Type 1" | "Type 2",
 	operations: number,
-	wireAWG?: number, // add optional wireAWG for special-case logic
+	wireAWG?: number,
 ): number {
-	if (operations > 5) {
-		throw new Error("Maximum 5 operations supported");
+	if (operations > MAX_OPERATIONS) {
+		throw new Error(`Maximum ${MAX_OPERATIONS} operations supported`);
 	}
 
 	// Special-case override for Type 2, 4 operations, AWG < 44
@@ -730,8 +993,16 @@ export function calculatePackingFactor(
 }
 
 /**
- * Calculate take up factor based on Litz type and operations
- * Based on Excel formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,5,0),VLOOKUP(D5,TYPE2,5,0))
+ * Calculate Take-Up Factor
+ *
+ * Determines the take-up factor based on Litz type and number of operations.
+ * Take-up factors account for elongation and compression during manufacturing.
+ *
+ * Formula: IF(D6="Type 1",VLOOKUP(D5,TYPE1,5,0),VLOOKUP(D5,TYPE2,5,0))
+ *
+ * @param litzType - Type 1 or Type 2 Litz construction
+ * @param operations - Number of manufacturing operations
+ * @returns Take-up factor for diameter calculations
  */
 export function calculateTakeUpFactor(
 	litzType: "Type 1" | "Type 2",
@@ -740,10 +1011,21 @@ export function calculateTakeUpFactor(
 	return TAKE_UP_FACTORS[litzType][operations] || 1.01;
 }
 
+// =============================================================================
+// COPPER AREA CALCULATIONS
+// =============================================================================
+
 /**
- * Calculate total copper area in CMA for display purposes
- * Based on Excel formula: INDEX('Magnet Wire'!$A$3:$E$41,MATCH(D4,'Magnet Wire'!$A$3:$A$41,0),MATCH("CMA SOLID",'Magnet Wire'!$A$2:$E$2,0))*$D$3
- * Excel calculates CMA using (diameter × 1000)² formula for display
+ * Calculate Total Copper Area in CMA
+ *
+ * Calculates the total circular mil area (CMA) for display purposes using the
+ * diameter formula: (diameter × 1000)² × strand count.
+ *
+ * Formula: INDEX('Magnet Wire'!$A$3:$E$41,MATCH(D4,'Magnet Wire'!$A$3:$A$41,0),MATCH("CMA SOLID",'Magnet Wire'!$A$2:$E$2,0))*$D$3
+ *
+ * @param strandCount - Number of strands
+ * @param wireAWG - AWG size of individual strands
+ * @returns Total copper area in circular mils
  */
 export function calculateTotalCopperAreaCMA(
 	strandCount: number,
@@ -760,8 +1042,14 @@ export function calculateTotalCopperAreaCMA(
 }
 
 /**
- * Calculate copper area for insulation calculations
- * Uses lookup table values for insulation rule calculations
+ * Calculate Copper Area for Insulation Calculations
+ *
+ * Uses lookup table values (strandedCMA) for insulation rule calculations.
+ * This accounts for the space between individual strands in the conductor.
+ *
+ * @param strandCount - Number of strands
+ * @param wireAWG - AWG size of individual strands
+ * @returns Copper area in circular mils for insulation calculations
  */
 function calculateCopperAreaForInsulation(
 	strandCount: number,
@@ -777,16 +1065,29 @@ function calculateCopperAreaForInsulation(
 }
 
 /**
- * Calculate total copper area in mm²
- * Based on Excel formula: $D$9*0.000506707
+ * Calculate Total Copper Area in mm²
+ *
+ * Converts circular mil area to square millimeters using the conversion factor.
+ *
+ * Formula: $D$9*0.000506707
+ *
+ * @param cma - Copper area in circular mils
+ * @returns Copper area in square millimeters
  */
 export function calculateTotalCopperAreaMM2(cma: number): number {
 	return cma * 0.000506707;
 }
 
 /**
- * Calculate equivalent AWG from total copper area
- * Based on Excel formula: IFERROR(IF((INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)>50,"",(INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)&" AWG"),"")
+ * Calculate Equivalent AWG from Total Copper Area
+ *
+ * Determines the equivalent AWG size based on total copper area using lookup tables.
+ * This provides a reference for comparing Litz wire to solid wire of equivalent capacity.
+ *
+ * Formula: IFERROR(IF((INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)>50,"",(INDEX('AWG Reference'!$F$5:$H$64,MATCH(D9,'AWG Reference'!$H$5:$H$64,-1),1)+1)&" AWG"),"")
+ *
+ * @param cma - Total copper area in circular mils
+ * @returns Equivalent AWG size as string (e.g., "14 AWG") or empty string if out of range
  */
 export function calculateEquivalentAWG(cma: number): string {
 	const awgEntries = Object.entries(AWG_REFERENCE)
@@ -811,9 +1112,24 @@ export function calculateEquivalentAWG(cma: number): string {
 	return `${foundAWG} AWG`;
 }
 
+// =============================================================================
+// DIAMETER CALCULATIONS
+// =============================================================================
+
 /**
- * Calculate bare Litz diameters
- * Based on Excel formula: ROUND(SQRT($D$3)*E39*$D$7,3)
+ * Calculate Bare Litz Wire Diameters
+ *
+ * Calculates the minimum, nominal, and maximum diameters for bare Litz wire
+ * based on strand count, AWG size, packing factor, and magnet wire film type.
+ *
+ * Formula: ROUND(SQRT($D$3)*E39*$D$7,3)
+ *
+ * @param strandCount - Number of strands
+ * @param wireAWG - AWG size of individual strands
+ * @param packingFactor - Packing factor for the Litz construction
+ * @param magnetWireGrade - Magnet wire grade (e.g., "MW 79-C")
+ * @param filmType - Film thickness type (Single, Heavy, Triple, Quadruple)
+ * @returns Diameter result with min/nom/max values and part number
  */
 export function calculateBareLitzDiameters(
 	strandCount: number,
@@ -888,16 +1204,14 @@ export function calculateBareLitzDiameters(
 	};
 }
 
-function round3(val: number): number {
-	return Math.round(val * 1000) / 1000;
-}
-
-// Excel MROUND equivalent - rounds to nearest multiple
-function mround(val: number, multiple: number): number {
-	return Math.round(val / multiple) * multiple;
-}
-
-// Excel wall thickness logic for single insulation (G73)
+/**
+ * Calculate Wall Thickness for Single Insulation
+ *
+ * Implements Excel's wall thickness logic for single insulation (G73).
+ *
+ * @param rawWall - Raw wall thickness value
+ * @returns Calculated wall thickness
+ */
 function calculateWallThicknessSingle(rawWall: number): number {
 	const rounded3 = Math.round(rawWall * 1000) / 1000;
 	if (rounded3 < rawWall) {
@@ -906,7 +1220,14 @@ function calculateWallThicknessSingle(rawWall: number): number {
 	return mround(rawWall, 0.0005);
 }
 
-// Excel wall thickness logic for double insulation (G81)
+/**
+ * Calculate Wall Thickness for Double Insulation
+ *
+ * Implements Excel's wall thickness logic for double insulation (G81).
+ *
+ * @param rawWall - Raw wall thickness value
+ * @returns Calculated wall thickness
+ */
 function calculateWallThicknessDouble(rawWall: number): number {
 	const halfWall = rawWall / 2;
 	const rounded3 = Math.round(halfWall * 1000) / 1000;
@@ -920,7 +1241,14 @@ function calculateWallThicknessDouble(rawWall: number): number {
 	return mrounded;
 }
 
-// Excel wall thickness logic for triple insulation (G89)
+/**
+ * Calculate Wall Thickness for Triple Insulation
+ *
+ * Implements Excel's wall thickness logic for triple insulation (G89).
+ *
+ * @param rawWall - Raw wall thickness value
+ * @returns Calculated wall thickness
+ */
 function calculateWallThicknessTriple(rawWall: number): number {
 	const thirdWall = rawWall / 3;
 	const rounded3 = Math.round(thirdWall * 1000) / 1000;
@@ -934,8 +1262,11 @@ function calculateWallThicknessTriple(rawWall: number): number {
 	return mrounded;
 }
 
+// =============================================================================
+// WALL THICKNESS CALCULATIONS
+// =============================================================================
+
 export function calculateInsulatedLitzDiameters(
-	bareDiameter: number, // ignored for min/nom/max
 	wireAWG: number,
 	insulationType: string,
 	layers: 1 | 2 | 3,
@@ -1077,26 +1408,15 @@ export function calculateInsulatedLitzDiameters(
 	};
 }
 
-/**
- * Validation rule interface for wall thickness checks
- */
-interface WallThicknessRule {
-	insulationType: string;
-	copperAreaMin?: number;
-	copperAreaMax?: number;
-	minWallThickness: number;
-	messageKey: string; // Use message key instead of full message
-}
+// =============================================================================
+// UL APPROVAL AND VALIDATION
+// =============================================================================
 
-/**
- * Validation rule interface for copper area checks
- */
-interface CopperAreaRule {
-	insulationType: string;
-	copperAreaMin?: number;
-	copperAreaMax?: number;
-	messageKey: string; // Use message key instead of full message
-}
+/** Maximum conductor diameter for UL approval (inches) */
+const MAX_CONDUCTOR_DIAMETER_INCHES = 0.2;
+
+/** Minimum copper area for manufacturing capability checks */
+const MIN_COPPER_AREA_CMA = 9.61;
 
 /**
  * Message constants to eliminate repetition
@@ -1127,218 +1447,9 @@ const VALIDATION_MESSAGES = {
 		"CONDUCTOR DIAMETER EXCEEDS UL MAXIMUM OF 0.200 inches / 5mm",
 } as const;
 
-// Single/Triple insulation rules (E73/E89 logic - same rules)
-const SINGLE_TRIPLE_WALL_RULES: WallThicknessRule[] = [
-	{
-		insulationType: "FEP",
-		copperAreaMax: 1938,
-		minWallThickness: 0.002,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "FEP",
-		copperAreaMin: 1939,
-		copperAreaMax: 12404,
-		minWallThickness: 0.003,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "FEP",
-		copperAreaMin: 12405,
-		copperAreaMax: 24978,
-		minWallThickness: 0.01,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "FEP",
-		copperAreaMin: 24978,
-		copperAreaMax: 39999,
-		minWallThickness: 0.012,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "FEP",
-		minWallThickness: 0.002,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "ETFE",
-		minWallThickness: 0.0015,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "PFA",
-		copperAreaMax: 186,
-		minWallThickness: 0.0015,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-	{
-		insulationType: "PFA",
-		copperAreaMin: 187,
-		copperAreaMax: 769,
-		minWallThickness: 0.002,
-		messageKey: "INCREASE_WALL_THICKNESS_SINGLE",
-	},
-];
-
-/**
- * Wall thickness validation rules based on Excel formulas
- * Organized by insulation type and layer count
- */
-const WALL_THICKNESS_RULES: Record<1 | 2 | 3, WallThicknessRule[]> = {
-	1: SINGLE_TRIPLE_WALL_RULES, // Single insulation (E73 logic)
-	2: [
-		// Double insulation (E81 logic)
-		{
-			insulationType: "ETFE",
-			copperAreaMax: 121,
-			minWallThickness: 0.001,
-			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
-		},
-		{
-			insulationType: "ETFE",
-			copperAreaMin: 122,
-			copperAreaMax: 2885,
-			minWallThickness: 0.0015,
-			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
-		},
-		{
-			insulationType: "ETFE",
-			copperAreaMin: 2886,
-			copperAreaMax: 12404,
-			minWallThickness: 0.003,
-			messageKey: "NO_UL_APPROVAL_ETFE_FEP",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMax: 12404,
-			minWallThickness: 0.002,
-			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 12405,
-			copperAreaMax: 24978,
-			minWallThickness: 0.005,
-			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
-		},
-		{
-			insulationType: "FEP",
-			copperAreaMin: 24978,
-			copperAreaMax: 39999,
-			minWallThickness: 0.006,
-			messageKey: "INCREASE_WALL_THICKNESS_DOUBLE",
-		},
-	],
-	3: SINGLE_TRIPLE_WALL_RULES, // Triple insulation (E89 logic) - same as single
-};
-
-/**
- * Copper area validation rules
- */
-const COPPER_AREA_RULES: CopperAreaRule[] = [
-	{
-		insulationType: "ETFE",
-		copperAreaMin: 12405,
-		messageKey: "NO_UL_APPROVAL_ETFE",
-	},
-	{
-		insulationType: "PFA",
-		copperAreaMin: 1939,
-		messageKey: "NO_UL_APPROVAL_PFA_FEP",
-	},
-	// Both ETFE and PFA have same rule for copper area >= 770 but < 12405
-	{
-		insulationType: "ETFE",
-		copperAreaMin: 770,
-		copperAreaMax: 12404,
-		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
-	},
-	{
-		insulationType: "PFA",
-		copperAreaMin: 770,
-		copperAreaMax: 12404,
-		messageKey: "NO_UL_APPROVAL_ETFE_PFA_SUPPLEMENTAL",
-	},
-	{
-		insulationType: "PFA",
-		copperAreaMin: 12405,
-		messageKey: "SELECT_FEP_FOR_UL",
-	},
-];
-
-/**
- * Check if a value falls within a range
- */
-function isInRange(value: number, min?: number, max?: number): boolean {
-	if (min !== undefined && value < min) return false;
-	if (max !== undefined && value > max) return false;
-	return true;
-}
-
-/**
- * Check wall thickness validation rules for specific insulation type
- */
-function checkWallThicknessRules(
-	insulationType: string,
-	copperArea: number,
-	wallThickness: number,
-	layers: 1 | 2 | 3,
-): string[] {
-	const warnings: string[] = [];
-	const rules = WALL_THICKNESS_RULES[layers];
-
-	// Only check rules for the current insulation type
-	const relevantRules = rules.filter(
-		(rule) => rule.insulationType === insulationType,
-	);
-
-	for (const rule of relevantRules) {
-		if (isInRange(copperArea, rule.copperAreaMin, rule.copperAreaMax)) {
-			if (wallThickness < rule.minWallThickness) {
-				warnings.push(
-					VALIDATION_MESSAGES[
-						rule.messageKey as keyof typeof VALIDATION_MESSAGES
-					],
-				);
-				break; // Only show first matching rule
-			}
-		}
-	}
-
-	return warnings;
-}
-
-/**
- * Check copper area validation rules for specific insulation type
- */
-function checkCopperAreaRules(
-	insulationType: string,
-	copperArea: number,
-): string[] {
-	const warnings: string[] = [];
-
-	// Only check rules for the current insulation type
-	const relevantRules = COPPER_AREA_RULES.filter(
-		(rule) => rule.insulationType === insulationType,
-	);
-
-	for (const rule of relevantRules) {
-		if (isInRange(copperArea, rule.copperAreaMin, rule.copperAreaMax)) {
-			warnings.push(
-				VALIDATION_MESSAGES[
-					rule.messageKey as keyof typeof VALIDATION_MESSAGES
-				],
-			);
-		}
-	}
-
-	return warnings;
-}
-
 /**
  * Check UL approval requirements for triple insulation (E89 logic)
- * Based on Excel formula: =IF(D9<9.61,"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",IF(AND(D68="FEP",D9<12405,E89<0.002),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",IF(AND(D68="FEP",D9>12404,E89<0.004),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES.",IF(OR(AND(D68="ETFE",D9<1241,E89<0.001),AND(D68="ETFE",D9>1240,D9<4900,E89<0.0015),AND(D68="ETFE",D9>4899,D9<12405,E89<0.002),AND(OR(D68="PFA",D68="ETFE"),D9>12404)),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",""))))
+ * Based on Excel formula: =IF(D9<9.61,"CONSULT PLANT TO CONFIRM MANUFACURING CAPABILITY. THIS PART WILL NOT CARRY UL APPROVALS.",IF(AND(D68="FEP",D9<12405,E89<0.002),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",IF(AND(D68="FEP",D9>12404,E89<0.004),"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES.",IF(OR(AND(D68="ETFE",D9<1241,E89<0.0015),AND(D68="ETFE",D9>1240,D9<4900,E89<0.002),AND(D68="ETFE",D9>4899,D9<12405,E89<0.002),AND(OR(D68="PFA",D68="ETFE"),D9>12404)),"THIS PART WILL NOT CARRY UL APPROVALS. CONSIDER FEP INSULATION.",""))))
  */
 function checkTripleInsulationULApproval(
 	copperArea: number,
@@ -1553,7 +1664,7 @@ export function checkULApproval(
 	const warnings: string[] = [];
 
 	// Check conductor diameter limit
-	if (conductorDiameter > 0.2) {
+	if (conductorDiameter > MAX_CONDUCTOR_DIAMETER_INCHES) {
 		warnings.push(VALIDATION_MESSAGES.CONDUCTOR_DIAMETER_EXCEEDS);
 	}
 
@@ -1589,7 +1700,7 @@ export function checkULApproval(
 
 	// Fallback logic if wall thickness is not provided (shouldn't happen for insulated wires)
 	// Check very small copper area (D9 < 9.61)
-	if (copperArea < 9.61) {
+	if (copperArea < MIN_COPPER_AREA_CMA) {
 		warnings.push(VALIDATION_MESSAGES.CONSULT_PLANT_MANUFACTURING);
 		return warnings; // Return early as this is a critical manufacturing issue
 	}
@@ -1613,7 +1724,7 @@ export function checkManufacturingCapability(
 	const warnings: string[] = [];
 
 	// Check very small copper area (D9 < 9.61)
-	if (copperArea < 9.61) {
+	if (copperArea < MIN_COPPER_AREA_CMA) {
 		warnings.push(
 			"CONSULT RUBADUE ENGINEERING TO VERIFY MANUFACTURING CAPABILITY.",
 		);
@@ -1657,7 +1768,6 @@ function calculateOperationsExcelWay(
 ): number {
 	const maxStrands = getMaxStrandsForAWG(wireAWG);
 	let currentCount = strandCount;
-	let level = 1;
 
 	// Level 1: Total strands (Row 14) - always exists
 	if (currentCount <= maxStrands) {
@@ -1665,7 +1775,6 @@ function calculateOperationsExcelWay(
 	}
 
 	// Level 2: 2nd to last operation (Row 18)
-	level = 2;
 	if (currentCount % 5 === 0) {
 		currentCount = currentCount / 5;
 	} else if (currentCount % 3 === 0) {
@@ -1681,7 +1790,6 @@ function calculateOperationsExcelWay(
 	}
 
 	// Level 3: 3rd to last operation (Row 22)
-	level = 3;
 	if (currentCount % 5 === 0) {
 		currentCount = currentCount / 5;
 	} else if (currentCount % 3 === 0) {
@@ -1697,7 +1805,6 @@ function calculateOperationsExcelWay(
 	}
 
 	// Level 4: 4th to last operation (Row 26)
-	level = 4;
 	if (currentCount % 5 === 0) {
 		currentCount = currentCount / 5;
 	} else if (currentCount % 3 === 0) {
@@ -1713,7 +1820,6 @@ function calculateOperationsExcelWay(
 	}
 
 	// Level 5: 5th to last operation (Row 30)
-	level = 5;
 	if (currentCount % 5 === 0) {
 		currentCount = currentCount / 5;
 	} else if (currentCount % 3 === 0) {
@@ -1727,14 +1833,27 @@ function calculateOperationsExcelWay(
 	return 5; // Reached maximum level
 }
 
+// =============================================================================
+// MAIN CALCULATION FUNCTIONS
+// =============================================================================
+
 /**
  * Main function to calculate complete Litz construction
+ *
+ * This is the primary entry point for Litz wire calculations. It validates the strand count,
+ * calculates manufacturing parameters, and returns a complete construction specification.
+ *
+ * @param totalStrands - Total number of strands in the construction
+ * @param wireAWG - AWG size of individual strands
+ * @param litzType - Type 1 (uniform) or Type 2 (varying) Litz construction
+ * @param magnetWireGrade - Magnet wire grade (default: "MW 79-C")
+ * @returns Complete Litz construction calculation result
  */
 export function calculateLitzConstruction(
 	totalStrands: number,
 	wireAWG: number,
 	litzType: "Type 1" | "Type 2",
-	magnetWireGrade = "MW 79-C",
+	_magnetWireGrade = "MW 79-C",
 ): LitzConstruction {
 	// Validate strand count
 	const validation = validateStrandCount(totalStrands, wireAWG);
@@ -1755,7 +1874,7 @@ export function calculateLitzConstruction(
 		};
 	}
 
-	// FIXED: Use Excel's hierarchical method instead of simple division count
+	// Calculate operations count using Excel's hierarchical method
 	const numberOfOperations = calculateOperationsExcelWay(totalStrands, wireAWG);
 
 	// Calculate packing factor (pass wireAWG for special-case logic)
@@ -1765,7 +1884,7 @@ export function calculateLitzConstruction(
 		wireAWG,
 	);
 
-	// Calculate take up factor (pass litzType)
+	// Calculate take up factor
 	const takeUpFactor = calculateTakeUpFactor(litzType, numberOfOperations);
 
 	// Calculate copper areas
@@ -1790,51 +1909,16 @@ export function calculateLitzConstruction(
 	};
 }
 
-export const STRAND_OD_REFERENCE: Record<
-	number,
-	{ min: number; nom: number; max: number }
-> = {
-	12: { min: 0.0814, nom: 0.0827, max: 0.084 },
-	13: { min: 0.0727, nom: 0.0739, max: 0.075 },
-	14: { min: 0.0651, nom: 0.0658, max: 0.0666 },
-	15: { min: 0.058, nom: 0.0587, max: 0.0594 },
-	16: { min: 0.0517, nom: 0.0524, max: 0.0531 },
-	17: { min: 0.0462, nom: 0.0468, max: 0.0475 },
-	18: { min: 0.0412, nom: 0.0418, max: 0.0424 },
-	19: { min: 0.0367, nom: 0.0373, max: 0.0379 },
-	20: { min: 0.0329, nom: 0.0334, max: 0.0339 },
-	21: { min: 0.0293, nom: 0.0298, max: 0.0303 },
-	22: { min: 0.0261, nom: 0.0266, max: 0.027 },
-	23: { min: 0.0234, nom: 0.0238, max: 0.0243 },
-	24: { min: 0.0209, nom: 0.0213, max: 0.0217 },
-	25: { min: 0.0186, nom: 0.019, max: 0.0194 },
-	26: { min: 0.0166, nom: 0.017, max: 0.0173 },
-	27: { min: 0.0149, nom: 0.0153, max: 0.0156 },
-	28: { min: 0.0133, nom: 0.0137, max: 0.014 },
-	29: { min: 0.0119, nom: 0.0123, max: 0.0126 },
-	30: { min: 0.0106, nom: 0.0109, max: 0.0112 },
-	31: { min: 0.0094, nom: 0.0097, max: 0.01 },
-	32: { min: 0.0085, nom: 0.0088, max: 0.0091 },
-	33: { min: 0.0075, nom: 0.0078, max: 0.0081 },
-	34: { min: 0.0067, nom: 0.007, max: 0.0072 },
-	35: { min: 0.0059, nom: 0.0062, max: 0.0064 },
-	36: { min: 0.0053, nom: 0.0056, max: 0.0058 },
-	37: { min: 0.0047, nom: 0.005, max: 0.0052 },
-	38: { min: 0.0042, nom: 0.0045, max: 0.0047 },
-	39: { min: 0.0036, nom: 0.0039, max: 0.0041 },
-	40: { min: 0.0032, nom: 0.0035, max: 0.0037 },
-	41: { min: 0.0029, nom: 0.0031, max: 0.0033 },
-	42: { min: 0.0026, nom: 0.0028, max: 0.003 },
-	43: { min: 0.0023, nom: 0.0025, max: 0.0026 },
-	44: { min: 0.0021, nom: 0.0023, max: 0.0024 },
-	45: { min: 0.00179, nom: 0.00192, max: 0.00205 },
-	46: { min: 0.00161, nom: 0.00173, max: 0.00185 },
-	47: { min: 0.00145, nom: 0.00157, max: 0.0017 },
-	48: { min: 0.00129, nom: 0.0014, max: 0.0015 },
-	49: { min: 0.00117, nom: 0.00124, max: 0.0013 },
-	50: { min: 0.00105, nom: 0.00113, max: 0.0012 },
-};
-
+/**
+ * Calculate Nylon Served Diameters
+ *
+ * Calculates the diameter increase for nylon-served Litz wire constructions.
+ * Single serve adds 0.002-0.003 inches, double serve adds 0.004-0.006 inches.
+ *
+ * @param bareResult - Bare Litz wire diameter result
+ * @param serveType - Type of nylon serve (Single or Double)
+ * @returns Served diameter result with updated part number
+ */
 export function calculateNylonServedDiameters(
 	bareResult: DiameterResult,
 	serveType: "Single Nylon Serve" | "Double Nylon Serve",

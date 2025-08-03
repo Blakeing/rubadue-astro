@@ -230,7 +230,6 @@ export function LitzDesignToolV2() {
 								insulatedResults[
 									`${layer === 1 ? "Single" : layer === 2 ? "Double" : "Triple"} Insulated`
 								] = calculateInsulatedLitzDiameters(
-									bareDiameter,
 									formData.wireAWG,
 									insulationType,
 									layer,
