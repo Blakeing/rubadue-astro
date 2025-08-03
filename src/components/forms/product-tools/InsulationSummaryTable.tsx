@@ -12,7 +12,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { HelpCircle, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, HelpCircle } from "lucide-react";
 import type React from "react";
 
 interface InsulationSummaryTableProps {

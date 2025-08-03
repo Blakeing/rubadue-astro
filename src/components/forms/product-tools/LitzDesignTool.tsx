@@ -40,15 +40,15 @@ import {
 import {
 	type DiameterResult,
 	type LitzConstruction,
-	STRAND_OD_REFERENCE,
 	MAGNET_WIRE_FILM_THICKNESSES,
+	STRAND_OD_REFERENCE,
 	type StrandValidationResult,
 	calculateBareLitzDiameters,
 	calculateInsulatedLitzDiameters,
 	calculateLitzConstruction,
 	calculateNylonServedDiameters,
-	checkULApproval,
 	checkManufacturingCapability,
+	checkULApproval,
 	validateStrandCount,
 } from "@/lib/litz-calculations";
 import { zodResolver } from "@hookform/resolvers/zod";

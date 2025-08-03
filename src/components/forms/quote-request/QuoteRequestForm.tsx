@@ -91,7 +91,7 @@ export function QuoteRequestForm({
 							? error.message
 							: "There was a problem submitting your request. Please try again.",
 				});
-				onError?.(error);
+				onError?.(error instanceof Error ? error : new Error(String(error)));
 			} finally {
 				setIsSubmitting(false);
 			}

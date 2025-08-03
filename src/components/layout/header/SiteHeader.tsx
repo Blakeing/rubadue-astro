@@ -23,8 +23,8 @@ import {
 	Menu,
 	Settings,
 	Shield,
-	Wrench,
 	Target,
+	Wrench,
 } from "lucide-react";
 import * as React from "react";
 
