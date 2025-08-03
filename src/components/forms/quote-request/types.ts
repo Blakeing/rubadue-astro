@@ -74,7 +74,7 @@ export interface QuoteRequestFormProps {
 	/** Callback when form is submitted successfully */
 	onSuccess?: (data: FormValues) => void;
 	/** Callback when form submission fails */
-	onError?: (error: unknown) => void;
+	onError?: (error: Error | string) => void;
 	/** Additional class name for the form */
 	className?: string;
 }

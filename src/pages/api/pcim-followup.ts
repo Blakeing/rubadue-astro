@@ -41,7 +41,6 @@ ${message || "No additional message provided."}
 		});
 
 		if (error) {
-			console.error("Resend error:", error);
 			return new Response(
 				JSON.stringify({
 					message: "Failed to send email",
@@ -69,7 +68,6 @@ ${message || "No additional message provided."}
 			},
 		);
 	} catch (error) {
-		console.error("API Route error:", error);
 		return new Response(
 			JSON.stringify({
 				message: "An error occurred processing your request",

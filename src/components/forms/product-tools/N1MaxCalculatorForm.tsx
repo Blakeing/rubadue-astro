@@ -163,10 +163,7 @@ export default function N1MaxCalculatorForm({
 			setResults(zeroResults);
 			onResultsCalculated?.(zeroResults);
 
-			// Only log in development
-			if (process.env.NODE_ENV === "development") {
-				console.error("Error calculating results:", error);
-			}
+			// Error handled silently in production
 		}
 	}, [
 		isValidForm,

@@ -1,6 +1,9 @@
 ---
 import ironGripPattern from "@/assets/backgrounds/iron-grip.png";
 
+// Get current year dynamically
+const currentYear = new Date().getFullYear();
+
 const navigation = {
   social: [
     {
@@ -56,7 +59,7 @@ const navigation = {
     <p
       class="mt-6 text-center text-xs sm:text-sm/6 text-muted md:order-1 md:mt-0"
     >
-      &copy; 2024 Rubadue Wire, Inc. All rights reserved.
+      &copy; {currentYear} Rubadue Wire, Inc. All rights reserved.
     </p>
   </div>
 </footer>

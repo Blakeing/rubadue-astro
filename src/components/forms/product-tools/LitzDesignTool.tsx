@@ -195,7 +195,7 @@ export function LitzDesignToolV2() {
 									filmType,
 								);
 							} catch (error) {
-								console.error(`Error calculating ${filmType} film:`, error);
+								// Error handled silently
 							}
 						}
 
@@ -239,10 +239,7 @@ export function LitzDesignToolV2() {
 									constructionResult.packingFactor,
 								);
 							} catch (error) {
-								console.error(
-									`Error calculating ${layer}-layer insulation:`,
-									error,
-								);
+								// Error handled silently
 							}
 						}
 
@@ -287,7 +284,6 @@ export function LitzDesignToolV2() {
 					setDiameterResults({ ulWarnings: [], manufacturingWarnings: [] });
 				}
 			} catch (error) {
-				console.error("Calculation error:", error);
 				setCalculationError(
 					"An error occurred during calculation. Please check your inputs and try again.",
 				);

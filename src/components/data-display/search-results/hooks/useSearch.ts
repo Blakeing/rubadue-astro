@@ -82,9 +82,6 @@ export function useSearch({
 					const tagParam = params.get("tag") || defaultTag;
 					return tagParam && allTags.includes(tagParam) ? tagParam : null;
 				} catch (error) {
-					if (process.env.NODE_ENV === "development") {
-						console.error("Error reading URL params:", error);
-					}
 					return defaultTag && allTags.includes(defaultTag) ? defaultTag : null;
 				}
 			};
@@ -118,9 +115,6 @@ export function useSearch({
 				}
 				window.history.replaceState({}, "", url.toString());
 			} catch (error) {
-				if (process.env.NODE_ENV === "development") {
-					console.error("Error updating URL:", error);
-				}
 				// URL update failure is non-critical, functionality continues
 			}
 		};

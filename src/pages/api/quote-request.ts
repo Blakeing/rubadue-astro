@@ -101,7 +101,6 @@ ${validatedData.message}
 		});
 
 		if (error) {
-			console.error("Resend error:", error);
 			return new Response(
 				JSON.stringify({
 					message: "Failed to send email",
@@ -129,7 +128,6 @@ ${validatedData.message}
 			},
 		);
 	} catch (error) {
-		console.error("Error processing quote request:", error);
 		return new Response(
 			JSON.stringify({
 				message:
