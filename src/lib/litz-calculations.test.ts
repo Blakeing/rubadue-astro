@@ -232,12 +232,12 @@ describe("Litz Wire Calculations", () => {
 			expect(calculateRequiredWallThickness("FEP", 1000, 0.003, 1)).toBe(0.003);
 		});
 
-		it("FEP: 1939 <= copper area < 12828, min wall 0.003", () => {
+		it("FEP: 1939 <= copper area < 12405, min wall 0.003", () => {
 			expect(calculateRequiredWallThickness("FEP", 5000, 0.002, 1)).toBe(0.003);
 			expect(calculateRequiredWallThickness("FEP", 5000, 0.004, 1)).toBe(0.004);
 		});
 
-		it("FEP: 12828 <= copper area < 24978, min wall 0.01", () => {
+		it("FEP: 12405 <= copper area < 24978, min wall 0.01", () => {
 			expect(calculateRequiredWallThickness("FEP", 20000, 0.005, 1)).toBe(0.01);
 			expect(calculateRequiredWallThickness("FEP", 20000, 0.02, 1)).toBe(0.02);
 		});
@@ -245,6 +245,25 @@ describe("Litz Wire Calculations", () => {
 		it("FEP: copper area >= 24978, min wall 0.012", () => {
 			expect(calculateRequiredWallThickness("FEP", 30000, 0.01, 1)).toBe(0.012);
 			expect(calculateRequiredWallThickness("FEP", 30000, 0.02, 1)).toBe(0.02);
+		});
+
+		// Triple insulation FEP wall thickness rules (from email feedback)
+		it("FEP triple insulation: copper area < 12828, min wall 0.002", () => {
+			expect(calculateRequiredWallThickness("FEP", 10000, 0.001, 3)).toBe(
+				0.002,
+			);
+			expect(calculateRequiredWallThickness("FEP", 10000, 0.003, 3)).toBe(
+				0.003,
+			);
+		});
+
+		it("FEP triple insulation: copper area >= 12828, min wall 0.004", () => {
+			expect(calculateRequiredWallThickness("FEP", 15000, 0.002, 3)).toBe(
+				0.004,
+			);
+			expect(calculateRequiredWallThickness("FEP", 15000, 0.006, 3)).toBe(
+				0.006,
+			);
 		});
 	});
 
@@ -289,24 +308,23 @@ describe("Litz Wire Calculations", () => {
 	});
 
 	describe("Triple Insulated Wire Calculations", () => {
-		it("should match Excel values for 200 strands AWG 36 triple insulated", () => {
-			// This is the specific case we were debugging
+		it("should match Excel values for 2000 strands AWG 44 triple insulated", () => {
+			// This matches the screenshot: 2000 strands, AWG 44, Type 2, FEP insulation
 			const result = calculateInsulatedLitzDiameters(
 				0.1, // ignored
-				36,
-				"PFA",
+				44,
+				"FEP",
 				3,
 				"MW 79-C",
-				200,
-				1.155, // Standard packing factor
+				2000,
+				1.271, // Type 2, 4 operations packing factor
 			);
 
-			// Expected values using single film data (updated logic)
-			// These values are now calculated using single film thickness instead of triple film
-			expect(result.min).toBeCloseTo(0.098, 3);
-			expect(result.nom).toBeCloseTo(0.103, 3);
-			expect(result.max).toBeCloseTo(0.108, 3);
-			expect(result.wallThicknessInches).toBeCloseTo(0.002, 3);
+			// Expected values from Excel screenshot
+			expect(result.min).toBeCloseTo(0.135, 3);
+			expect(result.nom).toBeCloseTo(0.149, 3);
+			expect(result.max).toBeCloseTo(0.156, 3);
+			expect(result.wallThicknessInches).toBeCloseTo(0.003, 3); // From screenshot
 		});
 
 		it("should work for different strand counts and AWG sizes", () => {
@@ -387,6 +405,44 @@ describe("Litz Wire Calculations", () => {
 			expect(smallResult.max - smallResult.min).toBeLessThan(
 				largeResult.max - largeResult.min,
 			);
+		});
+
+		it("should handle high AWG values for triple insulation (fallback to single film)", () => {
+			// Test AWG 46, 47, 48, 49, 50 which don't have triple film data
+			// These should work by falling back to single film diameter for delta calculation
+			const awg46Result = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				46,
+				"FEP",
+				3,
+				"MW 79-C",
+				100,
+				1.155,
+			);
+
+			const awg50Result = calculateInsulatedLitzDiameters(
+				0.1, // ignored
+				50,
+				"FEP",
+				3,
+				"MW 79-C",
+				50,
+				1.155,
+			);
+
+			// Both should calculate without errors (no "Triple film not available" errors)
+			expect(awg46Result.min).toBeGreaterThan(0);
+			expect(awg46Result.nom).toBeGreaterThan(awg46Result.min);
+			expect(awg46Result.max).toBeGreaterThan(awg46Result.nom);
+			expect(awg46Result.wallThicknessInches).toBeGreaterThan(0);
+
+			expect(awg50Result.min).toBeGreaterThan(0);
+			expect(awg50Result.nom).toBeGreaterThan(awg50Result.min);
+			expect(awg50Result.max).toBeGreaterThan(awg50Result.nom);
+			expect(awg50Result.wallThicknessInches).toBeGreaterThan(0);
+
+			// AWG 50 should have smaller diameters than AWG 46
+			expect(awg50Result.nom).toBeLessThan(awg46Result.nom);
 		});
 	});
 

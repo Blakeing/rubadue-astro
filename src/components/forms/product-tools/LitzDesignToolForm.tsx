@@ -493,7 +493,9 @@ export default function LitzDesignToolForm() {
 								<p>
 									Total Copper Area (CMA):{" "}
 									<span className="font-mono">
-										{totalCMA ? totalCMA.toLocaleString() : "-"}
+										{totalCMA
+											? Number.parseFloat(totalCMA.toFixed(1)).toLocaleString()
+											: "-"}
 									</span>
 								</p>
 								<p>

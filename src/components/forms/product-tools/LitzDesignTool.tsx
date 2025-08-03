@@ -556,7 +556,7 @@ export function LitzDesignToolV2() {
 													<FormLabel>Insulation Material</FormLabel>
 													<Select
 														onValueChange={field.onChange}
-														value={field.value}
+														value={field.value || ""}
 														disabled={isCalculating}
 													>
 														<FormControl>
@@ -869,7 +869,9 @@ export function LitzDesignToolV2() {
 										</div>
 										<div className="font-medium">
 											{construction
-												? construction.totalCopperAreaCMA.toFixed(1)
+												? Number.parseFloat(
+														construction.totalCopperAreaCMA.toFixed(1),
+													).toString()
 												: "N/A"}
 										</div>
 									</div>
