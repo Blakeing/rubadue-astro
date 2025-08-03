@@ -529,6 +529,40 @@ describe("Litz Wire Calculations", () => {
 			const warnings = checkULApproval(0.1, "ETFE", 5000, 0.002, 1);
 			expect(Array.isArray(warnings)).toBe(true);
 		});
+
+		it("should validate FEP triple insulation UL approval with updated 12828 CMA threshold", () => {
+			// Test FEP triple insulation with copper area < 12828 and insufficient wall thickness
+			const warnings1 = checkULApproval(0.1, "FEP", 10000, 0.001, 3);
+			expect(
+				warnings1.some((w) =>
+					w.includes(
+						"INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES",
+					),
+				),
+			).toBe(true);
+
+			// Test FEP triple insulation with copper area >= 12828 and insufficient wall thickness
+			const warnings2 = checkULApproval(0.1, "FEP", 15000, 0.002, 3);
+			expect(
+				warnings2.some((w) =>
+					w.includes(
+						"INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES",
+					),
+				),
+			).toBe(true);
+
+			// Test FEP triple insulation with copper area < 12828 and sufficient wall thickness
+			const warnings3 = checkULApproval(0.1, "FEP", 10000, 0.003, 3);
+			expect(
+				warnings3.some((w) => w.includes("INCREASE INSULATION WALL THICKNESS")),
+			).toBe(false);
+
+			// Test FEP triple insulation with copper area >= 12828 and sufficient wall thickness
+			const warnings4 = checkULApproval(0.1, "FEP", 15000, 0.005, 3);
+			expect(
+				warnings4.some((w) => w.includes("INCREASE INSULATION WALL THICKNESS")),
+			).toBe(false);
+		});
 	});
 
 	describe("Performance and Memory", () => {

@@ -1466,16 +1466,20 @@ function checkTripleInsulationULApproval(
 		return warnings;
 	}
 
-	// 2. FEP with copper area < 12405 and wall thickness < 0.002
-	if (insulationType === "FEP" && copperArea < 12405 && wallThickness < 0.002) {
+	// 2. FEP with copper area < 12828 and wall thickness < 0.002
+	if (insulationType === "FEP" && copperArea < 12828 && wallThickness < 0.002) {
 		warnings.push(
 			"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0020 INCHES.",
 		);
 		return warnings;
 	}
 
-	// 3. FEP with copper area > 12404 and wall thickness < 0.004
-	if (insulationType === "FEP" && copperArea > 12404 && wallThickness < 0.004) {
+	// 3. FEP with copper area >= 12828 and wall thickness < 0.004
+	if (
+		insulationType === "FEP" &&
+		copperArea >= 12828 &&
+		wallThickness < 0.004
+	) {
 		warnings.push(
 			"THIS PART WILL NOT CARRY UL APPROVALS. INCREASE INSULATION WALL THICKNESS TO AT LEAST 0.0040 INCHES.",
 		);
