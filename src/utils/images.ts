@@ -35,17 +35,10 @@ export async function getResolvedImageSource(
 				};
 				imageToProcess = importedModule.default;
 			} catch (importError) {
-				console.error(
-					`[getResolvedImageSource] Error importing asset ${normalizedPath}:`,
-					importError,
-				);
 				// Fallback to default image instead of breaking
 				imageToProcess = defaultHeroImageMetadata;
 			}
 		} else {
-			console.warn(
-				`[getResolvedImageSource] Asset NOT found in glob: ${normalizedPath}. Using fallback.`,
-			);
 			// Use fallback image
 			imageToProcess = defaultHeroImageMetadata;
 		}
@@ -62,7 +55,6 @@ export async function getResolvedImageSource(
 		});
 		return optimizedImage.src;
 	} catch (error) {
-		console.error("[getResolvedImageSource] Error optimizing image:", error);
 		// Return the source directly as a last resort
 		return imageToProcess.src || defaultHeroImageMetadata.src;
 	}

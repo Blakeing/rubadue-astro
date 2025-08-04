@@ -1,6 +1,4 @@
 // Layout Backgrounds
 // Placeholder for background components and utilities
 
-export const backgrounds = {
-	// Add background utilities here when needed
-};
+// This file can be removed - no actual background utilities are defined

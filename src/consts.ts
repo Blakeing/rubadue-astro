@@ -13,9 +13,8 @@ export const SITE = {
 	LOGO_ALT: "Rubadue Wire Logo",
 } as const;
 
-// Export SITE_TITLE and SITE_DESCRIPTION for backward compatibility
+// Export SITE_TITLE for backward compatibility
 export const SITE_TITLE = SITE.TITLE;
-const SITE_DESCRIPTION = SITE.DESCRIPTION;
 
 /**
  * Social media links
@@ -31,9 +30,9 @@ const SOCIAL = {
  */
 export const CONTACT = {
 	EMAIL: "info@rubadue.com",
-	PHONE: "+1 (555) 555-5555", // Replace with actual phone number
+	PHONE: "+1 (555) 555-5555", // TODO: Replace with actual phone number
 	ADDRESS: {
-		STREET: "123 Main St", // Replace with actual address
+		STREET: "123 Main St", // TODO: Replace with actual address
 		CITY: "Anytown",
 		STATE: "ST",
 		ZIP: "12345",

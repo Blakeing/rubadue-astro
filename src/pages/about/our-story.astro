@@ -1,5 +1,9 @@
 ---
 import { Image } from "astro:assets";
+import dougIngenthronImage from "@/assets/images/team/doug-ingenthron.webp";
+import kyleJensenImage from "@/assets/images/team/kyle-jensen.webp";
+import mikeSkorupaImage from "@/assets/images/team/mike-skorupa.webp";
+import shawnTolandImage from "@/assets/images/team/shawn-toland.webp";
 import Timeline from "@/components/pages/company/Timeline";
 import {
   Card,
@@ -12,10 +16,6 @@ import type { IconName } from "@/components/ui/icons";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import type { ImageMetadata } from "astro";
 import { Eye, Target } from "lucide-react";
-import dougIngenthronImage from "../assets/images/team/doug-ingenthron.webp";
-import kyleJensenImage from "../assets/images/team/kyle-jensen.webp";
-import mikeSkorupaImage from "../assets/images/team/mike-skorupa.webp";
-import shawnTolandImage from "../assets/images/team/shawn-toland.webp";
 
 interface Person {
   name: string;
@@ -164,7 +164,7 @@ const stats = [
 ---
 
 <BaseLayout
-  title="About Rubadue Wire | Wire & Cable Solutions"
+  title="Our Story | Rubadue Wire"
   description="Since 1977, Rubadue Wire has been pioneering wire solutions with cutting-edge technology, specializing in triple-insulated wire and Litz wire. As a 100% employee-owned company, we solve wire and cable challenges when high performance and reliability are critical."
   category="About"
   eyebrow="About"
@@ -182,7 +182,7 @@ const stats = [
       </div>
 
       {/* Mission & Vision Section */}
-      <div class="my-12 sm:my-16">
+      <div class="mt-12 mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div
             class="relative overflow-hidden rounded-xl border border-primary/20 bg-card text-card-foreground shadow"
@@ -227,6 +227,8 @@ const stats = [
           </div>
         </div>
       </div>
+
+      <hr class="my-12 border-t border-primary/10" />
 
       {/* History Timeline Section */}
       <div>
