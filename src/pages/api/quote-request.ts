@@ -43,6 +43,7 @@ const emailSchema = z.object({
 			message: "Please select at least one wire type",
 		}),
 	message: z.string().optional(),
+	partNumber: z.string().optional(),
 }) satisfies z.ZodType<QuoteRequestData>;
 
 export const POST: APIRoute = async ({ request }) => {
@@ -91,10 +92,15 @@ Message:
 ${validatedData.message}
 		`.trim();
 
+		// Use different email addresses for development vs production
+		const isDev = import.meta.env.DEV;
+		const toEmail = isDev ? "blakeingenthron@gmail.com" : "sales@rubadue.com";
+		const ccEmail = isDev ? undefined : "blakeingenthron@gmail.com";
+		
 		const { data: emailData, error } = await resend.emails.send({
 			from: "Rubadue Quote Request <sales@rubadue.com>", // Update with your verified domain
-			to: ["sales@rubadue.com"],
-			cc: ["blakeingenthron@gmail.com"], // Update with your email
+			to: [toEmail],
+			...(ccEmail && { cc: [ccEmail] }),
 			subject: `New Quote Request from ${validatedData.firstName} ${validatedData.lastName}`,
 			html: html,
 			text: text,

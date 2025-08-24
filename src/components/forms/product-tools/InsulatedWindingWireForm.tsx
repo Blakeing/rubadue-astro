@@ -373,7 +373,7 @@ export function InsulatedWindingWireForm({
 					</CardContent>
 				</Card>
 
-				<PartNumberDisplay partNumber={partNumber} />
+				<PartNumberDisplay partNumber={partNumber} wireType="windingWire" />
 			</div>
 			<Toaster />
 		</div>

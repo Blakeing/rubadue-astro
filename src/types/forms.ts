@@ -48,7 +48,7 @@ export type WireType = (typeof WIRE_TYPES)[keyof typeof WIRE_TYPES];
  */
 export const WIRE_TYPE_NAMES: Record<WireType, string> = {
 	[WIRE_TYPES.LITZ_WIRE]: "Litz Wire",
-	[WIRE_TYPES.WINDING_WIRE]: "Winding Wire",
+	[WIRE_TYPES.WINDING_WIRE]: "Insulated Winding Wire",
 	[WIRE_TYPES.CUSTOM_CABLE]: "Custom Cable",
 } as const;
 
@@ -81,6 +81,7 @@ export interface QuoteRequestData extends BaseFormData {
 	country?: Country;
 	jobFunction: JobFunction;
 	wireTypes: Record<WireType, boolean>;
+	partNumber?: string;
 }
 
 // Type definition for the PCIM Follow-up Form

@@ -6,33 +6,33 @@ import {
 	CardTitle,
 	Input,
 } from "@/components/ui";
+import { ContactUsCTA } from "@/components/ui/ContactUsCTA";
 import { cn } from "@/lib/utils";
-import { Copy } from "lucide-react";
-import { toast } from "sonner";
+import { ExternalLink } from "lucide-react";
 import { EXAMPLE_PART_NUMBERS } from "./utils";
 
 interface PartNumberDisplayProps {
 	partNumber: string;
 	className?: string;
+	wireType?: "litzWire" | "windingWire";
 }
 
 export function PartNumberDisplay({
 	partNumber,
 	className,
+	wireType,
 }: PartNumberDisplayProps) {
-	const handleCopy = async () => {
+	const handleRequestQuote = () => {
 		if (!partNumber) return;
 
-		try {
-			await navigator.clipboard.writeText(partNumber);
-			toast.success("Part number copied!", {
-				description: "The part number has been copied to your clipboard",
-			});
-		} catch (error) {
-			toast.error("Failed to copy part number", {
-				description: "Please try copying manually",
-			});
+		// Navigate to quote request page with part number and wire type as URL parameters
+		const params = new URLSearchParams();
+		params.set('partNumber', partNumber);
+		if (wireType) {
+			params.set('wireType', wireType);
 		}
+		const url = `/request-a-quote?${params.toString()}`;
+		window.location.href = url;
 	};
 
 	return (
@@ -69,22 +69,24 @@ export function PartNumberDisplay({
 								aria-label="Generated part number"
 							/>
 							<Button
-								variant="outline"
+								variant="default"
 								size="sm"
 								className="gap-2 whitespace-nowrap"
-								onClick={handleCopy}
+								onClick={handleRequestQuote}
 								disabled={!partNumber}
 								aria-label={
-									partNumber ? "Copy part number" : "No part number to copy"
+									partNumber ? "Request a quote for this part number" : "No part number to quote"
 								}
 							>
-								<Copy className="h-4 w-4" />
-								Copy
+								<ExternalLink className="h-4 w-4" />
+								Request a Quote
 							</Button>
 						</div>
 					</div>
 				</CardContent>
 			</Card>
+			
+			<ContactUsCTA className="mt-6" />
 		</div>
 	);
 }

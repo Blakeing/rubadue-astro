@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CompanyAddress } from "./CompanyAddress";
-import { JobInformation } from "./JobInformation";
+import { ProductInformation } from "./ProductInformation";
 import { PersonalInformation } from "./PersonalInformation";
 import type { FormValues, QuoteRequestFormProps } from "./types";
 import { formSchema } from "./types";
@@ -45,6 +45,7 @@ export function QuoteRequestForm({
 				customCable: initialValues?.wireTypes?.customCable || false,
 			},
 			message: initialValues?.message || "",
+			partNumber: initialValues?.partNumber || "",
 		},
 		mode: "onSubmit",
 		reValidateMode: "onSubmit",
@@ -78,8 +79,28 @@ export function QuoteRequestForm({
 					description: "Thank you for your request. We'll be in touch soon.",
 				});
 
-				// Reset form
-				form.reset();
+				// Reset form to empty values (not initial values)
+				form.reset({
+					firstName: "",
+					lastName: "",
+					email: "",
+					phone: "",
+					companyName: "",
+					streetAddress: "",
+					addressLine2: "",
+					city: "",
+					stateProvince: "",
+					zipCode: "",
+					country: undefined,
+					jobFunction: undefined,
+					wireTypes: {
+						litzWire: false,
+						windingWire: false,
+						customCable: false,
+					},
+					message: "",
+					partNumber: "",
+				});
 
 				// Call onSuccess callback if provided
 				await onSuccess?.(data);
@@ -110,7 +131,7 @@ export function QuoteRequestForm({
 				<div className="space-y-8">
 					<PersonalInformation />
 					<CompanyAddress />
-					<JobInformation />
+					<ProductInformation />
 
 					{form.formState.errors.root && (
 						<Alert variant="destructive">

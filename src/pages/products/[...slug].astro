@@ -46,7 +46,7 @@ const filterContext = {
 // Build breadcrumb segments with filter context
 const pathSegments = url.pathname.split("/").filter(Boolean);
 
-// Helper function to build catalog URL with filters
+// Helper function to build product URL with filters
 const buildFilterUrl = (segments: string[]) => {
   const params = new URLSearchParams();
 
@@ -82,7 +82,7 @@ const buildFilterUrl = (segments: string[]) => {
     params.append("material", filter);
   }
 
-  return `/catalog${params.toString() ? `?${params.toString()}` : ""}`;
+  return `/products${params.toString() ? `?${params.toString()}` : ""}`;
 };
 
 // Known materials list - keep in sync with ProductListingPage
@@ -91,7 +91,7 @@ const knownMaterials = ["ETFE", "FEP", "PFA", "TCA"];
 // Start with static segments
 const segments = [
   { name: "Home", href: "/" }, // Home icon
-  { name: "Catalog", href: "/catalog" }, // Static catalog link
+  { name: "Product", href: "/products" }, // Static product link
 ];
 
 // Add filter segments
@@ -155,8 +155,8 @@ const category = getProductCategory(product.data);
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="min-h-screen bg-background">
-    <Header client:load />
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <Header client:idle />
     <BaseHeader eyebrow={category} title={title} />
     <ProductBreadcrumbs segments={segments} />
     <main>

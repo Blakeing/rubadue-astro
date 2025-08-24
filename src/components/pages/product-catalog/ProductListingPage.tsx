@@ -382,8 +382,7 @@ export default function ProductListingPage({
 				</Sheet>
 
 				<section
-					aria-labelledby="products-heading"
-					className="pb-12 sm:pb-16 md:pb-24 pt-6 sm:pt-10 md:pt-12"
+					aria-labelledby="products-heading"	
 				>
 					<h2 id="products-heading" className="sr-only">
 						Products
@@ -476,7 +475,7 @@ export default function ProductListingPage({
 						{/* Product grid */}
 						<div className="lg:col-span-9">
 							{/* Mobile search and filter controls */}
-							<div className="mb-4 flex items-center justify-between lg:hidden">
+							<div className="my-4 flex items-center justify-between lg:hidden">
 								<div className="relative flex-1 mr-2">
 									<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 									<Input
@@ -500,7 +499,7 @@ export default function ProductListingPage({
 								{paginatedProducts.map((product) => (
 									<a
 										key={product.slug}
-										href={`/catalog/${product.slug}`}
+										                href={`/products/${product.slug}`}
 										className="group relative"
 									>
 										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-accent/25">

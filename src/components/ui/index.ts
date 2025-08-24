@@ -25,3 +25,4 @@ export * from "./toaster";
 export * from "./tooltip";
 export * from "./FormFields";
 export * from "./icons";
+export * from "./ContactUsCTA";

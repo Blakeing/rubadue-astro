@@ -27,10 +27,15 @@ Phone: ${phone}
 ${message}
 `;
 
+		// Use different email addresses for development vs production
+		const isDev = import.meta.env.DEV;
+		const toEmail = isDev ? "blakeingenthron@gmail.com" : "sales@rubadue.com";
+		const ccEmail = isDev ? undefined : "blakeingenthron@gmail.com";
+		
 		const { data, error } = await resend.emails.send({
 			from: "Rubadue Contact Form <sales@rubadue.com>", // Using Resend test domain
-			to: ["sales@rubadue.com"],
-			cc: ["blakeingenthron@gmail.com"], // Update with your email
+			to: [toEmail],
+			...(ccEmail && { cc: [ccEmail] }),
 			subject: `New Contact Submission from ${firstName} ${lastName}`,
 			html: html,
 			text: text,

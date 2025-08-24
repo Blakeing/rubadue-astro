@@ -81,6 +81,26 @@ export function generateQuoteRequestEmailHtml(data: QuoteRequestData): string {
       </tr>
     </table>
     
+    ${data.partNumber ? `
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 30px; background: #f9f9f9; border-radius: 8px; padding: 20px;">
+      <tr>
+        <td style="font-size: 18px; font-weight: bold; color: #2a2a2a; padding-bottom: 15px; border-bottom: 2px solid #eeeeee;">
+          Part Number
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-top: 15px;">
+          <div style="background: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #eeeeee; font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; color: #2a2a2a; text-align: center;">
+            ${escapeHtml(data.partNumber)}
+          </div>
+          <div style="margin-top: 10px; font-size: 12px; color: #666666; text-align: center;">
+            Generated from part number builder
+          </div>
+        </td>
+      </tr>
+    </table>
+    ` : ''}
+    
     <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 30px; background: #f9f9f9; border-radius: 8px; padding: 20px;">
       <tr>
         <td style="font-size: 18px; font-weight: bold; color: #2a2a2a; padding-bottom: 15px; border-bottom: 2px solid #eeeeee;">

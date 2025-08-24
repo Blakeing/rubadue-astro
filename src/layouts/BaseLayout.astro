@@ -75,7 +75,7 @@ if (segments.length === 0 || segments[0].name !== "Home") {
     class="bg-background font-sans antialiased min-h-screen flex flex-col relative"
   >
     <main class="flex-1 relative z-10">
-      <Header client:load />
+      <Header client:idle />
       {
         eyebrow && headerTitle && (
           <BaseHeader eyebrow={eyebrow} title={headerTitle} />

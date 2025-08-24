@@ -69,8 +69,7 @@ const TimelineCard: React.FC<{
 			<CardContent className="p-6">
 				<div
 					className={cn(
-						"flex items-center gap-3 mb-3",
-						isEven && "md:justify-end",
+						"flex items-center gap-3 mb-3"
 					)}
 				>
 					{entry.icon && (
@@ -80,22 +79,13 @@ const TimelineCard: React.FC<{
 							})}
 						</div>
 					)}
-					{!isEven && (
-						<h3 className="text-xl font-display text-foreground">
-							{entry.year}
-						</h3>
-					)}
-					{isEven && (
-						<h3 className="text-xl font-display text-foreground">
-							{entry.year}
-						</h3>
-					)}
+					<h3 className="text-xl font-display text-foreground">
+						{entry.year}
+					</h3>
 				</div>
 				<p
 					className={cn(
-						"text-base text-pretty text-muted-foreground leading-relaxed text-left",
-						"md:text-left",
-						isEven && "md:text-right",
+						"text-base text-pretty text-muted-foreground leading-relaxed text-left"
 					)}
 				>
 					{entry.description}

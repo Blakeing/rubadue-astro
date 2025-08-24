@@ -61,7 +61,7 @@ export default function ProductPage({
 	filterContext,
 }: ProductPageProps) {
 	const getCatalogUrl = () => {
-		if (!filterContext) return "/catalog";
+  if (!filterContext) return "/products";
 
 		const params = new URLSearchParams();
 		for (const type of filterContext.type) {
@@ -72,7 +72,7 @@ export default function ProductPage({
 		}
 		if (filterContext.search) params.set("q", filterContext.search);
 
-		return `/catalog${params.toString() ? `?${params.toString()}` : ""}`;
+		  return `/products${params.toString() ? `?${params.toString()}` : ""}`;
 	};
 
 	const renderConstructionDetails = (

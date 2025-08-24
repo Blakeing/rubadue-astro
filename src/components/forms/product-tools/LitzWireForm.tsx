@@ -204,7 +204,7 @@ export function LitzWireForm({
 					</CardContent>
 				</Card>
 
-				<PartNumberDisplay partNumber={partNumber} />
+				<PartNumberDisplay partNumber={partNumber} wireType="litzWire" />
 			</div>
 			<Toaster />
 		</div>

@@ -63,7 +63,7 @@ export default function ProductList({
 								<div className="mt-4 px-4 pb-4">
 									<div>
 										<h3 className="text-sm font-medium text-foreground">
-											<a href={`/catalog/${product.slug}`}>
+											        <a href={`/products/${product.slug}`}>
 												<span aria-hidden="true" className="absolute inset-0" />
 												{product.data.title}
 											</a>

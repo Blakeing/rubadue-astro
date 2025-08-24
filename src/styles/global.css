@@ -57,6 +57,24 @@
 		text-rendering: optimizeLegibility;
 	}
 
+	/* Prevent header layout shifts during hydration */
+	header {
+		contain: layout style;
+	}
+	
+	/* Ensure consistent font rendering */
+	.font-display {
+		font-feature-settings: normal;
+		font-variant-ligatures: normal;
+	}
+	
+	/* Optimize text shadow rendering */
+	.text-shadow-lg {
+		text-shadow: var(--text-shadow-lg);
+		will-change: auto;
+		backface-visibility: hidden;
+	}
+
 	/* biome-ignore lint/a11y/useGenericFontNames: This is a CSS feature query, not a font declaration */
 	@supports (font: -apple-system-body) and (-webkit-appearance: none) {
 		[data-wrapper] {
@@ -138,9 +156,5 @@
 
 	.text-shadow-md {
 		text-shadow: var(--text-shadow-md); /* 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1) */
-	}
-
-	.text-shadow-lg {
-		text-shadow: var(--text-shadow-lg); /* 0px 1px 2px rgb(0 0 0 / 0.1), 0px 3px 2px rgb(0 0 0 / 0.1), 0px 4px 8px rgb(0 0 0 / 0.1) */
 	}
 }
