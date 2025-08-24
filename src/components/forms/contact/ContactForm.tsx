@@ -10,11 +10,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import { cn } from "@/lib/utils";
+import { submitForm, handleValidationErrors } from "@/lib/utils/form-utils";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { type ContactFormProps, type FormValues, formSchema } from "./types";
@@ -25,7 +24,6 @@ export function ContactForm({
 	className,
 	initialValues,
 }: ContactFormProps) {
-	const { toast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const form = useForm<FormValues>({
@@ -42,44 +40,19 @@ export function ContactForm({
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 
-		try {
-			const response = await fetch("/api/contact", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(data),
-			});
+		const success = await submitForm({
+			endpoint: "/api/contact",
+			data,
+			successTitle: "Message Sent",
+			successDescription: "Thank you for your message. We'll be in touch soon.",
+			onSuccess: () => {
+				form.reset();
+				onSuccess?.();
+			},
+			onError,
+		});
 
-			const responseData = await response.json();
-
-			if (!response.ok) {
-				throw new Error(responseData.error || "Failed to send message");
-			}
-
-			toast({
-				title: "Message Sent",
-				description: "Thank you for your message. We'll be in touch soon.",
-			});
-
-			form.reset();
-			onSuccess?.();
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error
-					? error.message
-					: "There was a problem sending your message";
-
-			toast({
-				variant: "destructive",
-				title: "Error",
-				description: errorMessage,
-			});
-
-			onError?.(error instanceof Error ? error : new Error(errorMessage));
-		} finally {
-			setIsSubmitting(false);
-		}
+		setIsSubmitting(false);
 	};
 
 	return (

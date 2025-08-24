@@ -1,13 +1,13 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import { Header } from "@/components/layout";
-import BaseHead from "@/components/layout/BaseHead.astro";
-import BaseHeader from "@/components/layout/BaseHeader.astro";
-import Footer from "@/components/layout/Footer.astro";
-import ProductBreadcrumbs from "@/components/layout/ProductBreadcrumbs.astro";
+import ProductLayout from "@/layouts/ProductLayout.astro";
 import { ProductDetailPage } from "@/components/pages";
+import {
+  mapProductForDetail,
+  parseFilterContext,
+} from "@/lib/services/product-service";
+import { generateProductBreadcrumbs } from "@/lib/services/navigation-service";
 import { getProductCategory } from "@/utils/category";
-import { getResolvedImageSource } from "@/utils/images";
 
 // Add prerender export to ensure static generation
 export const prerender = true;
@@ -24,153 +24,31 @@ type Props = CollectionEntry<"products">;
 const product = Astro.props;
 const { Content } = await product.render();
 
-// Resolve the image path server-side using the single utility function
-const resolvedImageSrc = await getResolvedImageSource(product.data.heroImage);
-
-// Get URL parameters for filter context
+// Get URL and parse filter context
 const url = new URL(Astro.request.url);
-const searchParams = url.searchParams;
+const filterContext = parseFilterContext(url.searchParams);
 
-// Parse filter parameters
-const typeFilters = searchParams.getAll("type");
-const materialFilters = searchParams.getAll("material");
-const searchQuery = searchParams.get("q") || "";
-
-// Build filter context object
-const filterContext = {
-  type: typeFilters,
-  material: materialFilters,
-  search: searchQuery,
-};
-
-// Build breadcrumb segments with filter context
-const pathSegments = url.pathname.split("/").filter(Boolean);
-
-// Helper function to build product URL with filters
-const buildFilterUrl = (segments: string[]) => {
-  const params = new URLSearchParams();
-
-  // Known materials list - keep in sync with ProductListingPage
-  const knownMaterials = ["ETFE", "FEP", "PFA", "TCA"];
-
-  // Accumulate filters by type
-  const typeFilters: string[] = [];
-  const materialFilters: string[] = [];
-
-  for (const segment of segments) {
-    // Normalize segment for comparison (convert to uppercase)
-    const normalizedSegment = segment.toUpperCase();
-
-    // Check if segment is a material (case insensitive)
-    const matchedMaterial = knownMaterials.find(
-      (m) => m.toUpperCase() === normalizedSegment
-    );
-    if (matchedMaterial) {
-      materialFilters.push(matchedMaterial);
-    } else {
-      typeFilters.push(segment);
-    }
-  }
-
-  // Add type filters
-  for (const filter of typeFilters) {
-    params.append("type", filter);
-  }
-
-  // Add material filters
-  for (const filter of materialFilters) {
-    params.append("material", filter);
-  }
-
-  return `/products${params.toString() ? `?${params.toString()}` : ""}`;
-};
-
-// Known materials list - keep in sync with ProductListingPage
-const knownMaterials = ["ETFE", "FEP", "PFA", "TCA"];
-
-// Start with static segments
-const segments = [
-  { name: "Home", href: "/" }, // Home icon
-  { name: "Product", href: "/products" }, // Static product link
-];
-
-// Add filter segments
-const appliedFilters: string[] = [];
-for (let i = 1; i < pathSegments.length - 1; i++) {
-  const segment = pathSegments[i];
-
-  // Check if this segment is a material (case insensitive)
-  const normalizedSegment = segment.toUpperCase();
-  const matchedMaterial = knownMaterials.find(
-    (m) => m.toUpperCase() === normalizedSegment
-  );
-
-  // If it's a material, use the uppercase version, otherwise capitalize words
-  const segmentName =
-    matchedMaterial ||
-    segment
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-
-  // Add this segment as a filter
-  appliedFilters.push(segmentName);
-
-  segments.push({
-    name: segmentName,
-    href: buildFilterUrl(appliedFilters),
-  });
-}
-
-// Add the final product segment (no href for last item)
-segments.push({
-  name: product.data.title,
-  href: "", // No link for current page
-});
-
-// Map product data to match ProductDetailPage interface
-const mappedProduct = {
-  name: product.data.title,
-  description: product.data.description,
-  imageSrc: resolvedImageSrc,
-  imageAlt: product.data.title,
-  category: getProductCategory(product.data),
-  overview: product.data.overview,
-  applications: product.data.applications,
-  construction: product.data.construction,
-  compliances: product.data.compliances,
-  systemApprovals: product.data.systemApprovals,
-  tensileStrength: product.data.tensileStrength,
-  breakdown: product.data.breakdown,
-  tags: product.data.tags,
-};
+// Generate breadcrumbs and map product data using services
+const segments = generateProductBreadcrumbs(url.pathname, product.data.title);
+const mappedProduct = await mapProductForDetail(product);
 
 const title = product.data.title;
 const description = product.data.description;
 const category = getProductCategory(product.data);
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
-    <Header client:idle />
-    <BaseHeader eyebrow={category} title={title} />
-    <ProductBreadcrumbs segments={segments} />
-    <main>
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16">
-        <ProductDetailPage
-          client:load
-          product={mappedProduct}
-          filterContext={filterContext}
-        />
-        <div class="mt-8 prose prose-sm max-w-none">
-          <Content />
-        </div>
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>
+<ProductLayout
+  title={title}
+  description={description}
+  eyebrow={category}
+  breadcrumbSegments={segments}
+>
+  <ProductDetailPage
+    client:load
+    product={mappedProduct}
+    filterContext={filterContext}
+  />
+  <div class="mt-8 prose prose-sm max-w-none">
+    <Content />
+  </div>
+</ProductLayout>

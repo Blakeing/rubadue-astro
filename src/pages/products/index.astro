@@ -1,114 +1,38 @@
 ---
 import { getCollection } from "astro:content";
-import { Header } from "@/components/layout";
-import BaseHead from "@/components/layout/BaseHead.astro";
-import BaseHeader from "@/components/layout/BaseHeader.astro";
-import Footer from "@/components/layout/Footer.astro";
-import ProductBreadcrumbs from "@/components/layout/ProductBreadcrumbs.astro";
+import ProductLayout from "@/layouts/ProductLayout.astro";
 import { ProductListingPage } from "@/components/pages";
-import type {
-  Product,
-  ProductData,
-} from "@/components/pages/product-catalog/ProductListingPage";
-import { getProductCategory } from "@/utils/category";
-import { getResolvedImageSource } from "@/utils/images";
+import {
+  mapCollectionProduct,
+  sortProductsByDate,
+  extractCategories,
+  parseFilterContext,
+} from "@/lib/services/product-service";
 
-// Get all products from both directory structures
+// Get all products from content collections
 const products = await getCollection("products");
 
-// Map collection data to match Product interface and resolve images
-const mappedProducts = await Promise.all(
-  products.map(async (product) => {
-    // Resolve the image path server-side using the single utility function
-    const resolvedImageSrc = await getResolvedImageSource(
-      product.data.heroImage
-    );
+// Map and process products using shared service
+const mappedProducts = await Promise.all(products.map(mapCollectionProduct));
 
-    const productData: ProductData = {
-      title: product.data.title,
-      description: product.data.description,
-      heroImage: resolvedImageSrc,
-      category: getProductCategory(product.data),
-      pubDate: product.data.pubDate.toISOString(),
-      tableType: product.data.tableType,
-      construction: product.data.construction
-        ? {
-            sizeRange: Array.isArray(product.data.construction.sizeRange)
-              ? product.data.construction.sizeRange.join(", ")
-              : product.data.construction.sizeRange,
-            conductor: product.data.construction.conductor,
-            insulation: product.data.construction.insulation,
-            rating: product.data.construction.rating,
-          }
-        : undefined,
-      applications: product.data.applications,
-      compliances: product.data.compliances,
-      systemApprovals: product.data.systemApprovals,
-      tensileStrength: product.data.tensileStrength,
-      breakdown: product.data.breakdown,
-      overview: product.data.overview,
-      tags: product.data.tags || {},
-    };
+// Sort products by date and extract categories
+const sortedProducts = sortProductsByDate(mappedProducts);
+const categories = extractCategories(mappedProducts);
 
-    return {
-      id: product.id,
-      slug: product.slug,
-      collection: "products" as const,
-      data: productData,
-    };
-  })
-);
-
-// Sort products by date
-const sortedProducts = mappedProducts.sort(
-  (a, b) =>
-    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
-);
-
-// Get unique categories
-const categories = [
-  ...new Set(mappedProducts.map((post) => getProductCategory(post.data))),
-];
-
-// Get URL parameters for filters
+// Parse filter context from URL
 const url = new URL(Astro.request.url);
-const searchParams = url.searchParams;
-
-// Parse filter parameters
-const typeFilters = searchParams.getAll("type");
-const materialFilters = searchParams.getAll("material");
-const searchQuery = searchParams.get("q") || "";
-
-// Build filter state object
-const filterState = {
-  type: typeFilters,
-  material: materialFilters,
-  search: searchQuery,
-};
+const filterState = parseFilterContext(url.searchParams);
 
 const title = "Products";
 const description =
   "Browse our complete product catalog of high-quality wire and cable products.";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
-    <Header client:idle />
-    <BaseHeader eyebrow="Product" title="Catalog" />
-    <main>
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16">
-        <ProductListingPage
-          client:load
-          products={sortedProducts}
-          categories={categories}
-          initialFilters={filterState}
-        />
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>
+<ProductLayout title={title} description={description} eyebrow="Product">
+  <ProductListingPage
+    client:load
+    products={sortedProducts}
+    categories={categories}
+    initialFilters={filterState}
+  />
+</ProductLayout>

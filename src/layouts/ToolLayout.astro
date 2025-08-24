@@ -1,0 +1,41 @@
+---
+import CoreLayout from "./CoreLayout.astro";
+import BaseHeader from "@/components/layout/BaseHeader.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  eyebrow?: string;
+  headerTitle?: string;
+  containerClass?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  eyebrow,
+  headerTitle,
+  containerClass = "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16",
+} = Astro.props;
+---
+
+<CoreLayout
+  title={title}
+  description={description}
+  image={image}
+  bodyClass="flex flex-col relative"
+>
+  <slot name="head" slot="head" />
+  <main class="flex-1 relative z-10">
+    {
+      eyebrow && headerTitle && (
+        <BaseHeader eyebrow={eyebrow} title={headerTitle} />
+      )
+    }
+    <div class={containerClass}>
+      <slot />
+    </div>
+  </main>
+</CoreLayout>

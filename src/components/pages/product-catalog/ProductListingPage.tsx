@@ -32,49 +32,9 @@ import { useEffect, useState } from "react";
 
 export type FilterCategory = "type" | "material";
 
-export type ProductTags = {
-	[K in FilterCategory]?: string[];
-};
-
-export interface ProductData {
-	title: string;
-	description: string;
-	heroImage?: string;
-	category?: string;
-	pubDate: string;
-	tableType?: "litzWire" | "magnet" | "doubleInsulated" | "custom";
-	construction?: {
-		sizeRange?: string;
-		conductor?: string;
-		insulation?: string;
-		rating?: {
-			temperature?: string;
-			voltage?: string[];
-		};
-	};
-	applications?: string[];
-	compliances?: string[];
-	systemApprovals?: string[];
-	tensileStrength?: string;
-	breakdown?: string;
-	overview?: string;
-	// Keep legacy specifications for backward compatibility
-	specifications?: {
-		conductor?: string;
-		insulation?: string;
-		temperature?: string;
-		voltage?: string;
-		tensileStrength?: string;
-	};
-	tags?: ProductTags;
-}
-
-export interface Product {
-	id: string;
-	slug: string;
-	collection: string;
-	data: ProductData;
-}
+// Import types from centralized location
+import type { Product, ProductData, ProductTags, ProductListingProps } from "@/types/products";
+export type { Product, ProductData, ProductTags, ProductListingProps };
 
 interface FilterOption {
 	label: string;
@@ -113,6 +73,7 @@ type ActiveFilters = {
 	[K in FilterCategory]: string[];
 };
 
+// Use centralized interface with optional initialFilters
 interface ProductListingPageProps {
 	products: Product[];
 	categories: string[];
