@@ -28,17 +28,33 @@ const optimizedHero = await getImage({
   <div class="absolute inset-0 -z-10 bg-primary/80 opacity-40"></div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-    <div class="mx-auto max-w-3xl lg:mx-0">
-      <p
-        class="text-base text-pretty sm:text-lg md:text-2xl text-shadow-lg text-primary-foreground/90"
-      >
-        {eyebrow}
-      </p>
-      <h2
-        class="text-3xl text-pretty sm:text-4xl font-semibold text-shadow-lg text-primary-foreground"
-      >
-        {title}
-      </h2>
+    <div class="flex items-center justify-between">
+      <div class="max-w-3xl">
+        <p
+          class="text-base text-pretty sm:text-lg md:text-2xl text-shadow-lg text-primary-foreground/90"
+        >
+          {eyebrow}
+        </p>
+        <h2
+          class="text-3xl text-pretty sm:text-4xl font-semibold text-shadow-lg text-primary-foreground"
+        >
+          {title}
+        </h2>
+      </div>
+      <div class="hidden sm:block">
+        <div
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary-foreground h-14 px-4 py-3 shadow-lg"
+        >
+          <span class="flex flex-col items-start leading-tight">
+            <span class="text-sm font-bold text-foreground"
+              >Speak to an Engineer</span
+            >
+            <span class="text-sm font-semibold text-muted-foreground"
+              >(970) 351-6100 option 3</span
+            >
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

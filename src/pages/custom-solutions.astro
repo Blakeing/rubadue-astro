@@ -1,9 +1,51 @@
 ---
 import { Image } from "astro:assets";
 import customSolutionsImage from "@/assets/images/custom-solutions-featured.webp";
-import Separator from "@/components/ui/separator";
+import { Card } from "@/components/ui";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { Award, Factory, Handshake, Rocket, Settings } from "lucide-react";
+import {
+  Award,
+  Factory,
+  Handshake,
+  Rocket,
+  Settings,
+  MessageCircle,
+  Wrench,
+  TestTube,
+  Truck,
+} from "lucide-react";
+
+// Process steps data
+const processSteps = [
+  {
+    number: "01",
+    title: "Consultation",
+    description:
+      "Discuss your application needs, performance goals, and design challenges with our engineering team.",
+    icon: MessageCircle,
+  },
+  {
+    number: "02",
+    title: "Design & Development",
+    description:
+      "We collaborate with you to develop wire designs that meet your performance, size, and regulatory requirements.",
+    icon: Wrench,
+  },
+  {
+    number: "03",
+    title: "Prototype & Testing",
+    description:
+      "Fast-turn prototyping and rigorous testing ensure quality and compliance with global standards.",
+    icon: TestTube,
+  },
+  {
+    number: "04",
+    title: "Production & Delivery",
+    description:
+      "We scale production efficiently to meet your volume and timeline needs with our capital investment capability.",
+    icon: Truck,
+  },
+];
 ---
 
 <BaseLayout
@@ -13,7 +55,7 @@ import { Award, Factory, Handshake, Rocket, Settings } from "lucide-react";
   headerDescription="Engineered for Your Unique Applications"
   eyebrow="Custom Solutions"
 >
-  <div class="mt-16">
+  <div class="my-16">
     <!-- Hero Section -->
     <div class="relative bg-background">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
@@ -48,7 +90,7 @@ import { Award, Factory, Handshake, Rocket, Settings } from "lucide-react";
           </div>
           <div class="lg:pr-4">
             <h1
-              class="text-pretty font-semibold tracking-tight text-foreground text-2xl sm:text-3xl md:text-4xl"
+              class="text-balance font-semibold tracking-tight text-foreground text-2xl sm:text-3xl md:text-4xl"
             >
               Engineered for Your Unique Applications
             </h1>
@@ -64,239 +106,185 @@ import { Award, Factory, Handshake, Rocket, Settings } from "lucide-react";
       </div>
     </div>
 
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-16">
+      <div class="mx-auto lg:mx-0 mb-12">
+        <h2
+          class="text-2xl sm:text-3xl md:text-4xl text-balan font-semibold tracking-tight text-foreground mb-6"
+        >
+          How it Works
+        </h2>
+        <p class="text-base sm:text-lg/8 text-muted-foreground max-w-4xl">
+          Our streamlined process ensures efficient collaboration from initial
+          consultation to final delivery.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {
+          processSteps.map((step) => (
+            <Card className="p-6 h-full hover:shadow-lg transition-shadow duration-300">
+              <div class="flex flex-col h-full">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <step.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div class="text-2xl font-bold text-primary/20">
+                    {step.number}
+                  </div>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground mb-3">
+                  {step.title}
+                </h3>
+                <p class="text-sm text-muted-foreground leading-relaxed flex-grow">
+                  {step.description}
+                </p>
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+
     <!-- Why Partner Section -->
     <div class="relative mt-24 bg-background">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl lg:mx-0">
+        <div class="mx-auto lg:mx-0">
           <h2
             class="text-pretty text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground"
           >
             Why Partner with Rubadue?
           </h2>
-          <p class="mt-6 text-lg/8 text-muted-foreground">
+          <p class="mt-6 text-lg/8 text-muted-foreground max-w-4xl">
             Our commitment to excellence and innovation makes us the ideal
             partner for your custom wire solutions.
           </p>
         </div>
-        <dl
-          class="mt-16 grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3"
-        >
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <Handshake className="size-6 text-primary-foreground" />
-              </div>
-              Collaborative Engineering Expertise
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
-                Our engineers are problem solvers. We'll work closely with your
-                team to develop wire designs that meet your performance, size,
-                and regulatory needs.
-              </p>
-              <p class="mt-6">
-                <a href="/contact" class="text-sm/6 font-semibold text-primary"
-                  >Learn more <span aria-hidden="true">→</span></a
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Card
+            className="p-6 h-full hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div
+                  class="flex size-12 items-center justify-center rounded-full bg-primary/10 flex-shrink-0"
                 >
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <Rocket className="size-6 text-primary-foreground" />
+                  <Settings className="w-6 h-6 text-primary" />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">
+                  Design Flexibility
+                </h3>
               </div>
-              Rapid Prototyping
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
-                Speed matters. We offer fast-turn custom prototyping to help you
-                validate your design and move quickly into production.
-              </p>
-              <p class="mt-6">
-                <a href="/contact" class="text-sm/6 font-semibold text-primary"
-                  >Learn more <span aria-hidden="true">→</span></a
-                >
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
+              <p
+                class="text-sm text-muted-foreground leading-relaxed flex-grow"
               >
-                <Settings className="size-6 text-primary-foreground" />
-              </div>
-              Design Flexibility
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
                 Custom insulation materials, conductor configurations,
                 shielding, jacketing — if you need it, we can build it.
               </p>
-              <p class="mt-6">
-                <a href="/contact" class="text-sm/6 font-semibold text-primary"
-                  >Learn more <span aria-hidden="true">→</span></a
+            </div>
+          </Card>
+          <Card
+            className="p-6 h-full hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div
+                  class="flex size-12 items-center justify-center rounded-full bg-primary/10 flex-shrink-0"
                 >
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <Factory className="size-6 text-primary-foreground" />
+                  <Factory className="w-6 h-6 text-primary" />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">
+                  Capital Investment Capability
+                </h3>
               </div>
-              Capital Investment Capability
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
+              <p
+                class="text-sm text-muted-foreground leading-relaxed flex-grow"
+              >
                 Rubadue is committed to investing in the equipment, tooling, and
                 processes required to bring your custom wire product to life —
                 efficiently and at scale.
               </p>
-              <p class="mt-6">
-                <a href="/contact" class="text-sm/6 font-semibold text-primary"
-                  >Learn more <span aria-hidden="true">→</span></a
+            </div>
+          </Card>
+          <Card
+            className="p-6 h-full hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div
+                  class="flex size-12 items-center justify-center rounded-full bg-primary/10 flex-shrink-0"
                 >
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <Award className="size-6 text-primary-foreground" />
+                  <Award className="w-6 h-6 text-primary" />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">
+                  Regulatory & Quality Assurance
+                </h3>
               </div>
-              Regulatory & Quality Assurance
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
+              <p
+                class="text-sm text-muted-foreground leading-relaxed flex-grow"
+              >
                 Our custom wire products meet a variety of global standards
                 including UL, IEC, and more.
               </p>
-              <p class="mt-6">
-                <a href="/contact" class="text-sm/6 font-semibold text-primary"
-                  >Learn more <span aria-hidden="true">→</span></a
-                >
-              </p>
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-
-    <!-- Divider -->
-    <Separator
-      className="relative max-w-[calc(80rem-1.5rem)] overflow-hidden lg:max-w-[calc(80rem-2rem)] mx-auto my-16"
-    />
-
-    <!-- How It Works Section -->
-    <div class="relative bg-background mb-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl lg:mx-0">
-          <h2
-            class="text-pretty font-semibold tracking-tight text-foreground text-2xl sm:text-3xl md:text-4xl"
+            </div>
+          </Card>
+          <Card
+            className="p-6 h-full hover:shadow-lg transition-shadow duration-300"
           >
-            How It Works
-          </h2>
-          <p class="mt-6 text-lg/8 text-muted-foreground">
-            Our streamlined process ensures efficient development and delivery
-            of your custom wire solutions.
-          </p>
+            <div class="flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div
+                  class="flex size-12 items-center justify-center rounded-full bg-primary/10 flex-shrink-0"
+                >
+                  <Handshake className="w-6 h-6 text-primary" />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">
+                  Expert Engineering Team
+                </h3>
+              </div>
+              <p
+                class="text-sm text-muted-foreground leading-relaxed flex-grow"
+              >
+                Our experienced engineers bring deep technical knowledge and
+                industry expertise to solve your most challenging wire design
+                requirements.
+              </p>
+            </div>
+          </Card>
         </div>
-        <dl
-          class="mt-16 grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4"
-        >
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <span class="text-primary-foreground">1</span>
-              </div>
-              Consultation
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
+        <Card className="p-4 sm:p-12 my-16">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-base/7 font-semibold text-primary font-display">
+              Ready to Get Started?
+            </h2>
+            <p
+              class="mt-2 text-pretty text-2xl sm:text-3xl font-semibold tracking-tight text-foreground"
             >
-              <p class="flex-auto">
-                Discuss your application needs, performance goals, and design
-                challenges.
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <span class="text-primary-foreground">2</span>
-              </div>
-              Design & Development
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
+              Let's Solve Your Wire Challenge Together
+            </p>
+            <p
+              class="mt-4 sm:mt-6 text-base sm:text-lg/8 text-muted-foreground"
             >
-              <p class="flex-auto">
-                Our engineering team collaborates with you to develop a wire
-                solution that meets your requirements.
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
-              >
-                <span class="text-primary-foreground">3</span>
-              </div>
-              Prototype & Testing
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
+              Contact our team to discuss your specific requirements and
+              discover how Rubadue can support your project.
+            </p>
+            <div
+              class="mt-6 sm:mt-10 flex justify-center flex-col sm:flex-row gap-4"
             >
-              <p class="flex-auto">
-                We produce samples and conduct rigorous testing to ensure
-                quality and compliance.
-              </p>
-            </dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="text-base/7 font-semibold text-foreground">
-              <div
-                class="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary"
+              <a
+                href="/request-a-quote"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
               >
-                <span class="text-primary-foreground">4</span>
-              </div>
-              Production & Delivery
-            </dt>
-            <dd
-              class="mt-1 flex flex-auto flex-col text-base/7 text-muted-foreground"
-            >
-              <p class="flex-auto">
-                Once approved, we scale production to meet your volume and
-                timeline needs.
-              </p>
-            </dd>
+                Request a Quote
+              </a>
+              <a
+                href="/contact"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              >
+                Contact Us
+              </a>
+            </div>
           </div>
-        </dl>
+        </Card>
       </div>
     </div>
   </div>
