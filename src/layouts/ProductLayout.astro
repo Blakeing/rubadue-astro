@@ -1,0 +1,38 @@
+---
+import CoreLayout from "./CoreLayout.astro";
+import BaseHeader from "@/components/layout/BaseHeader.astro";
+import ProductBreadcrumbs from "@/components/layout/ProductBreadcrumbs.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  eyebrow?: string;
+  breadcrumbSegments?: Array<{ name: string; href: string }>;
+  containerClass?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  eyebrow,
+  breadcrumbSegments = [],
+  containerClass = "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16",
+} = Astro.props;
+---
+
+<CoreLayout title={title} description={description} image={image}>
+  <slot name="head" slot="head" />
+  <main>
+    {eyebrow && <BaseHeader eyebrow={eyebrow} title={title} />}
+    {
+      breadcrumbSegments.length > 0 && (
+        <ProductBreadcrumbs segments={breadcrumbSegments} />
+      )
+    }
+    <div class={containerClass}>
+      <slot />
+    </div>
+  </main>
+</CoreLayout>

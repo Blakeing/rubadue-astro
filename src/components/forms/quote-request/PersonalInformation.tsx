@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
-import { InputField } from "@/components/ui/FormFields";
+import { InputField, SelectField } from "@/components/ui/FormFields";
 import type { FormValues } from "./types";
+import { jobFunctions } from "./types";
 
 import { useFormContext } from "react-hook-form";
 
@@ -61,6 +62,18 @@ export function PersonalInformation({ className }: PersonalInformationProps) {
 						type="tel"
 						className="text-sm sm:text-base"
 					/>
+				</div>
+
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+					<SelectField
+						control={control}
+						name="jobFunction"
+						label="Job Function"
+						required
+						options={[...jobFunctions]}
+						className="text-sm sm:text-base"
+					/>
+					<div></div> {/* Empty div to maintain grid layout */}
 				</div>
 			</CardContent>
 		</Card>

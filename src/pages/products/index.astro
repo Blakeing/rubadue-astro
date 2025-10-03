@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import ProductLayout from "@/layouts/ProductLayout.astro";
+import { ProductListingPage } from "@/components/pages";
+import {
+  mapCollectionProduct,
+  sortProductsByDate,
+  extractCategories,
+  parseFilterContext,
+} from "@/lib/services/product-service";
+
+// Get all products from content collections
+const products = await getCollection("products");
+
+// Map and process products using shared service
+const mappedProducts = await Promise.all(products.map(mapCollectionProduct));
+
+// Sort products by date and extract categories
+const sortedProducts = sortProductsByDate(mappedProducts);
+const categories = extractCategories(mappedProducts);
+
+// Parse filter context from URL
+const url = new URL(Astro.request.url);
+const filterState = parseFilterContext(url.searchParams);
+
+const title = "Catalog";
+const description =
+  "Browse our complete product catalog of high-quality wire and cable products.";
+---
+
+<ProductLayout title={title} description={description} eyebrow="Product">
+  <ProductListingPage
+    client:load
+    products={sortedProducts}
+    categories={categories}
+    initialFilters={filterState}
+  />
+</ProductLayout>

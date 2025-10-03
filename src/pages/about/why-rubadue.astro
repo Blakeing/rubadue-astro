@@ -1,12 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Separator,
-} from "@/components/ui";
+import { Card, Separator } from "@/components/ui";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
   Award,
@@ -74,7 +68,7 @@ const mainFeatures = [
     features: qualityFeatures,
   },
   {
-    title: "Trusted Manufacturing with a Controlled Supply Chain",
+    title: "Trusted Manufacturing",
     description:
       "Rubadue products are manufactured using premium materials from vetted suppliers, giving you shorter lead times, better traceability, and peace of mind.",
     icon: "factory",
@@ -113,8 +107,9 @@ const mainFeatures = [
       <div class="mb-12">
         <Separator className="my-6" />
         <p class="text-base text-muted-foreground mb-4">
-          Check out our Resources section for helpful engineering tools,
-          technical articles, and more.
+          Check out our <a href="/knowledge-base" class="text-primary"
+            >Knowledge Base</a
+          > for helpful technical articles and more.
         </p>
       </div>
 

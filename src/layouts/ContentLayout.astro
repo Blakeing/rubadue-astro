@@ -1,0 +1,58 @@
+---
+import CoreLayout from "./CoreLayout.astro";
+import BaseHeader from "@/components/layout/BaseHeader.astro";
+import BaseBreadcrumbs from "@/components/layout/BaseBreadcrumbs.astro";
+import {
+  generateBreadcrumbs,
+  shouldShowBreadcrumbs,
+} from "@/lib/services/navigation-service";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  eyebrow?: string;
+  headerTitle?: string;
+  showBreadcrumbs?: boolean;
+  containerClass?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  eyebrow,
+  headerTitle,
+  showBreadcrumbs = true,
+  containerClass = "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-16",
+} = Astro.props;
+
+// Generate breadcrumbs using shared service
+const segments = generateBreadcrumbs(Astro.url.pathname);
+---
+
+<CoreLayout
+  title={title}
+  description={description}
+  image={image}
+  bodyClass="flex flex-col relative"
+>
+  <slot name="head" slot="head" />
+  <main class="flex-1 relative z-10">
+    {
+      eyebrow && headerTitle && (
+        <BaseHeader eyebrow={eyebrow} title={headerTitle} />
+      )
+    }
+    {
+      showBreadcrumbs &&
+        !Astro.url.pathname.startsWith("/knowledge-base") &&
+        shouldShowBreadcrumbs(segments) && (
+          <BaseBreadcrumbs segments={segments} />
+        )
+    }
+    <div class={containerClass}>
+      <slot />
+    </div>
+  </main>
+</CoreLayout>

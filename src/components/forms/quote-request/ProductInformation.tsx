@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { InputField } from "@/components/ui/FormFields";
+import { Input } from "@/components/ui/input";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import type { FormValues } from "./types";
 import { wireTypeOptions } from "./types";
 
@@ -26,18 +28,27 @@ export function ProductInformation({ className }: ProductInformationProps) {
 			</CardHeader>
 			<CardContent className="space-y-4 sm:space-y-6">
 				<div className="grid grid-cols-1 gap-3 sm:gap-4">
-					<InputField
+					<FormField
 						control={control}
 						name="partNumber"
-						label="Part Number (Optional)"
-						placeholder="Enter part number or leave blank"
-						className="text-sm sm:text-base font-mono"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Part Number</FormLabel>
+								<FormControl>
+									<Input
+										{...field}
+										className="font-mono text-sm sm:text-base"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
 				</div>
 
 				<div className="space-y-3">
-					<div className="block text-sm sm:text-base font-medium">
-						Wire Types
+					<div className="block text-sm  font-medium">
+						Wire Type
 					</div>
 					<div className="space-y-2">
 						{wireTypeOptions.map((option) => (

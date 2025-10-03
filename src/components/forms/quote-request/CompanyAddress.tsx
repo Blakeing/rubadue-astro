@@ -31,6 +31,7 @@ export function CompanyAddress({ className }: CompanyAddressProps) {
 						name="companyName"
 						label="Company Name"
 						placeholder="Company Inc."
+						required
 						className="text-sm sm:text-base"
 					/>
 					<InputField

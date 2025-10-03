@@ -32,49 +32,9 @@ import { useEffect, useState } from "react";
 
 export type FilterCategory = "type" | "material";
 
-export type ProductTags = {
-	[K in FilterCategory]?: string[];
-};
-
-export interface ProductData {
-	title: string;
-	description: string;
-	heroImage?: string;
-	category?: string;
-	pubDate: string;
-	tableType?: "litzWire" | "magnet" | "doubleInsulated" | "custom";
-	construction?: {
-		sizeRange?: string;
-		conductor?: string;
-		insulation?: string;
-		rating?: {
-			temperature?: string;
-			voltage?: string[];
-		};
-	};
-	applications?: string[];
-	compliances?: string[];
-	systemApprovals?: string[];
-	tensileStrength?: string;
-	breakdown?: string;
-	overview?: string;
-	// Keep legacy specifications for backward compatibility
-	specifications?: {
-		conductor?: string;
-		insulation?: string;
-		temperature?: string;
-		voltage?: string;
-		tensileStrength?: string;
-	};
-	tags?: ProductTags;
-}
-
-export interface Product {
-	id: string;
-	slug: string;
-	collection: string;
-	data: ProductData;
-}
+// Import types from centralized location
+import type { Product, ProductData, ProductTags, ProductListingProps } from "@/types/products";
+export type { Product, ProductData, ProductTags, ProductListingProps };
 
 interface FilterOption {
 	label: string;
@@ -113,6 +73,7 @@ type ActiveFilters = {
 	[K in FilterCategory]: string[];
 };
 
+// Use centralized interface with optional initialFilters
 interface ProductListingPageProps {
 	products: Product[];
 	categories: string[];
@@ -382,8 +343,7 @@ export default function ProductListingPage({
 				</Sheet>
 
 				<section
-					aria-labelledby="products-heading"
-					className="pb-12 sm:pb-16 md:pb-24 pt-6 sm:pt-10 md:pt-12"
+					aria-labelledby="products-heading"	
 				>
 					<h2 id="products-heading" className="sr-only">
 						Products
@@ -476,7 +436,7 @@ export default function ProductListingPage({
 						{/* Product grid */}
 						<div className="lg:col-span-9">
 							{/* Mobile search and filter controls */}
-							<div className="mb-4 flex items-center justify-between lg:hidden">
+							<div className="my-4 flex items-center justify-between lg:hidden">
 								<div className="relative flex-1 mr-2">
 									<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 									<Input
@@ -500,7 +460,7 @@ export default function ProductListingPage({
 								{paginatedProducts.map((product) => (
 									<a
 										key={product.slug}
-										href={`/catalog/${product.slug}`}
+										                href={`/products/${product.slug}`}
 										className="group relative"
 									>
 										<div className="aspect-square w-full shadow overflow-hidden rounded-lg bg-accent/25">

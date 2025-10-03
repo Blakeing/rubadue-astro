@@ -31,6 +31,15 @@ const fullTitle = title?.includes(SITE_TITLE)
 <link rel="icon" type="image/svg+xml" href="/icon-dots.svg" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Font preloads -->
+<link
+  rel="preload"
+  href="/fonts/good-times-regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+
 <!-- Font styles -->
 <style is:global>
   @font-face {

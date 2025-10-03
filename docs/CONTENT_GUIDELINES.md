@@ -102,7 +102,7 @@ Use tables for technical specifications and comparisons:
 - Link to relevant products when mentioned
 - Link to related knowledge base articles
 - Use descriptive link text (avoid "click here")
-- Example: `[PFA insulated wire products](/catalog/single-insulated/pfa/)`
+- Example: `[PFA insulated wire products](/products/single-insulated/pfa/)`
 
 **Image References**:
 - **Optimized images** (recommended): `![Alt text](@/assets/images/filename.webp)`

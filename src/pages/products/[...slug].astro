@@ -1,0 +1,54 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import ProductLayout from "@/layouts/ProductLayout.astro";
+import { ProductDetailPage } from "@/components/pages";
+import {
+  mapProductForDetail,
+  parseFilterContext,
+} from "@/lib/services/product-service";
+import { generateProductBreadcrumbs } from "@/lib/services/navigation-service";
+import { getProductCategory } from "@/utils/category";
+
+// Add prerender export to ensure static generation
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: product,
+  }));
+}
+
+type Props = CollectionEntry<"products">;
+const product = Astro.props;
+const { Content } = await product.render();
+
+// Get URL and parse filter context
+const url = new URL(Astro.request.url);
+const filterContext = parseFilterContext(url.searchParams);
+
+// Generate breadcrumbs and map product data using services
+const segments = generateProductBreadcrumbs(url.pathname, product.data.title);
+const mappedProduct = await mapProductForDetail(product);
+
+const title = product.data.title;
+const description = product.data.description;
+const category = getProductCategory(product.data);
+---
+
+<ProductLayout
+  title={title}
+  description={description}
+  eyebrow={category}
+  breadcrumbSegments={segments}
+>
+  <ProductDetailPage
+    client:load
+    product={mappedProduct}
+    filterContext={filterContext}
+  />
+  <div class="mt-8 prose prose-sm max-w-none">
+    <Content />
+  </div>
+</ProductLayout>

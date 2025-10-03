@@ -1,0 +1,38 @@
+---
+import { Header } from "@/components/layout";
+import BaseHead from "@/components/layout/BaseHead.astro";
+import Footer from "@/components/layout/Footer.astro";
+import { Toaster } from "@/components/ui";
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  bodyClass?: string;
+}
+
+const { title, description, image, bodyClass = "" } = Astro.props;
+
+// Standard body classes that should always be applied
+const standardBodyClasses = "bg-background font-sans antialiased min-h-screen";
+const finalBodyClass = `${standardBodyClasses} ${bodyClass}`.trim();
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <slot name="head" />
+  </head>
+  <body class={finalBodyClass}>
+    <Header client:idle />
+    <slot />
+    <Footer />
+    <Toaster client:load />
+    <Analytics />
+    <SpeedInsights />
+  </body>
+</html>

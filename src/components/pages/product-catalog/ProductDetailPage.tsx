@@ -10,58 +10,17 @@ import type { ImageMetadata } from "astro";
 
 import { cn } from "@/lib/utils";
 
-interface ProductPageProps {
-	product: {
-		name: string;
-		version?: { name: string; date: string; datetime: string };
-		price?: string;
-		description: string;
-		highlights?: string[];
-		imageSrc: string | ImageMetadata;
-		imageAlt: string;
-		construction?: {
-			sizeRange?: string | string[];
-			conductor?: string;
-			insulation?: string;
-			rating?: {
-				temperature?: string;
-				voltage?: string[];
-			};
-			numberWires?: string;
-			coatings?: string[];
-		};
-		compliances?: string[];
-		systemApprovals?: string[];
-		category: string;
-		overview?: string;
-		applications?: string[];
-		tensileStrength?: string;
-		breakdown?: string;
-		tags?: {
-			type?: string[];
-			material?: string[];
-		};
-	};
+// Import types from centralized location
+import type { ProductDetailProps } from "@/types/products";
 
-	license?: {
-		href: string;
-		summary: string;
-		content: string;
-	};
-
-	filterContext?: {
-		type: string[];
-		material: string[];
-		search: string;
-	};
-}
+type ProductPageProps = ProductDetailProps;
 
 export default function ProductPage({
 	product,
 	filterContext,
 }: ProductPageProps) {
 	const getCatalogUrl = () => {
-		if (!filterContext) return "/catalog";
+  if (!filterContext) return "/products";
 
 		const params = new URLSearchParams();
 		for (const type of filterContext.type) {
@@ -72,7 +31,7 @@ export default function ProductPage({
 		}
 		if (filterContext.search) params.set("q", filterContext.search);
 
-		return `/catalog${params.toString() ? `?${params.toString()}` : ""}`;
+		  return `/products${params.toString() ? `?${params.toString()}` : ""}`;
 	};
 
 	const renderConstructionDetails = (

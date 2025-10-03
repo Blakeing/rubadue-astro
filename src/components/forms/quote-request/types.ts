@@ -53,6 +53,9 @@ export const formSchema = z.object({
 			path: ["root"],
 		}),
 	message: z.string().optional(),
+	
+	// Part Number (optional, pre-populated from part number builder)
+	partNumber: z.string().optional(),
 });
 
 /**
@@ -94,6 +97,6 @@ export const jobFunctions = JOB_FUNCTIONS;
  */
 export const wireTypeOptions = [
 	{ id: "litzWire", label: "Litz Wire" },
-	{ id: "windingWire", label: "Winding Wire" },
+	{ id: "windingWire", label: "Insulated Winding Wire" },
 	{ id: "customCable", label: "Custom Cable" },
 ] as const;

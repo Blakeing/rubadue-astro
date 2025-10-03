@@ -1,28 +1,14 @@
 ---
-import { Header } from "@/components/layout";
-import BaseHead from "@/components/layout/BaseHead.astro";
-import Footer from "@/components/layout/Footer.astro";
+import HomeLayout from "@/layouts/HomeLayout.astro";
 import Hero from "@/components/layout/Hero.astro";
 import { ProductShowcase } from "@/components/sections/product-showcase";
-import "@/styles/global.css";
 
 const title = "Rubadue Wire - Advanced Wire Solutions";
 const description =
   "Specializing in Litz wire manufacturing, we deliver innovative solutions for high-frequency applications, transformers, and power supplies with unmatched quality and precision.";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-
-  <body class="bg-background font-sans antialiased">
-    <Header client:load />
-    <main class="">
-      <Hero />
-      <ProductShowcase client:load />
-    </main>
-    <Footer />
-  </body>
-</html>
+<HomeLayout title={title} description={description}>
+  <Hero />
+  <ProductShowcase client:load />
+</HomeLayout>
