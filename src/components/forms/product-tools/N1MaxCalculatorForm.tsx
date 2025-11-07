@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
 	Form,
@@ -48,8 +47,6 @@ interface N1MaxCalculatorFormProps {
 	initialValues?: Partial<FormValues>;
 	/** Callback when results are calculated */
 	onResultsCalculated?: (results: CalculationResults) => void;
-	/** Whether to show the chart */
-	showChart?: boolean;
 	/** Additional class name for the form */
 	className?: string;
 }
@@ -60,7 +57,6 @@ interface N1MaxCalculatorFormProps {
 export default function N1MaxCalculatorForm({
 	initialValues,
 	onResultsCalculated,
-	showChart = true,
 	className,
 }: N1MaxCalculatorFormProps) {
 	const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>("F");
@@ -176,26 +172,6 @@ export default function N1MaxCalculatorForm({
 		onResultsCalculated,
 	]);
 
-	// Generate chart data
-	const chartData =
-		showChart && isValidForm
-			? Array.from({ length: 10 }, (_, i) => {
-					const freq = frequency * (i + 1);
-					return {
-						frequency: freq,
-						...calculateResults(
-							{
-								frequency: freq,
-								permeability,
-								temperature,
-								awg,
-							},
-							selectedMaterial,
-							temperatureUnit,
-						),
-					};
-				})
-			: [];
 
 	return (
 		<div className={className}>
@@ -203,9 +179,6 @@ export default function N1MaxCalculatorForm({
 				<p className="text-muted-foreground">
 					{calculatorDescription.description}
 				</p>
-				{/* <p className="text-sm text-muted-foreground">
-					{calculatorDescription.frequencyNote}
-				</p> */}
 			</div>
 
 			<div className="grid gap-6 grid-cols-1 md:grid-cols-5">
@@ -355,8 +328,6 @@ export default function N1MaxCalculatorForm({
 									{calculatorDescription.skinDepthNote}
 								</p>
 							</div>
-
-							{/* Chart removed - can be re-added when needed */}
 						</div>
 					</CardContent>
 				</Card>

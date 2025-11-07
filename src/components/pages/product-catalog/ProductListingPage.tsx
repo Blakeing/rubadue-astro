@@ -181,7 +181,8 @@ export default function ProductListingPage({
 		// If no filters are active, show all products that match search
 		if (activeFilterCategories.length === 0) return true;
 
-		// Product must match ALL selected tags in ALL active categories
+		// Product must match ALL active categories (AND between categories),
+		// but within each category can match ANY selected tag (OR within categories)
 		return activeFilterCategories.every((category) => {
 			const selectedTags = activeFilters[category];
 			const productCategoryTags = productTags[category];
@@ -190,7 +191,7 @@ export default function ProductListingPage({
 				return false;
 			}
 
-			return selectedTags.every((tag) => productCategoryTags.includes(tag));
+			return selectedTags.some((tag) => productCategoryTags.includes(tag));
 		});
 	});
 
@@ -271,7 +272,7 @@ export default function ProductListingPage({
 								<SheetTitle className="text-lg">Filters</SheetTitle>
 								<SheetDescription className="text-sm">
 									Filter products by type and material. Select multiple options
-									to narrow down your search.
+									within a category to expand your search (OR logic).
 								</SheetDescription>
 							</SheetHeader>
 
@@ -365,6 +366,9 @@ export default function ProductListingPage({
 											Clear all
 										</Button>
 									</div>
+									<p className="text-xs text-muted-foreground mt-2">
+										Multiple selections within a category use OR logic
+									</p>
 									{/* Search input */}
 									<div className="mt-4">
 										<div className="relative">
