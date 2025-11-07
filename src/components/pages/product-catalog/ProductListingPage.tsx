@@ -1,22 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import {
-	Pagination,
-	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-} from "@/components/ui/pagination";
-import { ScrollArea } from "@/components/ui/scroll-area";
-
-import { navigate } from "astro:transitions/client";
 import defaultHeroImage from "@/assets/backgrounds/rubadue-hero.webp";
 import { SearchPagination } from "@/components/data-display/search-results/components/SearchPagination";
 import ProductImage from "@/components/sections/product-showcase/ProductImage";
-import { Card } from "@/components/ui/card";
 import {
 	Sheet,
 	SheetContent,
@@ -58,15 +45,6 @@ const filters: Filters = {
 		{ label: "PFA", value: "PFA" },
 		{ label: "TCA", value: "TCA" },
 	],
-	// specs: [
-	// 	{ label: "155°C", value: "155°C" },
-	// 	{ label: "1000V", value: "1000V" },
-	// ],
-	// certifications: [
-	// 	{ label: "UL", value: "UL" },
-	// 	{ label: "VDE", value: "VDE" },
-	// 	{ label: "RoHS", value: "RoHS" },
-	// ],
 };
 
 type ActiveFilters = {
@@ -76,7 +54,6 @@ type ActiveFilters = {
 // Use centralized interface with optional initialFilters
 interface ProductListingPageProps {
 	products: Product[];
-	categories: string[];
 	initialFilters?: {
 		type: string[];
 		material: string[];
@@ -86,21 +63,9 @@ interface ProductListingPageProps {
 
 const ITEMS_PER_PAGE = 9; // Number of products per page
 
-// Add mapping function for legacy categories
-function getCategoryFromCollection(collection: string): string {
-	const categoryMap: Record<string, string> = {
-		"litz-wire": "Litz Wire",
-		"single-insulated": "Single Insulated",
-		"double-insulated": "Double Insulated",
-		"triple-insulated": "Triple Insulated",
-	};
-
-	return categoryMap[collection] || collection;
-}
 
 export default function ProductListingPage({
 	products,
-	categories,
 	initialFilters = {
 		type: [],
 		material: [],
@@ -366,9 +331,6 @@ export default function ProductListingPage({
 											Clear all
 										</Button>
 									</div>
-									<p className="text-xs text-muted-foreground mt-2">
-										Multiple selections within a category use OR logic
-									</p>
 									{/* Search input */}
 									<div className="mt-4">
 										<div className="relative">
@@ -451,14 +413,6 @@ export default function ProductListingPage({
 									/>
 								</div>
 							</div>
-
-							{/* Results count */}
-							{/* <div className="mb-4 flex items-center justify-between">
-								<p className="text-sm text-muted-foreground">
-									Showing {paginatedProducts.length} of{" "}
-									{filteredProducts.length} products
-								</p>
-							</div> */}
 
 							<div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-6">
 								{paginatedProducts.map((product) => (
