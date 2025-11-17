@@ -1,29 +1,6 @@
-import { Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { createSortableHeader } from "../utils/sorting";
 import type { BareLitzWireSpec } from "./data";
-
-// Helper function to get sort icon
-function getSortIcon(isSorted: boolean | string) {
-	if (isSorted === "asc") {
-		return <ArrowUp className="ml-2 h-4 w-4 text-primary" />;
-	}
-	if (isSorted === "desc") {
-		return <ArrowDown className="ml-2 h-4 w-4 text-primary" />;
-	}
-	return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />;
-}
-
-// Helper function to get next sort state
-function getNextSortState(
-	currentState: boolean | string,
-): "asc" | "desc" | false {
-	if (currentState === false) return "asc";
-	if (currentState === "asc") return "desc";
-	return false;
-}
 
 /**
  * Safely formats a number with the specified decimal places

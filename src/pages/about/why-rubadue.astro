@@ -1,19 +1,12 @@
 ---
-import { Image } from "astro:assets";
 import { Card, Separator } from "@/components/ui";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
-  Award,
   CheckCircle,
-  ChevronRight,
-  Clock,
   Factory,
-  Globe,
-  Settings,
   Shield,
   Target,
   Users,
-  Zap,
 } from "lucide-react";
 
 const challengeSolutions = [
@@ -116,7 +109,7 @@ const mainFeatures = [
       {/* Main Features Section */}
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {
-          mainFeatures.map((feature, index) => (
+          mainFeatures.map((feature) => (
             <Card className="p-6 sm:p-8">
               <div class="mb-6">
                 <div class="flex items-center gap-3 mb-4">
@@ -144,7 +137,7 @@ const mainFeatures = [
               </div>
 
               <div class="space-y-3">
-                {feature.features.map((item, itemIndex) => (
+                {feature.features.map((item) => (
                   <div class="flex items-start gap-3">
                     <CheckCircle className="size-5 text-primary flex-shrink-0 mt-0.5" />
                     <span class="text-sm text-foreground leading-relaxed">

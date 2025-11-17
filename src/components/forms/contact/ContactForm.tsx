@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { submitForm, handleValidationErrors } from "@/lib/utils/form-utils";
+import { submitForm } from "@/lib/utils/form-utils";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { type ContactFormProps, type FormValues, formSchema } from "./types";
@@ -40,7 +40,7 @@ export function ContactForm({
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 
-		const success = await submitForm({
+		await submitForm({
 			endpoint: "/api/contact",
 			data,
 			successTitle: "Message Sent",

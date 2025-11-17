@@ -18,8 +18,6 @@ interface UseDebouncedSearchOptions {
 	toLowerCase?: boolean;
 	/** Whether to normalize unicode characters */
 	normalizeUnicode?: boolean;
-	/** Whether to enable fuzzy search */
-	fuzzySearch?: boolean;
 }
 
 /**
@@ -66,7 +64,6 @@ export function useDebouncedSearch({
 	trim = true,
 	toLowerCase = true,
 	normalizeUnicode = true,
-	fuzzySearch = false,
 }: UseDebouncedSearchOptions = {}): UseDebouncedSearchReturn {
 	// Validate inputs
 	if (delay < 0) {

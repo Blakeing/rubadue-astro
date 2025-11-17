@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type * as React from "react";
 import { TableSearch } from "./table-search";
 
-import { ArrowDown, ArrowUp, ArrowUpDown, RotateCcw } from "lucide-react";
+import { ArrowUpDown, RotateCcw } from "lucide-react";
 
 /**
  * Props for the table wrapper component

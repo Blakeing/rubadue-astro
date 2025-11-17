@@ -6,8 +6,6 @@ import {
 	AccordionTrigger,
 	ScrollArea,
 } from "@/components/ui";
-import type { ImageMetadata } from "astro";
-
 import { cn } from "@/lib/utils";
 
 // Import types from centralized location
@@ -17,23 +15,7 @@ type ProductPageProps = ProductDetailProps;
 
 export default function ProductPage({
 	product,
-	filterContext,
 }: ProductPageProps) {
-	const getCatalogUrl = () => {
-  if (!filterContext) return "/products";
-
-		const params = new URLSearchParams();
-		for (const type of filterContext.type) {
-			params.append("type", type);
-		}
-		for (const material of filterContext.material) {
-			params.append("material", material);
-		}
-		if (filterContext.search) params.set("q", filterContext.search);
-
-		  return `/products${params.toString() ? `?${params.toString()}` : ""}`;
-	};
-
 	const renderConstructionDetails = (
 		construction: ProductPageProps["product"]["construction"],
 	) => {

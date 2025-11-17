@@ -4,7 +4,6 @@ import {
 	type HeaderGroup,
 	flexRender,
 } from "@tanstack/react-table";
-import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 import type { TableHeaderContentProps } from "../types";

@@ -103,7 +103,7 @@ export function QuoteRequestForm({
 				});
 
 				// Call onSuccess callback if provided
-				await onSuccess?.(data);
+				onSuccess?.(data);
 			} catch (error) {
 				toast({
 					title: "Error",
@@ -117,7 +117,7 @@ export function QuoteRequestForm({
 				setIsSubmitting(false);
 			}
 		},
-		(errors) => {
+		() => {
 			toast({
 				title: "Error",
 				description: "Please fill in all required fields correctly.",

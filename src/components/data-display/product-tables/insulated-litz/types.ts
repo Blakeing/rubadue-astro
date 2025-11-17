@@ -28,13 +28,6 @@ export interface SingleInsulatedLitzSpec extends InsulatedLitzSpec {
 }
 
 /**
- * Interface for double insulated litz wire specifications
- */
-interface DoubleInsulatedLitzSpec extends InsulatedLitzSpec {
-	/** Additional properties specific to double insulated litz wire can be added here */
-}
-
-/**
  * Interface for triple insulated litz wire specifications
  */
 export interface TripleInsulatedLitzSpec extends InsulatedLitzSpec {

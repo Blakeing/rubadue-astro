@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-// Phone number regex for North American format
-const phoneRegex =
-	/^\+?1?\s*\(?([0-9]{3})\)?[-.\s]*([0-9]{3})[-.\s]*([0-9]{4})\s*$/;
-
 export const formSchema = z.object({
 	firstName: z
 		.string()

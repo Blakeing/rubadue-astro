@@ -5,7 +5,6 @@ import { ProductListingPage } from "@/components/pages";
 import {
   mapCollectionProduct,
   sortProductsByDate,
-  extractCategories,
   parseFilterContext,
 } from "@/lib/services/product-service";
 
@@ -15,9 +14,8 @@ const products = await getCollection("products");
 // Map and process products using shared service
 const mappedProducts = await Promise.all(products.map(mapCollectionProduct));
 
-// Sort products by date and extract categories
+// Sort products by date
 const sortedProducts = sortProductsByDate(mappedProducts);
-const categories = extractCategories(mappedProducts);
 
 // Parse filter context from URL
 const url = new URL(Astro.request.url);
@@ -32,7 +30,6 @@ const description =
   <ProductListingPage
     client:load
     products={sortedProducts}
-    categories={categories}
     initialFilters={filterState}
   />
 </ProductLayout>

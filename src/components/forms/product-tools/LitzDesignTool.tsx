@@ -41,7 +41,6 @@ import {
 	type DiameterResult,
 	type LitzConstruction,
 	MAGNET_WIRE_FILM_THICKNESSES,
-	STRAND_OD_REFERENCE,
 	type StrandValidationResult,
 	calculateBareLitzDiameters,
 	calculateInsulatedLitzDiameters,
@@ -59,7 +58,7 @@ import {
 	Info,
 	XCircle,
 } from "lucide-react";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { InsulationSummaryTable } from "./InsulationSummaryTable";
@@ -212,15 +211,6 @@ export function LitzDesignToolV2() {
 						// Calculate insulated Litz diameters
 						const insulatedResults: Record<string, DiameterResult> = {};
 						const layers = [1, 2, 3] as const;
-
-						// Get bare diameter for base calculation
-						const bareDiameter = calculateBareLitzDiameters(
-							formData.numberOfStrands,
-							formData.wireAWG,
-							constructionResult.packingFactor,
-							formData.magnetWireGrade,
-							"Single",
-						).nom;
 
 						// Use ETFE as default insulation type if none selected
 						const insulationType = formData.insulationType || ("ETFE" as const);

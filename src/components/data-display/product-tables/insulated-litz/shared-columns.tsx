@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui";
 import type { ColumnDef } from "@tanstack/react-table";
 import { createSortableHeader } from "../utils/sorting";
 import type { InsulatedLitzSpec } from "./types";

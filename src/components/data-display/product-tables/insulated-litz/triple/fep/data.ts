@@ -1917,59 +1917,6 @@ export const onePtFourToThreeMhzOperatingFrequency: BareLitzWireSpec[] = [
 	},
 ];
 
-const tabs = [
-	{
-		label: "60 Hz - 1 kHz",
-		value: "60hz-1khz",
-		data: sixtyHzToOneKhzOperatingFrequency,
-	},
-	{
-		label: "1 kHz - 10 kHz",
-		value: "1khz-10khz",
-		data: oneToTenKhzOperatingFrequency,
-	},
-	{
-		label: "10 kHz - 20 kHz",
-		value: "10khz-20khz",
-		data: tenToTwentyKhzOperatingFrequency,
-	},
-	{
-		label: "20 kHz - 50 kHz",
-		value: "20khz-50khz",
-		data: twentyToFiftyKhzOperatingFrequency,
-	},
-	{
-		label: "50 kHz - 100 kHz",
-		value: "50khz-100khz",
-		data: fiftyToOneHundredKhzOperatingFrequency,
-	},
-	{
-		label: "100 kHz - 200 kHz",
-		value: "100khz-200khz",
-		data: oneHundredToTwoHundredKhzOperatingFrequency,
-	},
-	{
-		label: "200 kHz - 350 kHz",
-		value: "200khz-350khz",
-		data: twoHundredToThreeHundredFiftyKhzOperatingFrequency,
-	},
-	{
-		label: "350 kHz - 850 kHz",
-		value: "350khz-850khz",
-		data: threeHundredFiftyToEightHundredFiftyKhzOperatingFrequency,
-	},
-	{
-		label: "850 kHz - 1.4 Mhz",
-		value: "850khz-1.4mhz",
-		data: eightHundredFiftyKhzToOnePtFourMhzOperatingFrequency,
-	},
-	{
-		label: "1.4 MHz - 3.0 Mhz",
-		value: "1.4mhz-3.0mhz",
-		data: onePtFourToThreeMhzOperatingFrequency,
-	},
-];
-
 export type TripleInsulatedLitzSpec = {
 	partNumber: string;
 	equivalentAWG: string;

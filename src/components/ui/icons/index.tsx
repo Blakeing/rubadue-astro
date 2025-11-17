@@ -9,7 +9,6 @@ import {
 	Handshake,
 	HeartPulse,
 	Lightbulb,
-	Linkedin,
 	Merge,
 	Move,
 	Plane,
@@ -18,7 +17,7 @@ import {
 	Settings,
 	Target,
 	Trophy,
-	Twitter,
+	X,
 	Users,
 } from "lucide-react";
 
@@ -34,7 +33,6 @@ export type IconName =
 	| "lightbulb"
 	| "users"
 	| "award"
-	| "linkedin"
 	| "twitter"
 	| "building"
 	| "move"
@@ -57,8 +55,7 @@ export const icons = {
 	lightbulb: Lightbulb,
 	users: Users,
 	award: Award,
-	linkedin: Linkedin,
-	twitter: Twitter,
+	twitter: X,
 	building: Building,
 	move: Move,
 	trophy: Trophy,
@@ -68,5 +65,3 @@ export const icons = {
 	settings: Settings,
 	rocket: Rocket,
 } as const;
-
-type IconProps = React.ComponentProps<typeof Car>;

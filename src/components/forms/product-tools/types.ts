@@ -144,11 +144,9 @@ export const materialPresets = {
 } as const;
 
 export type MaterialKey = keyof typeof materialPresets;
-type MaterialPreset = (typeof materialPresets)[MaterialKey];
 
-// Temperature and length unit types
+// Temperature unit type
 export type TemperatureUnit = "F" | "C";
-type LengthUnit = "m" | "ft";
 
 // Form schema
 export const formSchema = z.object({
@@ -379,7 +377,3 @@ export const litzWireFormSchema = z.object({
 	serveLayers: z.string().optional(),
 	uniqueIdentifier: z.string().optional(),
 });
-
-// Additional type exports for backwards compatibility
-type InsulatedWireFormData = z.infer<typeof insulatedWireFormSchema>;
-type LitzWireFormData = z.infer<typeof litzWireFormSchema>;

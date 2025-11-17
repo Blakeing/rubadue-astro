@@ -1,5 +1,4 @@
 import { Table, TableBody, TableHeader } from "@/components/ui";
-import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useTable } from "../hooks/use-table";

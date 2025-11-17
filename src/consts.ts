@@ -17,15 +17,6 @@ export const SITE = {
 export const SITE_TITLE = SITE.TITLE;
 
 /**
- * Social media links
- */
-const SOCIAL = {
-	LINKEDIN: "https://www.linkedin.com/company/rubadue-wire",
-	FACEBOOK: "https://www.facebook.com/RubadueWire",
-	TWITTER: "https://twitter.com/RubadueWire",
-} as const;
-
-/**
  * Contact information
  */
 export const CONTACT = {
@@ -40,23 +31,3 @@ export const CONTACT = {
 	},
 } as const;
 
-/**
- * Navigation links
- */
-const NAV = {
-	HOME: "/",
-	PRODUCTS: "/products",
-	ABOUT: "/about",
-	CONTACT: "/contact",
-	QUOTE: "/quote",
-	KNOWLEDGE_BASE: "/knowledge-base",
-} as const;
-
-/**
- * Product categories
- */
-const PRODUCT_CATEGORIES = {
-	LITZ_WIRE: "litz-wire",
-	WINDING_WIRE: "winding-wire",
-	CUSTOM_CABLE: "custom-cable",
-} as const;

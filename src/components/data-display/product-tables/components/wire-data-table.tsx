@@ -13,7 +13,6 @@ interface WireDataTableProps {
 
 export function WireDataTable({
 	data,
-	displayName = "Wire Data",
 	pageSize = 10,
 	enableMultiSort = true,
 	hideSearch = false,

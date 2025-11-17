@@ -29,12 +29,3 @@ export const searchInputStyles = `
 	}
 `;
 
-/**
- * Default search placeholder text
- */
-const DEFAULT_SEARCH_PLACEHOLDER = "Search by title, description, or tags...";
-
-/**
- * Default minimum height for search container
- */
-const DEFAULT_SEARCH_MIN_HEIGHT = "calc(100vh - 452px)";

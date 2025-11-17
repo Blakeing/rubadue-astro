@@ -159,7 +159,7 @@ export function SelectField<T extends FieldValues>({
 	options,
 	required,
 	className,
-	onChange,
+	onChange: _onChangeSelect,
 }: SelectFieldProps<T>) {
 	return (
 		<FormField
@@ -181,7 +181,7 @@ export function SelectField<T extends FieldValues>({
 							name={field.name}
 							onValueChange={(value) => {
 								field.onChange(value);
-								onChange?.(value);
+								_onChangeSelect?.(value);
 							}}
 						>
 							<SelectTrigger>
@@ -217,12 +217,10 @@ export function InputField<T extends FieldValues>({
 	min,
 	max,
 	step,
-	maxLength,
 	inputMode,
 	multiline,
 	rows = 3,
-	onChange,
-	onBlur,
+	onChange: _onChange,
 }: InputFieldProps<T>) {
 	const isCheckbox = type === "checkbox";
 
@@ -295,7 +293,7 @@ export function SelectWithCustomInput<T extends FieldValues>({
 	options,
 	required,
 	className,
-	onChange,
+	onChange: _onChangeSelectWithCustom,
 	customOptionValue,
 	showCustomInput,
 	setShowCustomInput,
@@ -328,7 +326,7 @@ export function SelectWithCustomInput<T extends FieldValues>({
 									field.onChange(value);
 									setShowCustomInput(false);
 								}
-								onChange?.(value);
+								_onChangeSelectWithCustom?.(value);
 							}}
 						>
 							<SelectTrigger>

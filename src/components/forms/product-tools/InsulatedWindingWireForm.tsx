@@ -96,51 +96,6 @@ export function InsulatedWindingWireForm({
 		}
 	};
 
-	const handleStrandsChange = (value: string) => {
-		setShowCustomStrands(value === "custom");
-	};
-
-	const handleStrandsCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		const num = Number.parseInt(value, 10);
-		if (!Number.isNaN(num) && num > 0) {
-			const formattedValue = num < 10 ? `0${num}` : `${num}`;
-			form.setValue("strands", formattedValue, { shouldValidate: true });
-		} else {
-			form.setValue("strands", value, { shouldValidate: true });
-		}
-	};
-
-	const handleMagnetWireSizeChange = (value: string) => {
-		const currentStrands = form.getValues("strands");
-		const newValue = currentStrands ? `${currentStrands}/${value}` : value;
-		form.setValue("magnetWireSize", newValue, { shouldValidate: true });
-	};
-
-	const handleThicknessChange = (value: string) => {
-		setShowCustomThickness(value === "other");
-	};
-
-	const handleThicknessCustomInput = (
-		e: React.ChangeEvent<HTMLInputElement>,
-	) => {
-		const value = e.target.value;
-
-		if (!value) {
-			form.setValue("thickness", "", { shouldValidate: true });
-		} else {
-			// Remove leading zeros after decimal point
-			const cleanedValue = value.replace(/\.0+/, ".");
-
-			const numValue = Number.parseFloat(cleanedValue);
-			if (numValue >= 0.001 && numValue <= 0.25) {
-				form.setValue("thickness", cleanedValue, { shouldValidate: true });
-			} else {
-				form.setValue("thickness", "invalid", { shouldValidate: true });
-			}
-		}
-	};
-
 	// Transform the thickness value for display
 	useEffect(() => {
 		if (thicknessValue && thicknessValue !== "invalid") {

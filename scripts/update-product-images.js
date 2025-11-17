@@ -3,7 +3,6 @@ import path from "node:path";
 import { glob } from "glob";
 
 const PRODUCTS_DIR = "src/content/products";
-const IMAGES_DIR = "src/assets/products/catalog";
 
 // Map of old image paths to new image paths
 const imagePathMapping = {

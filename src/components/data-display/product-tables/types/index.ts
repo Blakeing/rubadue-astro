@@ -1,11 +1,8 @@
 import type {
-	Cell,
 	ColumnDef,
 	Header,
 	HeaderGroup,
-	PaginationState,
 	Row,
-	SortingState,
 } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
@@ -45,32 +42,6 @@ export interface TabData<TData> {
 	value: string;
 	/** The data to display in the table */
 	data: TData[];
-}
-
-/**
- * The internal state of the table
- */
-interface TableState {
-	/** The current sorting state */
-	sorting: SortingState;
-	/** The current pagination state */
-	pagination: PaginationState;
-	/** The current global filter value */
-	globalFilter: string;
-}
-
-/**
- * Actions to update the table state
- */
-interface TableStateActions {
-	/** Update the sorting state */
-	setSorting: (value: SortingState) => void;
-	/** Update the pagination state */
-	setPagination: (value: PaginationState) => void;
-	/** Update the global filter value */
-	setGlobalFilter: (value: string) => void;
-	/** Reset all table state to initial values */
-	resetTable: () => void;
 }
 
 /**
@@ -187,24 +158,3 @@ export interface TableHeaderContentProps<TData> {
 	cellClassName?: string;
 }
 
-/**
- * Props for the table toolbar component
- */
-interface TableToolbarProps {
-	/** The title to display above the table */
-	title?: string;
-	/** Whether to hide the search input */
-	hideSearch?: boolean;
-	/** Placeholder text for the search input */
-	searchPlaceholder?: string;
-	/** Additional class name for the search input */
-	searchClassName?: string;
-	/** Additional class name for the search input wrapper */
-	searchWrapperClassName?: string;
-	/** The current global filter value */
-	globalFilter: string;
-	/** Callback to update the global filter value */
-	setGlobalFilter: (value: string) => void;
-	/** Additional class name for the toolbar container */
-	className?: string;
-}

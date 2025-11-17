@@ -1,5 +1,4 @@
 import type {
-	AWGValue,
 	CalculationResults,
 	FormValues,
 	InsulatedWireFormValues,
@@ -24,20 +23,6 @@ export const fahrenheitToCelsius = (fahrenheit: number): number =>
  */
 export const celsiusToFahrenheit = (celsius: number): number =>
 	celsius * (9 / 5) + 32;
-
-/**
- * Convert length from feet to meters
- * @param feet Length in feet
- * @returns Length in meters
- */
-const feetToMeters = (feet: number): number => feet * 0.3048;
-
-/**
- * Convert length from meters to feet
- * @param meters Length in meters
- * @returns Length in feet
- */
-const metersToFeet = (meters: number): number => meters * 3.28084;
 
 /**
  * Calculate resistivity at a given temperature

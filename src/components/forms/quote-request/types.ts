@@ -63,10 +63,6 @@ export const formSchema = z.object({
  */
 export type FormValues = z.infer<typeof formSchema>;
 
-/**
- * Type for wire types
- */
-type WireTypes = z.infer<typeof wireTypesSchema>;
 
 /**
  * Props for the quote request form

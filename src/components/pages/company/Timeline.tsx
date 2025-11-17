@@ -95,7 +95,7 @@ const TimelineCard: React.FC<{
 	</motion.div>
 );
 
-const Timeline: React.FC<TimelineProps> = ({ data, title, description }) => {
+const Timeline: React.FC<TimelineProps> = ({ data }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState(0);
 

@@ -1,19 +1,11 @@
 ---
-import { WorldMap } from "@/components/data-display/interactive-tools/WorldMap";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  Separator,
 } from "@/components/ui";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
-const startLocation = {
-  lat: 40.4,
-  lng: -105.05,
-  label: "Loveland, CO",
-};
 
 const distributors = {
   asia: [
@@ -56,17 +48,6 @@ const distributors = {
     },
   ],
 };
-
-const allDistributors = [...distributors.asia, ...distributors.europe];
-
-const mapDots = allDistributors.map((distributor) => ({
-  start: startLocation,
-  end: {
-    lat: distributor.lat,
-    lng: distributor.lng,
-    label: distributor.name,
-  },
-}));
 ---
 
 <BaseLayout

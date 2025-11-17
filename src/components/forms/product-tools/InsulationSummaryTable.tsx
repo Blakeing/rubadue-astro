@@ -6,13 +6,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ArrowUpRight, HelpCircle } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type React from "react";
 
 interface InsulationSummaryTableProps {
@@ -33,11 +27,8 @@ export const InsulationSummaryTable: React.FC<InsulationSummaryTableProps> = ({
 	min,
 	nom,
 	max,
-	wallInches,
-	wallMm,
 	nomWallInches,
 	nomWallMm,
-	partNumber,
 	note,
 }) => {
 	const wallDisplay = (

@@ -6,7 +6,7 @@ interface RequestQuotePageProps {
 	className?: string;
 }
 
-export function RequestQuotePage({ className }: RequestQuotePageProps) {
+export function RequestQuotePage({}: RequestQuotePageProps) {
 	const [initialValues, setInitialValues] = useState<{ 
 		partNumber?: string;
 		wireTypes?: {
