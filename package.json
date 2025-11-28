@@ -26,12 +26,12 @@
 		"verify-product-images": "node scripts/verify-product-images.js"
 	},
 	"dependencies": {
-		"@astrojs/check": "^0.9.4",
-		"@astrojs/mdx": "^4.0.8",
-		"@astrojs/react": "^4.2.0",
-		"@astrojs/sitemap": "^3.2.1",
-		"@astrojs/tailwind": "^6.0.0",
-		"@astrojs/vercel": "^8.1.0",
+		"@astrojs/check": "^0.9.6",
+		"@astrojs/mdx": "^4.3.12",
+		"@astrojs/react": "^4.4.2",
+		"@astrojs/sitemap": "^3.6.0",
+		"@astrojs/tailwind": "6.0.2",
+		"@astrojs/vercel": "^9.0.2",
 		"@fontsource-variable/exo-2": "^5.1.1",
 		"@hookform/resolvers": "^3.10.0",
 		"@radix-ui/react-accordion": "^1.2.3",
@@ -54,7 +54,7 @@
 		"@types/react-dom": "^19.0.4",
 		"@vercel/analytics": "^1.5.0",
 		"@vercel/speed-insights": "^1.2.0",
-		"astro": "^5.3.1",
+		"astro": "^5.16.2",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"decimal.js": "^10.5.0",
@@ -83,15 +83,23 @@
 		"jsdom": "^26.1.0",
 		"knip": "^5.59.1",
 		"typescript": "^5.8.2",
+		"vite": "6.3.5",
 		"vitest": "^3.2.4"
 	},
 	"pnpm": {
 		"overrides": {
-			"sharp": "^0.34.2"
+			"sharp": "^0.34.2",
+			"vite": "6.3.5"
 		},
 		"supportedArchitectures": {
-			"os": ["current", "linux"],
-			"cpu": ["current", "x64"]
+			"os": [
+				"current",
+				"linux"
+			],
+			"cpu": [
+				"current",
+				"x64"
+			]
 		},
 		"onlyBuiltDependencies": [
 			"@biomejs/biome",
