@@ -1,5 +1,6 @@
 /**
  * Format a date using a consistent format
+ * Uses UTC timezone to avoid client timezone conversion issues
  * @param date - Date to format
  * @returns Formatted date string
  */
@@ -13,6 +14,7 @@ export function formatDate(date: string | Date): string {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
+			timeZone: "UTC",
 		});
 	} catch {
 		return "Invalid date";

@@ -10,7 +10,7 @@ export function generateContactEmailHtml(data: ContactFormData): string {
     <div style="font-size: 24px; font-weight: bold; margin-bottom: 30px; color: #1a1a1a; text-align: center; padding-bottom: 20px; border-bottom: 2px solid #eeeeee;">
       New Contact Form Submission
       <div style="font-size: 16px; font-weight: normal; margin-top: 8px; color: #666666;">
-        Submitted on ${new Date().toLocaleDateString()}
+        Submitted on ${new Date().toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" })}
       </div>
     </div>
     
@@ -68,7 +68,7 @@ export function generatePcimFollowupEmailHtml(
     <div style="font-size: 24px; font-weight: bold; margin-bottom: 30px; color: #1a1a1a; text-align: center; padding-bottom: 20px; border-bottom: 2px solid #eeeeee;">
       New PCIM Follow-Up Submission
       <div style="font-size: 16px; font-weight: normal; margin-top: 8px; color: #666666;">
-        Submitted on ${new Date().toLocaleDateString()}
+        Submitted on ${new Date().toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" })}
       </div>
     </div>
     

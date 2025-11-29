@@ -8,17 +8,20 @@ type Props = CollectionEntry<"knowledgeBase">["data"];
 const { title, description, pubDate, tags = [] } = Astro.props;
 
 // Format the date for the eyebrow text
+// Use UTC timezone to ensure consistent date display regardless of server/client timezone
 const formattedDate = pubDate
   ? pubDate instanceof Date
     ? pubDate.toLocaleDateString("en-us", {
         year: "numeric",
         month: "long",
         day: "numeric",
+        timeZone: "UTC",
       })
     : new Date(pubDate).toLocaleDateString("en-us", {
         year: "numeric",
         month: "long",
         day: "numeric",
+        timeZone: "UTC",
       })
   : "No date available";
 ---
