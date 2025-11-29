@@ -5,21 +5,12 @@ import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
 // @ts-check
 import { defineConfig } from "astro/config";
-import rehypeKatex from "rehype-katex";
-import remarkMath from "remark-math";
 
 // https://astro.build/config
 export default defineConfig({
 	site: "https://rubadue.com",
-	markdown: {
-		remarkPlugins: [remarkMath],
-		rehypePlugins: [rehypeKatex],
-	},
 	integrations: [
-		mdx({
-			remarkPlugins: [remarkMath],
-			rehypePlugins: [rehypeKatex],
-		}),
+		mdx(),
 		sitemap(),
 		react(),
 		tailwind({

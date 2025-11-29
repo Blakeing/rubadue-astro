@@ -1,0 +1,22 @@
+---
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+interface Props {
+  formula: string;
+  block?: boolean;
+  class?: string;
+}
+
+const { formula, block = true, class: className } = Astro.props;
+
+const html = katex.renderToString(formula, {
+  displayMode: block,
+  throwOnError: false,
+});
+---
+
+<span
+  class:list={["math", { "block overflow-x-auto my-6": block }, className]}
+  set:html={html}
+/>

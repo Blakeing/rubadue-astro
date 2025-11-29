@@ -5,12 +5,7 @@ import BaseLayout from "./BaseLayout.astro";
 
 type Props = CollectionEntry<"knowledgeBase">["data"];
 
-const {
-  title,
-  description,
-  pubDate,
-  tags = [],
-} = Astro.props;
+const { title, description, pubDate, tags = [] } = Astro.props;
 
 // Format the date for the eyebrow text
 const formattedDate = pubDate
@@ -35,14 +30,6 @@ const formattedDate = pubDate
   headerTitle={title}
   category="knowledge-base"
 >
-  <!-- KaTeX CSS for math equations -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
-    crossorigin="anonymous"
-    slot="head"
-  />
   <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
       <!-- Main Content -->

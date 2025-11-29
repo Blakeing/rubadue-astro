@@ -28,8 +28,8 @@ const optimizedHero = await getImage({
   <div class="absolute inset-0 -z-10 bg-primary/80 opacity-40"></div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-    <div class="flex items-center justify-between">
-      <div class="max-w-3xl">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex-1 min-w-0 max-w-4xl">
         <p
           class="text-base text-pretty sm:text-lg md:text-2xl text-shadow-lg text-primary-foreground/90"
         >
@@ -41,7 +41,7 @@ const optimizedHero = await getImage({
           {title}
         </h2>
       </div>
-      <div class="hidden sm:block">
+      <div class="hidden sm:block flex-shrink-0">
         <div
           class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary-foreground h-14 px-4 py-3 shadow-lg"
         >
