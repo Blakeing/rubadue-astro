@@ -95,12 +95,10 @@ ${validatedData.message}
 		// Use different email addresses for development vs production
 		const isDev = import.meta.env.DEV;
 		const toEmail = isDev ? "blakeingenthron@gmail.com" : "sales@rubadue.com";
-		const ccEmail = isDev ? undefined : "blakeingenthron@gmail.com";
 		
 		const { data: emailData, error } = await resend.emails.send({
 			from: "Rubadue Quote Request <sales@rubadue.com>", // Update with your verified domain
 			to: [toEmail],
-			...(ccEmail && { cc: [ccEmail] }),
 			subject: `New Quote Request from ${validatedData.firstName} ${validatedData.lastName}`,
 			html: html,
 			text: text,

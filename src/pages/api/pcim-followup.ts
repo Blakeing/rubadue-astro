@@ -34,12 +34,10 @@ ${message || "No additional message provided."}
 		// Use different email addresses for development vs production
 		const isDev = import.meta.env.DEV;
 		const toEmail = isDev ? "blakeingenthron@gmail.com" : "sales@rubadue.com";
-		const ccEmail = isDev ? undefined : "blakeingenthron@gmail.com";
 		
 		const { data, error } = await resend.emails.send({
 			from: "PCIM Follow-Up Form <sales@rubadue.com>",
 			to: [toEmail],
-			...(ccEmail && { cc: [ccEmail] }),
 			subject: `PCIM Follow-up from ${firstName} ${lastName} (${company})`,
 			html: html,
 			text: text,

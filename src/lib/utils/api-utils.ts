@@ -32,11 +32,9 @@ export interface EmailConfig {
 export function getEmailConfig(fromName: string): EmailConfig {
   const isDev = import.meta.env.DEV;
   const toEmail = isDev ? "blakeingenthron@gmail.com" : "sales@rubadue.com";
-  const ccEmail = isDev ? undefined : "blakeingenthron@gmail.com";
   
   return {
     to: [toEmail],
-    ...(ccEmail && { cc: [ccEmail] }),
     from: `${fromName} <sales@rubadue.com>`,
   };
 }
