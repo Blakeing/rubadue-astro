@@ -21,6 +21,7 @@
 		"test:run": "vitest run",
 		"test:coverage": "vitest run --coverage",
 		"migrate:components": "node scripts/migrate-components.js",
+		"export:resend-emails": "node scripts/export-resend-emails.js",
 		"update:imports": "node scripts/update-data-table-imports.js",
 		"update-product-images": "node scripts/update-product-images.js",
 		"verify-product-images": "node scripts/verify-product-images.js"
