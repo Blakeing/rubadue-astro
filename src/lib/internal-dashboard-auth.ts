@@ -4,6 +4,7 @@ import {
 	randomBytes,
 	timingSafeEqual,
 } from "node:crypto";
+import { getSecret } from "astro:env/server";
 
 export const INTERNAL_DASHBOARD_LOGIN_PATH = "/internal/login";
 export const INTERNAL_DASHBOARD_DEFAULT_PATH = "/internal/emails";
@@ -24,8 +25,12 @@ type EnvLike = {
 export function getDashboardCredentials(
 	env: EnvLike,
 ): DashboardCredentials | null {
-	const username = env.INTERNAL_DASHBOARD_USERNAME;
-	const password = env.INTERNAL_DASHBOARD_PASSWORD;
+	const username =
+		env.INTERNAL_DASHBOARD_USERNAME ??
+		getSecret("INTERNAL_DASHBOARD_USERNAME");
+	const password =
+		env.INTERNAL_DASHBOARD_PASSWORD ??
+		getSecret("INTERNAL_DASHBOARD_PASSWORD");
 
 	if (!username || !password) {
 		return null;
