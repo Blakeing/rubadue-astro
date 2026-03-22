@@ -1,0 +1,17 @@
+---
+import { EmailDashboard } from "@/components/pages/internal/EmailDashboard";
+import ToolLayout from "@/layouts/ToolLayout.astro";
+---
+
+<ToolLayout
+  title="Internal Email Dashboard | Rubadue"
+  description="Protected internal dashboard for reviewing recent Resend email activity."
+  headerTitle="Email Dashboard"
+  eyebrow="Internal Tools"
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex,nofollow" />
+  </Fragment>
+
+  <EmailDashboard client:load />
+</ToolLayout>

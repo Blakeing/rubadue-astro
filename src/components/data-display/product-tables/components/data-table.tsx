@@ -20,6 +20,8 @@ interface DataTableProps<TData extends object> {
 	enableMultiSort?: boolean;
 	/** Whether to hide the search input */
 	hideSearch?: boolean;
+	/** Placeholder text for the search input */
+	searchPlaceholder?: string;
 	/** Whether to hide the pagination */
 	hidePagination?: boolean;
 	/** Whether to show the page count in pagination */
@@ -40,6 +42,10 @@ interface DataTableProps<TData extends object> {
 	loadingMessage?: string;
 	/** Additional class name for the table container */
 	className?: string;
+	/** Callback when a row is clicked */
+	onRowClick?: (row: Row<TData>) => void;
+	/** Function to determine whether a row is selected */
+	isRowSelected?: (row: Row<TData>) => boolean;
 	/** Custom render function for header cells */
 	renderHeader?: (header: Header<TData, unknown>) => React.ReactNode;
 	/** Custom render function for body cells */
@@ -70,6 +76,7 @@ export function DataTable<TData extends object>({
 	simple = false,
 	enableMultiSort = false,
 	hideSearch = false,
+	searchPlaceholder,
 	hidePagination = false,
 	showPageCount = true,
 	showPageNumbers = true,
@@ -80,6 +87,8 @@ export function DataTable<TData extends object>({
 	errorMessage = "An error occurred while loading the data.",
 	loadingMessage = "Loading data...",
 	className,
+	onRowClick,
+	isRowSelected,
 	renderHeader,
 	renderCell,
 }: DataTableProps<TData>) {
@@ -91,6 +100,7 @@ export function DataTable<TData extends object>({
 			pageSize={pageSize}
 			enableMultiSort={!simple && enableMultiSort}
 			hideSearch={hideSearch}
+			searchPlaceholder={searchPlaceholder}
 			hidePagination={hidePagination}
 			showPageCount={showPageCount}
 			showPageNumbers={showPageNumbers}
@@ -100,6 +110,8 @@ export function DataTable<TData extends object>({
 			emptyMessage={emptyMessage}
 			errorMessage={errorMessage}
 			loadingMessage={loadingMessage}
+			onRowClick={onRowClick}
+			isRowSelected={isRowSelected}
 			renderHeader={renderHeader}
 			renderCell={renderCell}
 			className={className}
